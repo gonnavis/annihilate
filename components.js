@@ -10,6 +10,8 @@ Moving.schema = {
   offset: { type: Types.Number, default: 0 },
 }
 
+export class Role extends Component{}
+
 export class PulsatingScale extends Component {}
 
 PulsatingScale.schema = {

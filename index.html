@@ -21,10 +21,13 @@
 </body>
 <script type="module">
   import { World } from './lib/ecsy.module.js';
-  import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating } from './components.js';
-  import { RotatingSystem, ColliderSystem, PulsatingColorSystem, PulsatingScaleSystem, MovingSystem, TimeoutSystem } from './systems.js';
+  import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, Role } from './components.js';
+  import { RotatingSystem, ColliderSystem, PulsatingColorSystem, PulsatingScaleSystem, MovingSystem, TimeoutSystem, RoleSystem } from './systems.js';
   import { GLTFLoader } from "./lib/three.js/examples/jsm/loaders/GLTFLoader.js"
 
+  window.s = {
+    okey: {}, //object of keyboard
+  }
   var world = new World();
 
   world
@@ -37,7 +40,8 @@
     .registerComponent(Timeout)
     .registerComponent(PulsatingColor)
     .registerComponent(Colliding)
-    .registerComponent(Rotating);
+    .registerComponent(Rotating)
+    .registerComponent(Role)
 
   world
     .registerSystem(RotatingSystem)
@@ -45,7 +49,8 @@
     .registerSystem(PulsatingScaleSystem)
     .registerSystem(TimeoutSystem)
     .registerSystem(ColliderSystem)
-    .registerSystem(MovingSystem);
+    .registerSystem(MovingSystem)
+    .registerSystem(RoleSystem)
 
   var camera, scene, renderer, parent;
   var clock = new THREE.Clock();
@@ -139,6 +144,8 @@
     scene.add(parent);
 
     /*role*/{
+      let entity = world.createEntity()
+      entity.addComponent(Role)
       new Promise((resolve, reject) => {
         var loader = new GLTFLoader();
         loader.load('./model/fel_lord/a.glb', function (gltf) {
@@ -156,6 +163,7 @@
             }
           });
           scene.add(s.gltf.scene)
+          entity.addComponent(Object3D, { object: s.gltf.scene })
           // s.gltf.scene.scale.set(.7,.7,.7)
           // s.gltf.scene.position.set(x,y,z)
           s.mixer = new THREE.AnimationMixer(s.gltf.scene)
@@ -195,6 +203,16 @@
     document.body.appendChild(renderer.domElement);
     //
     window.addEventListener('resize', onWindowResize, false);
+
+    window.addEventListener('keydown', e => {
+      // console.log(e)
+      // console.log(e.key)
+      s.okey[e.key] = true
+    })
+    window.addEventListener('keyup', e => {
+      // console.log(e)
+      s.okey[e.key] = false
+    })
 
     renderer.setAnimationLoop(animate);
 

@@ -13,7 +13,7 @@
       color: #fff;
     }
   </style>
-  <script src="./lib/three.min.js"></script>
+  <script src="./lib/three.js/build/three.min.js"></script>
 
 </head>
 
@@ -23,6 +23,7 @@
   import { World } from './lib/ecsy.module.js';
   import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating } from './components.js';
   import { RotatingSystem, ColliderSystem, PulsatingColorSystem, PulsatingScaleSystem, MovingSystem, TimeoutSystem } from './systems.js';
+  import { GLTFLoader } from "./lib/three.js/examples/jsm/loaders/GLTFLoader.js"
 
   var world = new World();
 
@@ -137,6 +138,56 @@
 
     scene.add(parent);
 
+    /*role*/{
+      new Promise((resolve, reject) => {
+        var loader = new GLTFLoader();
+        loader.load('./model/fel_lord/a.glb', function (gltf) {
+          // console.log(gltf)
+          let s = {}
+          s.oaction = {}
+          s.gltf = gltf
+
+          s.gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+              child.material = new THREE.MeshBasicMaterial()
+              child.material.map = new THREE.TextureLoader().load('./model/fel_lord/fel_lord.png')
+              child.material.map.flipY = false
+              child.material.skinning = true
+            }
+          });
+          scene.add(s.gltf.scene)
+          // s.gltf.scene.scale.set(.7,.7,.7)
+          // s.gltf.scene.position.set(x,y,z)
+          s.mixer = new THREE.AnimationMixer(s.gltf.scene)
+          s.gltf.animations.forEach(animation => {
+            let name = animation.name.toLowerCase()
+            let action = s.mixer.clipAction(animation)
+            s.oaction[name] = action
+            if (['jump', 'punch', 'dodge', 'hit'].includes(name)) {
+              action.loop = THREE.LoopOnce
+            }
+            if ([].includes(name)) {
+              action.loop = THREE.LoopOnce
+              action.clampWhenFinished = true
+            }
+          })
+          s.action_act = s.oaction.idle
+          s.action_act.play()
+          s.mixer.addEventListener('finished', e => {
+            // console.log('finished')
+            s.fsm.tattacked()
+            s.fsm.tjumped()
+            s.fsm.thitted()
+            s.fsm.tidle()
+          })
+          resolve()
+        }, undefined, function (e) {
+          console.error(e);
+          reject()
+        });
+      })
+    }
+
     renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(0x333333);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -164,8 +215,6 @@
 
     renderer.render(scene, camera);
   }
-</script>
-
 </script>
 
 </html>

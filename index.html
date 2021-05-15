@@ -156,7 +156,6 @@
         loader.load('./model/fel_lord/a.glb', function (gltf) {
           // console.log(gltf)
           window.role = gltf.scene
-          let oaction = {}
 
           role.traverse(function (child) {
             if (child.isMesh) {
@@ -171,6 +170,7 @@
           // role.scale.set(.7,.7,.7)
           // role.position.set(x,y,z)
           window.mixerRole = new THREE.AnimationMixer(role)
+          let oaction = {}
           gltf.animations.forEach(animation => {
             let name = animation.name.toLowerCase()
             let action = mixerRole.clipAction(animation)
@@ -178,16 +178,18 @@
             if (['jump', 'punch', 'dodge', 'hit'].includes(name)) {
               action.loop = THREE.LoopOnce
             }
-            if ([].includes(name)) {
-              action.loop = THREE.LoopOnce
-              action.clampWhenFinished = true
-            }
+            // if ([].includes(name)) {
+            //   action.loop = THREE.LoopOnce
+            //   action.clampWhenFinished = true
+            // }
           })
+          // console.log(oaction)
           let action_act = oaction.idle
           action_act.play()
           entity.addComponent(CAction, { oaction, action_act })
           mixerRole.addEventListener('finished', e => {
             oaction.idle.play()
+            entity.getMutableComponent(CAction).action_act = oaction.idle
           })
           resolve()
           isMounted = true

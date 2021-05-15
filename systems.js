@@ -24,7 +24,7 @@ export class PlayerControlSystem extends System {
       object.position.add(s.direction)
 
       let cAction = entity.getMutableComponent(CAction)
-      if (cAction) {
+      if (cAction && cAction.action_act === cAction.oaction.idle) {
         if (okey.j) {
           cAction.action_act.stop()
           cAction.action_act = cAction.oaction.punch

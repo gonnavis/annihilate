@@ -72,7 +72,7 @@
 
   var objMoving, states;
   function init() {
-    var numObjects = 10000;
+    var numObjects = 10;
     var size = 0.2;
     var w = 100;
 
@@ -156,9 +156,8 @@
         var loader = new GLTFLoader();
         loader.load('./model/fel_lord/a.glb', function (gltf) {
           // console.log(gltf)
-          s.oaction = {}
-          s.gltf = gltf
           window.role=gltf.scene
+          let oaction={}
 
           role.traverse(function (child) {
             if (child.isMesh) {
@@ -172,11 +171,11 @@
           entity.addComponent(Object3D, { object: role })
           // role.scale.set(.7,.7,.7)
           // role.position.set(x,y,z)
-          s.mixer = new THREE.AnimationMixer(role)
-          s.gltf.animations.forEach(animation => {
+          window.mixerRole = new THREE.AnimationMixer(role)
+          gltf.animations.forEach(animation => {
             let name = animation.name.toLowerCase()
-            let action = s.mixer.clipAction(animation)
-            s.oaction[name] = action
+            let action = mixerRole.clipAction(animation)
+            oaction[name] = action
             if (['jump', 'punch', 'dodge', 'hit'].includes(name)) {
               action.loop = THREE.LoopOnce
             }
@@ -185,14 +184,14 @@
               action.clampWhenFinished = true
             }
           })
-          s.action_act = s.oaction.idle
-          s.action_act.play()
-          s.mixer.addEventListener('finished', e => {
+          let action_act = oaction.idle
+          action_act.play()
+          mixerRole.addEventListener('finished', e => {
             // console.log('finished')
-            s.fsm.tattacked()
-            s.fsm.tjumped()
-            s.fsm.thitted()
-            s.fsm.tidle()
+            // fsm.tattacked()
+            // fsm.tjumped()
+            // fsm.thitted()
+            // fsm.tidle()
           })
           resolve()
           isMounted=true
@@ -237,6 +236,7 @@
     var elapsedTime = clock.elapsedTime;
     //console.time('render');
     world.execute(delta, elapsedTime);
+    mixerRole.update(delta)
     //console.timeEnd('render');
 
     renderer.render(scene, camera);

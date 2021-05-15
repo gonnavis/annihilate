@@ -25,12 +25,10 @@
   import { RotatingSystem, ColliderSystem, PulsatingColorSystem, PulsatingScaleSystem, MovingSystem, TimeoutSystem, PlayerMoveSystem } from './systems.js';
   import { GLTFLoader } from "./lib/three.js/examples/jsm/loaders/GLTFLoader.js"
 
-  window.s = {
-    okey: {}, //object of keyboard
-  }
+  window.okey = {} //object of keyboard
   var world = new World();
   var entity;
-  window.isMounted=false;
+  window.isMounted = false;
 
   world
     .registerComponent(Object3D)
@@ -81,9 +79,9 @@
     window.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.25, 100);
     camera.position.set(0, 30, 30)
     camera.lookAt(0, 0, 0)
-    entity=world.createEntity()
+    entity = world.createEntity()
     entity.addComponent(PlayerMove)
-    entity.addComponent(Object3D,{object:camera})
+    entity.addComponent(Object3D, { object: camera })
 
     parent = new THREE.Object3D();
 
@@ -151,13 +149,13 @@
 
     /*role*/{
       let entity = world.createEntity()
-      entity.addComponent(PlayerMove  )
+      entity.addComponent(PlayerMove)
       new Promise((resolve, reject) => {
         var loader = new GLTFLoader();
         loader.load('./model/fel_lord/a.glb', function (gltf) {
           // console.log(gltf)
-          window.role=gltf.scene
-          let oaction={}
+          window.role = gltf.scene
+          let oaction = {}
 
           role.traverse(function (child) {
             if (child.isMesh) {
@@ -194,7 +192,7 @@
             // fsm.tidle()
           })
           resolve()
-          isMounted=true
+          isMounted = true
         }, undefined, function (e) {
           console.error(e);
           reject()
@@ -213,11 +211,11 @@
     window.addEventListener('keydown', e => {
       // console.log(e)
       // console.log(e.key)
-      s.okey[e.key] = true
+      okey[e.key] = true
     })
     window.addEventListener('keyup', e => {
       // console.log(e)
-      s.okey[e.key] = false
+      okey[e.key] = false
     })
 
     renderer.setAnimationLoop(animate);
@@ -231,7 +229,7 @@
   }
 
   function animate() {
-    if(!isMounted) return;
+    if (!isMounted) return;
     var delta = clock.getDelta();
     var elapsedTime = clock.elapsedTime;
     //console.time('render');

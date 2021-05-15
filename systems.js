@@ -3,16 +3,25 @@ import { System } from './lib/ecsy.module.js'
 import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerMove } from './components.js'
 
 export class PlayerMoveSystem extends System {
+  constructor() {
+    super(...arguments)
+    const s = this
+    s.speed = 0.15
+    s.direction = new THREE.Vector3()
+  }
   execute(delta, time) {
+    const s = this
     let entities = this.queries.entities.results
     entities.forEach((entity) => {
       let object3D = entity.getComponent(Object3D)
-      if (!object3D) return
       let object = object3D.object
-      if (s.okey.w) object.position.z -= 1
-      if (s.okey.s) object.position.z += 1
-      if (s.okey.a) object.position.x -= 1
-      if (s.okey.d) object.position.x += 1
+      s.direction.set(0, 0, 0)
+      if (okey.w) s.direction.z -= 1
+      if (okey.s) s.direction.z += 1
+      if (okey.a) s.direction.x -= 1
+      if (okey.d) s.direction.x += 1
+      s.direction.normalize().multiplyScalar(s.speed)
+      object.position.add(s.direction)
     })
   }
 }

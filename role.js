@@ -74,10 +74,10 @@ class Role{
 
       if(s.fsm.state!=='sattacking' && s.fsm.state!=='shitting'){
         s.direction=vec2()
-        if(s.okey.w) s.direction.add(vec2(0,-1))
-        if(s.okey.s) s.direction.add(vec2(0,1))
-        if(s.okey.a) s.direction.add(vec2(-1,0))
-        if(s.okey.d) s.direction.add(vec2(1,0))
+        if(s.okey.KeyW||s.okey.ArrowUp) s.direction.add(vec2(0,-1))
+        if(s.okey.KeyS||s.okey.ArrowDown) s.direction.add(vec2(0,1))
+        if(s.okey.KeyA||s.okey.ArrowLeft) s.direction.add(vec2(-1,0))
+        if(s.okey.KeyD||s.okey.ArrowRight) s.direction.add(vec2(1,0))
         s.direction.normalize().multiplyScalar(s.speed)
         s.gltf.scene.rotation.y=-s.facing.angle()+Math.PI/2
       }
@@ -188,25 +188,26 @@ class Role{
   events(){
     let s=this
     window.addEventListener('keydown', e=>{
-      // console.log(e)
-      // console.log(e.key)
-      s.okey[e.key]=1
+      // console.log(e.key,e.code,e.keyCode)
+      s.okey[e.code]=true
 
       if(!s.gltf) return
-      if(e.key===s.actkey) return
-      switch(e.key){
-        case 'j':
+      if(e.code===s.actkey) return
+      switch(e.code){
+        case 'KeyJ':
+        case 'Numpad4':
           s.fsm.tattacking()
           break;
-        case 'k':
+        case 'KeyK':
+        case 'Numpad5':
           s.fsm.tjumping()
           break;
       }
-      s.actkey=e.key
+      s.actkey=e.code
     })
     window.addEventListener('keyup', e=>{
       // console.log(e)
-      s.okey[e.key]=0
+      s.okey[e.code]=false
       s.actkey=''
     })
   }

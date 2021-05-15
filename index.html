@@ -21,14 +21,16 @@
 </body>
 <script type="module">
   import { World } from './lib/ecsy.module.js';
-  import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, Role } from './components.js';
-  import { RotatingSystem, ColliderSystem, PulsatingColorSystem, PulsatingScaleSystem, MovingSystem, TimeoutSystem, RoleSystem } from './systems.js';
+  import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerMove } from './components.js';
+  import { RotatingSystem, ColliderSystem, PulsatingColorSystem, PulsatingScaleSystem, MovingSystem, TimeoutSystem, PlayerMoveSystem } from './systems.js';
   import { GLTFLoader } from "./lib/three.js/examples/jsm/loaders/GLTFLoader.js"
 
   window.s = {
     okey: {}, //object of keyboard
   }
   var world = new World();
+  var entity;
+  window.isMounted=false;
 
   world
     .registerComponent(Object3D)
@@ -41,7 +43,7 @@
     .registerComponent(PulsatingColor)
     .registerComponent(Colliding)
     .registerComponent(Rotating)
-    .registerComponent(Role)
+    .registerComponent(PlayerMove)
 
   world
     .registerSystem(RotatingSystem)
@@ -50,9 +52,9 @@
     .registerSystem(TimeoutSystem)
     .registerSystem(ColliderSystem)
     .registerSystem(MovingSystem)
-    .registerSystem(RoleSystem)
+    .registerSystem(PlayerMoveSystem)
 
-  var camera, scene, renderer, parent;
+  var scene, renderer, parent;
   var clock = new THREE.Clock();
 
   init();
@@ -76,8 +78,12 @@
 
     scene = new THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.005, 10000);
-    camera.position.z = 20;
+    window.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.25, 100);
+    camera.position.set(0, 30, 30)
+    camera.lookAt(0, 0, 0)
+    entity=world.createEntity()
+    entity.addComponent(PlayerMove)
+    entity.addComponent(Object3D,{object:camera})
 
     parent = new THREE.Object3D();
 
@@ -90,7 +96,7 @@
     objMoving.position.set(0, 0, 0);
     var radius = 10;
 
-    var entity = world.createEntity();
+    entity = world.createEntity();
     objMoving.position.set(0, 0, radius);
     entity.addComponent(Collider);
     entity.addComponent(Object3D, { object: objMoving });
@@ -145,16 +151,16 @@
 
     /*role*/{
       let entity = world.createEntity()
-      entity.addComponent(Role)
+      entity.addComponent(PlayerMove  )
       new Promise((resolve, reject) => {
         var loader = new GLTFLoader();
         loader.load('./model/fel_lord/a.glb', function (gltf) {
           // console.log(gltf)
-          let s = {}
           s.oaction = {}
           s.gltf = gltf
+          window.role=gltf.scene
 
-          s.gltf.scene.traverse(function (child) {
+          role.traverse(function (child) {
             if (child.isMesh) {
               child.material = new THREE.MeshBasicMaterial()
               child.material.map = new THREE.TextureLoader().load('./model/fel_lord/fel_lord.png')
@@ -162,11 +168,11 @@
               child.material.skinning = true
             }
           });
-          scene.add(s.gltf.scene)
-          entity.addComponent(Object3D, { object: s.gltf.scene })
-          // s.gltf.scene.scale.set(.7,.7,.7)
-          // s.gltf.scene.position.set(x,y,z)
-          s.mixer = new THREE.AnimationMixer(s.gltf.scene)
+          scene.add(role)
+          entity.addComponent(Object3D, { object: role })
+          // role.scale.set(.7,.7,.7)
+          // role.position.set(x,y,z)
+          s.mixer = new THREE.AnimationMixer(role)
           s.gltf.animations.forEach(animation => {
             let name = animation.name.toLowerCase()
             let action = s.mixer.clipAction(animation)
@@ -189,6 +195,7 @@
             s.fsm.tidle()
           })
           resolve()
+          isMounted=true
         }, undefined, function (e) {
           console.error(e);
           reject()
@@ -225,6 +232,7 @@
   }
 
   function animate() {
+    if(!isMounted) return;
     var delta = clock.getDelta();
     var elapsedTime = clock.elapsedTime;
     //console.time('render');

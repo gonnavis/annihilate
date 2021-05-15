@@ -1,8 +1,8 @@
 /* global THREE */
 import { System } from './lib/ecsy.module.js'
-import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, Role } from './components.js'
+import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerMove } from './components.js'
 
-export class RoleSystem extends System {
+export class PlayerMoveSystem extends System {
   execute(delta, time) {
     let entities = this.queries.entities.results
     entities.forEach((entity) => {
@@ -16,8 +16,8 @@ export class RoleSystem extends System {
     })
   }
 }
-RoleSystem.queries = {
-  entities: { components: [Role] },
+PlayerMoveSystem.queries = {
+  entities: { components: [PlayerMove] },
 }
 
 export class RotatingSystem extends System {

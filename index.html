@@ -21,8 +21,8 @@
 </body>
 <script type="module">
   import { World } from './lib/ecsy.module.js';
-  import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerMove } from './components.js';
-  import { RotatingSystem, ColliderSystem, PulsatingColorSystem, PulsatingScaleSystem, MovingSystem, TimeoutSystem, PlayerMoveSystem } from './systems.js';
+  import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerControl, CAction } from './components.js';
+  import { RotatingSystem, ColliderSystem, PulsatingColorSystem, PulsatingScaleSystem, MovingSystem, TimeoutSystem, PlayerControlSystem } from './systems.js';
   import { GLTFLoader } from "./lib/three.js/examples/jsm/loaders/GLTFLoader.js"
 
   window.okey = {} //object of keyboard
@@ -41,7 +41,8 @@
     .registerComponent(PulsatingColor)
     .registerComponent(Colliding)
     .registerComponent(Rotating)
-    .registerComponent(PlayerMove)
+    .registerComponent(PlayerControl)
+    .registerComponent(CAction)
 
   world
     .registerSystem(RotatingSystem)
@@ -50,7 +51,7 @@
     .registerSystem(TimeoutSystem)
     .registerSystem(ColliderSystem)
     .registerSystem(MovingSystem)
-    .registerSystem(PlayerMoveSystem)
+    .registerSystem(PlayerControlSystem)
 
   var scene, renderer, parent;
   var clock = new THREE.Clock();
@@ -80,7 +81,7 @@
     camera.position.set(0, 30, 30)
     camera.lookAt(0, 0, 0)
     entity = world.createEntity()
-    entity.addComponent(PlayerMove)
+    entity.addComponent(PlayerControl)
     entity.addComponent(Object3D, { object: camera })
 
     parent = new THREE.Object3D();
@@ -149,7 +150,7 @@
 
     /*role*/{
       let entity = world.createEntity()
-      entity.addComponent(PlayerMove)
+      entity.addComponent(PlayerControl)
       new Promise((resolve, reject) => {
         var loader = new GLTFLoader();
         loader.load('./model/fel_lord/a.glb', function (gltf) {
@@ -184,12 +185,9 @@
           })
           let action_act = oaction.idle
           action_act.play()
+          entity.addComponent(CAction, { oaction, action_act })
           mixerRole.addEventListener('finished', e => {
-            // console.log('finished')
-            // fsm.tattacked()
-            // fsm.tjumped()
-            // fsm.thitted()
-            // fsm.tidle()
+            oaction.idle.play()
           })
           resolve()
           isMounted = true

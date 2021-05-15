@@ -1,8 +1,8 @@
 /* global THREE */
 import { System } from './lib/ecsy.module.js'
-import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerMove } from './components.js'
+import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerControl, CAction } from './components.js'
 
-export class PlayerMoveSystem extends System {
+export class PlayerControlSystem extends System {
   constructor() {
     super(...arguments)
     const s = this
@@ -22,11 +22,25 @@ export class PlayerMoveSystem extends System {
       if (okey.d) s.direction.x += 1
       s.direction.normalize().multiplyScalar(s.speed)
       object.position.add(s.direction)
+
+      let cAction = entity.getMutableComponent(CAction)
+      if (cAction) {
+        if (okey.j) {
+          cAction.action_act.stop()
+          cAction.action_act = cAction.oaction.punch
+          cAction.oaction.punch.reset().play()
+        }
+        if (okey.k) {
+          cAction.action_act.stop()
+          cAction.action_act = cAction.oaction.jump
+          cAction.oaction.jump.reset().play()
+        }
+      }
     })
   }
 }
-PlayerMoveSystem.queries = {
-  entities: { components: [PlayerMove] },
+PlayerControlSystem.queries = {
+  entities: { components: [PlayerControl] },
 }
 
 export class RotatingSystem extends System {

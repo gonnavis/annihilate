@@ -21,7 +21,10 @@ export class PlayerControlSystem extends System {
       if (okey.a) s.velocity.x -= 1
       if (okey.d) s.velocity.x += 1
       s.velocity.normalize().multiplyScalar(s.speed)
-      entity.getMutableComponent(Moving).velocity.copy(s.velocity)
+      let cMoving = entity.getMutableComponent(Moving)
+      if (cMoving) {
+        cMoving.velocity.copy(s.velocity)
+      }
 
       let cAction = entity.getMutableComponent(CAction)
       if (cAction && cAction.action_act === cAction.oaction.idle) {
@@ -29,6 +32,7 @@ export class PlayerControlSystem extends System {
           cAction.action_act.stop()
           cAction.action_act = cAction.oaction.punch
           cAction.oaction.punch.reset().play()
+          entity.removeComponent(Moving)
         }
         if (okey.k) {
           cAction.action_act.stop()

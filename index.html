@@ -76,13 +76,10 @@
 
     scene = new THREE.Scene();
 
+    window.cameraBiasZ = 30
     window.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.25, 100);
-    camera.position.set(0, 30, 30)
+    camera.position.set(0, 30, cameraBiasZ)
     camera.lookAt(0, 0, 0)
-    entity = world.createEntity()
-    entity.addComponent(PlayerControl)
-    entity.addComponent(Object3D, { object: camera })
-    entity.addComponent(Moving, { velocity: new THREE.Vector3() })
 
     /*lights*/{
       let light = new THREE.HemisphereLight(0xffffff, 0x444444);
@@ -95,9 +92,11 @@
     }
 
     /*role*/{
+      let velocity = new THREE.Vector3()
       let entity = world.createEntity()
+      window.roleEntity = entity
       entity.addComponent(PlayerControl)
-      entity.addComponent(Moving, { velocity: new THREE.Vector3() })
+      entity.addComponent(Moving, { velocity })
       new Promise((resolve, reject) => {
         var loader = new GLTFLoader();
         loader.load('./model/fel_lord/a.glb', function (gltf) {
@@ -137,6 +136,7 @@
           mixerRole.addEventListener('finished', e => {
             oaction.idle.play()
             entity.getMutableComponent(CAction).action_act = oaction.idle
+            entity.addComponent(Moving, { velocity })
           })
           resolve()
           isMounted = true
@@ -197,6 +197,8 @@
     //console.time('render');
     world.execute(delta, elapsedTime);
     mixerRole.update(delta)
+    camera.position.x = role.position.x
+    camera.position.z = role.position.z + cameraBiasZ
     //console.timeEnd('render');
 
     renderer.render(scene, camera);

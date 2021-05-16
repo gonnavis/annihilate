@@ -58,9 +58,9 @@
   var scene, renderer, parent;
   var clock = new THREE.Clock();
 
-  init();
   init_cannon();
-  window.cannonDebugRenderer = new THREE.CannonDebugRenderer(scene, world);
+  init();
+  window.cannonDebugRenderer = new THREE.CannonDebugRenderer(scene, cannonWorld);
 
   function randomSpherePoint(radius) {
     var u = Math.random();
@@ -101,6 +101,19 @@
       window.roleEntity = entity
       entity.addComponent(PlayerControl)
       entity.addComponent(Moving, { velocity })
+
+      let body_size = 1.5
+      let body = new CANNON.Body({
+        mass: 1,
+      })
+      // let shape=new CANNON.Sphere(body_size)
+      let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
+      body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
+      body.angularDamping = 1
+      body.addShape(shape)
+      body.position.set(0, 5, 0)
+      cannonWorld.addBody(body)
+
       new Promise((resolve, reject) => {
         var loader = new GLTFLoader();
         loader.load('./model/fel_lord/a.glb', function (gltf) {
@@ -116,7 +129,7 @@
             }
           });
           scene.add(role)
-          entity.addComponent(Object3D, { object: role })
+          entity.addComponent(Object3D, { object: role, body, body_size })
           // role.scale.set(.7,.7,.7)
           // role.position.set(x,y,z)
           window.mixerRole = new THREE.AnimationMixer(role)
@@ -156,12 +169,24 @@
       mesh.rotation.x = - Math.PI / 2;
       scene.add(mesh);
 
-
       let grid = new THREE.GridHelper(200, 40, 0x000000, 0x000000);
       grid.position.y = .1
       grid.material.opacity = 0.2;
       grid.material.transparent = true;
       scene.add(grid);
+
+      let shape = new CANNON.Plane()
+      let body = new CANNON.Body({
+        mass: 0,
+        collisionResponse: 0,
+      })
+      body.addShape(shape)
+      body.position.set(0, 0, 0)
+      body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
+      // body.addEventListener("collide", function (event) {
+      //   console.log('collide floor')
+      // })
+      cannonWorld.addBody(body)
     }
 
     renderer = new THREE.WebGLRenderer();
@@ -213,7 +238,7 @@
     camera.position.x = role.position.x
     camera.position.z = role.position.z + cameraBiasZ
 
-    // cannonDebugRenderer.update()
+    cannonDebugRenderer.update()
     cannonWorld.step(fixedTimeStep, delta)
 
     //console.timeEnd('render');

@@ -38,6 +38,7 @@ export class PlayerControlSystem extends System {
           cAction.action_act.stop()
           cAction.action_act = cAction.oaction.jump
           cAction.oaction.jump.reset().play()
+          object3D.body.velocity.y = 20
         }
       }
     })
@@ -124,9 +125,15 @@ export class MovingSystem extends System {
     let entities = this.queries.entities.results
     for (let i = 0; i < entities.length; i++) {
       let entity = entities[i]
-      let object = entity.getComponent(Object3D).object
+      let object3D = entity.getComponent(Object3D) ///todo: getMutableComponent?
+      let body = object3D.body
       let velocity = entity.getComponent(Moving).velocity
-      object.position.add(velocity)
+      body.position.x += velocity.x
+      body.position.z += velocity.z
+
+      let object = object3D.object
+      let body_size = object3D.body_size
+      object.position.set(body.position.x, body.position.y - body_size, body.position.z)
     }
   }
 }

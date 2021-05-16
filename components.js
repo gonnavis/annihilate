@@ -25,6 +25,8 @@ PulsatingScale.schema = {
 export class Object3D extends Component {}
 Object3D.schema = {
   object: { type: Types.Ref },
+  body: { type: Types.Ref },
+  body_size: { type: Types.Number },
 }
 
 export class Timeout extends Component {}

@@ -82,6 +82,7 @@
     entity = world.createEntity()
     entity.addComponent(PlayerControl)
     entity.addComponent(Object3D, { object: camera })
+    entity.addComponent(Moving, { velocity: new THREE.Vector3() })
 
     /*lights*/{
       let light = new THREE.HemisphereLight(0xffffff, 0x444444);
@@ -92,10 +93,11 @@
       light.position.set(0, 20, 10);
       scene.add(light);
     }
-    
+
     /*role*/{
       let entity = world.createEntity()
       entity.addComponent(PlayerControl)
+      entity.addComponent(Moving, { velocity: new THREE.Vector3() })
       new Promise((resolve, reject) => {
         var loader = new GLTFLoader();
         loader.load('./model/fel_lord/a.glb', function (gltf) {

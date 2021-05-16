@@ -6,7 +6,7 @@ export class Recovering extends TagComponent {}
 
 export class Moving extends Component {}
 Moving.schema = {
-  offset: { type: Types.Number, default: 0 },
+  velocity: { type: Types.Ref },
 }
 
 export class CAction extends Component {}

@@ -7,7 +7,7 @@ export class PlayerControlSystem extends System {
     super(...arguments)
     const s = this
     s.speed = 0.15
-    s.direction = new THREE.Vector3()
+    s.velocity = new THREE.Vector3()
   }
   execute(delta, time) {
     const s = this
@@ -15,13 +15,13 @@ export class PlayerControlSystem extends System {
     entities.forEach((entity) => {
       let object3D = entity.getComponent(Object3D)
       let object = object3D.object
-      s.direction.set(0, 0, 0)
-      if (okey.w) s.direction.z -= 1
-      if (okey.s) s.direction.z += 1
-      if (okey.a) s.direction.x -= 1
-      if (okey.d) s.direction.x += 1
-      s.direction.normalize().multiplyScalar(s.speed)
-      object.position.add(s.direction)
+      s.velocity.set(0, 0, 0)
+      if (okey.w) s.velocity.z -= 1
+      if (okey.s) s.velocity.z += 1
+      if (okey.a) s.velocity.x -= 1
+      if (okey.d) s.velocity.x += 1
+      s.velocity.normalize().multiplyScalar(s.speed)
+      entity.getMutableComponent(Moving).velocity.copy(s.velocity)
 
       let cAction = entity.getMutableComponent(CAction)
       if (cAction && cAction.action_act === cAction.oaction.idle) {
@@ -121,10 +121,8 @@ export class MovingSystem extends System {
     for (let i = 0; i < entities.length; i++) {
       let entity = entities[i]
       let object = entity.getComponent(Object3D).object
-      let offset = entity.getComponent(Moving).offset
-      let radius = 5
-      let maxRadius = 5
-      object.position.z = Math.cos(time + 3 * offset) * maxRadius + radius
+      let velocity = entity.getComponent(Moving).velocity
+      object.position.add(velocity)
     }
   }
 }

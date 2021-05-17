@@ -4,9 +4,10 @@ export class Collidable extends TagComponent {}
 export class Collider extends TagComponent {}
 export class Recovering extends TagComponent {}
 
-export class Moving extends Component {}
-Moving.schema = {
+export class CMoving extends Component {}
+CMoving.schema = {
   velocity: { type: Types.Ref },
+  facing: { type: Types.Ref },
 }
 
 export class CAction extends Component {}

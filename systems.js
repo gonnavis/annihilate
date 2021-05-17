@@ -1,6 +1,6 @@
 /* global THREE */
 import { System } from './lib/ecsy.module.js'
-import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerControl, CAction } from './components.js'
+import { Object3D, Collidable, Collider, Recovering, CMoving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerControl, CAction } from './components.js'
 
 export class PlayerControlSystem extends System {
   constructor() {
@@ -21,7 +21,7 @@ export class PlayerControlSystem extends System {
       if (okey.a) s.velocity.x -= 1
       if (okey.d) s.velocity.x += 1
       s.velocity.normalize().multiplyScalar(s.speed)
-      let cMoving = entity.getMutableComponent(Moving)
+      let cMoving = entity.getMutableComponent(CMoving)
       if (cMoving) {
         cMoving.velocity.copy(s.velocity)
       }
@@ -32,7 +32,7 @@ export class PlayerControlSystem extends System {
           cAction.action_act.stop()
           cAction.action_act = cAction.oaction.punch
           cAction.oaction.punch.reset().play()
-          entity.removeComponent(Moving)
+          entity.removeComponent(CMoving)
         }
         if (okey.k) {
           cAction.action_act.stop()
@@ -131,19 +131,25 @@ export class MovingSystem extends System {
       let entity = entities[i]
       let object3D = entity.getComponent(Object3D) ///todo: getMutableComponent?
       let body = object3D.body
-      let velocity = entity.getComponent(Moving).velocity
+      let cMoving = entity.getComponent(CMoving)
+      let velocity = cMoving.velocity
       body.position.x += velocity.x
       body.position.z += velocity.z
 
       let object = object3D.object
       let body_size = object3D.body_size
       object.position.set(body.position.x, body.position.y - body_size, body.position.z)
+      if (velocity.x !== 0 || velocity.z !== 0) {
+        cMoving.facing.x = velocity.x
+        cMoving.facing.y = velocity.z
+      }
+      object.rotation.y = -cMoving.facing.angle() + Math.PI / 2
     }
   }
 }
 
 MovingSystem.queries = {
-  entities: { components: [Moving] },
+  entities: { components: [CMoving] },
 }
 
 export class TimeoutSystem extends System {

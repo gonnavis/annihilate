@@ -23,7 +23,7 @@
 </body>
 <script type="module">
   import { World } from './lib/ecsy.module.js';
-  import { Object3D, Collidable, Collider, Recovering, Moving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerControl, CAction } from './components.js';
+  import { Object3D, Collidable, Collider, Recovering, CMoving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerControl, CAction } from './components.js';
   import { RotatingSystem, ColliderSystem, PulsatingColorSystem, PulsatingScaleSystem, MovingSystem, TimeoutSystem, PlayerControlSystem } from './systems.js';
   import { GLTFLoader } from "./lib/three.js/examples/jsm/loaders/GLTFLoader.js"
 
@@ -36,7 +36,7 @@
     .registerComponent(Collidable)
     .registerComponent(Collider)
     .registerComponent(Recovering)
-    .registerComponent(Moving)
+    .registerComponent(CMoving)
     .registerComponent(PulsatingScale)
     .registerComponent(Timeout)
     .registerComponent(PulsatingColor)
@@ -95,10 +95,11 @@
 
     /*role*/{
       let velocity = new THREE.Vector3()
+      let facing = new THREE.Vector2()
       let entity = world.createEntity()
       window.roleEntity = entity
       entity.addComponent(PlayerControl)
-      entity.addComponent(Moving, { velocity })
+      entity.addComponent(CMoving, { velocity, facing })
 
       let body_size = 1.5
       let body = new CANNON.Body({
@@ -151,7 +152,7 @@
           mixerRole.addEventListener('finished', e => {
             oaction.idle.play()
             entity.getMutableComponent(CAction).action_act = oaction.idle
-            entity.addComponent(Moving, { velocity })
+            entity.addComponent(CMoving, { velocity, facing })
           })
           resolve()
         }, undefined, function (e) {
@@ -163,9 +164,10 @@
 
     /*enemy*/{
       let velocity = new THREE.Vector3()
+      let facing = new THREE.Vector2()
       let entity = world.createEntity()
       window.enemyEntity = entity
-      entity.addComponent(Moving, { velocity })
+      entity.addComponent(CMoving, { velocity, facing })
 
       let body_size = 1.5
       let body = new CANNON.Body({

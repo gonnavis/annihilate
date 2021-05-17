@@ -33,6 +33,7 @@ export class PlayerControlSystem extends System {
           cAction.action_act = cAction.oaction.punch
           cAction.oaction.punch.reset().play()
           entity.removeComponent(CMoving)
+          cMoving.velocity.set(0, 0, 0)
         }
         if (okey.k) {
           cAction.action_act.stop()

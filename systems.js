@@ -48,6 +48,10 @@ PlayerControlSystem.queries = {
   entities: { components: [PlayerControl] },
 }
 
+// export class Enemy extends System{
+
+// }
+
 export class RotatingSystem extends System {
   execute(delta) {
     let entities = this.queries.entities.results

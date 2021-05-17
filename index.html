@@ -30,7 +30,6 @@
   window.okey = {} //object of keyboard
   var world = new World();
   var entity;
-  window.isMounted = false;
 
   world
     .registerComponent(Object3D)
@@ -60,7 +59,6 @@
 
   init_cannon();
   init();
-  window.cannonDebugRenderer = new THREE.CannonDebugRenderer(scene, cannonWorld);
 
   function randomSpherePoint(radius) {
     var u = Math.random();
@@ -73,7 +71,7 @@
     return new THREE.Vector3(x, y, z);
   }
 
-  function init() {
+  async function init() {
     var numObjects = 10;
     var size = 0.2;
     var w = 100;
@@ -114,7 +112,7 @@
       body.position.set(0, 5, 0)
       cannonWorld.addBody(body)
 
-      new Promise((resolve, reject) => {
+      await new Promise((resolve, reject) => {
         var loader = new GLTFLoader();
         loader.load('./model/fel_lord/a.glb', function (gltf) {
           // console.log(gltf)
@@ -156,7 +154,65 @@
             entity.addComponent(Moving, { velocity })
           })
           resolve()
-          isMounted = true
+        }, undefined, function (e) {
+          console.error(e);
+          reject()
+        });
+      })
+    }
+
+    /*enemy*/{
+      let velocity = new THREE.Vector3()
+      let entity = world.createEntity()
+      window.enemyEntity = entity
+      entity.addComponent(Moving, { velocity })
+
+      let body_size = 1.5
+      let body = new CANNON.Body({
+        mass: 1,
+      })
+      // let shape=new CANNON.Sphere(body_size)
+      let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
+      body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
+      body.angularDamping = 1
+      body.addShape(shape)
+      body.position.set(15, 5, -15)
+      cannonWorld.addBody(body)
+
+      await new Promise((resolve, reject) => {
+        var loader = new GLTFLoader();
+        loader.load('./model/RobotExpressive/RobotExpressive.glb', function (gltf) {
+          // console.log(gltf)
+          window.enemy = gltf.scene
+          enemy.scale.setScalar(.7)
+          scene.add(enemy)
+          entity.addComponent(Object3D, { object: enemy, body, body_size })
+          // enemy.scale.set(.7,.7,.7)
+          // enemy.position.set(x,y,z)
+          window.mixerEnemy = new THREE.AnimationMixer(enemy)
+          let oaction = {}
+          gltf.animations.forEach(animation => {
+            let name = animation.name.toLowerCase()
+            let action = mixerEnemy.clipAction(animation)
+            oaction[name] = action
+            if (['jump', 'punch', 'dance'].includes(name)) {
+              action.loop = THREE.LoopOnce
+            }
+            if (['death'].includes(name)) {
+              action.loop = THREE.LoopOnce
+              action.clampWhenFinished = true
+            }
+            oaction.dance.timeScale = 3
+          })
+          // console.log(oaction)
+          let action_act = oaction.idle
+          action_act.play()
+          entity.addComponent(CAction, { oaction, action_act })
+          mixerEnemy.addEventListener('finished', e => {
+            oaction.idle.play()
+            entity.getMutableComponent(CAction).action_act = oaction.idle
+          })
+          resolve()
         }, undefined, function (e) {
           console.error(e);
           reject()
@@ -209,6 +265,7 @@
       okey[e.key] = false
     })
 
+    window.cannonDebugRenderer = new THREE.CannonDebugRenderer(scene, cannonWorld);
     renderer.setAnimationLoop(animate);
 
   }
@@ -229,7 +286,6 @@
   }
 
   function animate() {
-    if (!isMounted) return;
     var delta = clock.getDelta();
     var elapsedTime = clock.elapsedTime;
     //console.time('render');

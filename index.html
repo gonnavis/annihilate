@@ -23,8 +23,8 @@
 </body>
 <script type="module">
   import { World } from './lib/ecsy.module.js';
-  import { Object3D, Collidable, Collider, Recovering, CMoving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerControl, CAction } from './components.js';
-  import { RotatingSystem, ColliderSystem, PulsatingColorSystem, PulsatingScaleSystem, MovingSystem, TimeoutSystem, PlayerControlSystem } from './systems.js';
+  import { CObject3D, CCollidable, CCollider, CRecovering, CMoving, CPulsatingScale, CTimeout, CPulsatingColor, CColliding, CRotating, CPlayerControl, CAction } from './components.js';
+  import { SRotating, SCollider, SPulsatingColor, SPulsatingScale, SMoving, STimeout, SPlayerControl } from './systems.js';
   import { GLTFLoader } from "./lib/three.js/examples/jsm/loaders/GLTFLoader.js"
 
   window.okey = {} //object of keyboard
@@ -32,27 +32,27 @@
   var entity;
 
   world
-    .registerComponent(Object3D)
-    .registerComponent(Collidable)
-    .registerComponent(Collider)
-    .registerComponent(Recovering)
+    .registerComponent(CObject3D)
+    .registerComponent(CCollidable)
+    .registerComponent(CCollider)
+    .registerComponent(CRecovering)
     .registerComponent(CMoving)
-    .registerComponent(PulsatingScale)
-    .registerComponent(Timeout)
-    .registerComponent(PulsatingColor)
-    .registerComponent(Colliding)
-    .registerComponent(Rotating)
-    .registerComponent(PlayerControl)
+    .registerComponent(CPulsatingScale)
+    .registerComponent(CTimeout)
+    .registerComponent(CPulsatingColor)
+    .registerComponent(CColliding)
+    .registerComponent(CRotating)
+    .registerComponent(CPlayerControl)
     .registerComponent(CAction)
 
   world
-    .registerSystem(RotatingSystem)
-    .registerSystem(PulsatingColorSystem)
-    .registerSystem(PulsatingScaleSystem)
-    .registerSystem(TimeoutSystem)
-    .registerSystem(ColliderSystem)
-    .registerSystem(MovingSystem)
-    .registerSystem(PlayerControlSystem)
+    .registerSystem(SRotating)
+    .registerSystem(SPulsatingColor)
+    .registerSystem(SPulsatingScale)
+    .registerSystem(STimeout)
+    .registerSystem(SCollider)
+    .registerSystem(SMoving)
+    .registerSystem(SPlayerControl)
 
   var scene, renderer, parent;
   var clock = new THREE.Clock();
@@ -98,7 +98,7 @@
       let facing = new THREE.Vector2()
       let entity = world.createEntity()
       window.roleEntity = entity
-      entity.addComponent(PlayerControl)
+      entity.addComponent(CPlayerControl)
       entity.addComponent(CMoving, { velocity, facing })
 
       let body_size = 1.5
@@ -128,11 +128,12 @@
             }
           });
           scene.add(role)
-          entity.addComponent(Object3D, { object: role, body, body_size })
+          entity.addComponent(CObject3D, { object: role, body, body_size })
           // role.scale.set(.7,.7,.7)
           // role.position.set(x,y,z)
           window.mixerRole = new THREE.AnimationMixer(role)
           let oaction = {}
+          window.oactionRole = oaction
           gltf.animations.forEach(animation => {
             let name = animation.name.toLowerCase()
             let action = mixerRole.clipAction(animation)
@@ -188,7 +189,7 @@
           window.enemy = gltf.scene
           enemy.scale.setScalar(.7)
           scene.add(enemy)
-          entity.addComponent(Object3D, { object: enemy, body, body_size })
+          entity.addComponent(CObject3D, { object: enemy, body, body_size })
           // enemy.scale.set(.7,.7,.7)
           // enemy.position.set(x,y,z)
           window.mixerEnemy = new THREE.AnimationMixer(enemy)

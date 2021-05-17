@@ -1,8 +1,8 @@
 /* global THREE */
 import { System } from './lib/ecsy.module.js'
-import { Object3D, Collidable, Collider, Recovering, CMoving, PulsatingScale, Timeout, PulsatingColor, Colliding, Rotating, PlayerControl, CAction } from './components.js'
+import { CObject3D, CCollidable, CCollider, CRecovering, CMoving, CPulsatingScale, CTimeout, CPulsatingColor, CColliding, CRotating, CPlayerControl, CAction } from './components.js'
 
-export class PlayerControlSystem extends System {
+export class SPlayerControl extends System {
   constructor() {
     super(...arguments)
     const s = this
@@ -13,7 +13,7 @@ export class PlayerControlSystem extends System {
     const s = this
     let entities = this.queries.entities.results
     entities.forEach((entity) => {
-      let object3D = entity.getComponent(Object3D)
+      let object3D = entity.getComponent(CObject3D)
       let object = object3D.object
       s.velocity.set(0, 0, 0)
       if (okey.w) s.velocity.z -= 1
@@ -45,21 +45,21 @@ export class PlayerControlSystem extends System {
     })
   }
 }
-PlayerControlSystem.queries = {
-  entities: { components: [PlayerControl] },
+SPlayerControl.queries = {
+  entities: { components: [CPlayerControl] },
 }
 
 // export class Enemy extends System{
 
 // }
 
-export class RotatingSystem extends System {
+export class SRotating extends System {
   execute(delta) {
     let entities = this.queries.entities.results
     for (let i = 0; i < entities.length; i++) {
       let entity = entities[i]
-      let rotatingSpeed = entity.getComponent(Rotating).rotatingSpeed
-      let object = entity.getComponent(Object3D).object
+      let rotatingSpeed = entity.getComponent(CRotating).rotatingSpeed
+      let object = entity.getComponent(CObject3D).object
 
       object.rotation.x += rotatingSpeed * delta
       object.rotation.y += rotatingSpeed * delta * 2
@@ -68,69 +68,69 @@ export class RotatingSystem extends System {
   }
 }
 
-RotatingSystem.queries = {
-  entities: { components: [Rotating, Object3D] },
+SRotating.queries = {
+  entities: { components: [CRotating, CObject3D] },
 }
 
 const TIMER_TIME = 1
 
-export class PulsatingColorSystem extends System {
+export class SPulsatingColor extends System {
   execute(delta, time) {
     time *= 1000
     let entities = this.queries.entities.results
     for (let i = 0; i < entities.length; i++) {
       let entity = entities[i]
-      let object = entity.getComponent(Object3D).object
-      if (entity.hasComponent(Colliding)) {
+      let object = entity.getComponent(CObject3D).object
+      if (entity.hasComponent(CColliding)) {
         object.material.color.setRGB(1, 1, 0)
-      } else if (entity.hasComponent(Recovering)) {
-        let col = 0.3 + entity.getComponent(Timeout).timer / TIMER_TIME
+      } else if (entity.hasComponent(CRecovering)) {
+        let col = 0.3 + entity.getComponent(CTimeout).timer / TIMER_TIME
         object.material.color.setRGB(col, col, 0)
       } else {
-        let r = Math.sin(time / 500 + entity.getComponent(PulsatingColor).offset * 12) / 2 + 0.5
+        let r = Math.sin(time / 500 + entity.getComponent(CPulsatingColor).offset * 12) / 2 + 0.5
         object.material.color.setRGB(r, 0, 0)
       }
     }
   }
 }
 
-PulsatingColorSystem.queries = {
-  entities: { components: [PulsatingColor, Object3D] },
+SPulsatingColor.queries = {
+  entities: { components: [CPulsatingColor, CObject3D] },
 }
 
-export class PulsatingScaleSystem extends System {
+export class SPulsatingScale extends System {
   execute(delta, time) {
     let entities = this.queries.entities.results
     for (let i = 0; i < entities.length; i++) {
       let entity = entities[i]
-      let object = entity.getComponent(Object3D).object
+      let object = entity.getComponent(CObject3D).object
 
       let mul
-      if (entity.hasComponent(Colliding)) {
+      if (entity.hasComponent(CColliding)) {
         mul = 2
-      } else if (entity.hasComponent(Recovering)) {
+      } else if (entity.hasComponent(CRecovering)) {
         mul = 1.2
       } else {
         mul = 0.8
       }
 
-      let offset = entity.getComponent(PulsatingScale).offset
+      let offset = entity.getComponent(CPulsatingScale).offset
       let sca = mul * (Math.cos(time + offset) / 2 + 1) + 0.2
       object.scale.set(sca, sca, sca)
     }
   }
 }
 
-PulsatingScaleSystem.queries = {
-  entities: { components: [PulsatingScale] },
+SPulsatingScale.queries = {
+  entities: { components: [CPulsatingScale] },
 }
 
-export class MovingSystem extends System {
+export class SMoving extends System {
   execute(delta, time) {
     let entities = this.queries.entities.results
     for (let i = 0; i < entities.length; i++) {
       let entity = entities[i]
-      let object3D = entity.getComponent(Object3D) ///todo: getMutableComponent?
+      let object3D = entity.getComponent(CObject3D) ///todo: getMutableComponent?
       let body = object3D.body
       let cMoving = entity.getComponent(CMoving)
       let velocity = cMoving.velocity
@@ -149,17 +149,17 @@ export class MovingSystem extends System {
   }
 }
 
-MovingSystem.queries = {
+SMoving.queries = {
   entities: { components: [CMoving] },
 }
 
-export class TimeoutSystem extends System {
+export class STimeout extends System {
   execute(delta) {
     let entities = this.queries.entities.results
     for (let i = 0; i < entities.length; i++) {
       let entity = entities[i]
 
-      let timeout = entity.getMutableComponent(Timeout)
+      let timeout = entity.getMutableComponent(CTimeout)
       timeout.timer -= delta
       if (timeout.timer < 0) {
         timeout.timer = 0
@@ -170,25 +170,25 @@ export class TimeoutSystem extends System {
           entity.removeComponent(componentName)
         })
 
-        entity.removeComponent(Timeout)
+        entity.removeComponent(CTimeout)
       }
     }
   }
 }
 
-TimeoutSystem.queries = {
-  entities: { components: [Timeout] },
+STimeout.queries = {
+  entities: { components: [CTimeout] },
 }
 
 let ballWorldPos = new THREE.Vector3()
 
-export class ColliderSystem extends System {
+export class SCollider extends System {
   execute() {
     let boxes = this.queries.boxes.results
     let balls = this.queries.balls.results
     for (let i = 0; i < balls.length; i++) {
       let ball = balls[i]
-      let ballObject = ball.getComponent(Object3D).object
+      let ballObject = ball.getComponent(CObject3D).object
       ballObject.getWorldPosition(ballWorldPos)
       if (!ballObject.geometry.boundingSphere) {
         ballObject.geometry.computeBoundingSphere()
@@ -197,8 +197,8 @@ export class ColliderSystem extends System {
 
       for (let j = 0; j < boxes.length; j++) {
         let box = boxes[j]
-        let boxObject = box.getComponent(Object3D).object
-        let prevColliding = box.hasComponent(Colliding)
+        let boxObject = box.getComponent(CObject3D).object
+        let prevColliding = box.hasComponent(CColliding)
         if (!boxObject.geometry.boundingSphere) {
           boxObject.geometry.computeBoundingSphere()
         }
@@ -207,15 +207,15 @@ export class ColliderSystem extends System {
 
         if (boxObject.position.distanceToSquared(ballWorldPos) <= radiusSum * radiusSum) {
           if (!prevColliding) {
-            box.addComponent(Colliding)
+            box.addComponent(CColliding)
           }
         } else {
           if (prevColliding) {
-            box.removeComponent(Colliding)
-            box.addComponent(Recovering)
-            box.addComponent(Timeout, {
+            box.removeComponent(CColliding)
+            box.addComponent(CRecovering)
+            box.addComponent(CTimeout, {
               timer: TIMER_TIME,
-              removeComponents: [Recovering],
+              removeComponents: [CRecovering],
             })
           }
         }
@@ -224,7 +224,7 @@ export class ColliderSystem extends System {
   }
 }
 
-ColliderSystem.queries = {
-  boxes: { components: [Collidable] },
-  balls: { components: [Collider] },
+SCollider.queries = {
+  boxes: { components: [CCollidable] },
+  balls: { components: [CCollider] },
 }

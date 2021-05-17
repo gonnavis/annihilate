@@ -1,8 +1,8 @@
 import { TagComponent, Component, Types } from './lib/ecsy.module.js'
 
-export class Collidable extends TagComponent {}
-export class Collider extends TagComponent {}
-export class Recovering extends TagComponent {}
+export class CCollidable extends TagComponent {}
+export class CCollider extends TagComponent {}
+export class CRecovering extends TagComponent {}
 
 export class CMoving extends Component {}
 CMoving.schema = {
@@ -16,39 +16,39 @@ CAction.schema = {
   action_act: { type: Types.Ref },
 }
 
-export class PlayerControl extends Component {}
+export class CPlayerControl extends Component {}
 
-export class PulsatingScale extends Component {}
-PulsatingScale.schema = {
+export class CPulsatingScale extends Component {}
+CPulsatingScale.schema = {
   offset: { type: Types.Number, default: 0 },
 }
 
-export class Object3D extends Component {}
-Object3D.schema = {
+export class CObject3D extends Component {}
+CObject3D.schema = {
   object: { type: Types.Ref },
   body: { type: Types.Ref },
   body_size: { type: Types.Number },
 }
 
-export class Timeout extends Component {}
-Timeout.schema = {
+export class CTimeout extends Component {}
+CTimeout.schema = {
   timer: { type: Types.Number },
   addComponents: { type: Types.Array },
   removeComponents: { type: Types.Array },
 }
 
-export class PulsatingColor extends Component {}
-PulsatingColor.schema = {
+export class CPulsatingColor extends Component {}
+CPulsatingColor.schema = {
   offset: { type: Types.Number },
 }
 
-export class Colliding extends Component {}
-Colliding.schema = {
+export class CColliding extends Component {}
+CColliding.schema = {
   value: { type: Types.Boolean },
 }
 
-export class Rotating extends Component {}
-Rotating.schema = {
+export class CRotating extends Component {}
+CRotating.schema = {
   enabled: { type: Types.Boolean },
   rotatingSpeed: { type: Types.Number },
   decreasingSpeed: { type: Types.Number, default: 0.001 },

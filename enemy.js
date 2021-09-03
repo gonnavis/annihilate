@@ -20,45 +20,33 @@ class Enemy {
             },
           },
           sidle: {
+            entry: () => {
+              s.fadeToAction('idle', 0.2)
+            },
             on: {
               tattacking: { target: 'sattacking', actions: 'onTattacking' },
               thitting: { target: 'shitting', actions: 'onThitting' },
-              tdeading: { target: 'sdeading', actions: 'onTdeading' },
             },
           },
           sattacking: {
             on: {
               tattacked: { target: 'sattacked', actions: 'onTattacked' },
               thitting: { target: 'shitting', actions: 'onThitting' },
-              tdeading: { target: 'sdeading', actions: 'onTdeading' },
             },
           },
           sattacked: {
             on: {
               tidle: { target: 'sidle', actions: 'onTidle' },
               thitting: { target: 'shitting', actions: 'onThitting' },
-              tdeading: { target: 'sdeading', actions: 'onTdeading' },
             },
           },
           shitting: {
             on: {
-              thitted: { target: 'shitted', actions: 'onThitted' },
-              tdeading: { target: 'sdeading', actions: 'onTdeading' },
-            },
-          },
-          shitted: {
-            on: {
               tidle: { target: 'sidle', actions: 'onTidle' },
-              thitting: { target: 'shitting', actions: 'onThitting' },
               tdeading: { target: 'sdeading', actions: 'onTdeading' },
             },
           },
           sdeading: {
-            on: {
-              tdeaded: { target: 'sdeaded', actions: 'onTdeaded' },
-            },
-          },
-          sdeaded: {
             type: 'final',
           },
         },
@@ -82,9 +70,6 @@ class Enemy {
             console.log(s.health)
             s.fadeToAction('jump', 0.2)
           },
-          onThitted() {
-            s.fadeToAction('idle', 0.2)
-          },
           onTdeading() {
             s.fadeToAction('death', 0.2)
 
@@ -98,7 +83,6 @@ class Enemy {
                 console.log('interval')
                 setTimeout(() => {
                   clearInterval(interval)
-                  s.xstateService.send('tdeaded')
                   // },5000)
                 }, 2000)
               })
@@ -140,7 +124,7 @@ class Enemy {
       s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
 
       if (!role.gltf) return
-      if (s.xstateService.state.value !== 'sdeading' && s.xstateService.state.value !== 'sdeaded') {
+      if (s.xstateService.state.value !== 'sdeading') {
         {
           // look at role
           let vec2_diff = vec2(role.gltf.scene.position.x - s.gltf.scene.position.x, role.gltf.scene.position.z - s.gltf.scene.position.z)
@@ -196,7 +180,6 @@ class Enemy {
           s.mixer.addEventListener('finished', (e) => {
             // console.log('finished')
             s.xstateService.send('tattacked')
-            s.xstateService.send('thitted')
             s.xstateService.send('tidle')
           })
           s.xstateService.send('tidle')

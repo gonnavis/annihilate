@@ -7,6 +7,69 @@ class Enemy {
     s.oaction = {}
     s.mixer
 
+    const { createMachine, actions, interpret } = XState // global variable: window.XState
+
+    s.fsm = createMachine({
+      id: 'enemy',
+      initial: 'sloading',
+      states: {
+        sloading: {
+          on: {
+            tidle: { target: 'sidle' },
+          },
+        },
+        sidle: {
+          on: {
+            tattacking: { target: 'sattacking' },
+            thitting: { target: 'shitting' },
+            tdeaded: { target: 'sdeading' },
+          },
+        },
+        sattacking: {
+          on: {
+            tattacked: { target: 'sattacked' },
+            thitting: { target: 'shitting' },
+            tdeaded: { target: 'sdeading' },
+          },
+        },
+        sattacked: {
+          on: {
+            tidle: { target: 'sidle' },
+            thitting: { target: 'shitting' },
+            tdeaded: { target: 'sdeading' },
+          },
+        },
+        shitting: {
+          on: {
+            thitted: { target: 'shitted' },
+            tdeaded: { target: 'sdeading' },
+          },
+        },
+        shitted: {
+          on: {
+            tidle: { target: 'sidle' },
+            thitting: { target: 'shitting' },
+            tdeaded: { target: 'sdeading' },
+          },
+        },
+        sdeading: {
+          on: {
+            tdeaded: { target: 'sdeaded' },
+          },
+        },
+        sdeaded: {},
+      },
+    })
+
+    const fsmService = interpret(s.fsm).onTransition((state) => console.log(state.value))
+
+    // Start the service
+    fsmService.start()
+    // => 'pending'
+
+    fsmService.send({ type: 'RESOLVE' })
+    // => 'resolved'
+
     s.fsm = new StateMachine({
       init: 'sloading',
       transitions: [

@@ -9,123 +9,118 @@ class Enemy {
 
     const { createMachine, actions, interpret } = XState // global variable: window.XState
 
-    s.fsm = createMachine({
-      id: 'enemy',
-      initial: 'sloading',
-      states: {
-        sloading: {
-          on: {
-            tidle: { target: 'sidle' },
+    s.xstate = createMachine(
+      {
+        id: 'enemy',
+        initial: 'sloading',
+        states: {
+          sloading: {
+            on: {
+              tidle: { target: 'sidle', actions: 'onTidle' },
+            },
+          },
+          sidle: {
+            on: {
+              tattacking: { target: 'sattacking', actions: 'onTattacking' },
+              thitting: { target: 'shitting', actions: 'onThitting' },
+              tdeaded: { target: 'sdeading', actions: 'onTdeaded' },
+            },
+          },
+          sattacking: {
+            on: {
+              tattacked: { target: 'sattacked', actions: 'onTattacked' },
+              thitting: { target: 'shitting', actions: 'onThitting' },
+              tdeaded: { target: 'sdeading', actions: 'onTdeaded' },
+            },
+          },
+          sattacked: {
+            on: {
+              tidle: { target: 'sidle', actions: 'onTidle' },
+              thitting: { target: 'shitting', actions: 'onThitting' },
+              tdeaded: { target: 'sdeading', actions: 'onTdeaded' },
+            },
+          },
+          shitting: {
+            on: {
+              thitted: { target: 'shitted', actions: 'onThitted' },
+              tdeaded: { target: 'sdeading', actions: 'onTdeaded' },
+            },
+          },
+          shitted: {
+            on: {
+              tidle: { target: 'sidle', actions: 'onTidle' },
+              thitting: { target: 'shitting', actions: 'onThitting' },
+              tdeaded: { target: 'sdeading', actions: 'onTdeaded' },
+            },
+          },
+          sdeading: {
+            on: {
+              tdeaded: { target: 'sdeaded', actions: 'onTdeaded' },
+            },
+          },
+          sdeaded: {
+            type: 'final',
           },
         },
-        sidle: {
-          on: {
-            tattacking: { target: 'sattacking' },
-            thitting: { target: 'shitting' },
-            tdeaded: { target: 'sdeading' },
-          },
-        },
-        sattacking: {
-          on: {
-            tattacked: { target: 'sattacked' },
-            thitting: { target: 'shitting' },
-            tdeaded: { target: 'sdeading' },
-          },
-        },
-        sattacked: {
-          on: {
-            tidle: { target: 'sidle' },
-            thitting: { target: 'shitting' },
-            tdeaded: { target: 'sdeading' },
-          },
-        },
-        shitting: {
-          on: {
-            thitted: { target: 'shitted' },
-            tdeaded: { target: 'sdeading' },
-          },
-        },
-        shitted: {
-          on: {
-            tidle: { target: 'sidle' },
-            thitting: { target: 'shitting' },
-            tdeaded: { target: 'sdeading' },
-          },
-        },
-        sdeading: {
-          on: {
-            tdeaded: { target: 'sdeaded' },
-          },
-        },
-        sdeaded: {},
       },
-    })
+      {
+        actions: {
+          onInvalidTransition() {},
+          onTidle() {
+            // s.fadeToAction('idle', 0.2)
+          },
+          onTattacking() {
+            s.fadeToAction('dance', 0.2)
+          },
+          onTattacked() {
+            s.fadeToAction('idle', 0.2)
+            if (window.role.gltf && s.gltf) window.attacker = new Attacker(scene, updates, s.gltf.scene.position, window.role.gltf.scene.position)
+          },
+          onThitting() {
+            console.log('hit()')
+            s.health -= 50
+            console.log(s.health)
+            s.fadeToAction('jump', 0.2)
+          },
+          onThitted() {
+            s.fadeToAction('idle', 0.2)
+          },
+          onTdeading() {
+            s.fadeToAction('death', 0.2)
 
-    const fsmService = interpret(s.fsm).onTransition((state) => console.log(state.value))
+            let interval
+            setTimeout(() => {
+              interval = setInterval(() => {
+                // s.gltf.scene.position.y-=.001
+                s.body.mass = 0
+                s.body.collisionResponse = false
+                s.body.position.y -= 0.0005
+                console.log('interval')
+                setTimeout(() => {
+                  clearInterval(interval)
+                  s.xstate.tdeaded()
+                  // },5000)
+                }, 2000)
+              })
+            }, 2000)
+          },
+        },
+      }
+    )
+
+    // s.currentState
+    s.xstateService = interpret(s.xstate).onTransition((state) => {
+      console.log(state.value)
+      // s.currentState = state.value
+      ///currentState === s.xstateService.state.value
+    })
 
     // Start the service
-    fsmService.start()
+    s.xstateService.start()
     // => 'pending'
 
-    fsmService.send({ type: 'RESOLVE' })
+    // s.xstateService.send( 'tidle' )
     // => 'resolved'
-
-    s.fsm = new StateMachine({
-      init: 'sloading',
-      transitions: [
-        { name: 'tidle', from: ['sattacked', 'shitted', 'sloading'], to: 'sidle' },
-
-        { name: 'tattacking', from: 'sidle', to: 'sattacking' },
-        { name: 'tattacked', from: 'sattacking', to: 'sattacked' },
-
-        { name: 'thitting', from: ['sidle', 'sattacking', 'sattacked', 'shitted'], to: 'shitting' },
-        { name: 'thitted', from: 'shitting', to: 'shitted' },
-
-        { name: 'tdeading', from: ['sidle', 'sattacking', 'sattacked', 'shitting', 'shitted'], to: 'sdeading' },
-        { name: 'tdeaded', from: ['sdeading'], to: 'sdeaded' },
-      ],
-      methods: {
-        onInvalidTransition() {},
-        onTidle() {
-          s.fadeToAction('idle', 0.2)
-        },
-        onTattacking() {
-          s.fadeToAction('dance', 0.2)
-        },
-        onTattacked() {
-          s.fadeToAction('idle', 0.2)
-          if (window.role.gltf && s.gltf) window.attacker = new Attacker(scene, updates, s.gltf.scene.position, window.role.gltf.scene.position)
-        },
-        onThitting() {
-          console.log('hit()')
-          s.health -= 50
-          console.log(s.health)
-          s.fadeToAction('jump', 0.2)
-        },
-        onThitted() {
-          s.fadeToAction('idle', 0.2)
-        },
-        onTdeading() {
-          s.fadeToAction('death', 0.2)
-
-          let interval
-          setTimeout(() => {
-            interval = setInterval(() => {
-              // s.gltf.scene.position.y-=.001
-              s.body.mass = 0
-              s.body.collisionResponse = false
-              s.body.position.y -= 0.0005
-              console.log('interval')
-              setTimeout(() => {
-                clearInterval(interval)
-                s.fsm.tdeaded()
-                // },5000)
-              }, 2000)
-            })
-          }, 2000)
-        },
-      },
-    })
 
     let body_size = 1.5
     s.body = new CANNON.Body({
@@ -140,12 +135,12 @@ class Enemy {
     world.addBody(s.body)
 
     updates.push(function (dt) {
-      if (s.fsm.state === 'sloading') return
+      if (s.xstateService.state.value === 'sloading') return
       s.mixer.update(dt)
       s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
 
       if (!role.gltf) return
-      if (s.fsm.state !== 'sdeading' && s.fsm.state !== 'sdeaded') {
+      if (s.xstateService.state.value !== 'sdeading' && s.xstateService.state.value !== 'sdeaded') {
         {
           // look at role
           let vec2_diff = vec2(role.gltf.scene.position.x - s.gltf.scene.position.x, role.gltf.scene.position.z - s.gltf.scene.position.z)
@@ -157,15 +152,15 @@ class Enemy {
     })
 
     setInterval(() => {
-      s.fsm.tattacking()
+      s.xstateService.send('tattacking')
     }, 3000)
   }
 
   hit() {
     let s = this
-    s.fsm.thitting()
+    s.xstateService.send('thitting')
     if (s.health <= 0) {
-      s.fsm.tdeading()
+      s.xstateService.send('tdeading')
     }
   }
 
@@ -200,11 +195,11 @@ class Enemy {
           s.action_act.play()
           s.mixer.addEventListener('finished', (e) => {
             // console.log('finished')
-            s.fsm.tattacked()
-            s.fsm.thitted()
-            s.fsm.tidle()
+            s.xstateService.send('tattacked')
+            s.xstateService.send('thitted')
+            s.xstateService.send('tidle')
           })
-          s.fsm.tidle()
+          s.xstateService.send('tidle')
           resolve()
         },
         undefined,

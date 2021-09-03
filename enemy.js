@@ -20,24 +20,18 @@ class Enemy {
             },
           },
           sidle: {
-            entry: () => {
-              s.fadeToAction('idle', 0.2)
-            },
+            entry: 'playIdle',
             on: {
               tattacking: { target: 'sattacking', actions: 'onTattacking' },
               thitting: { target: 'shitting', actions: 'onThitting' },
             },
           },
           sattacking: {
-            entry: () => {
-              s.fadeToAction('dance', 0.2)
-            },
+            entry: 'playAttack',
             on: {
               tidle: {
                 target: 'sidle',
-                actions: () => {
-                  if (window.role.gltf && s.gltf) window.attacker = new Attacker(scene, updates, s.gltf.scene.position, window.role.gltf.scene.position)
-                },
+                actions: 'throwAttacker',
               },
               thitting: { target: 'shitting', actions: 'onThitting' },
             },
@@ -55,6 +49,15 @@ class Enemy {
       },
       {
         actions: {
+          throwAttacker() {
+            if (window.role.gltf && s.gltf) window.attacker = new Attacker(scene, updates, s.gltf.scene.position, window.role.gltf.scene.position)
+          },
+          playIdle() {
+            s.fadeToAction('idle', 0.2)
+          },
+          playAttack() {
+            s.fadeToAction('dance', 0.2)
+          },
           onInvalidTransition() {},
           onThitting() {
             console.log('hit()')

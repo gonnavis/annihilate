@@ -16,14 +16,14 @@ class Enemy {
         states: {
           loading: {
             on: {
-              idle: { target: 'idle' },
+              loaded: { target: 'idle' },
             },
           },
           idle: {
             entry: 'playIdle',
             on: {
               attack: { target: 'attack' },
-              hit: { target: 'hit', actions: 'hit' },
+              hit: { target: 'hit' },
             },
           },
           attack: {
@@ -33,10 +33,11 @@ class Enemy {
                 target: 'idle',
                 actions: 'throwAttacker',
               },
-              hit: { target: 'hit', actions: 'hit' },
+              hit: { target: 'hit' },
             },
           },
           hit: {
+            entry: ['hit', 'playHit'],
             on: {
               idle: { target: 'idle' },
               dead: { target: 'dead', actions: 'dead' },
@@ -58,11 +59,13 @@ class Enemy {
           playAttack() {
             s.fadeToAction('dance', 0.2)
           },
+          playHit() {
+            s.fadeToAction('jump', 0.2)
+          },
           hit() {
-            console.log('hit()')
+            // console.log('hit action')
             s.health -= 50
             console.log(s.health)
-            s.fadeToAction('jump', 0.2)
           },
           dead() {
             s.fadeToAction('death', 0.2)
@@ -135,6 +138,7 @@ class Enemy {
   }
 
   hit() {
+    // console.log('hit function')
     let s = this
     s.xstateService.send('hit')
     if (s.health <= 0) {
@@ -173,10 +177,9 @@ class Enemy {
           s.action_act.play()
           s.mixer.addEventListener('finished', (e) => {
             // console.log('finished')
-            s.xstateService.send('attack')
             s.xstateService.send('idle')
           })
-          s.xstateService.send('idle')
+          s.xstateService.send('loaded')
           resolve()
         },
         undefined,

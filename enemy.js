@@ -29,14 +29,16 @@ class Enemy {
             },
           },
           sattacking: {
-            on: {
-              tattacked: { target: 'sattacked', actions: 'onTattacked' },
-              thitting: { target: 'shitting', actions: 'onThitting' },
+            entry: () => {
+              s.fadeToAction('dance', 0.2)
             },
-          },
-          sattacked: {
             on: {
-              tidle: { target: 'sidle', actions: 'onTidle' },
+              tidle: {
+                target: 'sidle',
+                actions: () => {
+                  if (window.role.gltf && s.gltf) window.attacker = new Attacker(scene, updates, s.gltf.scene.position, window.role.gltf.scene.position)
+                },
+              },
               thitting: { target: 'shitting', actions: 'onThitting' },
             },
           },
@@ -54,16 +56,6 @@ class Enemy {
       {
         actions: {
           onInvalidTransition() {},
-          onTidle() {
-            // s.fadeToAction('idle', 0.2)
-          },
-          onTattacking() {
-            s.fadeToAction('dance', 0.2)
-          },
-          onTattacked() {
-            s.fadeToAction('idle', 0.2)
-            if (window.role.gltf && s.gltf) window.attacker = new Attacker(scene, updates, s.gltf.scene.position, window.role.gltf.scene.position)
-          },
           onThitting() {
             console.log('hit()')
             s.health -= 50
@@ -179,7 +171,7 @@ class Enemy {
           s.action_act.play()
           s.mixer.addEventListener('finished', (e) => {
             // console.log('finished')
-            s.xstateService.send('tattacked')
+            s.xstateService.send('tattacking')
             s.xstateService.send('tidle')
           })
           s.xstateService.send('tidle')

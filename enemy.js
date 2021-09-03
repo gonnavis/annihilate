@@ -23,34 +23,34 @@ class Enemy {
             on: {
               tattacking: { target: 'sattacking', actions: 'onTattacking' },
               thitting: { target: 'shitting', actions: 'onThitting' },
-              tdeaded: { target: 'sdeading', actions: 'onTdeaded' },
+              tdeading: { target: 'sdeading', actions: 'onTdeading' },
             },
           },
           sattacking: {
             on: {
               tattacked: { target: 'sattacked', actions: 'onTattacked' },
               thitting: { target: 'shitting', actions: 'onThitting' },
-              tdeaded: { target: 'sdeading', actions: 'onTdeaded' },
+              tdeading: { target: 'sdeading', actions: 'onTdeading' },
             },
           },
           sattacked: {
             on: {
               tidle: { target: 'sidle', actions: 'onTidle' },
               thitting: { target: 'shitting', actions: 'onThitting' },
-              tdeaded: { target: 'sdeading', actions: 'onTdeaded' },
+              tdeading: { target: 'sdeading', actions: 'onTdeading' },
             },
           },
           shitting: {
             on: {
               thitted: { target: 'shitted', actions: 'onThitted' },
-              tdeaded: { target: 'sdeading', actions: 'onTdeaded' },
+              tdeading: { target: 'sdeading', actions: 'onTdeading' },
             },
           },
           shitted: {
             on: {
               tidle: { target: 'sidle', actions: 'onTidle' },
               thitting: { target: 'shitting', actions: 'onThitting' },
-              tdeaded: { target: 'sdeading', actions: 'onTdeaded' },
+              tdeading: { target: 'sdeading', actions: 'onTdeading' },
             },
           },
           sdeading: {
@@ -98,7 +98,7 @@ class Enemy {
                 console.log('interval')
                 setTimeout(() => {
                   clearInterval(interval)
-                  s.xstate.tdeaded()
+                  s.xstateService.send('tdeaded')
                   // },5000)
                 }, 2000)
               })

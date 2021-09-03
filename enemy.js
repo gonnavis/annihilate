@@ -12,37 +12,37 @@ class Enemy {
     s.xstate = createMachine(
       {
         id: 'enemy',
-        initial: 'sloading',
+        initial: 'loading',
         states: {
-          sloading: {
+          loading: {
             on: {
-              tidle: { target: 'sidle', actions: 'onTidle' },
+              idle: { target: 'idle' },
             },
           },
-          sidle: {
+          idle: {
             entry: 'playIdle',
             on: {
-              tattacking: { target: 'sattacking', actions: 'onTattacking' },
-              thitting: { target: 'shitting', actions: 'onThitting' },
+              attack: { target: 'attack' },
+              hit: { target: 'hit', actions: 'hit' },
             },
           },
-          sattacking: {
+          attack: {
             entry: 'playAttack',
             on: {
-              tidle: {
-                target: 'sidle',
+              idle: {
+                target: 'idle',
                 actions: 'throwAttacker',
               },
-              thitting: { target: 'shitting', actions: 'onThitting' },
+              hit: { target: 'hit', actions: 'hit' },
             },
           },
-          shitting: {
+          hit: {
             on: {
-              tidle: { target: 'sidle', actions: 'onTidle' },
-              tdeading: { target: 'sdeading', actions: 'onTdeading' },
+              idle: { target: 'idle' },
+              dead: { target: 'dead', actions: 'dead' },
             },
           },
-          sdeading: {
+          dead: {
             type: 'final',
           },
         },
@@ -58,14 +58,13 @@ class Enemy {
           playAttack() {
             s.fadeToAction('dance', 0.2)
           },
-          onInvalidTransition() {},
-          onThitting() {
+          hit() {
             console.log('hit()')
             s.health -= 50
             console.log(s.health)
             s.fadeToAction('jump', 0.2)
           },
-          onTdeading() {
+          dead() {
             s.fadeToAction('death', 0.2)
 
             let interval
@@ -98,7 +97,7 @@ class Enemy {
     s.xstateService.start()
     // => 'pending'
 
-    // s.xstateService.send( 'tidle' )
+    // s.xstateService.send( 'idle' )
     // => 'resolved'
 
     let body_size = 1.5
@@ -114,12 +113,12 @@ class Enemy {
     world.addBody(s.body)
 
     updates.push(function (dt) {
-      if (s.xstateService.state.value === 'sloading') return
+      if (s.xstateService.state.value === 'loading') return
       s.mixer.update(dt)
       s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
 
       if (!role.gltf) return
-      if (s.xstateService.state.value !== 'sdeading') {
+      if (s.xstateService.state.value !== 'dead') {
         {
           // look at role
           let vec2_diff = vec2(role.gltf.scene.position.x - s.gltf.scene.position.x, role.gltf.scene.position.z - s.gltf.scene.position.z)
@@ -131,15 +130,15 @@ class Enemy {
     })
 
     setInterval(() => {
-      s.xstateService.send('tattacking')
+      s.xstateService.send('attack')
     }, 3000)
   }
 
   hit() {
     let s = this
-    s.xstateService.send('thitting')
+    s.xstateService.send('hit')
     if (s.health <= 0) {
-      s.xstateService.send('tdeading')
+      s.xstateService.send('dead')
     }
   }
 
@@ -174,10 +173,10 @@ class Enemy {
           s.action_act.play()
           s.mixer.addEventListener('finished', (e) => {
             // console.log('finished')
-            s.xstateService.send('tattacking')
-            s.xstateService.send('tidle')
+            s.xstateService.send('attack')
+            s.xstateService.send('idle')
           })
-          s.xstateService.send('tidle')
+          s.xstateService.send('idle')
           resolve()
         },
         undefined,

@@ -3,15 +3,17 @@ class Enemy {
     let s = this
     s.scene = scene
     s.updates = updates
-    s.health = 100
     s.oaction = {}
     s.mixer
 
-    const { createMachine, actions, interpret } = XState // global variable: window.XState
+    const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
     s.xstate = createMachine(
       {
         id: 'enemy',
+        context: {
+          health: 100,
+        },
         initial: 'loading',
         states: {
           loading: {
@@ -37,10 +39,10 @@ class Enemy {
             },
           },
           hit: {
-            entry: ['hit', 'playHit'],
+            entry: ['decreaseHealth', 'playHit'],
+            always: [{ target: 'dead', actions: 'dead', cond: 'isDead' }],
             on: {
               idle: { target: 'idle' },
-              dead: { target: 'dead', actions: 'dead' },
             },
           },
           dead: {
@@ -62,11 +64,7 @@ class Enemy {
           playHit() {
             s.fadeToAction('jump', 0.2)
           },
-          hit() {
-            // console.log('hit action')
-            s.health -= 50
-            console.log(s.health)
-          },
+          decreaseHealth: assign({ health: (context, event) => context.health - 50 }),
           dead() {
             s.fadeToAction('death', 0.2)
 
@@ -86,12 +84,18 @@ class Enemy {
             }, 2000)
           },
         },
+        guards: {
+          isDead(context) {
+            return context.health <= 0
+          },
+        },
       }
     )
 
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
-      console.log(state.value)
+      // console.log(state)
+      if (state.changed) console.log(state)
       // s.currentState = state.value
       ///currentState === s.xstateService.state.value
     })
@@ -141,9 +145,6 @@ class Enemy {
     // console.log('hit function')
     let s = this
     s.xstateService.send('hit')
-    if (s.health <= 0) {
-      s.xstateService.send('dead')
-    }
   }
 
   load() {

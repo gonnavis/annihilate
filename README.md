@@ -6,7 +6,7 @@ An action game prototype made in 2018.
 
 Now open-sourced and:
 
-1. switch to <a href="https://github.com/statelyai/xstate" target="_blank">XState</a>.
+1. switch from <a href="https://github.com/jakesgordon/javascript-state-machine" target="_blank">state-machine.js</a> to <a href="https://github.com/statelyai/xstate" target="_blank">XState</a>.
 
 2. try to optimize it with <a href="https://github.com/ecsyjs/ecsy" target="_blank">ecsy.js</a> at `branch dev`.
 

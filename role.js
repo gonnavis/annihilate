@@ -28,7 +28,17 @@ class Role {
           idle: {
             entry: 'playIdle',
             on: {
+              run: { target: 'run', actions: 'playRun' },
               attack: { target: 'attack' },
+              jump: { target: 'jump', actions: 'playJump' },
+              hit: { target: 'hit' },
+            },
+          },
+          run: {
+            on: {
+              idle: { target: 'idle' },
+              attack: { target: 'attack' },
+              jump: { target: 'jump', actions: 'playJump' },
               hit: { target: 'hit' },
             },
           },
@@ -39,6 +49,12 @@ class Role {
                 target: 'idle',
                 actions: 'throwAttacker',
               },
+              hit: { target: 'hit' },
+            },
+          },
+          jump: {
+            on: {
+              idle: { target: 'idle' },
               hit: { target: 'hit' },
             },
           },
@@ -61,11 +77,18 @@ class Role {
           playIdle() {
             s.fadeToAction('idle', 0.2)
           },
+          playRun() {
+            s.fadeToAction('running', 0.2)
+          },
           playAttack() {
             s.fadeToAction('dance', 0.2)
           },
-          playHit() {
+          playJump() {
             s.fadeToAction('jump', 0.2)
+            s.body.velocity.y = 20
+          },
+          playHit() {
+            s.fadeToAction('hit', 0.2)
           },
           throwAttacker() {
             if (window.role.gltf && s.gltf) window.attacker = new Attacker(scene, updates, s.gltf.scene.position, window.role.gltf.scene.position)
@@ -112,46 +135,6 @@ class Role {
     // s.xstateService.send( 'idle' )
     // => 'resolved'
 
-    s.fsm = new StateMachine({
-      init: 'sloading',
-      transitions: [
-        { name: 'tidle', from: ['srunning', 'sattacked', 'sjumped', 'sloading', 'shitted'], to: 'sidle' },
-
-        { name: 'trunning', from: 'sidle', to: 'srunning' },
-
-        { name: 'tattacking', from: ['sidle', 'srunning'], to: 'sattacking' },
-        { name: 'tattacked', from: ['sattacking'], to: 'sattacked' },
-
-        { name: 'tjumping', from: ['sidle', 'srunning'], to: 'sjumping' },
-        { name: 'tjumped', from: ['sjumping'], to: 'sjumped' },
-
-        { name: 'thitting', from: ['sidle', 'sattacking', 'sattacked', 'sjumping', 'sjumped', 'srunning'], to: 'shitting' },
-        { name: 'thitted', from: ['shitting'], to: 'shitted' },
-      ],
-      methods: {
-        onInvalidTransition: function () {},
-        onTidle: function () {
-          s.fadeToAction('idle', 0.2)
-        },
-        onTrunning: function () {
-          s.fadeToAction('running', 0.2)
-        },
-        onTattacking: function () {
-          s.fadeToAction('punch', 0.2)
-        },
-        onTjumping: function () {
-          s.fadeToAction('jump', 0.2)
-          s.body.velocity.y = 20
-        },
-        onThitting: function () {
-          s.fadeToAction('hit', 0.2)
-        },
-        onThitted() {
-          s.fadeToAction('idle', 0.2)
-        },
-      },
-    })
-
     let body_size = 1.5
     s.body = new CANNON.Body({
       mass: 1,
@@ -167,10 +150,9 @@ class Role {
     s.events()
 
     updates.push(function update(dt) {
-      // console.log(s.fsm.state)
-      if (s.fsm.state === 'sloading') return
+      if (s.xstateService.state.value === 'loading') return
 
-      if (s.fsm.state !== 'sattacking' && s.fsm.state !== 'shitting') {
+      if (s.xstateService.state.value !== 'attack' && s.xstateService.state.value !== 'hit') {
         s.direction = vec2()
         if (s.okey.KeyW || s.okey.ArrowUp) s.direction.add(vec2(0, -1))
         if (s.okey.KeyS || s.okey.ArrowDown) s.direction.add(vec2(0, 1))
@@ -180,12 +162,13 @@ class Role {
         s.gltf.scene.rotation.y = -s.facing.angle() + Math.PI / 2
       }
       if (s.direction.length() > 0) {
-        s.fsm.trunning()
+        s.xstateService.send('run')
         s.facing.copy(s.direction)
       } else {
-        s.fsm.tidle()
+        // console.log('111111111111111')
+        s.xstateService.send('idle')
       }
-      if (s.fsm.state === 'srunning' || s.fsm.state === 'sjumping') {
+      if (s.xstateService.state.value === 'run' || s.xstateService.state.value === 'jump') {
         s.body.position.x += s.direction.x
         s.body.position.z += s.direction.y
       }
@@ -201,9 +184,9 @@ class Role {
     // s.health-=50
     // console.log(this.health)
     // if(s.health<=0){
-    //   s.fsm.tdeading()
+    //   s.xstateService.send('dead')
     // }else{
-    s.fsm.thitting()
+    s.xstateService.send('hit')
     // }
   }
 
@@ -245,13 +228,9 @@ class Role {
           s.action_act = s.oaction.idle
           s.action_act.play()
           s.mixer.addEventListener('finished', (e) => {
-            // console.log('finished')
-            s.fsm.tattacked()
-            s.fsm.tjumped()
-            s.fsm.thitted()
-            s.fsm.tidle()
+            s.xstateService.send('idle')
           })
-          s.fsm.tidle()
+          s.xstateService.send('loaded')
           resolve()
         },
         undefined,
@@ -294,11 +273,11 @@ class Role {
       switch (e.code) {
         case 'KeyJ':
         case 'Numpad4':
-          s.fsm.tattacking()
+          s.xstateService.send('attack')
           break
         case 'KeyK':
         case 'Numpad5':
-          s.fsm.tjumping()
+          s.xstateService.send('jump')
           break
       }
       s.actkey = e.code

@@ -52,9 +52,8 @@ class Enemy {
       },
       {
         actions: {
-          throwAttacker() {
-            if (window.role.gltf && s.gltf) window.attacker = new Attacker(scene, updates, s.gltf.scene.position, window.role.gltf.scene.position)
-          },
+          decreaseHealth: assign({ health: (context, event) => context.health - 50 }),
+
           playIdle() {
             s.fadeToAction('idle', 0.2)
           },
@@ -64,7 +63,9 @@ class Enemy {
           playHit() {
             s.fadeToAction('jump', 0.2)
           },
-          decreaseHealth: assign({ health: (context, event) => context.health - 50 }),
+          throwAttacker() {
+            if (window.role.gltf && s.gltf) window.attacker = new Attacker(scene, updates, s.gltf.scene.position, window.role.gltf.scene.position)
+          },
           dead() {
             s.fadeToAction('death', 0.2)
 

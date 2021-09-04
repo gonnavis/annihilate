@@ -14,7 +14,7 @@ class Role {
 
     s.xstate = createMachine(
       {
-        id: 'enemy',
+        id: 'role',
         context: {
           health: 100,
         },
@@ -30,7 +30,7 @@ class Role {
             on: {
               run: { target: 'run', actions: 'playRun' },
               attack: { target: 'attack' },
-              jump: { target: 'jump', actions: 'playJump' },
+              jump: { target: 'jumping', actions: 'playJump' },
               hit: { target: 'hit' },
             },
           },
@@ -38,7 +38,7 @@ class Role {
             on: {
               idle: { target: 'idle' },
               attack: { target: 'attack' },
-              jump: { target: 'jump', actions: 'playJump' },
+              jump: { target: 'jumping', actions: 'playJump' },
               hit: { target: 'hit' },
             },
           },
@@ -49,11 +49,14 @@ class Role {
               hit: { target: 'hit' },
             },
           },
-          jump: {
+          jumping: {
             on: {
-              idle: { target: 'idle' },
               hit: { target: 'hit' },
+              land: { target: 'jumped' },
             },
+          },
+          jumped: {
+            always: { target: 'idle' },
           },
           hit: {
             entry: ['playHit'],
@@ -111,6 +114,13 @@ class Role {
     s.body.addShape(shape)
     s.body.position.set(x, y, z)
     world.addBody(s.body)
+    s.body.addEventListener('collide', (event) => {
+      // console.log('collide', event.body.id, event.target.id)
+      if (event.body.id === window.ground.body.id) {
+        // todo: refactor: window.ground
+        s.xstateService.send('land')
+      }
+    })
 
     s.events()
 

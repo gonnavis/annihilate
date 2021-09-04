@@ -30,15 +30,15 @@ class Role {
             on: {
               run: { target: 'run', actions: 'playRun' },
               attack: { target: 'attack' },
-              jump: { target: 'jumping', actions: 'playJump' },
+              jump: { target: 'jump', actions: 'playJump' },
               hit: { target: 'hit' },
             },
           },
           run: {
             on: {
-              idle: { target: 'idle' },
+              stop: { target: 'idle' },
               attack: { target: 'attack' },
-              jump: { target: 'jumping', actions: 'playJump' },
+              jump: { target: 'jump', actions: 'playJump' },
               hit: { target: 'hit' },
             },
           },
@@ -49,14 +49,11 @@ class Role {
               hit: { target: 'hit' },
             },
           },
-          jumping: {
+          jump: {
             on: {
               hit: { target: 'hit' },
-              land: { target: 'jumped' },
+              land: { target: 'idle' },
             },
-          },
-          jumped: {
-            always: { target: 'idle' },
           },
           hit: {
             entry: ['playHit'],
@@ -91,7 +88,8 @@ class Role {
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
       // console.log(state)
-      if (state.changed) console.log(state)
+      // if (state.changed) console.log(state)
+      if (state.changed) console.log('state:', state.value)
       // s.currentState = state.value
       ///currentState === s.xstateService.state.value
     })
@@ -141,7 +139,7 @@ class Role {
         s.facing.copy(s.direction)
       } else {
         // console.log('111111111111111')
-        s.xstateService.send('idle')
+        s.xstateService.send('stop')
       }
       if (s.xstateService.state.value === 'run' || s.xstateService.state.value === 'jump') {
         s.body.position.x += s.direction.x

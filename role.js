@@ -10,6 +10,108 @@ class Role {
     s.direction = vec2()
     s.facing = vec2(0, 1)
 
+    const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
+
+    s.xstate = createMachine(
+      {
+        id: 'enemy',
+        context: {
+          health: 100,
+        },
+        initial: 'loading',
+        states: {
+          loading: {
+            on: {
+              loaded: { target: 'idle' },
+            },
+          },
+          idle: {
+            entry: 'playIdle',
+            on: {
+              attack: { target: 'attack' },
+              hit: { target: 'hit' },
+            },
+          },
+          attack: {
+            entry: 'playAttack',
+            on: {
+              idle: {
+                target: 'idle',
+                actions: 'throwAttacker',
+              },
+              hit: { target: 'hit' },
+            },
+          },
+          hit: {
+            entry: ['decreaseHealth', 'playHit'],
+            always: [{ target: 'dead', actions: 'dead', cond: 'isDead' }],
+            on: {
+              idle: { target: 'idle' },
+            },
+          },
+          dead: {
+            type: 'final',
+          },
+        },
+      },
+      {
+        actions: {
+          decreaseHealth: assign({ health: (context, event) => context.health - 50 }),
+
+          playIdle() {
+            s.fadeToAction('idle', 0.2)
+          },
+          playAttack() {
+            s.fadeToAction('dance', 0.2)
+          },
+          playHit() {
+            s.fadeToAction('jump', 0.2)
+          },
+          throwAttacker() {
+            if (window.role.gltf && s.gltf) window.attacker = new Attacker(scene, updates, s.gltf.scene.position, window.role.gltf.scene.position)
+          },
+          dead() {
+            s.fadeToAction('death', 0.2)
+
+            let interval
+            setTimeout(() => {
+              interval = setInterval(() => {
+                // s.gltf.scene.position.y-=.001
+                s.body.mass = 0
+                s.body.collisionResponse = false
+                s.body.position.y -= 0.0005
+                console.log('interval')
+                setTimeout(() => {
+                  clearInterval(interval)
+                  // },5000)
+                }, 2000)
+              })
+            }, 2000)
+          },
+        },
+        guards: {
+          isDead(context) {
+            return context.health <= 0
+          },
+        },
+      }
+    )
+
+    // s.currentState
+    s.xstateService = interpret(s.xstate).onTransition((state) => {
+      // console.log(state)
+      if (state.changed) console.log(state)
+      // s.currentState = state.value
+      ///currentState === s.xstateService.state.value
+    })
+
+    // Start the service
+    s.xstateService.start()
+    // => 'pending'
+
+    // s.xstateService.send( 'idle' )
+    // => 'resolved'
+
     s.fsm = new StateMachine({
       init: 'sloading',
       transitions: [

@@ -12,6 +12,8 @@ Now open-sourced and:
 
     state diagram of enemy: https://stately.ai/viz/92f4cb2a-6e1a-4607-9a6c-5006490edd62
     
+    todo: use Actor model.
+    
 2. try to switch from cannon.js to ammo.js.
     
 3. try to use <a href="https://github.com/ecsyjs/ecsy" target="_blank">ecsy.js</a> at branch: ecsy.

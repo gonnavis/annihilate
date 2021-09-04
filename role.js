@@ -45,10 +45,7 @@ class Role {
           attack: {
             entry: 'playAttack',
             on: {
-              idle: {
-                target: 'idle',
-                actions: 'throwAttacker',
-              },
+              idle: { target: 'idle' },
               hit: { target: 'hit' },
             },
           },
@@ -59,21 +56,15 @@ class Role {
             },
           },
           hit: {
-            entry: ['decreaseHealth', 'playHit'],
-            always: [{ target: 'dead', actions: 'dead', cond: 'isDead' }],
+            entry: ['playHit'],
             on: {
               idle: { target: 'idle' },
             },
-          },
-          dead: {
-            type: 'final',
           },
         },
       },
       {
         actions: {
-          decreaseHealth: assign({ health: (context, event) => context.health - 50 }),
-
           playIdle() {
             s.fadeToAction('idle', 0.2)
           },
@@ -81,7 +72,7 @@ class Role {
             s.fadeToAction('running', 0.2)
           },
           playAttack() {
-            s.fadeToAction('dance', 0.2)
+            s.fadeToAction('punch', 0.2)
           },
           playJump() {
             s.fadeToAction('jump', 0.2)
@@ -89,32 +80,6 @@ class Role {
           },
           playHit() {
             s.fadeToAction('hit', 0.2)
-          },
-          throwAttacker() {
-            if (window.role.gltf && s.gltf) window.attacker = new Attacker(scene, updates, s.gltf.scene.position, window.role.gltf.scene.position)
-          },
-          dead() {
-            s.fadeToAction('death', 0.2)
-
-            let interval
-            setTimeout(() => {
-              interval = setInterval(() => {
-                // s.gltf.scene.position.y-=.001
-                s.body.mass = 0
-                s.body.collisionResponse = false
-                s.body.position.y -= 0.0005
-                console.log('interval')
-                setTimeout(() => {
-                  clearInterval(interval)
-                  // },5000)
-                }, 2000)
-              })
-            }, 2000)
-          },
-        },
-        guards: {
-          isDead(context) {
-            return context.health <= 0
           },
         },
       }

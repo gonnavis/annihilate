@@ -53,6 +53,7 @@ class Role {
             on: {
               hit: { target: 'hit' },
               land: { target: 'idle' },
+              attack: { target: 'attack' },
             },
           },
           hit: {
@@ -114,7 +115,7 @@ class Role {
     world.addBody(s.body)
     s.body.addEventListener('collide', (event) => {
       // console.log('collide', event.body.id, event.target.id)
-      if (event.body.id === window.ground.body.id) {
+      if (event.body === window.ground.body) {
         // todo: refactor: window.ground
         s.xstateService.send('land')
       }

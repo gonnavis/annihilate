@@ -191,6 +191,7 @@ class Role {
       var loader = new THREE.GLTFLoader()
       loader.load(
         './model/mutant/a.glb',
+        // '/_3d_model/mixamo/Mutant/test.glb',
         function (gltf) {
           console.log(gltf.animations)
           s.gltf = gltf

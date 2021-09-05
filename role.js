@@ -140,17 +140,20 @@ class Role {
     s.events()
 
     updates.push(function update(dt) {
-      if (s.xstateService.state.value === 'loading') return
+      if (s.xstateService.state.matches('loading')) return
 
-      if (s.xstateService.state.value !== 'attack' && s.xstateService.state.value !== 'hit') {
-        s.direction = vec2()
-        if (s.okey.KeyW || s.okey.ArrowUp) s.direction.add(vec2(0, -1))
-        if (s.okey.KeyS || s.okey.ArrowDown) s.direction.add(vec2(0, 1))
-        if (s.okey.KeyA || s.okey.ArrowLeft) s.direction.add(vec2(-1, 0))
-        if (s.okey.KeyD || s.okey.ArrowRight) s.direction.add(vec2(1, 0))
-        s.direction.normalize().multiplyScalar(s.speed)
+      s.direction.set(0, 0)
+      if (s.okey.KeyW || s.okey.ArrowUp) s.direction.add(vec2(0, -1))
+      if (s.okey.KeyS || s.okey.ArrowDown) s.direction.add(vec2(0, 1))
+      if (s.okey.KeyA || s.okey.ArrowLeft) s.direction.add(vec2(-1, 0))
+      if (s.okey.KeyD || s.okey.ArrowRight) s.direction.add(vec2(1, 0))
+      s.direction.normalize().multiplyScalar(s.speed)
+
+      if (!['attack', 'hit'].some(s.xstateService.state.matches)) {
+        // change facing
         s.gltf.scene.rotation.y = -s.facing.angle() + Math.PI / 2
       }
+
       if (s.direction.length() > 0) {
         s.xstateService.send('run')
         s.facing.copy(s.direction)
@@ -158,6 +161,7 @@ class Role {
         // console.log('111111111111111')
         s.xstateService.send('stop')
       }
+
       if (s.xstateService.state.hasTag('canMove')) {
         s.body.position.x += s.direction.x
         s.body.position.z += s.direction.y

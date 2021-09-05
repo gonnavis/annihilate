@@ -2,7 +2,7 @@
 
 Play online: https://raw.githack.com/gonnavis/annihilate/main/index.html
 
-Doing: use mixamo mutant model: https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html
+Doing: Use mixamo mutant model: https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html
 
 An action game prototype made in 2018.
 

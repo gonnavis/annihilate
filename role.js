@@ -42,6 +42,7 @@ class Role {
               jump: { target: 'jump' },
               hit: { target: 'hit' },
             },
+            tags: ['canMove'],
           },
           attack: {
             entry: 'playAttack',
@@ -58,6 +59,7 @@ class Role {
               attack: { target: 'attack' },
               jump: { target: 'doubleJump' },
             },
+            tags: ['canMove'],
           },
           doubleJump: {
             entry: ['playJump', 'jump'],
@@ -66,6 +68,7 @@ class Role {
               land: { target: 'idle' },
               attack: { target: 'attack' },
             },
+            tags: ['canMove'],
           },
           hit: {
             entry: ['playHit'],
@@ -155,7 +158,7 @@ class Role {
         // console.log('111111111111111')
         s.xstateService.send('stop')
       }
-      if (s.xstateService.state.value === 'run' || s.xstateService.state.value === 'jump' || s.xstateService.state.value === 'doubleJump') {
+      if (s.xstateService.state.hasTag('canMove')) {
         s.body.position.x += s.direction.x
         s.body.position.z += s.direction.y
       }

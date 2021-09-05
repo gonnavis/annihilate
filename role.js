@@ -6,7 +6,8 @@ class Role {
     s.mixer
     s.okey = {}
     s.actkey = ''
-    s.speed = 0.15
+    // s.speed = 0.15
+    s.speed = 0.3
     s.direction = vec2()
     s.facing = vec2(0, 1)
 
@@ -189,8 +190,7 @@ class Role {
     return new Promise((resolve, reject) => {
       var loader = new THREE.GLTFLoader()
       loader.load(
-        // './model/fel_lord/a.glb',
-        '/_3d_model/mixamo/Mutant/Running.glb',
+        './model/mutant/a.glb',
         function (gltf) {
           console.log(gltf.animations)
           s.gltf = gltf
@@ -205,6 +205,7 @@ class Role {
             }
           })
           scene.add(s.gltf.scene)
+          s.gltf.scene.scale.setScalar(2.7)
           // s.gltf.scene.scale.set(.7,.7,.7)
           // s.gltf.scene.position.set(x,y,z)
           s.mixer = new THREE.AnimationMixer(s.gltf.scene)

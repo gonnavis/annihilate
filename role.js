@@ -28,17 +28,18 @@ class Role {
           idle: {
             entry: 'playIdle',
             on: {
-              run: { target: 'run', actions: 'playRun' },
+              run: { target: 'run' },
               attack: { target: 'attack' },
-              jump: { target: 'jump', actions: 'playJump' },
+              jump: { target: 'jump' },
               hit: { target: 'hit' },
             },
           },
           run: {
+            entry: 'playRun',
             on: {
               stop: { target: 'idle' },
               attack: { target: 'attack' },
-              jump: { target: 'jump', actions: 'playJump' },
+              jump: { target: 'jump' },
               hit: { target: 'hit' },
             },
           },
@@ -50,9 +51,20 @@ class Role {
             },
           },
           jump: {
+            entry: ['playJump', 'jump'],
             on: {
               hit: { target: 'hit' },
               land: { target: 'idle' },
+              attack: { target: 'attack' },
+              jump: { target: 'doubleJump' },
+            },
+          },
+          doubleJump: {
+            entry: ['playJump', 'jump'],
+            on: {
+              hit: { target: 'hit' },
+              land: { target: 'idle' },
+              attack: { target: 'attack' },
             },
           },
           hit: {
@@ -74,9 +86,11 @@ class Role {
           playAttack() {
             s.fadeToAction('punch', 0.2)
           },
+          jump() {
+            s.body.velocity.y = 20
+          },
           playJump() {
             s.fadeToAction('jump', 0.2)
-            s.body.velocity.y = 20
           },
           playHit() {
             s.fadeToAction('hit', 0.2)
@@ -114,7 +128,7 @@ class Role {
     world.addBody(s.body)
     s.body.addEventListener('collide', (event) => {
       // console.log('collide', event.body.id, event.target.id)
-      if (event.body.id === window.ground.body.id) {
+      if (event.body === window.ground.body) {
         // todo: refactor: window.ground
         s.xstateService.send('land')
       }
@@ -141,7 +155,7 @@ class Role {
         // console.log('111111111111111')
         s.xstateService.send('stop')
       }
-      if (s.xstateService.state.value === 'run' || s.xstateService.state.value === 'jump') {
+      if (s.xstateService.state.value === 'run' || s.xstateService.state.value === 'jump' || s.xstateService.state.value === 'doubleJump') {
         s.body.position.x += s.direction.x
         s.body.position.z += s.direction.y
       }

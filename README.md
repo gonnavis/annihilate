@@ -8,7 +8,11 @@ Now open-sourced and:
 
 1. switching from <a href="https://github.com/jakesgordon/javascript-state-machine" target="_blank">state-machine.js</a> to <a href="https://github.com/statelyai/xstate" target="_blank">XState</a>.
 
+    state diagram of role: https://stately.ai/viz/f8c7eb66-db73-4bc4-b3ca-7e1ef2276923
+
     state diagram of enemy: https://stately.ai/viz/92f4cb2a-6e1a-4607-9a6c-5006490edd62
+    
+    todo: use Actor model.
     
 2. try to switch from cannon.js to ammo.js.
     

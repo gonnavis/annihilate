@@ -189,9 +189,10 @@ class Role {
     return new Promise((resolve, reject) => {
       var loader = new THREE.GLTFLoader()
       loader.load(
-        './model/fel_lord/a.glb',
+        // './model/fel_lord/a.glb',
+        '/_3d_model/mixamo/Mutant/Running.glb',
         function (gltf) {
-          // console.log(gltf)
+          console.log(gltf.animations)
           s.gltf = gltf
 
           s.gltf.scene.traverse(function (child) {

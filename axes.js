@@ -18,7 +18,7 @@ class Axes{
     s.body.addEventListener('collide', e=>{
 
       if(e.body===enemy.body ){
-        if (role.xstateService.state.value === 'attack') enemy.hit() // todo: refactor
+        if (['attack','jumpAttack'].some(role.xstateService.state.matches)) enemy.hit() // todo: refactor: do not check role's state at here.
       }
     })
 

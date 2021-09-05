@@ -52,12 +52,19 @@ class Role {
               hit: { target: 'hit' },
             },
           },
+          jumpAttack: {
+            entry: 'playJumpAttack',
+            on: {
+              idle: { target: 'idle' },
+              hit: { target: 'hit' },
+            },
+          },
           jump: {
             entry: ['playJump', 'jump'],
             on: {
               hit: { target: 'hit' },
               land: { target: 'idle' },
-              attack: { target: 'attack' },
+              attack: { target: 'jumpAttack' },
               jump: { target: 'doubleJump' },
             },
             tags: ['canMove'],
@@ -67,7 +74,7 @@ class Role {
             on: {
               hit: { target: 'hit' },
               land: { target: 'idle' },
-              attack: { target: 'attack' },
+              attack: { target: 'jumpAttack' },
             },
             tags: ['canMove'],
           },
@@ -89,6 +96,9 @@ class Role {
           },
           playAttack() {
             s.fadeToAction('punch', 0.2)
+          },
+          playJumpAttack() {
+            s.fadeToAction('jumpattack', 0.2)
           },
           jump() {
             s.body.velocity.y = 20
@@ -150,7 +160,7 @@ class Role {
       if (s.okey.KeyD || s.okey.ArrowRight) s.direction.add(vec2(1, 0))
       s.direction.normalize().multiplyScalar(s.speed)
 
-      if (!['attack', 'hit'].some(s.xstateService.state.matches)) {
+      if (!['attack', 'jumpAttack', 'hit'].some(s.xstateService.state.matches)) {
         // change facing
         s.gltf.scene.rotation.y = -s.facing.angle() + Math.PI / 2
       }
@@ -190,8 +200,8 @@ class Role {
     return new Promise((resolve, reject) => {
       var loader = new THREE.GLTFLoader()
       loader.load(
-        './model/mutant/a.glb',
-        // '/_3d_model/mixamo/Mutant/test.glb',
+        './model/mutant/a.gltf',
+        // '/_3d_model/mixamo/Mutant/a/a.gltf',
         function (gltf) {
           console.log(gltf.animations)
           s.gltf = gltf
@@ -199,8 +209,8 @@ class Role {
           s.gltf.scene.traverse(function (child) {
             if (child.isMesh) {
               child.material = new THREE.MeshBasicMaterial()
-              child.material.map = new THREE.TextureLoader().load('./model/fel_lord/fel_lord.png')
-              // child.material.map=new THREE.TextureLoader().load('../model/mutant/a.jpg')
+              child.material.map = new THREE.TextureLoader().load('./model/mutant/a.jpg')
+              // child.material.map = new THREE.TextureLoader().load('/_3d_model/mixamo/Mutant/a/a.jpg')
               child.material.map.flipY = false
               child.material.skinning = true
             }
@@ -214,7 +224,7 @@ class Role {
             let name = animation.name.toLowerCase()
             let action = s.mixer.clipAction(animation)
             s.oaction[name] = action
-            if (['jump', 'punch', 'dodge', 'hit'].includes(name)) {
+            if (['jump', 'punch', 'jumpattack', 'dodge', 'hit'].includes(name)) {
               action.loop = THREE.LoopOnce
             }
             if ([].includes(name)) {

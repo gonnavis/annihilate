@@ -68,12 +68,14 @@ class Enemy {
           },
           dead() {
             s.fadeToAction('death', 0.2)
+            s.body.mass = 0
+            s.body.velocity.set(0,0,0)
 
             let interval
             setTimeout(() => {
               interval = setInterval(() => {
                 // s.gltf.scene.position.y-=.001
-                s.body.mass = 0
+                s.body.velocity.set(0,0,0) // continuously clear velocity, otherwise may not cleared.
                 s.body.collisionResponse = false
                 s.body.position.y -= 0.0005
                 console.log('interval')
@@ -112,8 +114,8 @@ class Enemy {
     s.body = new CANNON.Body({
       mass: 1,
     })
-    // let shape=new CANNON.Sphere(body_size)
-    let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
+    let shape=new CANNON.Sphere(body_size)
+    // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
     s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     s.body.angularDamping = 1
     s.body.addShape(shape)

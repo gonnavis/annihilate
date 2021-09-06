@@ -10,6 +10,7 @@ class Role {
     s.speed = 0.3
     s.direction = vec2()
     s.facing = vec2(0, 1)
+    s.vecJumpAttack = new THREE.Vector3()
 
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -99,9 +100,19 @@ class Role {
           },
           playJumpAttack() {
             s.fadeToAction('jumpattack', 0.2)
+            // s.body.velocity.z+=20
+            s.vecJumpAttack.set(0,0,1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
+            console.log(s.vecJumpAttack)
+            s.body.velocity.x+=s.vecJumpAttack.x
+            s.body.velocity.y+=10
+            s.body.velocity.z+=s.vecJumpAttack.z
+            setTimeout(() => {
+              s.body.velocity.y-=20
+            }, 200);
+            
           },
           jump() {
-            s.body.velocity.y = 20
+            s.body.velocity.y += 20
           },
           playJump() {
             s.fadeToAction('jump', 0.2)
@@ -133,8 +144,8 @@ class Role {
     s.body = new CANNON.Body({
       mass: 1,
     })
-    // let shape=new CANNON.Sphere(body_size)
-    let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
+    let shape=new CANNON.Sphere(body_size)
+    // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
     s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     s.body.angularDamping = 1
     s.body.addShape(shape)

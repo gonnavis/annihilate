@@ -117,7 +117,7 @@ class Role {
     s.xstateService = interpret(s.xstate).onTransition((state) => {
       // console.log(state)
       // if (state.changed) console.log(state)
-      if (state.changed) console.log('state:', state.value)
+      // if (state.changed) console.log('state:', state.value)
       // s.currentState = state.value
       ///currentState === s.xstateService.state.value
     })
@@ -138,7 +138,8 @@ class Role {
     s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     s.body.angularDamping = 1
     s.body.addShape(shape)
-    s.body.position.set(x, y, z)
+    // s.body.position.set(x, y, z)///formal
+    s.body.position.set(10.135119435295582, -0.000010295802922222208, -14.125613840025014)///test
     world.addBody(s.body)
     s.body.addEventListener('collide', (event) => {
       // console.log('collide', event.body.id, event.target.id)
@@ -162,7 +163,8 @@ class Role {
 
       if (!['attack', 'jumpAttack', 'hit'].some(s.xstateService.state.matches)) {
         // change facing
-        s.gltf.scene.rotation.y = -s.facing.angle() + Math.PI / 2
+        // s.gltf.scene.rotation.y = -s.facing.angle() + Math.PI / 2///formal
+        s.gltf.scene.rotation.y = -s.facing.angle()+Math.PI///test
       }
 
       if (s.direction.length() > 0) {

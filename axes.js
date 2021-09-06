@@ -4,7 +4,7 @@ class Axes{
   constructor(){
     let s=this
 
-    let body_size=1
+    let body_size=.7
     s.is_hit=false
     s.body=new CANNON.Body({
       mass: 0,
@@ -25,7 +25,8 @@ class Axes{
     function update(){
       if(role.gltf){
         let vec3_temp=vec3()
-        role.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(vec3_temp)
+        // role.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(vec3_temp)
+        role.gltf.scene.getObjectByName('KnifeTip').getWorldPosition(vec3_temp)
         s.body.position.copy(vec3_temp)
       }
     }

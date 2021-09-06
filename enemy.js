@@ -95,8 +95,8 @@ class Enemy {
 
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
-      // console.log(state)
-      // if (state.changed) console.log(state)
+      console.log(state)
+      // if (state.changed) console.log(state.value,state)
       // s.currentState = state.value
       ///currentState === s.xstateService.state.value
     })

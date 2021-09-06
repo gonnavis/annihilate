@@ -1,8 +1,8 @@
 # Annihilate - js action game
 
-Play online: https://raw.githack.com/gonnavis/annihilate/main/index.html
+Play online: https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html ( use mixamo mutant model )
 
-Doing: Use mixamo mutant model: https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html
+Play online 2: https://raw.githack.com/gonnavis/annihilate/main/index.html ( use self rig-and-animated naive model )
 
 ---
 

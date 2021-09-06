@@ -117,7 +117,7 @@ class Role {
     s.xstateService = interpret(s.xstate).onTransition((state) => {
       // console.log(state)
       // if (state.changed) console.log(state)
-      // if (state.changed) console.log('state:', state.value)
+      // if (state.changed) console.log('role: state:', state.value)
       // s.currentState = state.value
       ///currentState === s.xstateService.state.value
     })
@@ -193,7 +193,7 @@ class Role {
     // if(s.health<=0){
     //   s.xstateService.send('dead')
     // }else{
-    s.xstateService.send('hit')
+    // s.xstateService.send('hit')
     // }
   }
 

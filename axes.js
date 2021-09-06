@@ -4,7 +4,7 @@ class Axes{
   constructor(){
     let s=this
 
-    let body_size=.7
+    let body_size=1
     s.is_hit=false
     s.body=new CANNON.Body({
       mass: 0,

@@ -148,8 +148,6 @@
     }
 
     //
-    window.y=30///test
-    window.z=30///test
 
     function animate() {
       requestAnimationFrame(animate);
@@ -163,12 +161,10 @@
       if (window.camera && window.role.gltf) {
         camera.position.set(
           role.gltf.scene.position.x,
-          // 30,///formal
-          y,///test
-          // role.gltf.scene.position.z + 30,///formal
-          role.gltf.scene.position.z + z,///test
+          30,
+          role.gltf.scene.position.z + 30,
         )
-        camera.lookAt(role.gltf.scene.position)
+        // camera.lookAt(role.gltf.scene.position)
       }
 
       cannonDebugRenderer.update()

@@ -54,7 +54,7 @@ class Role {
             },
           },
           jumpAttack: {
-            entry: 'playJumpAttack',
+            entry: ['playJumpAttack'],
             on: {
               idle: { target: 'idle' },
               hit: { target: 'hit' },
@@ -98,18 +98,19 @@ class Role {
           playAttack() {
             s.fadeToAction('punch', 0.2)
           },
-          playJumpAttack() {
+          playJumpAttack(context, event, o) {
             s.fadeToAction('jumpattack', 0.2)
             // s.body.velocity.z+=20
-            s.vecJumpAttack.set(0,0,1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
+            s.vecJumpAttack.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
             console.log(s.vecJumpAttack)
-            s.body.velocity.x+=s.vecJumpAttack.x
-            s.body.velocity.y+=10
-            s.body.velocity.z+=s.vecJumpAttack.z
+            s.body.velocity.x += s.vecJumpAttack.x
+            s.body.velocity.y += 10
+            s.body.velocity.z += s.vecJumpAttack.z
+            // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             setTimeout(() => {
-              s.body.velocity.y-=20
-            }, 200);
-            
+              // s.body.velocity.y -= downVelocity
+              s.body.velocity.y -= s.body.position.y * 5
+            }, 200)
           },
           jump() {
             s.body.velocity.y += 20
@@ -144,12 +145,12 @@ class Role {
     s.body = new CANNON.Body({
       mass: 1,
     })
-    let shape=new CANNON.Sphere(body_size)
+    let shape = new CANNON.Sphere(body_size)
     // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
     s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     s.body.angularDamping = 1
     s.body.addShape(shape)
-    s.body.position.set(x, y, z)///formal
+    s.body.position.set(x, y, z) ///formal
     // s.body.position.set(10.135119435295582, -0.000010295802922222208, -14.125613840025014)///test
     world.addBody(s.body)
     s.body.addEventListener('collide', (event) => {
@@ -174,7 +175,7 @@ class Role {
 
       if (!['attack', 'jumpAttack', 'hit'].some(s.xstateService.state.matches)) {
         // change facing
-        s.gltf.scene.rotation.y = -s.facing.angle() + Math.PI / 2///formal
+        s.gltf.scene.rotation.y = -s.facing.angle() + Math.PI / 2 ///formal
         // s.gltf.scene.rotation.y = -s.facing.angle()+Math.PI///test
       }
 

@@ -33,6 +33,7 @@ class Role {
     s.shadow = new THREE.Mesh(geometry, material) // pseudo shadow
     s.shadow.rotation.x = -Math.PI / 2
     s.shadow.position.y = 0.01
+    s.shadow.renderOrder = 1 // need same as position.y order of all pseudo shadows
     scene.add(s.shadow)
 
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState

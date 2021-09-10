@@ -10,6 +10,40 @@ var container, stats, clock, gui, mixer, actions, activeAction, previousAction;
 var camera, scene, renderer, model, face;
 var updates = []
 
+// // fsm
+
+
+// const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
+
+// s.xstate = createMachine(
+//   {
+//     id: 'enemy',
+//     context: {
+//       enemys:[],
+//     },
+//     initial: 'playing',
+//     states: {
+//       playing: {
+//         on: {
+//           loaded: { target: 'idle' },
+//         },
+//       },
+//     },
+//   },
+// )
+
+// // s.currentState
+// s.xstateService = interpret(s.xstate).onTransition((state) => {
+//   console.log('enemy: state:',state.value,state)
+//   // if (state.changed) console.log(state.value,state)
+//   // s.currentState = state.value
+//   ///currentState === s.xstateService.state.value
+// })
+
+// // Start the service
+// s.xstateService.start()
+// // => 'pending'
+
 
 init_three();
 init_cannon();
@@ -22,10 +56,14 @@ function init() {
 
   window.role = new Role(0, 5, 0)
   role.load()
+
   window.axes = new Axes()
 
   window.enemy = new Enemy(15, 5, -15)
   enemy.load()
+
+  window.enemy2 = new Enemy(-15, 5, -15)
+  enemy2.load()
 }
 
 function init_three() {

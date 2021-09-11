@@ -89,6 +89,21 @@ class Role {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              attack: { target: 'prepareStrike' },
+            },
+          },
+          prepareStrike: {
+            on: {
+              finish: { target: 'strike' },
+              hit: { target: 'hit' },
+            },
+          },
+          strike: {
+            // top down strike
+            entry: 'playStrike',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
             },
           },
           jumpAttack: {
@@ -139,12 +154,25 @@ class Role {
           playFist() {
             s.fadeToAction('fist', 0.2)
           },
+          playStrike() {
+            s.fadeToAction('jumpattack', 0.2)
+            s.vecJumpAttack.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
+            console.log(s.vecJumpAttack)
+            s.body.velocity.x = s.vecJumpAttack.x
+            s.body.velocity.y = 30
+            s.body.velocity.z = s.vecJumpAttack.z
+            // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
+            setTimeout(() => {
+              // s.body.velocity.y -= downVelocity
+              s.body.velocity.y = -s.body.position.y * 5
+            }, 200)
+          },
           playJumpAttack(context, event, o) {
             s.fadeToAction('jumpattack', 0.2)
             s.vecJumpAttack.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
             console.log(s.vecJumpAttack)
             s.body.velocity.x = s.vecJumpAttack.x
-            s.body.velocity.y = 10
+            s.body.velocity.y = 20
             s.body.velocity.z = s.vecJumpAttack.z
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             setTimeout(() => {

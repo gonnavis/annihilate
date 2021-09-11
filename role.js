@@ -58,6 +58,7 @@ class Role {
               attack: { target: 'attack' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
           },
           run: {
@@ -77,6 +78,7 @@ class Role {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
               attack: { target: 'prepareFist' },
+              dash: { target: 'dash' },
             },
           },
           prepareFist: {
@@ -141,20 +143,26 @@ class Role {
             },
           },
           dash: {
-            entry:'dash',
+            entry: 'entryDash',
             after: {
-              500: { target: 'idle' },
+              300: { target: 'idle' },
             },
+            exit: 'exitDash',
           },
         },
       },
       {
         actions: {
-          dash(){
-            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(50)
+          entryDash() {
+            s.fadeToAction('running', 0.2)
+            // s.body.mass = 0
+            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(30)
             s.body.velocity.x = s._vec0.x
-            s.body.velocity.y = 10
+            // s.body.velocity.y = 0
             s.body.velocity.z = s._vec0.z
+          },
+          exitDash() {
+            // s.body.mass = 1
           },
           playIdle() {
             s.fadeToAction('idle', 0.2)
@@ -224,8 +232,12 @@ class Role {
     // => 'resolved'
 
     let body_size = 1.5
+    let physicsMaterial = new CANNON.Material({
+      friction: 0,
+    })
     s.body = new CANNON.Body({
       mass: 1,
+      // material: physicsMaterial,
     })
     let shape = new CANNON.Sphere(body_size)
     // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)

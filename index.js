@@ -81,7 +81,7 @@ function init_cannon() {
   window.fixedTimeStep = 1 / 60;
   window.maxSubSteps = 3;
   window.world = new CANNON.World()
-  world.defaultContactMaterial.friction = 100
+  world.defaultContactMaterial.friction = .01
   world.gravity.set(0, -50, 0)
   world.broadphase = new CANNON.NaiveBroadphase();
 }

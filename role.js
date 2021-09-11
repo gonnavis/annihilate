@@ -10,7 +10,7 @@ class Role {
     s.speed = 0.3
     s.direction = vec2()
     s.facing = vec2(0, 1)
-    s.vecJumpAttack = new THREE.Vector3()
+    s._vec0 = new THREE.Vector3()
 
     const geometry = new THREE.CircleGeometry(1.7, 32)
     const material = new THREE.ShaderMaterial({
@@ -58,6 +58,7 @@ class Role {
               attack: { target: 'attack' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
           },
           run: {
@@ -67,6 +68,7 @@ class Role {
               attack: { target: 'attack' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
             tags: ['canMove'],
           },
@@ -76,12 +78,14 @@ class Role {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
               attack: { target: 'prepareFist' },
+              dash: { target: 'dash' },
             },
           },
           prepareFist: {
             on: {
               finish: { target: 'fist' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
           },
           fist: {
@@ -89,6 +93,7 @@ class Role {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
               attack: { target: 'prepareStrike' },
             },
           },
@@ -96,6 +101,7 @@ class Role {
             on: {
               finish: { target: 'strike' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
           },
           strike: {
@@ -104,6 +110,7 @@ class Role {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
           },
           jumpAttack: {
@@ -116,19 +123,21 @@ class Role {
           jump: {
             entry: ['playJump', 'jump'],
             on: {
-              hit: { target: 'hit' },
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
               jump: { target: 'doubleJump' },
+              hit: { target: 'hit' },
+              dash: { target: 'jumpDash' },
             },
             tags: ['canMove'],
           },
           doubleJump: {
             entry: ['playJump', 'jump'],
             on: {
-              hit: { target: 'hit' },
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
+              hit: { target: 'hit' },
+              dash: { target: 'jumpDash' },
             },
             tags: ['canMove'],
           },
@@ -138,10 +147,39 @@ class Role {
               finish: { target: 'idle' },
             },
           },
+          dash: {
+            entry: 'entryDash',
+            after: {
+              300: { target: 'idle' },
+            },
+          },
+          jumpDash: {
+            entry: 'entryJumpDash',
+            on: {
+              land: { target: 'idle' },
+            },
+            exit: 'exitJumpDash',
+          },
         },
       },
       {
         actions: {
+          entryDash() {
+            s.fadeToAction('dash', 0.2)
+            // s.body.mass = 0
+            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(60)
+            s.body.velocity.x = s._vec0.x
+            // s.body.velocity.y = 0
+            s.body.velocity.z = s._vec0.z
+          },
+          entryJumpDash() {
+            s.fadeToAction('dash', 0.2)
+            // s.body.mass = 0
+            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(30)
+            s.body.velocity.x = s._vec0.x
+            // s.body.velocity.y = 0
+            s.body.velocity.z = s._vec0.z
+          },
           playIdle() {
             s.fadeToAction('idle', 0.2)
           },
@@ -156,11 +194,11 @@ class Role {
           },
           playStrike() {
             s.fadeToAction('jumpattack', 0.2)
-            s.vecJumpAttack.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
-            console.log(s.vecJumpAttack)
-            s.body.velocity.x = s.vecJumpAttack.x
+            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
+            console.log(s._vec0)
+            s.body.velocity.x = s._vec0.x
             s.body.velocity.y = 30
-            s.body.velocity.z = s.vecJumpAttack.z
+            s.body.velocity.z = s._vec0.z
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             setTimeout(() => {
               // s.body.velocity.y -= downVelocity
@@ -169,11 +207,11 @@ class Role {
           },
           playJumpAttack(context, event, o) {
             s.fadeToAction('jumpattack', 0.2)
-            s.vecJumpAttack.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
-            console.log(s.vecJumpAttack)
-            s.body.velocity.x = s.vecJumpAttack.x
+            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
+            console.log(s._vec0)
+            s.body.velocity.x = s._vec0.x
             s.body.velocity.y = 20
-            s.body.velocity.z = s.vecJumpAttack.z
+            s.body.velocity.z = s._vec0.z
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             setTimeout(() => {
               // s.body.velocity.y -= downVelocity
@@ -197,7 +235,7 @@ class Role {
     s.xstateService = interpret(s.xstate).onTransition((state) => {
       // console.log(state)
       // if (state.changed) console.log(state)
-      // if (state.changed) console.log('role: state:', state.value)
+      if (state.changed) console.log('role: state:', state.value)
       // s.currentState = state.value
       ///currentState === s.xstateService.state.value
     })
@@ -210,8 +248,12 @@ class Role {
     // => 'resolved'
 
     let body_size = 1.5
+    let physicsMaterial = new CANNON.Material({
+      friction: 0,
+    })
     s.body = new CANNON.Body({
       mass: 1,
+      // material: physicsMaterial,
     })
     let shape = new CANNON.Sphere(body_size)
     // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
@@ -369,6 +411,10 @@ class Role {
         case 'KeyK':
         case 'Numpad5':
           s.xstateService.send('jump')
+          break
+        case 'KeyI':
+        case 'Numpad8':
+          s.xstateService.send('dash')
           break
       }
       s.actkey = e.code

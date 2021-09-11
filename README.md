@@ -13,6 +13,8 @@ Now open-sourced and:
 1. switched from <a href="https://github.com/jakesgordon/javascript-state-machine" target="_blank">state-machine.js</a> to <a href="https://github.com/statelyai/xstate" target="_blank">XState</a>.
 
     state diagram of role: https://stately.ai/viz/f8c7eb66-db73-4bc4-b3ca-7e1ef2276923
+    
+    state diagram of role mutant: https://stately.ai/viz/8817b66b-7cdd-4035-9c50-d86d03f54eb7
 
     state diagram of enemy: https://stately.ai/viz/92f4cb2a-6e1a-4607-9a6c-5006490edd62
     

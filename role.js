@@ -241,7 +241,7 @@ class Role {
       if (s.okey.KeyD || s.okey.ArrowRight) s.direction.add(vec2(1, 0))
       s.direction.normalize().multiplyScalar(s.speed)
 
-      if (!['attack', 'jumpAttack', 'hit'].some(s.xstateService.state.matches)) {
+      if (s.xstateService.state.hasTag('canMove')) {
         // change facing
         s.gltf.scene.rotation.y = -s.facing.angle() + Math.PI / 2 ///formal
         // s.gltf.scene.rotation.y = -s.facing.angle()+Math.PI///test

@@ -85,6 +85,7 @@ class Role {
             on: {
               finish: { target: 'fist' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
           },
           fist: {
@@ -92,6 +93,7 @@ class Role {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
               attack: { target: 'prepareStrike' },
             },
           },
@@ -99,6 +101,7 @@ class Role {
             on: {
               finish: { target: 'strike' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
           },
           strike: {
@@ -107,6 +110,7 @@ class Role {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
           },
           jumpAttack: {
@@ -119,20 +123,21 @@ class Role {
           jump: {
             entry: ['playJump', 'jump'],
             on: {
-              hit: { target: 'hit' },
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
               jump: { target: 'doubleJump' },
-              dash: { target: 'dash' },
+              hit: { target: 'hit' },
+              dash: { target: 'jumpDash' },
             },
             tags: ['canMove'],
           },
           doubleJump: {
             entry: ['playJump', 'jump'],
             on: {
-              hit: { target: 'hit' },
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
+              hit: { target: 'hit' },
+              dash: { target: 'jumpDash' },
             },
             tags: ['canMove'],
           },
@@ -147,22 +152,33 @@ class Role {
             after: {
               300: { target: 'idle' },
             },
-            exit: 'exitDash',
+          },
+          jumpDash: {
+            entry: 'entryJumpDash',
+            on: {
+              land: { target: 'idle' },
+            },
+            exit: 'exitJumpDash',
           },
         },
       },
       {
         actions: {
           entryDash() {
-            s.fadeToAction('running', 0.2)
+            s.fadeToAction('dash', 0.2)
+            // s.body.mass = 0
+            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(60)
+            s.body.velocity.x = s._vec0.x
+            // s.body.velocity.y = 0
+            s.body.velocity.z = s._vec0.z
+          },
+          entryJumpDash() {
+            s.fadeToAction('dash', 0.2)
             // s.body.mass = 0
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(30)
             s.body.velocity.x = s._vec0.x
             // s.body.velocity.y = 0
             s.body.velocity.z = s._vec0.z
-          },
-          exitDash() {
-            // s.body.mass = 1
           },
           playIdle() {
             s.fadeToAction('idle', 0.2)

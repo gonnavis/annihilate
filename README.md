@@ -1,1 +1,1 @@
-See: https://github.com/gonnavis/annihilate/tree/main
+See: https://github.com/gonnavis/annihilate

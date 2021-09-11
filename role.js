@@ -10,7 +10,7 @@ class Role {
     s.speed = 0.3
     s.direction = vec2()
     s.facing = vec2(0, 1)
-    s.vecJumpAttack = new THREE.Vector3()
+    s._vec0 = new THREE.Vector3()
 
     const geometry = new THREE.CircleGeometry(1.7, 32)
     const material = new THREE.ShaderMaterial({
@@ -67,6 +67,7 @@ class Role {
               attack: { target: 'attack' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
             tags: ['canMove'],
           },
@@ -120,6 +121,7 @@ class Role {
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
               jump: { target: 'doubleJump' },
+              dash: { target: 'dash' },
             },
             tags: ['canMove'],
           },
@@ -138,10 +140,22 @@ class Role {
               finish: { target: 'idle' },
             },
           },
+          dash: {
+            entry:'dash',
+            after: {
+              500: { target: 'idle' },
+            },
+          },
         },
       },
       {
         actions: {
+          dash(){
+            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(50)
+            s.body.velocity.x = s._vec0.x
+            s.body.velocity.y = 10
+            s.body.velocity.z = s._vec0.z
+          },
           playIdle() {
             s.fadeToAction('idle', 0.2)
           },
@@ -156,11 +170,11 @@ class Role {
           },
           playStrike() {
             s.fadeToAction('jumpattack', 0.2)
-            s.vecJumpAttack.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
-            console.log(s.vecJumpAttack)
-            s.body.velocity.x = s.vecJumpAttack.x
+            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
+            console.log(s._vec0)
+            s.body.velocity.x = s._vec0.x
             s.body.velocity.y = 30
-            s.body.velocity.z = s.vecJumpAttack.z
+            s.body.velocity.z = s._vec0.z
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             setTimeout(() => {
               // s.body.velocity.y -= downVelocity
@@ -169,11 +183,11 @@ class Role {
           },
           playJumpAttack(context, event, o) {
             s.fadeToAction('jumpattack', 0.2)
-            s.vecJumpAttack.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
-            console.log(s.vecJumpAttack)
-            s.body.velocity.x = s.vecJumpAttack.x
+            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
+            console.log(s._vec0)
+            s.body.velocity.x = s._vec0.x
             s.body.velocity.y = 20
-            s.body.velocity.z = s.vecJumpAttack.z
+            s.body.velocity.z = s._vec0.z
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             setTimeout(() => {
               // s.body.velocity.y -= downVelocity
@@ -197,7 +211,7 @@ class Role {
     s.xstateService = interpret(s.xstate).onTransition((state) => {
       // console.log(state)
       // if (state.changed) console.log(state)
-      // if (state.changed) console.log('role: state:', state.value)
+      if (state.changed) console.log('role: state:', state.value)
       // s.currentState = state.value
       ///currentState === s.xstateService.state.value
     })
@@ -369,6 +383,10 @@ class Role {
         case 'KeyK':
         case 'Numpad5':
           s.xstateService.send('jump')
+          break
+        case 'KeyI':
+        case 'Numpad8':
+          s.xstateService.send('dash')
           break
       }
       s.actkey = e.code

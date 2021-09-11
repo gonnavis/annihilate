@@ -73,14 +73,28 @@ class Role {
           attack: {
             entry: 'playAttack',
             on: {
-              idle: { target: 'idle' },
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              attack: { target: 'prepareFist' },
+            },
+          },
+          prepareFist: {
+            on: {
+              finish: { target: 'fist' },
+              hit: { target: 'hit' },
+            },
+          },
+          fist: {
+            entry: 'playFist',
+            on: {
+              finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
           },
           jumpAttack: {
             entry: ['playJumpAttack'],
             on: {
-              idle: { target: 'idle' },
+              finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
           },
@@ -106,7 +120,7 @@ class Role {
           hit: {
             entry: ['playHit'],
             on: {
-              idle: { target: 'idle' },
+              finish: { target: 'idle' },
             },
           },
         },
@@ -121,6 +135,9 @@ class Role {
           },
           playAttack() {
             s.fadeToAction('punch', 0.2)
+          },
+          playFist() {
+            s.fadeToAction('fist', 0.2)
           },
           playJumpAttack(context, event, o) {
             s.fadeToAction('jumpattack', 0.2)
@@ -263,7 +280,7 @@ class Role {
             let name = animation.name.toLowerCase()
             let action = s.mixer.clipAction(animation)
             s.oaction[name] = action
-            if (['jump', 'punch', 'jumpattack', 'dodge', 'hit'].includes(name)) {
+            if (['jump', 'punch', 'fist', 'jumpattack', 'dodge', 'hit'].includes(name)) {
               action.loop = THREE.LoopOnce
             }
             if ([].includes(name)) {
@@ -274,7 +291,7 @@ class Role {
           s.action_act = s.oaction.idle
           s.action_act.play()
           s.mixer.addEventListener('finished', (e) => {
-            s.xstateService.send('idle')
+            s.xstateService.send('finish')
           })
           s.xstateService.send('loaded')
           resolve()

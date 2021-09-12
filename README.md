@@ -36,6 +36,8 @@ chargeAttack, dashAttack, chargeDash, aoe, skill, air attacks, walk ...
 
 Fix: Do not inflict at the beginning of an attack.
 
+Integrate common state, like `air`.
+
 ### Ref and Goal:
     
   Action: DMC, Guilty Gear ...

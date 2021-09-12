@@ -1,10 +1,12 @@
 # Annihilate - js action game
 
-Play online: https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html ( use mixamo mutant model )
+### Play online
 
-Play online 2: https://raw.githack.com/gonnavis/annihilate/main/index.html ( use self rig-and-animated naive model )
+https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html ( use mixamo mutant model )
 
----
+https://raw.githack.com/gonnavis/annihilate/main/index.html ( use self rig-and-animated naive model )
+
+### Brief
 
 An action game prototype made in 2018.
 
@@ -24,16 +26,18 @@ Now open-sourced and:
 
 ![image](https://user-images.githubusercontent.com/10785634/118347405-b6f14b80-b575-11eb-9269-38ef89051949.png)
 
----
+### Note
 
 Current actively developing at <a href="https://github.com/gonnavis/annihilate/tree/MutantModel">branch: MutantModel</a>
 
-Todo: chargeAttack, dashAttack, chargeDash, aoe, skill, air attacks, walk ...
+### Todo: 
 
-Ref and Goal:
+chargeAttack, dashAttack, chargeDash, aoe, skill, air attacks, walk ...
+
+### Ref and Goal:
     
-    Action: DMC, Guilty Gear ...
+  Action: DMC, Guilty Gear ...
     
-    Level design: Super Mario 3D World ...
+  Level design: Super Mario 3D World ...
     
-    Multiplayer Strategy: Into the Breach ...
+  Multiplayer Strategy: Into the Breach ...

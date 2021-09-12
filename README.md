@@ -42,7 +42,7 @@ Multiplayer Strategy: Into the Breach ...
 
 chargeAttack, dashAttack, chargeDash, aoe, skill, air attacks, walk ...
 
-Fix: Do not inflict at the beginning of an attack.
+Fix: Do not inflict damage at the beginning of an attack.
 
 Integrate common state, like `air`.
 

@@ -34,6 +34,8 @@ Current actively developing at <a href="https://github.com/gonnavis/annihilate/t
 
 chargeAttack, dashAttack, chargeDash, aoe, skill, air attacks, walk ...
 
+Fix: Do not inflict at the beginning of an attack.
+
 ### Ref and Goal:
     
   Action: DMC, Guilty Gear ...

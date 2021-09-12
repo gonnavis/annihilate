@@ -30,6 +30,14 @@ Now open-sourced and:
 
 Current actively developing at <a href="https://github.com/gonnavis/annihilate/tree/MutantModel">branch: MutantModel</a>
 
+### Ref and Goal:
+    
+Action: DMC, Guilty Gear ...
+    
+Level design: Super Mario 3D World ...
+    
+Multiplayer Strategy: Into the Breach ...
+
 ### Todo: 
 
 chargeAttack, dashAttack, chargeDash, aoe, skill, air attacks, walk ...
@@ -38,10 +46,4 @@ Fix: Do not inflict at the beginning of an attack.
 
 Integrate common state, like `air`.
 
-### Ref and Goal:
-    
-  Action: DMC, Guilty Gear ...
-    
-  Level design: Super Mario 3D World ...
-    
-  Multiplayer Strategy: Into the Breach ...
+Rename `dash` to `dodge`. `dodge` can force change orientation.

@@ -152,6 +152,16 @@ class Role {
             after: {
               300: { target: 'idle' },
             },
+            on: {
+              attack: { target: 'dashAttack' },
+            },
+          },
+          dashAttack: {
+            entry: 'playDashAttack',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+            },
           },
           jumpDash: {
             entry: 'entryJumpDash',
@@ -188,6 +198,19 @@ class Role {
           },
           playAttack() {
             s.fadeToAction('punch', 0.2)
+          },
+          playDashAttack() {
+            s.fadeToAction('punch', 0.2)
+            let to = { t: 0 }
+            let _rotationY = s.gltf.scene.rotation.y
+            gsap.to(to, {
+              duration: 0.5,
+              t: -Math.PI * 2,
+              onUpdate: () => {
+                console.log(to.t)
+                s.gltf.scene.rotation.y = _rotationY + to.t
+              },
+            })
           },
           playFist() {
             s.fadeToAction('fist', 0.2)

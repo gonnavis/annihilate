@@ -6,6 +6,8 @@ https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html ( use mixamo 
 
 https://raw.githack.com/gonnavis/annihilate/main/index.html ( use self rig-and-animated naive model )
 
+Current actively developing at <a href="https://github.com/gonnavis/annihilate/tree/MutantModel">branch: MutantModel</a>
+
 ### Brief
 
 An action game prototype made in 2018.
@@ -26,9 +28,7 @@ Now open-sourced and:
 
 ![image](https://user-images.githubusercontent.com/10785634/118347405-b6f14b80-b575-11eb-9269-38ef89051949.png)
 
-### Note
-
-Current actively developing at <a href="https://github.com/gonnavis/annihilate/tree/MutantModel">branch: MutantModel</a>
+[Video](https://twitter.com/gonnavis/status/1434951076365561859)
 
 ### Ref and Goal:
     

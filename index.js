@@ -33,7 +33,7 @@ var collisionConfiguration
 var dispatcher
 var broadphase
 var solver
-var physicsWorld
+var world
 var dynamicObjects = []
 var transformAux1
 
@@ -54,19 +54,19 @@ Ammo().then(function (AmmoLib) {
   // init_cannon();
   init_ammo()
   // window.cannonDebugRenderer = new THREE.CannonDebugRenderer(scene, world);
-  // init()
+  init()
   animate()
 })
 
 function init() {
   window.ground = new Ground() // todo: refactor
 
-  window.role = new Role(0, 5, 0)
-  role.load()
-  window.axes = new Axes()
+  // window.role = new Role(0, 5, 0)
+  // role.load()
+  // window.axes = new Axes()
 
-  window.enemy = new Enemy(15, 5, -15)
-  enemy.load()
+  // window.enemy = new Enemy(15, 5, -15)
+  // enemy.load()
 }
 
 function init_three() {
@@ -131,8 +131,8 @@ function init_ammo() {
   dispatcher = new Ammo.btCollisionDispatcher(collisionConfiguration)
   broadphase = new Ammo.btDbvtBroadphase()
   solver = new Ammo.btSequentialImpulseConstraintSolver()
-  physicsWorld = new Ammo.btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration)
-  physicsWorld.setGravity(new Ammo.btVector3(0, -6, 0))
+  world = new Ammo.btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration)
+  world.setGravity(new Ammo.btVector3(0, -6, 0))
 
   // Create the terrain body
 
@@ -145,7 +145,7 @@ function init_ammo() {
   const groundLocalInertia = new Ammo.btVector3(0, 0, 0)
   const groundMotionState = new Ammo.btDefaultMotionState(groundTransform)
   const groundBody = new Ammo.btRigidBody(new Ammo.btRigidBodyConstructionInfo(groundMass, groundMotionState, groundShape, groundLocalInertia))
-  physicsWorld.addRigidBody(groundBody)
+  world.addRigidBody(groundBody)
 
   transformAux1 = new Ammo.btTransform()
 }

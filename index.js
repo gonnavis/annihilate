@@ -333,10 +333,10 @@ function animate() {
     update(dt)
   })
 
-  // if (window.camera && window.role.gltf) {
-  //   camera.position.set(role.gltf.scene.position.x, 30, role.gltf.scene.position.z + 30)
-  //   // camera.lookAt(role.gltf.scene.position)
-  // }
+  if (window.camera && window.role.gltf) {
+    camera.position.set(role.gltf.scene.position.x, 30, role.gltf.scene.position.z + 30)
+    // camera.lookAt(role.gltf.scene.position)
+  }
 
   // cannonDebugRenderer.update()
   // world.step(fixedTimeStep, dt)

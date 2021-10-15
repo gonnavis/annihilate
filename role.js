@@ -360,19 +360,26 @@ class Role {
       if (s.xstateService.state.hasTag('canMove')) {
         // s.body.position.x += s.direction.x
         // s.body.position.z += s.direction.y
+
+        //https://medium.com/@bluemagnificent/moving-objects-in-javascript-3d-physics-using-ammo-js-and-three-js-6e39eff6d9e5
+        let resultantImpulse = new Ammo.btVector3(s.direction.x, 0, s.direction.y) //perfromance
+        let scalingFactor = 30
+        resultantImpulse.op_mul(scalingFactor)
+        s.body.setLinearVelocity(resultantImpulse)
       }
 
       // s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
-      // s.shadow.position.x = s.body.position.x
-      // s.shadow.position.z = s.body.position.z
+      s.shadow.position.x = s.gltf.scene.position.x
+      s.shadow.position.z = s.gltf.scene.position.z
 
+      // https://github.com/mrdoob/three.js/blob/e9ee667219ea630f8fdef98f44875e11d0516260/examples/physics_ammo_rope.html#L461
       const ms = s.body.getMotionState()
       if (ms) {
         ms.getWorldTransform(s.transformAux1)
         const p = s.transformAux1.getOrigin()
         const q = s.transformAux1.getRotation()
         s.gltf.scene.position.set(p.x(), p.y(), p.z())
-        s.gltf.scene.quaternion.set(q.x(), q.y(), q.z(), q.w())
+        // s.gltf.scene.quaternion.set(q.x(), q.y(), q.z(), q.w())
       }
 
       s.mixer.update(dt)

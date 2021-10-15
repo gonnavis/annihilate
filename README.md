@@ -22,9 +22,9 @@ Now open-sourced and:
 
     state diagram of enemy: https://stately.ai/viz/92f4cb2a-6e1a-4607-9a6c-5006490edd62
     
-2. try to switch from cannon.js to ammo.js.
+2. try to switch from cannon.js to ammo.js, at [branch: AmmoJS](https://github.com/gonnavis/annihilate/tree/AmmoJS).
     
-3. try to use <a href="https://github.com/ecsyjs/ecsy" target="_blank">ecsy.js</a> at branch: ecsy.
+3. try to use <a href="https://github.com/ecsyjs/ecsy" target="_blank">ecsy.js</a> at [branch: ecsy](https://github.com/gonnavis/annihilate/tree/ecsy).
 
 ![image](https://user-images.githubusercontent.com/10785634/118347405-b6f14b80-b575-11eb-9269-38ef89051949.png)
 

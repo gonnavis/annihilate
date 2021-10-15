@@ -320,6 +320,7 @@ class Role {
 
     const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, localInertia)
     s.body = new Ammo.btRigidBody(rbInfo)
+    s.body.setAngularFactor(0, 0, 0) //https://stackoverflow.com/questions/17755848/is-it-possible-to-disable-x-z-rotation-in-ammo-js
 
     if (mass > 0) {
       // rigidBodies.push(threeObject)

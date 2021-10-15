@@ -176,19 +176,19 @@ class Role {
         actions: {
           entryDash() {
             s.fadeToAction('dash', 0.2)
-            // s.body.mass = 0
-            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(60)
-            s.body.velocity.x = s._vec0.x
-            // s.body.velocity.y = 0
-            s.body.velocity.z = s._vec0.z
+            // // s.body.mass = 0
+            // s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(60)
+            // s.body.velocity.x = s._vec0.x
+            // // s.body.velocity.y = 0
+            // s.body.velocity.z = s._vec0.z
           },
           entryJumpDash() {
             s.fadeToAction('dash', 0.2)
-            // s.body.mass = 0
-            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(30)
-            s.body.velocity.x = s._vec0.x
-            // s.body.velocity.y = 0
-            s.body.velocity.z = s._vec0.z
+            // // s.body.mass = 0
+            // s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(30)
+            // s.body.velocity.x = s._vec0.x
+            // // s.body.velocity.y = 0
+            // s.body.velocity.z = s._vec0.z
           },
           playIdle() {
             s.fadeToAction('idle', 0.2)
@@ -219,30 +219,30 @@ class Role {
             s.fadeToAction('jumpattack', 0.2)
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
             console.log(s._vec0)
-            s.body.velocity.x = s._vec0.x
-            s.body.velocity.y = 30
-            s.body.velocity.z = s._vec0.z
-            // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
-            setTimeout(() => {
-              // s.body.velocity.y -= downVelocity
-              s.body.velocity.y = -s.body.position.y * 5
-            }, 200)
+            // s.body.velocity.x = s._vec0.x
+            // s.body.velocity.y = 30
+            // s.body.velocity.z = s._vec0.z
+            // // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
+            // setTimeout(() => {
+            //   // s.body.velocity.y -= downVelocity
+            //   s.body.velocity.y = -s.body.position.y * 5
+            // }, 200)
           },
           playJumpAttack(context, event, o) {
             s.fadeToAction('jumpattack', 0.2)
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
             console.log(s._vec0)
-            s.body.velocity.x = s._vec0.x
-            s.body.velocity.y = 20
-            s.body.velocity.z = s._vec0.z
-            // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
-            setTimeout(() => {
-              // s.body.velocity.y -= downVelocity
-              s.body.velocity.y = -s.body.position.y * 5
-            }, 200)
+            // s.body.velocity.x = s._vec0.x
+            // s.body.velocity.y = 20
+            // s.body.velocity.z = s._vec0.z
+            // // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
+            // setTimeout(() => {
+            //   // s.body.velocity.y -= downVelocity
+            //   s.body.velocity.y = -s.body.position.y * 5
+            // }, 200)
           },
           jump() {
-            s.body.velocity.y = 20
+            // s.body.velocity.y = 20
           },
           playJump() {
             s.fadeToAction('jump', 0.2)
@@ -270,29 +270,29 @@ class Role {
     // s.xstateService.send( 'idle' )
     // => 'resolved'
 
-    let body_size = 1.5
-    let physicsMaterial = new CANNON.Material({
-      friction: 0,
-    })
-    s.body = new CANNON.Body({
-      mass: 1,
-      // material: physicsMaterial,
-    })
-    let shape = new CANNON.Sphere(body_size)
-    // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
-    s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
-    s.body.angularDamping = 1
-    s.body.addShape(shape)
-    s.body.position.set(x, y, z) ///formal
-    // s.body.position.set(10.135119435295582, -0.000010295802922222208, -14.125613840025014)///test
-    world.addBody(s.body)
-    s.body.addEventListener('collide', (event) => {
-      // console.log('collide', event.body.id, event.target.id)
-      if (event.body === window.ground.body) {
-        // todo: refactor: window.ground
-        s.xstateService.send('land')
-      }
-    })
+    // let body_size = 1.5
+    // let physicsMaterial = new CANNON.Material({
+    //   friction: 0,
+    // })
+    // s.body = new CANNON.Body({
+    //   mass: 1,
+    //   // material: physicsMaterial,
+    // })
+    // let shape = new CANNON.Sphere(body_size)
+    // // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
+    // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
+    // s.body.angularDamping = 1
+    // s.body.addShape(shape)
+    // s.body.position.set(x, y, z) ///formal
+    // // s.body.position.set(10.135119435295582, -0.000010295802922222208, -14.125613840025014)///test
+    // world.addBody(s.body)
+    // s.body.addEventListener('collide', (event) => {
+    //   // console.log('collide', event.body.id, event.target.id)
+    //   if (event.body === window.ground.body) {
+    //     // todo: refactor: window.ground
+    //     s.xstateService.send('land')
+    //   }
+    // })
 
     s.events()
 
@@ -321,13 +321,13 @@ class Role {
       }
 
       if (s.xstateService.state.hasTag('canMove')) {
-        s.body.position.x += s.direction.x
-        s.body.position.z += s.direction.y
+        // s.body.position.x += s.direction.x
+        // s.body.position.z += s.direction.y
       }
 
-      s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
-      s.shadow.position.x = s.body.position.x
-      s.shadow.position.z = s.body.position.z
+      // s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
+      // s.shadow.position.x = s.body.position.x
+      // s.shadow.position.z = s.body.position.z
       s.mixer.update(dt)
     })
   }

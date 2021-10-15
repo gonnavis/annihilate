@@ -61,8 +61,8 @@ Ammo().then(function (AmmoLib) {
 function init() {
   window.ground = new Ground() // todo: refactor
 
-  // window.role = new Role(0, 5, 0)
-  // role.load()
+  window.role = new Role(0, 5, 0)
+  role.load()
   // window.axes = new Axes()
 
   // window.enemy = new Enemy(15, 5, -15)
@@ -195,40 +195,32 @@ function createTerrainShape() {
   return heightFieldShape
 }
 
-function generateHeight( width, depth, minHeight, maxHeight ) {
-
+function generateHeight(width, depth, minHeight, maxHeight) {
   // Generates the height data (a sinus wave)
 
-  const size = width * depth;
-  const data = new Float32Array( size );
+  const size = width * depth
+  const data = new Float32Array(size)
 
-  const hRange = maxHeight - minHeight;
-  const w2 = width / 2;
-  const d2 = depth / 2;
-  const phaseMult = 12;
+  const hRange = maxHeight - minHeight
+  const w2 = width / 2
+  const d2 = depth / 2
+  const phaseMult = 12
 
-  let p = 0;
+  let p = 0
 
-  for ( let j = 0; j < depth; j ++ ) {
+  for (let j = 0; j < depth; j++) {
+    for (let i = 0; i < width; i++) {
+      const radius = Math.sqrt(Math.pow((i - w2) / w2, 2.0) + Math.pow((j - d2) / d2, 2.0))
 
-    for ( let i = 0; i < width; i ++ ) {
+      const height = (Math.sin(radius * phaseMult) + 1) * 0.5 * hRange + minHeight
 
-      const radius = Math.sqrt(
-        Math.pow( ( i - w2 ) / w2, 2.0 ) +
-          Math.pow( ( j - d2 ) / d2, 2.0 ) );
+      data[p] = height
 
-      const height = ( Math.sin( radius * phaseMult ) + 1 ) * 0.5 * hRange + minHeight;
-
-      data[ p ] = height;
-
-      p ++;
-
+      p++
     }
-
   }
 
-  return data;
-
+  return data
 }
 
 function createTerrainShape() {
@@ -276,66 +268,50 @@ function createTerrainShape() {
   return heightFieldShape
 }
 
-			function createTerrainShape() {
+function createTerrainShape() {
+  // This parameter is not really used, since we are using PHY_FLOAT height data type and hence it is ignored
+  const heightScale = 1
 
-				// This parameter is not really used, since we are using PHY_FLOAT height data type and hence it is ignored
-				const heightScale = 1;
+  // Up axis = 0 for X, 1 for Y, 2 for Z. Normally 1 = Y is used.
+  const upAxis = 1
 
-				// Up axis = 0 for X, 1 for Y, 2 for Z. Normally 1 = Y is used.
-				const upAxis = 1;
+  // hdt, height data type. "PHY_FLOAT" is used. Possible values are "PHY_FLOAT", "PHY_UCHAR", "PHY_SHORT"
+  const hdt = 'PHY_FLOAT'
 
-				// hdt, height data type. "PHY_FLOAT" is used. Possible values are "PHY_FLOAT", "PHY_UCHAR", "PHY_SHORT"
-				const hdt = "PHY_FLOAT";
+  // Set this to your needs (inverts the triangles)
+  const flipQuadEdges = false
 
-				// Set this to your needs (inverts the triangles)
-				const flipQuadEdges = false;
+  // Creates height data buffer in Ammo heap
+  ammoHeightData = Ammo._malloc(4 * terrainWidth * terrainDepth)
 
-				// Creates height data buffer in Ammo heap
-				ammoHeightData = Ammo._malloc( 4 * terrainWidth * terrainDepth );
+  // Copy the javascript height data array to the Ammo one.
+  let p = 0
+  let p2 = 0
 
-				// Copy the javascript height data array to the Ammo one.
-				let p = 0;
-				let p2 = 0;
+  for (let j = 0; j < terrainDepth; j++) {
+    for (let i = 0; i < terrainWidth; i++) {
+      // write 32-bit float data to memory
+      Ammo.HEAPF32[(ammoHeightData + p2) >> 2] = heightData[p]
 
-				for ( let j = 0; j < terrainDepth; j ++ ) {
+      p++
 
-					for ( let i = 0; i < terrainWidth; i ++ ) {
+      // 4 bytes/float
+      p2 += 4
+    }
+  }
 
-						// write 32-bit float data to memory
-						Ammo.HEAPF32[ ammoHeightData + p2 >> 2 ] = heightData[ p ];
+  // Creates the heightfield physics shape
+  const heightFieldShape = new Ammo.btHeightfieldTerrainShape(terrainWidth, terrainDepth, ammoHeightData, heightScale, terrainMinHeight, terrainMaxHeight, upAxis, hdt, flipQuadEdges)
 
-						p ++;
+  // Set horizontal scale
+  const scaleX = terrainWidthExtents / (terrainWidth - 1)
+  const scaleZ = terrainDepthExtents / (terrainDepth - 1)
+  heightFieldShape.setLocalScaling(new Ammo.btVector3(scaleX, 1, scaleZ))
 
-						// 4 bytes/float
-						p2 += 4;
+  heightFieldShape.setMargin(0.05)
 
-					}
-
-				}
-
-				// Creates the heightfield physics shape
-				const heightFieldShape = new Ammo.btHeightfieldTerrainShape(
-					terrainWidth,
-					terrainDepth,
-					ammoHeightData,
-					heightScale,
-					terrainMinHeight,
-					terrainMaxHeight,
-					upAxis,
-					hdt,
-					flipQuadEdges
-				);
-
-				// Set horizontal scale
-				const scaleX = terrainWidthExtents / ( terrainWidth - 1 );
-				const scaleZ = terrainDepthExtents / ( terrainDepth - 1 );
-				heightFieldShape.setLocalScaling( new Ammo.btVector3( scaleX, 1, scaleZ ) );
-
-				heightFieldShape.setMargin( 0.05 );
-
-				return heightFieldShape;
-
-			}
+  return heightFieldShape
+}
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight

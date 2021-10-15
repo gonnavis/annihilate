@@ -270,6 +270,7 @@ class Role {
     // s.xstateService.send( 'idle' )
     // => 'resolved'
 
+    //cannon
     // let body_size = 1.5
     // let physicsMaterial = new CANNON.Material({
     //   friction: 0,
@@ -293,6 +294,41 @@ class Role {
     //     s.xstateService.send('land')
     //   }
     // })
+
+    //ammo
+    const pos = new THREE.Vector3()
+    const quat = new THREE.Quaternion()
+    pos.set(x, y, z)
+    quat.set(0, 0, 0, 1)
+    const margin = 0.05
+    let mass = 3
+    let radius = 0.4
+    s.transformAux1 = new Ammo.btTransform()
+
+    // const shape = new Ammo.btBoxShape(new Ammo.btVector3(100, 1, 100))
+    const shape = new Ammo.btSphereShape(radius)
+    shape.setMargin(margin)
+
+    const transform = new Ammo.btTransform()
+    transform.setIdentity()
+    transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
+    transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
+    const motionState = new Ammo.btDefaultMotionState(transform)
+
+    const localInertia = new Ammo.btVector3(0, 0, 0)
+    shape.calculateLocalInertia(mass, localInertia)
+
+    const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, localInertia)
+    s.body = new Ammo.btRigidBody(rbInfo)
+
+    if (mass > 0) {
+      // rigidBodies.push(threeObject)
+
+      // // Disable deactivation
+      s.body.setActivationState(4)
+    }
+
+    world.addRigidBody(s.body)
 
     s.events()
 
@@ -328,6 +364,16 @@ class Role {
       // s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
       // s.shadow.position.x = s.body.position.x
       // s.shadow.position.z = s.body.position.z
+
+      const ms = s.body.getMotionState()
+      if (ms) {
+        ms.getWorldTransform(s.transformAux1)
+        const p = s.transformAux1.getOrigin()
+        const q = s.transformAux1.getRotation()
+        s.gltf.scene.position.set(p.x(), p.y(), p.z())
+        s.gltf.scene.quaternion.set(q.x(), q.y(), q.z(), q.w())
+      }
+
       s.mixer.update(dt)
     })
   }

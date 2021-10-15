@@ -61,7 +61,7 @@ Ammo().then(function (AmmoLib) {
 function init() {
   window.ground = new Ground() // todo: refactor
 
-  window.role = new Role(0, 5, 0)
+  window.role = new Role(0, 20, 0)
   role.load()
   // window.axes = new Axes()
 
@@ -325,11 +325,13 @@ function onWindowResize() {
 function animate() {
   requestAnimationFrame(animate)
 
-  // var dt = clock.getDelta()
+  var dt = clock.getDelta()
 
-  // updates.forEach((update) => {
-  //   update(dt)
-  // })
+  world.stepSimulation(dt, 10)
+
+  updates.forEach((update) => {
+    update(dt)
+  })
 
   // if (window.camera && window.role.gltf) {
   //   camera.position.set(role.gltf.scene.position.x, 30, role.gltf.scene.position.z + 30)

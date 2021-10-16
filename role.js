@@ -303,8 +303,18 @@ class Role {
     let mass = 1
 
     //threeJS Section
-    let ball = new THREE.Mesh(new THREE.SphereBufferGeometry(radius), new THREE.MeshPhongMaterial({ color: 0xff0505 }))
+    let ball = new THREE.Mesh(
+      new THREE.SphereBufferGeometry(radius),
+      new THREE.MeshPhongMaterial({
+        color: 'green',
+        wireframe: true,
+        // transparent: true,
+        // opacity: 0.1,
+        // depthWrite: false,
+      })
+    )
     s.ball = ball
+    // ball.visible = false
 
     ball.position.set(pos.x, pos.y, pos.z)
 
@@ -379,7 +389,7 @@ class Role {
 
         //https://medium.com/@bluemagnificent/moving-objects-in-javascript-3d-physics-using-ammo-js-and-three-js-6e39eff6d9e5
         let resultantImpulse = new Ammo.btVector3(s.direction.x, 0, s.direction.y) //perfromance
-        let scalingFactor = 30
+        let scalingFactor = 50
         resultantImpulse.op_mul(scalingFactor)
         s.body.setLinearVelocity(resultantImpulse)
       }
@@ -394,7 +404,7 @@ class Role {
         ms.getWorldTransform(s.tempTransform)
         const p = s.tempTransform.getOrigin()
         const q = s.tempTransform.getRotation()
-        s.gltf.scene.position.set(p.x(), p.y(), p.z())
+        s.gltf.scene.position.set(p.x(), p.y() - 2, p.z())
         s.ball.position.set(p.x(), p.y(), p.z())
         s.ball.quaternion.set(q.x(), q.y(), q.z(), q.w())
       }

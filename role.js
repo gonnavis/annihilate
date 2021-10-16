@@ -295,32 +295,48 @@ class Role {
     //   }
     // })
 
+    // debug mesh
+
+    let pos = { x: 0, y: 4, z: 0 }
+    let radius = 2
+    let quat = { x: 0, y: 0, z: 0, w: 1 }
+    let mass = 1
+
+    //threeJS Section
+    let ball = new THREE.Mesh(new THREE.SphereBufferGeometry(radius), new THREE.MeshPhongMaterial({ color: 0xff0505 }))
+    s.ball = ball
+
+    ball.position.set(pos.x, pos.y, pos.z)
+
+    // ball.castShadow = true
+    // ball.receiveShadow = true
+
+    scene.add(ball)
+
     //ammo
-    const pos = new THREE.Vector3()
-    const quat = new THREE.Quaternion()
-    pos.set(x, y, z)
-    quat.set(0, 0, 0, 1)
     const margin = 0.05
-    let mass = 3
-    let radius = 0.4
-    s.transformAux1 = new Ammo.btTransform()
+    // let mass = 3
+    // let radius = 0.4
+    s.tempTransform = new Ammo.btTransform()
+    s.transform = new Ammo.btTransform()
+    s.transform.setIdentity()
+    s.transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
+    s.transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
+    const motionState = new Ammo.btDefaultMotionState(s.transform)
 
     // const shape = new Ammo.btBoxShape(new Ammo.btVector3(100, 1, 100))
     const shape = new Ammo.btSphereShape(radius)
     shape.setMargin(margin)
-
-    const transform = new Ammo.btTransform()
-    transform.setIdentity()
-    transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
-    transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
-    const motionState = new Ammo.btDefaultMotionState(transform)
 
     const localInertia = new Ammo.btVector3(0, 0, 0)
     shape.calculateLocalInertia(mass, localInertia)
 
     const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, localInertia)
     s.body = new Ammo.btRigidBody(rbInfo)
-    s.body.setAngularFactor(0, 0, 0) //https://stackoverflow.com/questions/17755848/is-it-possible-to-disable-x-z-rotation-in-ammo-js
+    // s.body.setAngularFactor(0, 0, 0) //https://stackoverflow.com/questions/17755848/is-it-possible-to-disable-x-z-rotation-in-ammo-js
+
+    s.body.setFriction(4)
+    s.body.setRollingFriction(10)
 
     if (mass > 0) {
       // rigidBodies.push(threeObject)
@@ -375,11 +391,12 @@ class Role {
       // https://github.com/mrdoob/three.js/blob/e9ee667219ea630f8fdef98f44875e11d0516260/examples/physics_ammo_rope.html#L461
       const ms = s.body.getMotionState()
       if (ms) {
-        ms.getWorldTransform(s.transformAux1)
-        const p = s.transformAux1.getOrigin()
-        const q = s.transformAux1.getRotation()
+        ms.getWorldTransform(s.tempTransform)
+        const p = s.tempTransform.getOrigin()
+        const q = s.tempTransform.getRotation()
         s.gltf.scene.position.set(p.x(), p.y(), p.z())
-        // s.gltf.scene.quaternion.set(q.x(), q.y(), q.z(), q.w())
+        s.ball.position.set(p.x(), p.y(), p.z())
+        s.ball.quaternion.set(q.x(), q.y(), q.z(), q.w())
       }
 
       s.mixer.update(dt)

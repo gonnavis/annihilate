@@ -73,7 +73,7 @@ function init_three() {
   container = document.createElement('div')
   document.body.appendChild(container)
 
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.25, 100)
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000)
   camera.position.set(0, 30, 30)
   camera.lookAt(0, 0, 0)
 
@@ -112,7 +112,7 @@ function init_three() {
   stats = new Stats()
   container.appendChild(stats.dom)
 
-  // controls = new THREE.OrbitControls(camera, renderer.domElement);
+  // controls = new THREE.OrbitControls(camera, renderer.domElement)
 }
 
 // function init_cannon() {
@@ -132,22 +132,22 @@ function init_ammo() {
   broadphase = new Ammo.btDbvtBroadphase()
   solver = new Ammo.btSequentialImpulseConstraintSolver()
   world = new Ammo.btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration)
-  world.setGravity(new Ammo.btVector3(0, -6, 0))
+  world.setGravity(new Ammo.btVector3(0, -9.8, 0))
 
-  // Create the terrain body
+  // Create the terrain body ( sine wave shape )
 
-  const groundShape = createTerrainShape()
-  const groundTransform = new Ammo.btTransform()
-  groundTransform.setIdentity()
-  // Shifts the terrain, since bullet re-centers it on its bounding box.
-  groundTransform.setOrigin(new Ammo.btVector3(0, (terrainMaxHeight + terrainMinHeight) / 2, 0))
-  const groundMass = 0
-  const groundLocalInertia = new Ammo.btVector3(0, 0, 0)
-  const groundMotionState = new Ammo.btDefaultMotionState(groundTransform)
-  const groundBody = new Ammo.btRigidBody(new Ammo.btRigidBodyConstructionInfo(groundMass, groundMotionState, groundShape, groundLocalInertia))
-  world.addRigidBody(groundBody)
+  // const groundShape = createTerrainShape()
+  // const groundTransform = new Ammo.btTransform()
+  // groundTransform.setIdentity()
+  // // Shifts the terrain, since bullet re-centers it on its bounding box.
+  // groundTransform.setOrigin(new Ammo.btVector3(0, (terrainMaxHeight + terrainMinHeight) / 2, 0))
+  // const groundMass = 0
+  // const groundLocalInertia = new Ammo.btVector3(0, 0, 0)
+  // const groundMotionState = new Ammo.btDefaultMotionState(groundTransform)
+  // const groundBody = new Ammo.btRigidBody(new Ammo.btRigidBodyConstructionInfo(groundMass, groundMotionState, groundShape, groundLocalInertia))
+  // world.addRigidBody(groundBody)
 
-  transformAux1 = new Ammo.btTransform()
+  // transformAux1 = new Ammo.btTransform()
 }
 
 function createTerrainShape() {

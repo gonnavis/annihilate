@@ -1,19 +1,21 @@
 class Ground {
   constructor() {
     let s = this
-    s.mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(2000, 2000), new THREE.MeshPhongMaterial({ color: 0x999999 /*depthWrite: false*/ }))
-    s.mesh.rotation.x = -Math.PI / 2
+    const pos = new THREE.Vector3()
+    const quat = new THREE.Quaternion()
+    pos.set(0, -1, 0)
+    quat.set(0, 0, 0, 1)
+
+    s.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(100, 2, 100), new THREE.MeshPhongMaterial({ color: 0x999999 /*depthWrite: false*/ }))
+    // s.mesh.rotation.x = -Math.PI / 2
+    s.mesh.position.copy(pos)
     scene.add(s.mesh)
 
     //ammo
-    const pos = new THREE.Vector3()
-    const quat = new THREE.Quaternion()
-    pos.set(0, 0, 0)
-    quat.set(0, 0, 0, 1)
     const margin = 0.05
     let mass = 0
 
-    const shape = new Ammo.btBoxShape(new Ammo.btVector3(100, 1, 100))
+    const shape = new Ammo.btBoxShape(new Ammo.btVector3(50, 1, 50))
     shape.setMargin(margin)
 
     const transform = new Ammo.btTransform()
@@ -27,6 +29,9 @@ class Ground {
 
     const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, localInertia)
     const body = new Ammo.btRigidBody(rbInfo)
+
+    body.setFriction(4)
+    body.setRollingFriction(10)
 
     if (mass > 0) {
       // rigidBodies.push(threeObject)

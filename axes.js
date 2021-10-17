@@ -45,6 +45,8 @@ class Axes {
 
     let rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia)
     let body = new Ammo.btRigidBody(rbInfo)
+    s.body = body
+    body.name = 'axes'
 
     body.setFriction(4)
     body.setRollingFriction(10)
@@ -52,8 +54,11 @@ class Axes {
     body.setActivationState(4)
     body.setCollisionFlags(2)
 
+    body.onCollide = (event) => {
+      console.log('axes collide')
+    }
+
     world.addRigidBody(body)
-    mesh.userData.physicsBody = body
 
     // //cannon
     // let body_size=1
@@ -81,16 +86,21 @@ class Axes {
         role.gltf.scene.getObjectByName('KnifeTip').getWorldPosition(tmpPos)
         // s.body.position.copy(tmpPos)
 
+        tmpPos.x += 8 //test
+
         mesh.position.copy(tmpPos)
 
-        let ammoTmpPos = new Ammo.btVector3()
-        ammoTmpPos.setValue(tmpPos.x, tmpPos.y, tmpPos.z)
+        let ms = body.getMotionState()
+        if (ms) {
+          let ammoTmpPos = new Ammo.btVector3()
+          ammoTmpPos.setValue(tmpPos.x, tmpPos.y, tmpPos.z)
 
-        let tmpTrans = new Ammo.btTransform()
-        tmpTrans.setIdentity()
-        tmpTrans.setOrigin(ammoTmpPos)
+          let tmpTrans = new Ammo.btTransform()
+          tmpTrans.setIdentity()
+          tmpTrans.setOrigin(ammoTmpPos)
 
-        body.setWorldTransform(tmpTrans)
+          ms.setWorldTransform(tmpTrans)
+        }
       }
     }
     updates.push(update)

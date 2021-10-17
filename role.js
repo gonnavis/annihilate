@@ -64,7 +64,7 @@ class Role {
           run: {
             entry: 'playRun',
             on: {
-              stop: { target: 'idle' },
+              stop: { target: 'idle', actions: 'stop' },
               attack: { target: 'attack' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
@@ -174,6 +174,13 @@ class Role {
       },
       {
         actions: {
+          stop() {
+            //todo: Any better solution? Why increase `friction` and `rollingFriction` no effect, can't stop?
+            let resultantImpulse = new Ammo.btVector3(0, 0, 0) //perfromance
+            // let scalingFactor = 50
+            // resultantImpulse.op_mul(scalingFactor)
+            s.body.setLinearVelocity(resultantImpulse)
+          },
           entryDash() {
             s.fadeToAction('dash', 0.2)
             // // s.body.mass = 0

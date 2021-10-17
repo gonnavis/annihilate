@@ -58,7 +58,7 @@ class Axes {
       console.log('axes collide')
     }
 
-    world.addRigidBody(body)
+    // world.addRigidBody(body)
 
     // //cannon
     // let body_size=1
@@ -86,7 +86,7 @@ class Axes {
         role.gltf.scene.getObjectByName('KnifeTip').getWorldPosition(tmpPos)
         // s.body.position.copy(tmpPos)
 
-        tmpPos.x += 8 //test
+        // tmpPos.x += 8 //test
 
         mesh.position.copy(tmpPos)
 

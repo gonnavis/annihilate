@@ -29,6 +29,7 @@ class Ground {
 
     const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, localInertia)
     const body = new Ammo.btRigidBody(rbInfo)
+    body.name = 'ground'
 
     body.setFriction(4)
     body.setRollingFriction(10)

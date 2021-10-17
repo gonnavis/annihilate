@@ -350,6 +350,7 @@ class Role {
 
     const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, localInertia)
     s.body = new Ammo.btRigidBody(rbInfo)
+    s.body.name = 'role'
     // s.body.setAngularFactor(0, 0, 0) //https://stackoverflow.com/questions/17755848/is-it-possible-to-disable-x-z-rotation-in-ammo-js
 
     s.body.setFriction(4)

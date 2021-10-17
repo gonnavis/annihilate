@@ -79,7 +79,7 @@ function init_three() {
 
   scene = new THREE.Scene()
   scene.background = new THREE.Color(0xe0e0e0)
-  scene.fog = new THREE.Fog(0xe0e0e0, 20, 100)
+  // scene.fog = new THREE.Fog(0xe0e0e0, 20, 100)
 
   clock = new THREE.Clock()
 
@@ -404,6 +404,7 @@ function animate() {
 
   if (window.camera && window.role.gltf) {
     camera.position.set(role.gltf.scene.position.x, 30, role.gltf.scene.position.z + 30)
+    // camera.position.set(role.gltf.scene.position.x, 100, role.gltf.scene.position.z + 100)
     // camera.lookAt(role.gltf.scene.position)
   }
 

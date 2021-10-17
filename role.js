@@ -176,12 +176,12 @@ class Role {
       {
         actions: {
           stop() {
-            //todo: Any better solution? Why increase `friction` and `rollingFriction` no effect, can't stop?
-            let resultantImpulse = new Ammo.btVector3(0, 0, 0) //perfromance
-            // let scalingFactor = 50
-            // resultantImpulse.op_mul(scalingFactor)
-            s.body.setLinearVelocity(resultantImpulse)
-            // console.log('setLinearVelocity')
+            // //todo: Any better solution? Why increase `friction` and `rollingFriction` no effect, can't stop?
+            // let resultantImpulse = new Ammo.btVector3(0, 0, 0) //perfromance
+            // // let scalingFactor = 50
+            // // resultantImpulse.op_mul(scalingFactor)
+            // s.body.setLinearVelocity(resultantImpulse)
+            // // console.log('setLinearVelocity')
           },
           entryDash() {
             s.fadeToAction('dash', 0.2)
@@ -364,7 +364,7 @@ class Role {
     const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, localInertia)
     s.body = new Ammo.btRigidBody(rbInfo)
     s.body.name = 'role'
-    // s.body.setAngularFactor(0, 0, 0) //https://stackoverflow.com/questions/17755848/is-it-possible-to-disable-x-z-rotation-in-ammo-js
+    s.body.setAngularFactor(0, 0, 0) //https://stackoverflow.com/questions/17755848/is-it-possible-to-disable-x-z-rotation-in-ammo-js
 
     s.body.setFriction(4)
     s.body.setRollingFriction(10)

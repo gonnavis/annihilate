@@ -30,35 +30,43 @@ class Axes {
 
     scene.add(mesh)
 
-    //Ammojs Section
-    let transform = new Ammo.btTransform()
-    transform.setIdentity()
-    transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
-    transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
-    let motionState = new Ammo.btDefaultMotionState(transform)
+    // // Ammojs Section
+    // let transform = new Ammo.btTransform()
+    // transform.setIdentity()
+    // transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
+    // transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
+    // let motionState = new Ammo.btDefaultMotionState(transform)
 
     let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5, scale.y * 0.5, scale.z * 0.5))
     colShape.setMargin(0.05)
 
-    let localInertia = new Ammo.btVector3(0, 0, 0)
-    colShape.calculateLocalInertia(mass, localInertia)
+    // let localInertia = new Ammo.btVector3(0, 0, 0)
+    // colShape.calculateLocalInertia(mass, localInertia)
 
-    let rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia)
-    let body = new Ammo.btRigidBody(rbInfo)
+    // let rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, colShape, localInertia)
+    // let body = new Ammo.btRigidBody(rbInfo)
+
+    let body = new Ammo.btGhostObject() //ghost
+    // body.setCollisionShape(new Ammo.btSphereShape(10))
+    body.setCollisionShape(colShape)
+    // body.setWorldTransform(new Ammo.btTransform(new Ammo.btQuaternion(0, 0, 0, 1), new Ammo.btVector3(0, 15, 0)))
+    // body.setCollisionFlags(4)
+    // physicsWorld.addCollisionObject(body)
+
     s.body = body
     body.name = 'axes'
 
-    body.setFriction(4)
-    body.setRollingFriction(10)
+    // body.setFriction(4)
+    // body.setRollingFriction(10)
 
-    body.setActivationState(4)
-    body.setCollisionFlags(2)
+    // body.setActivationState(4)
+    // body.setCollisionFlags(4)
 
     body.onCollide = (event) => {
       console.log('axes collide')
     }
 
-    world.addRigidBody(body)
+    // world.addRigidBody(body)
 
     // //cannon
     // let body_size=1
@@ -90,17 +98,26 @@ class Axes {
 
         mesh.position.copy(tmpPos)
 
-        let ms = body.getMotionState()
-        if (ms) {
-          let ammoTmpPos = new Ammo.btVector3()
-          ammoTmpPos.setValue(tmpPos.x, tmpPos.y, tmpPos.z)
+        // let ms = body.getMotionState()
+        // if (ms) {
+        //   let ammoTmpPos = new Ammo.btVector3()
+        //   ammoTmpPos.setValue(tmpPos.x, tmpPos.y, tmpPos.z)
 
-          let tmpTrans = new Ammo.btTransform()
-          tmpTrans.setIdentity()
-          tmpTrans.setOrigin(ammoTmpPos)
+        //   let tmpTrans = new Ammo.btTransform()
+        //   tmpTrans.setIdentity()
+        //   tmpTrans.setOrigin(ammoTmpPos)
 
-          ms.setWorldTransform(tmpTrans)
-        }
+        //   ms.setWorldTransform(tmpTrans)
+        // }
+
+        let ammoTmpPos = new Ammo.btVector3()
+        ammoTmpPos.setValue(tmpPos.x, tmpPos.y, tmpPos.z)
+
+        let tmpTrans = new Ammo.btTransform()
+        tmpTrans.setIdentity()
+        tmpTrans.setOrigin(ammoTmpPos)
+
+        body.setWorldTransform(tmpTrans)
       }
     }
     updates.push(update)

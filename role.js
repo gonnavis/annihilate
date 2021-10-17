@@ -11,7 +11,8 @@ class Role {
     s.direction = vec2()
     s.facing = vec2(0, 1)
     s._vec0 = new THREE.Vector3()
-    s.banCollideDetect = false //todo: Any better solution? Why ammo fire collide event after jump? ( at same tick )
+    // s.banCollideDetect = false //todo: Any better solution? Why ammo fire collide event after jump? ( at same tick )
+    s.isCollide = false
 
     const geometry = new THREE.CircleGeometry(1.7, 32)
     const material = new THREE.ShaderMaterial({
@@ -57,7 +58,7 @@ class Role {
             on: {
               run: { target: 'run' },
               attack: { target: 'attack' },
-              jump: { target: 'jump' },
+              jump: { target: 'prepareJump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
@@ -67,7 +68,7 @@ class Role {
             on: {
               stop: { target: 'idle', actions: 'stop' },
               attack: { target: 'attack' },
-              jump: { target: 'jump' },
+              jump: { target: 'prepareJump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
@@ -122,7 +123,6 @@ class Role {
             },
           },
           jump: {
-            entry: ['playJump', 'jump'],
             on: {
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
@@ -131,6 +131,14 @@ class Role {
               dash: { target: 'jumpDash' },
             },
             // tags: ['canMove'],//todo
+          },
+          prepareJump: {
+            entry: ['playJump', 'jump'],
+            on: {
+              leaveGround: { target: 'jump' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
           },
           doubleJump: {
             entry: ['playJump', 'jump'],
@@ -262,7 +270,7 @@ class Role {
             // resultantImpulse.op_mul(scalingFactor)
             s.body.setLinearVelocity(resultantImpulse)
             // console.log('setLinearVelocity')
-            s.banCollideDetect = true
+            // s.banCollideDetect = true
           },
           playJump() {
             s.fadeToAction('jump', 0.2)
@@ -377,11 +385,13 @@ class Role {
     }
 
     s.body.onCollide = (event) => {
-      if (s.banCollideDetect) return
+      s.isCollide = true
+      // if (s.banCollideDetect) return
       // console.warn('collide')
       // console.log('collide', event.body.id, event.target.id)
       if (event.body === window.ground.body) {
         // todo: refactor: window.ground
+        // console.warn('land')
         s.xstateService.send('land')
       }
     }
@@ -393,7 +403,12 @@ class Role {
     updates.push(function update(dt) {
       if (s.xstateService.state.matches('loading')) return
 
-      s.banCollideDetect = false
+      // s.banCollideDetect = false
+
+      if (!s.isCollide) {
+        // console.warn('leaveGround')
+        s.xstateService.send('leaveGround')
+      }
 
       s.direction.set(0, 0)
       if (s.okey.KeyW || s.okey.ArrowUp) s.direction.add(vec2(0, -1))
@@ -444,6 +459,7 @@ class Role {
       }
 
       s.mixer.update(dt)
+      s.isCollide = false
     })
   }
 

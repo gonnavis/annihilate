@@ -63,7 +63,7 @@ function init() {
 
   window.role = new Role(0, 20, 0)
   role.load()
-  // window.axes = new Axes()
+  window.axes = new Axes()
 
   window.enemy = new Enemy(15, 5, -15)
   enemy.load()

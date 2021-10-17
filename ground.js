@@ -28,20 +28,22 @@ class Ground {
     shape.calculateLocalInertia(mass, localInertia)
 
     const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, localInertia)
-    const body = new Ammo.btRigidBody(rbInfo)
-    body.name = 'ground'
+    s.body = new Ammo.btRigidBody(rbInfo)
+    s.body.name = 'ground'
 
-    body.setFriction(4)
-    body.setRollingFriction(10)
+    s.body.setFriction(4)
+    s.body.setRollingFriction(10)
 
     if (mass > 0) {
       // rigidBodies.push(threeObject)
 
       // // Disable deactivation
-      body.setActivationState(4)
+      s.body.setActivationState(4)
     }
 
-    world.addRigidBody(body)
+    s.body.onCollide = (event) => {}
+
+    world.addRigidBody(s.body)
 
     //cannon
     // let shape=new CANNON.Plane()

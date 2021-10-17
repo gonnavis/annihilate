@@ -11,6 +11,7 @@ class Role {
     s.direction = vec2()
     s.facing = vec2(0, 1)
     s._vec0 = new THREE.Vector3()
+    s.banCollideDetect = false //todo: Any better solution? Why ammo fire collide event after jump? ( at same tick )
 
     const geometry = new THREE.CircleGeometry(1.7, 32)
     const material = new THREE.ShaderMaterial({
@@ -129,7 +130,7 @@ class Role {
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
             },
-            tags: ['canMove'],
+            // tags: ['canMove'],//todo
           },
           doubleJump: {
             entry: ['playJump', 'jump'],
@@ -180,6 +181,7 @@ class Role {
             // let scalingFactor = 50
             // resultantImpulse.op_mul(scalingFactor)
             s.body.setLinearVelocity(resultantImpulse)
+            console.log('setLinearVelocity')
           },
           entryDash() {
             s.fadeToAction('dash', 0.2)
@@ -249,7 +251,18 @@ class Role {
             // }, 200)
           },
           jump() {
+            console.warn('jump')
+
+            //cannon
             // s.body.velocity.y = 20
+
+            //ammo
+            let resultantImpulse = new Ammo.btVector3(0, 10, 0) //perfromance
+            // let scalingFactor = 50
+            // resultantImpulse.op_mul(scalingFactor)
+            s.body.setLinearVelocity(resultantImpulse)
+            console.log('setLinearVelocity')
+            s.banCollideDetect = true
           },
           playJump() {
             s.fadeToAction('jump', 0.2)
@@ -363,12 +376,24 @@ class Role {
       s.body.setActivationState(4)
     }
 
+    s.body.onCollide = (event) => {
+      if (s.banCollideDetect) return
+      console.warn('collide')
+      // console.log('collide', event.body.id, event.target.id)
+      if (event.body === window.ground.body) {
+        // todo: refactor: window.ground
+        s.xstateService.send('land')
+      }
+    }
+
     world.addRigidBody(s.body)
 
     s.events()
 
     updates.push(function update(dt) {
       if (s.xstateService.state.matches('loading')) return
+
+      s.banCollideDetect = false
 
       s.direction.set(0, 0)
       if (s.okey.KeyW || s.okey.ArrowUp) s.direction.add(vec2(0, -1))
@@ -400,6 +425,7 @@ class Role {
         let scalingFactor = 50
         resultantImpulse.op_mul(scalingFactor)
         s.body.setLinearVelocity(resultantImpulse)
+        console.log('setLinearVelocity')
       }
 
       // s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)

@@ -323,6 +323,14 @@ function detectCollision() {
 
     let rb0 = Ammo.castObject(contactManifold.getBody0(), Ammo.btRigidBody)
     let rb1 = Ammo.castObject(contactManifold.getBody1(), Ammo.btRigidBody)
+
+    rb0.onCollide({
+      body: rb1,
+    })
+    rb1.onCollide({
+      body: rb0,
+    })
+
     // let threeObject0 = rb0.threeObject
     // let threeObject1 = rb1.threeObject
 
@@ -348,25 +356,25 @@ function detectCollision() {
       let localPos0 = contactPoint.get_m_localPointA()
       let localPos1 = contactPoint.get_m_localPointB()
 
-      console.log({
-        manifoldIndex: i,
-        contactIndex: j,
-        distance: distance,
-        name0: rb0.name,
-        name1: rb1.name,
-        object0: {
-          name: rb0.name,
-          velocity: { x: velocity0.x(), y: velocity0.y(), z: velocity0.z() },
-          worldPos: { x: worldPos0.x(), y: worldPos0.y(), z: worldPos0.z() },
-          localPos: { x: localPos0.x(), y: localPos0.y(), z: localPos0.z() },
-        },
-        object1: {
-          name: rb1.name,
-          velocity: { x: velocity1.x(), y: velocity1.y(), z: velocity1.z() },
-          worldPos: { x: worldPos1.x(), y: worldPos1.y(), z: worldPos1.z() },
-          localPos: { x: localPos1.x(), y: localPos1.y(), z: localPos1.z() },
-        },
-      })
+      // console.log({
+      //   manifoldIndex: i,
+      //   contactIndex: j,
+      //   distance: distance,
+      //   name0: rb0.name,
+      //   name1: rb1.name,
+      //   object0: {
+      //     name: rb0.name,
+      //     velocity: { x: velocity0.x(), y: velocity0.y(), z: velocity0.z() },
+      //     worldPos: { x: worldPos0.x(), y: worldPos0.y(), z: worldPos0.z() },
+      //     localPos: { x: localPos0.x(), y: localPos0.y(), z: localPos0.z() },
+      //   },
+      //   object1: {
+      //     name: rb1.name,
+      //     velocity: { x: velocity1.x(), y: velocity1.y(), z: velocity1.z() },
+      //     worldPos: { x: worldPos1.x(), y: worldPos1.y(), z: worldPos1.z() },
+      //     localPos: { x: localPos1.x(), y: localPos1.y(), z: localPos1.z() },
+      //   },
+      // })
     }
   }
 }

@@ -133,24 +133,36 @@ class Enemy {
     // s.xstateService.send( 'idle' )
     // => 'resolved'
 
-    let body_size = 1.5
-    s.body = new CANNON.Body({
-      mass: 1,
-    })
-    let shape = new CANNON.Sphere(body_size)
-    // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
-    s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
-    s.body.angularDamping = 1
-    s.body.addShape(shape)
-    s.body.position.set(x, y, z)
-    world.addBody(s.body)
+    // cannon
+    // let body_size = 1.5
+    // s.body = new CANNON.Body({
+    //   mass: 1,
+    // })
+    // let shape = new CANNON.Sphere(body_size)
+    // // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
+    // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
+    // s.body.angularDamping = 1
+    // s.body.addShape(shape)
+    // s.body.position.set(x, y, z)
+    // world.addBody(s.body)
 
-    updates.push(function (dt) {
+    updates.push(function update(dt) {
       if (s.xstateService.state.value === 'loading') return
       s.mixer.update(dt)
-      s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
-      s.shadow.position.x = s.body.position.x
-      s.shadow.position.z = s.body.position.z
+      // s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
+      s.shadow.position.x = s.gltf.scene.position.x
+      s.shadow.position.z = s.gltf.scene.position.z
+
+      // https://github.com/mrdoob/three.js/blob/e9ee667219ea630f8fdef98f44875e11d0516260/examples/physics_ammo_rope.html#L461
+      const ms = s.body.getMotionState()
+      if (ms) {
+        ms.getWorldTransform(s.tempTransform)
+        const p = s.tempTransform.getOrigin()
+        const q = s.tempTransform.getRotation()
+        s.gltf.scene.position.set(p.x(), p.y() - 2, p.z())
+        s.ball.position.set(p.x(), p.y(), p.z())
+        s.ball.quaternion.set(q.x(), q.y(), q.z(), q.w())
+      }
 
       if (!role.gltf) return
       if (s.xstateService.state.value !== 'dead') {
@@ -164,8 +176,82 @@ class Enemy {
       }
     })
 
+    // ammo debug mesh
+
+    let pos = { x: 0, y: 4, z: 0 }
+    let radius = 2
+    let quat = { x: 0, y: 0, z: 0, w: 1 }
+    let mass = 1
+
+    //threeJS Section
+    let ball = new THREE.Mesh(
+      new THREE.SphereBufferGeometry(radius),
+      new THREE.MeshPhongMaterial({
+        color: 'green',
+        wireframe: true,
+        // transparent: true,
+        // opacity: 0.1,
+        // depthWrite: false,
+      })
+    )
+    s.ball = ball
+    // ball.visible = false
+
+    ball.position.set(pos.x, pos.y, pos.z)
+
+    // ball.castShadow = true
+    // ball.receiveShadow = true
+
+    scene.add(ball)
+
+    //ammo
+    const margin = 0.05
+    // let mass = 3
+    // let radius = 0.4
+    s.tempTransform = new Ammo.btTransform()
+    s.transform = new Ammo.btTransform()
+    s.transform.setIdentity()
+    s.transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
+    s.transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
+    const motionState = new Ammo.btDefaultMotionState(s.transform)
+
+    // const shape = new Ammo.btBoxShape(new Ammo.btVector3(100, 1, 100))
+    const shape = new Ammo.btSphereShape(radius)
+    shape.setMargin(margin)
+
+    const localInertia = new Ammo.btVector3(0, 0, 0)
+    shape.calculateLocalInertia(mass, localInertia)
+
+    const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, localInertia)
+    s.body = new Ammo.btRigidBody(rbInfo)
+    s.body.name = 'enemy'
+    // s.body.setAngularFactor(0, 0, 0) //https://stackoverflow.com/questions/17755848/is-it-possible-to-disable-x-z-rotation-in-ammo-js
+
+    s.body.setFriction(4)
+    s.body.setRollingFriction(10)
+
+    if (mass > 0) {
+      // rigidBodies.push(threeObject)
+
+      // // Disable deactivation
+      s.body.setActivationState(4)
+    }
+
+    s.body.onCollide = (event) => {}
+    // s.body.onCollide = (event) => {
+    //   if (s.banCollideDetect) return
+    //   // console.warn('collide')
+    //   // console.log('collide', event.body.id, event.target.id)
+    //   if (event.body === window.ground.body) {
+    //     // todo: refactor: window.ground
+    //     s.xstateService.send('land')
+    //   }
+    // }
+
+    world.addRigidBody(s.body)
+
     setInterval(() => {
-      s.xstateService.send('attack')
+      // s.xstateService.send('attack')//todo
     }, 3000)
   }
 

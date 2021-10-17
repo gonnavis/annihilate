@@ -315,7 +315,7 @@ class Role {
     //   }
     // })
 
-    // debug mesh
+    // ammo debug mesh
 
     let pos = { x: 0, y: 4, z: 0 }
     let radius = 2

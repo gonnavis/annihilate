@@ -313,6 +313,26 @@ function createTerrainShape() {
   return heightFieldShape
 }
 
+function detectCollision() {
+  // https://medium.com/@bluemagnificent/collision-detection-in-javascript-3d-physics-using-ammo-js-and-three-js-31a5569291ef
+  let dispatcher = world.getDispatcher()
+  let numManifolds = dispatcher.getNumManifolds()
+
+  for (let i = 0; i < numManifolds; i++) {
+    let contactManifold = dispatcher.getManifoldByIndexInternal(i)
+    let numContacts = contactManifold.getNumContacts()
+
+    for (let j = 0; j < numContacts; j++) {
+      let contactPoint = contactManifold.getContactPoint(j)
+      let distance = contactPoint.getDistance()
+
+      console.log({ manifoldIndex: i, contactIndex: j, distance: distance })
+    }
+  }
+}
+
+//
+
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
@@ -328,6 +348,7 @@ function animate() {
   var dt = clock.getDelta()
 
   world.stepSimulation(dt, 10)
+  detectCollision()
 
   updates.forEach((update) => {
     update(dt)

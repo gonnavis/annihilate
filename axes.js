@@ -2,6 +2,8 @@
 class Axes {
   constructor() {
     let s = this
+    s.cbContactResult
+    s.setupContactResultCallback()
 
     //ammo
 
@@ -80,6 +82,7 @@ class Axes {
     // })
 
     function update() {
+      //todo: move out from constructor
       if (role.gltf) {
         let tmpPos = vec3()
         // role.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(tmpPos)
@@ -101,8 +104,51 @@ class Axes {
 
           ms.setWorldTransform(tmpTrans)
         }
+
+        world.contactTest(s.body, s.cbContactResult)
       }
     }
     updates.push(update)
+  }
+
+  setupContactResultCallback() {
+    // https://medium.com/@bluemagnificent/collision-detection-in-javascript-3d-physics-using-ammo-js-and-three-js-31a5569291ef
+    let s = this
+    s.cbContactResult = new Ammo.ConcreteContactResultCallback()
+
+    s.cbContactResult.addSingleResult = function (cp, colObj0Wrap, partId0, index0, colObj1Wrap, partId1, index1) {
+      console.log('addSingleResult')
+      let contactPoint = Ammo.wrapPointer(cp, Ammo.btManifoldPoint)
+
+      const distance = contactPoint.getDistance()
+
+      if (distance > 0) return
+
+      let colWrapper0 = Ammo.wrapPointer(colObj0Wrap, Ammo.btCollisionObjectWrapper)
+      let rb0 = Ammo.castObject(colWrapper0.getCollisionObject(), Ammo.btRigidBody)
+
+      let colWrapper1 = Ammo.wrapPointer(colObj1Wrap, Ammo.btCollisionObjectWrapper)
+      let rb1 = Ammo.castObject(colWrapper1.getCollisionObject(), Ammo.btRigidBody)
+
+      let threeObject0 = rb0.threeObject
+      let threeObject1 = rb1.threeObject
+
+      let tag, localPos, worldPos
+
+      if (threeObject0.userData.tag != 'ball') {
+        tag = threeObject0.userData.tag
+        localPos = contactPoint.get_m_localPointA()
+        worldPos = contactPoint.get_m_positionWorldOnA()
+      } else {
+        tag = threeObject1.userData.tag
+        localPos = contactPoint.get_m_localPointB()
+        worldPos = contactPoint.get_m_positionWorldOnB()
+      }
+
+      let localPosDisplay = { x: localPos.x(), y: localPos.y(), z: localPos.z() }
+      let worldPosDisplay = { x: worldPos.x(), y: worldPos.y(), z: worldPos.z() }
+
+      console.log('contactTest', { tag, localPosDisplay, worldPosDisplay })
+    }
   }
 }

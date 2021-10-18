@@ -6,7 +6,7 @@ https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html ( use mixamo 
 
 https://raw.githack.com/gonnavis/annihilate/main/index.html ( use self rig-and-animated naive model )
 
-Current actively developing at <a href="https://github.com/gonnavis/annihilate/tree/MutantModel">branch: MutantModel</a>
+Current actively developing at [branch: MutantModel](https://github.com/gonnavis/annihilate/tree/MutantModel) & [branch: AmmoJS](https://github.com/gonnavis/annihilate/tree/AmmoJS).
 
 ### Brief
 

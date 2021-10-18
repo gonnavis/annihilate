@@ -3,7 +3,7 @@ class Axes {
   constructor() {
     let s = this
     s.cbContactResult
-    s.setupContactResultCallback()
+    // s.setupContactResultCallback()
 
     //ammo
 
@@ -54,7 +54,19 @@ class Axes {
     body.setRollingFriction(10)
 
     body.setActivationState(4)
-    body.setCollisionFlags(2)
+
+    body.setCollisionFlags(2 | 4)
+    // /lib/ammo.js_github/bullet/src/BulletCollision/CollisionDispatch/btCollisionObject.h
+    // enum CollisionFlags
+    // {
+    //   CF_STATIC_OBJECT= 1,
+    //   CF_KINEMATIC_OBJECT= 2,
+    //   CF_NO_CONTACT_RESPONSE = 4,
+    //   CF_CUSTOM_MATERIAL_CALLBACK = 8,//this allows per-triangle material (friction/restitution)
+    //   CF_CHARACTER_OBJECT = 16,
+    //   CF_DISABLE_VISUALIZE_OBJECT = 32, //disable debug drawing
+    //   CF_DISABLE_SPU_COLLISION_PROCESSING = 64//disable parallel/SPU processing
+    // };
 
     body.onCollide = (event) => {
       console.log('axes collide')
@@ -105,50 +117,50 @@ class Axes {
           ms.setWorldTransform(tmpTrans)
         }
 
-        world.contactTest(s.body, s.cbContactResult)
+        // world.contactTest(s.body, s.cbContactResult)
       }
     }
     updates.push(update)
   }
 
-  setupContactResultCallback() {
-    // https://medium.com/@bluemagnificent/collision-detection-in-javascript-3d-physics-using-ammo-js-and-three-js-31a5569291ef
-    let s = this
-    s.cbContactResult = new Ammo.ConcreteContactResultCallback()
+  // setupContactResultCallback() {
+  //   // https://medium.com/@bluemagnificent/collision-detection-in-javascript-3d-physics-using-ammo-js-and-three-js-31a5569291ef
+  //   let s = this
+  //   s.cbContactResult = new Ammo.ConcreteContactResultCallback()
 
-    s.cbContactResult.addSingleResult = function (cp, colObj0Wrap, partId0, index0, colObj1Wrap, partId1, index1) {
-      console.warn('addSingleResult')
-      // let contactPoint = Ammo.wrapPointer(cp, Ammo.btManifoldPoint)
+  //   s.cbContactResult.addSingleResult = function (cp, colObj0Wrap, partId0, index0, colObj1Wrap, partId1, index1) {
+  //     console.warn('addSingleResult')
+  //     // let contactPoint = Ammo.wrapPointer(cp, Ammo.btManifoldPoint)
 
-      // const distance = contactPoint.getDistance()
+  //     // const distance = contactPoint.getDistance()
 
-      // if (distance > 0) return
+  //     // if (distance > 0) return
 
-      // let colWrapper0 = Ammo.wrapPointer(colObj0Wrap, Ammo.btCollisionObjectWrapper)
-      // let rb0 = Ammo.castObject(colWrapper0.getCollisionObject(), Ammo.btRigidBody)
+  //     // let colWrapper0 = Ammo.wrapPointer(colObj0Wrap, Ammo.btCollisionObjectWrapper)
+  //     // let rb0 = Ammo.castObject(colWrapper0.getCollisionObject(), Ammo.btRigidBody)
 
-      // let colWrapper1 = Ammo.wrapPointer(colObj1Wrap, Ammo.btCollisionObjectWrapper)
-      // let rb1 = Ammo.castObject(colWrapper1.getCollisionObject(), Ammo.btRigidBody)
+  //     // let colWrapper1 = Ammo.wrapPointer(colObj1Wrap, Ammo.btCollisionObjectWrapper)
+  //     // let rb1 = Ammo.castObject(colWrapper1.getCollisionObject(), Ammo.btRigidBody)
 
-      // let threeObject0 = rb0.threeObject
-      // let threeObject1 = rb1.threeObject
+  //     // let threeObject0 = rb0.threeObject
+  //     // let threeObject1 = rb1.threeObject
 
-      // let tag, localPos, worldPos
+  //     // let tag, localPos, worldPos
 
-      // if (threeObject0.userData.tag != 'ball') {
-      //   tag = threeObject0.userData.tag
-      //   localPos = contactPoint.get_m_localPointA()
-      //   worldPos = contactPoint.get_m_positionWorldOnA()
-      // } else {
-      //   tag = threeObject1.userData.tag
-      //   localPos = contactPoint.get_m_localPointB()
-      //   worldPos = contactPoint.get_m_positionWorldOnB()
-      // }
+  //     // if (threeObject0.userData.tag != 'ball') {
+  //     //   tag = threeObject0.userData.tag
+  //     //   localPos = contactPoint.get_m_localPointA()
+  //     //   worldPos = contactPoint.get_m_positionWorldOnA()
+  //     // } else {
+  //     //   tag = threeObject1.userData.tag
+  //     //   localPos = contactPoint.get_m_localPointB()
+  //     //   worldPos = contactPoint.get_m_positionWorldOnB()
+  //     // }
 
-      // let localPosDisplay = { x: localPos.x(), y: localPos.y(), z: localPos.z() }
-      // let worldPosDisplay = { x: worldPos.x(), y: worldPos.y(), z: worldPos.z() }
+  //     // let localPosDisplay = { x: localPos.x(), y: localPos.y(), z: localPos.z() }
+  //     // let worldPosDisplay = { x: worldPos.x(), y: worldPos.y(), z: worldPos.z() }
 
-      // console.log('contactTest', { tag, localPosDisplay, worldPosDisplay })
-    }
-  }
+  //     // console.log('contactTest', { tag, localPosDisplay, worldPosDisplay })
+  //   }
+  // }
 }

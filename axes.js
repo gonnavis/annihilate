@@ -60,7 +60,7 @@ class Axes {
       console.log('axes collide')
     }
 
-    // world.addRigidBody(body)
+    world.addRigidBody(body)
 
     // //cannon
     // let body_size=1
@@ -89,7 +89,7 @@ class Axes {
         role.gltf.scene.getObjectByName('KnifeTip').getWorldPosition(tmpPos)
         // s.body.position.copy(tmpPos)
 
-        // tmpPos.x += 8 //test
+        tmpPos.x += 8 //test
 
         mesh.position.copy(tmpPos)
 
@@ -117,38 +117,38 @@ class Axes {
     s.cbContactResult = new Ammo.ConcreteContactResultCallback()
 
     s.cbContactResult.addSingleResult = function (cp, colObj0Wrap, partId0, index0, colObj1Wrap, partId1, index1) {
-      console.log('addSingleResult')
-      let contactPoint = Ammo.wrapPointer(cp, Ammo.btManifoldPoint)
+      console.warn('addSingleResult')
+      // let contactPoint = Ammo.wrapPointer(cp, Ammo.btManifoldPoint)
 
-      const distance = contactPoint.getDistance()
+      // const distance = contactPoint.getDistance()
 
-      if (distance > 0) return
+      // if (distance > 0) return
 
-      let colWrapper0 = Ammo.wrapPointer(colObj0Wrap, Ammo.btCollisionObjectWrapper)
-      let rb0 = Ammo.castObject(colWrapper0.getCollisionObject(), Ammo.btRigidBody)
+      // let colWrapper0 = Ammo.wrapPointer(colObj0Wrap, Ammo.btCollisionObjectWrapper)
+      // let rb0 = Ammo.castObject(colWrapper0.getCollisionObject(), Ammo.btRigidBody)
 
-      let colWrapper1 = Ammo.wrapPointer(colObj1Wrap, Ammo.btCollisionObjectWrapper)
-      let rb1 = Ammo.castObject(colWrapper1.getCollisionObject(), Ammo.btRigidBody)
+      // let colWrapper1 = Ammo.wrapPointer(colObj1Wrap, Ammo.btCollisionObjectWrapper)
+      // let rb1 = Ammo.castObject(colWrapper1.getCollisionObject(), Ammo.btRigidBody)
 
-      let threeObject0 = rb0.threeObject
-      let threeObject1 = rb1.threeObject
+      // let threeObject0 = rb0.threeObject
+      // let threeObject1 = rb1.threeObject
 
-      let tag, localPos, worldPos
+      // let tag, localPos, worldPos
 
-      if (threeObject0.userData.tag != 'ball') {
-        tag = threeObject0.userData.tag
-        localPos = contactPoint.get_m_localPointA()
-        worldPos = contactPoint.get_m_positionWorldOnA()
-      } else {
-        tag = threeObject1.userData.tag
-        localPos = contactPoint.get_m_localPointB()
-        worldPos = contactPoint.get_m_positionWorldOnB()
-      }
+      // if (threeObject0.userData.tag != 'ball') {
+      //   tag = threeObject0.userData.tag
+      //   localPos = contactPoint.get_m_localPointA()
+      //   worldPos = contactPoint.get_m_positionWorldOnA()
+      // } else {
+      //   tag = threeObject1.userData.tag
+      //   localPos = contactPoint.get_m_localPointB()
+      //   worldPos = contactPoint.get_m_positionWorldOnB()
+      // }
 
-      let localPosDisplay = { x: localPos.x(), y: localPos.y(), z: localPos.z() }
-      let worldPosDisplay = { x: worldPos.x(), y: worldPos.y(), z: worldPos.z() }
+      // let localPosDisplay = { x: localPos.x(), y: localPos.y(), z: localPos.z() }
+      // let worldPosDisplay = { x: worldPos.x(), y: worldPos.y(), z: worldPos.z() }
 
-      console.log('contactTest', { tag, localPosDisplay, worldPosDisplay })
+      // console.log('contactTest', { tag, localPosDisplay, worldPosDisplay })
     }
   }
 }

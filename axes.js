@@ -69,7 +69,10 @@ class Axes {
     // };
 
     body.onCollide = (event) => {
-      console.log('axes collide')
+      // console.log('axes collide')
+      if (event.body === enemy.body) {
+        if (['attack', 'fist', 'strike', 'jumpAttack', 'dashAttack'].some(role.xstateService.state.matches)) enemy.hit() // todo: refactor: do not check role's state at here.
+      }
     }
 
     world.addRigidBody(body)
@@ -101,7 +104,7 @@ class Axes {
         role.gltf.scene.getObjectByName('KnifeTip').getWorldPosition(tmpPos)
         // s.body.position.copy(tmpPos)
 
-        tmpPos.x += 8 //test
+        // tmpPos.x += 8 //test
 
         mesh.position.copy(tmpPos)
 

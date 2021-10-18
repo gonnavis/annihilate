@@ -324,7 +324,7 @@ function detectCollision() {
     let rb0 = Ammo.castObject(contactManifold.getBody0(), Ammo.btRigidBody)
     let rb1 = Ammo.castObject(contactManifold.getBody1(), Ammo.btRigidBody)
 
-    if (rb0.name !== 'ground' && rb1.name !== 'ground') console.log('detectCollision', rb0, rb1)
+    // if (rb0.name !== 'ground' && rb1.name !== 'ground') console.log('detectCollision', rb0, rb1)
 
     rb0.onCollide({
       body: rb1,

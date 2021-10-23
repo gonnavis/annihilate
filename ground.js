@@ -3,19 +3,19 @@ class Ground {
     let s = this
     const pos = new THREE.Vector3()
     const quat = new THREE.Quaternion()
-    pos.set(0, -1, 0)
-    quat.set(0, 0, 0, 1)
+    pos.set(0, -1 * gs, 0)
+    quat.set(0, 0, 0, 1 * gs)
 
-    s.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(100, 2, 100), new THREE.MeshPhongMaterial({ color: 0x999999 /*depthWrite: false*/ }))
+    s.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(100 * gs, 2 * gs, 100 * gs), new THREE.MeshPhongMaterial({ color: 0x999999 /*depthWrite: false*/ }))
     // s.mesh.rotation.x = -Math.PI / 2
     s.mesh.position.copy(pos)
     scene.add(s.mesh)
 
     //ammo
-    const margin = 0.05
+    const margin = 0.04
     let mass = 0
 
-    const shape = new Ammo.btBoxShape(new Ammo.btVector3(50, 1, 50))
+    const shape = new Ammo.btBoxShape(new Ammo.btVector3(50 * gs, 1 * gs, 50 * gs))
     shape.setMargin(margin)
 
     const transform = new Ammo.btTransform()

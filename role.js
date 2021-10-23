@@ -14,8 +14,9 @@ class Role {
     // s.banCollideDetect = false //todo: Any better solution? Why ammo fire collide event after jump? ( at same tick )
     s.isCollide = false
 
-    const geometry = new THREE.CircleGeometry(1.7, 32)
+    const geometry = new THREE.CircleGeometry(1.7 * gs, 32)
     const material = new THREE.ShaderMaterial({
+      depthWrite: false,
       transparent: true,
       vertexShader: `
         varying vec2 vUv;
@@ -189,7 +190,6 @@ class Role {
             // // let scalingFactor = 50
             // // resultantImpulse.op_mul(scalingFactor)
             // s.body.setLinearVelocity(resultantImpulse)
-            // // console.log('setLinearVelocity')
           },
           entryDash() {
             s.fadeToAction('dash', 0.2)
@@ -265,12 +265,10 @@ class Role {
             // s.body.velocity.y = 20
 
             //ammo
-            let resultantImpulse = new Ammo.btVector3(0, 10, 0) //perfromance
+            let resultantImpulse = new Ammo.btVector3(0, 4, 0) //perfromance
             // let scalingFactor = 50
             // resultantImpulse.op_mul(scalingFactor)
-            // s.body.setLinearVelocity(resultantImpulse)
             s.body.applyImpulse(resultantImpulse)
-            // console.log('setLinearVelocity')
             // s.banCollideDetect = true
           },
           playJump() {
@@ -326,8 +324,8 @@ class Role {
 
     // ammo debug mesh
 
-    let pos = { x: 0, y: 4, z: 0 }
-    let radius = 2
+    let pos = { x: 0, y: 4 * gs, z: 0 }
+    let radius = 1 * gs
     let quat = { x: 0, y: 0, z: 0, w: 1 }
     let mass = 1
 
@@ -353,7 +351,7 @@ class Role {
     scene.add(ball)
 
     //ammo
-    const margin = 0.05
+    const margin = 0.04
     // let mass = 3
     // let radius = 0.4
     s.tempTransform = new Ammo.btTransform()
@@ -386,14 +384,17 @@ class Role {
     }
 
     s.body.onCollide = (event) => {
-      s.isCollide = true
       // if (s.banCollideDetect) return
-      // console.warn('collide')
+      // console.log('collide')
       // console.log('collide', event.body.id, event.target.id)
       if (event.body === window.ground.body) {
+        // console.log(event.distance.toFixed(5))
+        // if (Math.abs(event.distance) < 10000) {
+        s.isCollide = true
         // todo: refactor: window.ground
         // console.warn('land')
         s.xstateService.send('land')
+        // }
       }
     }
 
@@ -438,11 +439,9 @@ class Role {
 
         //https://medium.com/@bluemagnificent/moving-objects-in-javascript-3d-physics-using-ammo-js-and-three-js-6e39eff6d9e5
         let resultantImpulse = new Ammo.btVector3(s.direction.x, 0, s.direction.y) //perfromance
-        let scalingFactor = 50
+        let scalingFactor = 20
         resultantImpulse.op_mul(scalingFactor)
         s.body.setLinearVelocity(resultantImpulse)
-        // s.body.applyImpulse(resultantImpulse)
-        // console.log('setLinearVelocity')
       }
 
       // s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
@@ -455,13 +454,15 @@ class Role {
         ms.getWorldTransform(s.tempTransform)
         const p = s.tempTransform.getOrigin()
         const q = s.tempTransform.getRotation()
-        s.gltf.scene.position.set(p.x(), p.y() - 2, p.z())
+        s.gltf.scene.position.set(p.x(), p.y() - 1 * gs, p.z())
         s.ball.position.set(p.x(), p.y(), p.z())
         s.ball.quaternion.set(q.x(), q.y(), q.z(), q.w())
       }
 
       s.mixer.update(dt)
       s.isCollide = false
+
+      // console.log(s.gltf.scene.position.y.toFixed(5))
     })
   }
 
@@ -498,7 +499,7 @@ class Role {
             }
           })
           scene.add(s.gltf.scene)
-          s.gltf.scene.scale.setScalar(2.7)
+          s.gltf.scene.scale.setScalar((2.7 / 2) * gs)
           // s.gltf.scene.scale.set(.7,.7,.7)
           // s.gltf.scene.position.set(x,y,z)
           s.mixer = new THREE.AnimationMixer(s.gltf.scene)
@@ -516,6 +517,7 @@ class Role {
           })
           s.action_act = s.oaction.idle
           s.action_act.play()
+          s.action_act.paused = true
           s.mixer.addEventListener('finished', (e) => {
             s.xstateService.send('finish')
           })

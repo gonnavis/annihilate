@@ -178,7 +178,7 @@ class Enemy {
 
     // ammo debug mesh
 
-    let pos = { x: 0, y: 4, z: 0 }
+    let pos = { x: 10, y: 4, z: 0 }
     let radius = 2
     let quat = { x: 0, y: 0, z: 0, w: 1 }
     let mass = 1

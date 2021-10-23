@@ -7,8 +7,8 @@ class Axes {
 
     //ammo
 
-    let pos = { x: 40, y: 6, z: 5 }
-    let scale = { x: 2, y: 2, z: 2 }
+    let pos = { x: 40 * gs, y: 6 * gs, z: 5 * gs }
+    let scale = { x: 1 * gs, y: 1 * gs, z: 1 * gs }
     let quat = { x: 0, y: 0, z: 0, w: 1 }
     let mass = 1
 

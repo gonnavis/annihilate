@@ -11,6 +11,7 @@ var vec3 = function (x, y, z) {
 var container, stats, clock, gui, mixer, actions, activeAction, previousAction
 var camera, scene, renderer, model, face
 var updates = []
+window.gs = 0.5 //global scale ( mainly for ammojs bodies to have desired falling speed ).
 
 // Heightfield parameters
 var terrainWidthExtents = 100
@@ -74,7 +75,7 @@ function init_three() {
   document.body.appendChild(container)
 
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000)
-  camera.position.set(0, 30, 30)
+  camera.position.set(0, 15 * gs, 15 * gs)
   camera.lookAt(0, 0, 0)
 
   scene = new THREE.Scene()
@@ -93,8 +94,8 @@ function init_three() {
   light.position.set(0, 20, 10)
   scene.add(light)
 
-  var grid = new THREE.GridHelper(200, 40, 0x000000, 0x000000)
-  grid.position.y = 0.1
+  var grid = new THREE.GridHelper(200 * gs, 40, 0x000000, 0x000000)
+  grid.position.y = 0.1 * gs
   grid.material.opacity = 0.2
   grid.material.transparent = true
   scene.add(grid)
@@ -326,12 +327,13 @@ function detectCollision() {
 
     // if (rb0.name !== 'ground' && rb1.name !== 'ground') console.log('detectCollision', rb0, rb1)
 
-    rb0.onCollide({
-      body: rb1,
-    })
-    rb1.onCollide({
-      body: rb0,
-    })
+    // why fire collide event at here will cause too early / too far.
+    // rb0.onCollide({
+    //   body: rb1,
+    // })
+    // rb1.onCollide({
+    //   body: rb0,
+    // })
 
     // let threeObject0 = rb0.threeObject
     // let threeObject1 = rb1.threeObject
@@ -348,6 +350,16 @@ function detectCollision() {
     for (let j = 0; j < numContacts; j++) {
       let contactPoint = contactManifold.getContactPoint(j)
       let distance = contactPoint.getDistance()
+
+      // why fire collide event at here works fine, even do not need check distance.
+      rb0.onCollide({
+        body: rb1,
+        distance,
+      })
+      rb1.onCollide({
+        body: rb0,
+        distance,
+      })
 
       // if (distance > 0.0) continue
 
@@ -405,7 +417,7 @@ function animate() {
   })
 
   if (window.camera && window.role.gltf) {
-    camera.position.set(role.gltf.scene.position.x, 30, role.gltf.scene.position.z + 30)
+    camera.position.set(role.gltf.scene.position.x, 15 * gs, role.gltf.scene.position.z + 15 * gs)
     // camera.position.set(role.gltf.scene.position.x, 100, role.gltf.scene.position.z + 100)
     // camera.lookAt(role.gltf.scene.position)
   }

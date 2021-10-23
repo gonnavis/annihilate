@@ -277,6 +277,8 @@ class Role {
             // s.body.velocity.y = 20
 
             //ammo
+            let velocity = s.body.getLinearVelocity()
+            s.body.setLinearVelocity(new Ammo.btVector3(velocity.x(), 0, velocity.z())) //prevent doubleJump too high
             let resultantImpulse = new Ammo.btVector3(0, 4, 0) //perfromance
             // let scalingFactor = 50
             // resultantImpulse.op_mul(scalingFactor)

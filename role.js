@@ -125,6 +125,7 @@ class Role {
             },
           },
           jump: {
+            entry: 'entryJump',
             on: {
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
@@ -185,6 +186,11 @@ class Role {
       },
       {
         actions: {
+          entryJump() {
+            let velocity = s.body.getLinearVelocity()
+            // console.log(velocity.x(), velocity.y(), velocity.z())
+            s.body.setLinearVelocity(new Ammo.btVector3(velocity.x() / 1.5, velocity.y(), velocity.z() / 1.5))
+          },
           stop() {
             // //todo: Any better solution? Why increase `friction` and `rollingFriction` no effect, can't stop?
             // let resultantImpulse = new Ammo.btVector3(0, 0, 0) //perfromance

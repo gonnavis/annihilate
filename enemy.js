@@ -9,6 +9,7 @@ class Enemy {
     const geometry = new THREE.CircleGeometry(1.5, 32)
     const material = new THREE.ShaderMaterial({
       transparent: true,
+      depthWrite: false,
       vertexShader: `
         varying vec2 vUv;
         void main(){
@@ -25,7 +26,7 @@ class Enemy {
     })
     s.shadow = new THREE.Mesh(geometry, material) // pseudo shadow
     s.shadow.rotation.x = -Math.PI / 2
-    s.shadow.position.y = 0.02
+    s.shadow.position.y = 0.01
     s.shadow.renderOrder = 2 // need same as position.y order of all pseudo shadows
     scene.add(s.shadow)
 
@@ -159,7 +160,7 @@ class Enemy {
         ms.getWorldTransform(s.tempTransform)
         const p = s.tempTransform.getOrigin()
         const q = s.tempTransform.getRotation()
-        s.gltf.scene.position.set(p.x(), p.y() - 2, p.z())
+        s.gltf.scene.position.set(p.x(), p.y() - 1 * gs, p.z())
         s.ball.position.set(p.x(), p.y(), p.z())
         s.ball.quaternion.set(q.x(), q.y(), q.z(), q.w())
       }
@@ -178,8 +179,8 @@ class Enemy {
 
     // ammo debug mesh
 
-    let pos = { x: 10, y: 4, z: 0 }
-    let radius = 2
+    let pos = { x: 3 * gs, y: 4 * gs, z: 0 }
+    let radius = 1 * gs
     let quat = { x: 0, y: 0, z: 0, w: 1 }
     let mass = 1
 
@@ -272,7 +273,7 @@ class Enemy {
           // console.log(gltf)
           s.gltf = gltf
           s.scene.add(gltf.scene)
-          gltf.scene.scale.set(0.7, 0.7, 0.7)
+          gltf.scene.scale.setScalar((0.7 / 2) * gs)
           // gltf.scene.position.set(x,y,z)
           s.mixer = new THREE.AnimationMixer(gltf.scene)
           gltf.animations.forEach((animation) => {

@@ -45,6 +45,7 @@ var time = 0
 var objectTimePeriod = 3
 var timeNextSpawn = time + objectTimePeriod
 var maxNumObjects = 30
+var cameraAway = 15
 
 Ammo().then(function (AmmoLib) {
   Ammo = AmmoLib
@@ -75,7 +76,7 @@ function init_three() {
   document.body.appendChild(container)
 
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000)
-  camera.position.set(0, 15 * gs, 15 * gs)
+  camera.position.set(0, cameraAway * gs, cameraAway * gs)
   camera.lookAt(0, 0, 0)
 
   scene = new THREE.Scene()
@@ -417,7 +418,7 @@ function animate() {
   })
 
   if (window.camera && window.role.gltf) {
-    camera.position.set(role.gltf.scene.position.x, 15 * gs, role.gltf.scene.position.z + 15 * gs)
+    camera.position.set(role.gltf.scene.position.x, cameraAway * gs, role.gltf.scene.position.z + cameraAway * gs)
     // camera.position.set(role.gltf.scene.position.x, 100, role.gltf.scene.position.z + 100)
     // camera.lookAt(role.gltf.scene.position)
   }

@@ -252,7 +252,7 @@ class Enemy {
     world.addRigidBody(s.body)
 
     setInterval(() => {
-      // s.xstateService.send('attack')//todo
+      s.xstateService.send('attack')
     }, 3000)
   }
 

@@ -72,6 +72,7 @@ class Role {
               jump: { target: 'prepareJump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
+              // leaveGround: { target: 'jump' },
             },
             tags: ['canMove'],
           },
@@ -249,6 +250,11 @@ class Role {
             s.fadeToAction('jumpattack', 0.2)
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
             console.log(s._vec0)
+
+            setTimeout(() => {
+              s.body.applyImpulse(new Ammo.btVector3(0, -10, 0))
+            }, 300)
+
             // s.body.velocity.x = s._vec0.x
             // s.body.velocity.y = 20
             // s.body.velocity.z = s._vec0.z

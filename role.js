@@ -520,14 +520,15 @@ class Role {
           s.gltf.animations.forEach((animation) => {
             let name = animation.name.toLowerCase()
             let action = s.mixer.clipAction(animation)
+            action.clampWhenFinished = true
             s.oaction[name] = action
             if (['jump', 'punch', 'fist', 'jumpattack', 'dodge', 'hit'].includes(name)) {
               action.loop = THREE.LoopOnce
             }
-            if ([].includes(name)) {
-              action.loop = THREE.LoopOnce
-              action.clampWhenFinished = true
-            }
+            // if ([].includes(name)) {
+            //   action.loop = THREE.LoopOnce
+            //   action.clampWhenFinished = true
+            // }
           })
           s.action_act = s.oaction.idle
           s.action_act.play()

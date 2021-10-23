@@ -92,23 +92,23 @@ class Enemy {
           },
           dead() {
             s.fadeToAction('death', 0.2)
-            s.body.mass = 0
-            s.body.velocity.set(0, 0, 0)
+            // s.body.mass = 0
+            // s.body.velocity.set(0, 0, 0)
 
-            let interval
-            setTimeout(() => {
-              interval = setInterval(() => {
-                // s.gltf.scene.position.y-=.001
-                s.body.velocity.set(0, 0, 0) // continuously clear velocity, otherwise may not cleared.
-                s.body.collisionResponse = false
-                s.body.position.y -= 0.0005
-                console.log('interval')
-                setTimeout(() => {
-                  clearInterval(interval)
-                  // },5000)
-                }, 2000)
-              })
-            }, 2000)
+            // let interval
+            // setTimeout(() => {
+            //   interval = setInterval(() => {
+            //     // s.gltf.scene.position.y-=.001
+            //     s.body.velocity.set(0, 0, 0) // continuously clear velocity, otherwise may not cleared.
+            //     s.body.collisionResponse = false
+            //     s.body.position.y -= 0.0005
+            //     console.log('interval')
+            //     setTimeout(() => {
+            //       clearInterval(interval)
+            //       // },5000)
+            //     }, 2000)
+            //   })
+            // }, 2000)
           },
         },
         guards: {

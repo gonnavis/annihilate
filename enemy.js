@@ -6,7 +6,7 @@ class Enemy {
     s.oaction = {}
     s.mixer
 
-    const geometry = new THREE.CircleGeometry(1.5, 32)
+    const geometry = new THREE.CircleGeometry((1.8 / 2) * gs, 32)
     const material = new THREE.ShaderMaterial({
       transparent: true,
       depthWrite: false,

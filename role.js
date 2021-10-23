@@ -14,7 +14,7 @@ class Role {
     // s.banCollideDetect = false //todo: Any better solution? Why ammo fire collide event after jump? ( at same tick )
     s.isCollide = false
 
-    const geometry = new THREE.CircleGeometry(1.7 * gs, 32)
+    const geometry = new THREE.CircleGeometry((2 / 2) * gs, 32)
     const material = new THREE.ShaderMaterial({
       depthWrite: false,
       transparent: true,
@@ -453,7 +453,7 @@ class Role {
 
         //https://medium.com/@bluemagnificent/moving-objects-in-javascript-3d-physics-using-ammo-js-and-three-js-6e39eff6d9e5
         let resultantImpulse = new Ammo.btVector3(s.direction.x, 0, s.direction.y) //perfromance
-        let scalingFactor = 20
+        let scalingFactor = 18
         resultantImpulse.op_mul(scalingFactor)
         s.body.setLinearVelocity(resultantImpulse)
       }

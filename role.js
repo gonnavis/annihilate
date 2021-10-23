@@ -268,7 +268,8 @@ class Role {
             let resultantImpulse = new Ammo.btVector3(0, 10, 0) //perfromance
             // let scalingFactor = 50
             // resultantImpulse.op_mul(scalingFactor)
-            s.body.setLinearVelocity(resultantImpulse)
+            // s.body.setLinearVelocity(resultantImpulse)
+            s.body.applyImpulse(resultantImpulse)
             // console.log('setLinearVelocity')
             // s.banCollideDetect = true
           },
@@ -440,6 +441,7 @@ class Role {
         let scalingFactor = 50
         resultantImpulse.op_mul(scalingFactor)
         s.body.setLinearVelocity(resultantImpulse)
+        // s.body.applyImpulse(resultantImpulse)
         // console.log('setLinearVelocity')
       }
 

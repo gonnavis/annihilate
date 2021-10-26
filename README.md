@@ -38,7 +38,7 @@ Level design: Super Mario 3D World ...
     
 Multiplayer Strategy: Into the Breach ...
 
-Other: [other1](https://twitter.com/gonnavis/status/1442426877390385153) [other2](https://twitter.com/FluidNinjaLIVE/status/1445897813020196869)
+Other: [other1](https://twitter.com/gonnavis/status/1442426877390385153) [other2](https://twitter.com/FluidNinjaLIVE/status/1445897813020196869) [other3](https://twitter.com/80Level/status/1450084674307600387)
 
 ### Todo: 
 

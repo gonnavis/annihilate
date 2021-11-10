@@ -12,7 +12,7 @@ class Attacker {
     let pos = { x: enemy.gltf.scene.position.x, y: height / 2, z: enemy.gltf.scene.position.z }
     let scale = { x: 1 * gs, y: 1 * gs, z: 1 * gs }
     let quat = { x: 0, y: 0, z: 0, w: 1 }
-    let mass = 1
+    let mass = 0
     s.tempTransform = new Ammo.btTransform()
 
     //threeJS Section
@@ -59,7 +59,7 @@ class Attacker {
     body.setFriction(0)
     body.setRollingFriction(0)
 
-    body.setActivationState(4)
+    body.setActivationState(4)// Disable deactivation
 
     body.setCollisionFlags(4)
     // /lib/ammo.js_github/bullet/src/BulletCollision/CollisionDispatch/btCollisionObject.h
@@ -115,7 +115,7 @@ class Attacker {
     function update() {
       // ammo
       let ms = s.body.getMotionState()
-      s.body.setLinearVelocity(new Ammo.btVector3(movement.x * 10, 0, movement.z * 10))
+      s.body.setLinearVelocity(new Ammo.btVector3(movement.x * 20, 0, movement.z * 20))
 
       // let tmpPos = vec3()
       // s.mesh.position.copy(tmpPos)

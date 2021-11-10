@@ -31,7 +31,8 @@ class Ground {
     s.body = new Ammo.btRigidBody(rbInfo)
     s.body.name = 'ground'
 
-    s.body.setFriction(4)
+    // s.body.setFriction(4)
+    s.body.setFriction(20)
     s.body.setRollingFriction(10)
 
     if (mass > 0) {

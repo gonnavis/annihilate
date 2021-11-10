@@ -228,8 +228,8 @@ class Enemy {
     s.body.name = 'enemy'
     s.body.setAngularFactor(0, 0, 0) //https://stackoverflow.com/questions/17755848/is-it-possible-to-disable-x-z-rotation-in-ammo-js
 
-    s.body.setFriction(4)
-    s.body.setRollingFriction(10)
+    // s.body.setFriction(4)
+    // s.body.setRollingFriction(10)
 
     if (mass > 0) {
       // rigidBodies.push(threeObject)

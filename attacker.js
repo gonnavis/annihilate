@@ -75,10 +75,9 @@ class Attacker {
     // };
 
     body.onCollide = (event) => {
-      // console.log('axes collide')
-      // if (event.body === enemy.body) {
-      //   if (['attack', 'fist', 'strike', 'jumpAttack', 'dashAttack'].some(role.xstateService.state.matches)) enemy.hit() // todo: refactor: do not check role's state at here.
-      // }
+      if (event.body === role.body) {
+        role.hit()
+      }
     }
 
     world.addRigidBody(body)
@@ -115,7 +114,7 @@ class Attacker {
     function update() {
       // ammo
       let ms = s.body.getMotionState()
-      s.body.setLinearVelocity(new Ammo.btVector3(movement.x * 20, 0, movement.z * 20))
+      s.body.setLinearVelocity(new Ammo.btVector3(movement.x * 18, 0, movement.z * 18))
 
       // let tmpPos = vec3()
       // s.mesh.position.copy(tmpPos)

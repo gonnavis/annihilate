@@ -45,7 +45,7 @@ var time = 0
 var objectTimePeriod = 3
 var timeNextSpawn = time + objectTimePeriod
 var maxNumObjects = 30
-var cameraAway = 15
+var cameraAway = 30
 
 Ammo().then(function (AmmoLib) {
   Ammo = AmmoLib
@@ -93,13 +93,13 @@ function init_three() {
 
   light = new THREE.DirectionalLight(0xffffff)
   light.position.set(0, 20, 10)
-  scene.add(light)
+  // scene.add(light)
 
   var grid = new THREE.GridHelper(200 * gs, 40, 0x000000, 0x000000)
   grid.position.y = 0.1 * gs
   grid.material.opacity = 0.2
   grid.material.transparent = true
-  scene.add(grid)
+  // scene.add(grid)
 
   renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setPixelRatio(window.devicePixelRatio)

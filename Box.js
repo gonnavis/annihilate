@@ -4,11 +4,13 @@ class Box {
     const pos = new THREE.Vector3()
     const quat = new THREE.Quaternion()
 
-    let size=1.5
-    pos.set(-3, size/2 * gs, 0)
+    let x=10
+    let y=1.5
+    let z=70
+    pos.set(-3-x/2, y/2 * gs, 0)
     quat.set(0, 0, 0, 1 * gs)
 
-    s.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(size * gs, size * gs, size * gs), new THREE.MeshPhongMaterial({ color: 0x555555 /*depthWrite: false*/ }))
+    s.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(x * gs, y * gs, z * gs), new THREE.MeshPhongMaterial({ color: 0x555555 /*depthWrite: false*/ }))
     // s.mesh.rotation.x = -Math.PI / 2
     s.mesh.position.copy(pos)
     scene.add(s.mesh)
@@ -17,7 +19,7 @@ class Box {
     const margin = 0.04
     let mass = 0
 
-    const shape = new Ammo.btBoxShape(new Ammo.btVector3(size/2 * gs, size/2 * gs, size/2 * gs))
+    const shape = new Ammo.btBoxShape(new Ammo.btVector3(x/2 * gs, y/2 * gs, z/2 * gs))
     shape.setMargin(margin)
 
     const transform = new Ammo.btTransform()
@@ -36,6 +38,7 @@ class Box {
     // s.body.setFriction(4)
     s.body.setFriction(20)
     s.body.setRollingFriction(10)
+    // s.body.setRollingFriction(0)
 
     if (mass > 0) {
       // rigidBodies.push(threeObject)

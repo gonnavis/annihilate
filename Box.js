@@ -1,27 +1,23 @@
-class Ground {
+class Box {
   constructor() {
     let s = this
     const pos = new THREE.Vector3()
     const quat = new THREE.Quaternion()
-    pos.set(0, -1 * gs, 0)
+
+    let size=1.5
+    pos.set(-3, size/2 * gs, 0)
     quat.set(0, 0, 0, 1 * gs)
 
-    s.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(100 * gs, 2 * gs, 100 * gs), new THREE.MeshPhongMaterial({ color: 0x999999 /*depthWrite: false*/ }))
+    s.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(size * gs, size * gs, size * gs), new THREE.MeshPhongMaterial({ color: 0x555555 /*depthWrite: false*/ }))
     // s.mesh.rotation.x = -Math.PI / 2
     s.mesh.position.copy(pos)
     scene.add(s.mesh)
-
-    var grid = new THREE.GridHelper(200 * gs, 40, 0x000000, 0x000000)
-    grid.position.y = 0.1 * gs
-    grid.material.opacity = 0.2
-    grid.material.transparent = true
-    scene.add(grid)
 
     //ammo
     const margin = 0.04
     let mass = 0
 
-    const shape = new Ammo.btBoxShape(new Ammo.btVector3(50 * gs, 1 * gs, 50 * gs))
+    const shape = new Ammo.btBoxShape(new Ammo.btVector3(size/2 * gs, size/2 * gs, size/2 * gs))
     shape.setMargin(margin)
 
     const transform = new Ammo.btTransform()
@@ -35,7 +31,7 @@ class Ground {
 
     const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, shape, localInertia)
     s.body = new Ammo.btRigidBody(rbInfo)
-    s.body.name = 'ground'
+    s.body.name = 'box'
 
     // s.body.setFriction(4)
     s.body.setFriction(20)

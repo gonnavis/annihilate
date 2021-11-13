@@ -256,9 +256,9 @@ class Role {
 
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
+      // if (state.changed) console.log('role: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
-      if (state.changed) console.log('role: state:', state.value)
       // s.currentState = state.value
       ///currentState === s.xstateService.state.value
     })
@@ -289,7 +289,8 @@ class Role {
     s.body.addEventListener('collide', (event) => {
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
-      if (event.body !== window.axes.body) {///todo: Is cannon.js has collision mask?
+      if (event.body !== window.axes.body) {
+        ///todo: Is cannon.js has collision mask?
         // todo: refactor: window.ground
         s.xstateService.send('land')
       }

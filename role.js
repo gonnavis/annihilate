@@ -207,7 +207,7 @@ class Role {
               duration: 0.5,
               t: -Math.PI * 2,
               onUpdate: () => {
-                console.log(to.t)
+                // console.log(to.t)
                 s.gltf.scene.rotation.y = _rotationY + to.t
               },
             })

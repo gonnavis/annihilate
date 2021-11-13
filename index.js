@@ -16,11 +16,16 @@ init_three()
 init_cannon()
 window.cannonDebugRenderer = new THREE.CannonDebugRenderer(scene, world)
 init()
-animate()
+requestAnimationFrame(animate)
 
 function init() {
   window.ground = new Ground() // todo: refactor
-  window.box = new Box()
+
+  window.box = new Box(20, 4, 60)
+  box.mesh.position.set(-30, 1, 0)
+  box.body.position.copy(box.mesh.position)
+
+  window.floatingBox = new FloatingBox()
 
   window.role = new Role(0, 5, 0)
   role.load()
@@ -99,13 +104,13 @@ function onWindowResize() {
 
 //
 
-function animate() {
+function animate(time) {
   requestAnimationFrame(animate)
 
   var dt = clock.getDelta()
 
   updates.forEach((update) => {
-    update(dt)
+    update(dt, time)
   })
 
   if (window.camera && window.role.gltf) {

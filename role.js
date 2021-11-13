@@ -288,7 +288,8 @@ class Role {
     world.addBody(s.body)
     s.body.addEventListener('collide', (event) => {
       // console.log('collide', event.body.id, event.target.id)
-      if (event.body === window.ground.body) {
+      // if (event.body === window.ground.body) {
+      if (event.body !== window.axes.body) {///todo: Is cannon.js has collision mask?
         // todo: refactor: window.ground
         s.xstateService.send('land')
       }

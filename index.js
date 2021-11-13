@@ -19,6 +19,7 @@ animate();
 
 function init() {
   window.ground = new Ground()// todo: refactor
+  window.box = new Box()
 
   window.role = new Role(0, 5, 0)
   role.load()

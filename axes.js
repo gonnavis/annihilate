@@ -15,10 +15,13 @@ class Axes{
     s.body.addShape(shape)
     world.addBody(s.body)
 
-    s.body.addEventListener('collide', e=>{
-
-      if(e.body===enemy.body ){
-        if (['attack','fist','strike','jumpAttack','dashAttack'].some(role.xstateService.state.matches)) enemy.hit() // todo: refactor: do not check role's state at here.
+    s.body.addEventListener('collide', (e) => {
+      if (['attack', 'fist', 'strike', 'jumpAttack', 'dashAttack'].some(role.xstateService.state.matches)) {
+        window.enemys.forEach((enemy) => {
+          if (e.body === enemy.body) {
+            enemy.hit() // todo: refactor: do not check role's state at here.
+          }
+        })
       }
     })
 

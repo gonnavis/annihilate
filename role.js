@@ -10,7 +10,9 @@ class Role {
     s.speed = 0.3
     s.direction = vec2()
     s.facing = vec2(0, 1)
-    s._vec0 = new THREE.Vector3()
+    s.tempVec3 = new THREE.Vector3()
+    s.prevPos = new THREE.Vector3()
+    s.deltaPos = new THREE.Vector3()
 
     const geometry = new THREE.CircleGeometry(1.7, 32)
     const material = new THREE.ShaderMaterial({
@@ -129,17 +131,17 @@ class Role {
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
             },
-            tags: ['canMove'],
+            // tags: ['canMove'],
           },
           doubleJump: {
-            entry: ['playJump', 'jump'],
+            entry: ['playJump', 'doubleJump'],
             on: {
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
             },
-            tags: ['canMove'],
+            // tags: ['canMove'],
           },
           hit: {
             entry: ['playHit'],
@@ -177,18 +179,18 @@ class Role {
           entryDash() {
             s.fadeToAction('dash', 0.2)
             // s.body.mass = 0
-            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(60)
-            s.body.velocity.x = s._vec0.x
+            s.tempVec3.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(60)
+            s.body.velocity.x = s.tempVec3.x
             // s.body.velocity.y = 0
-            s.body.velocity.z = s._vec0.z
+            s.body.velocity.z = s.tempVec3.z
           },
           entryJumpDash() {
             s.fadeToAction('dash', 0.2)
             // s.body.mass = 0
-            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(30)
-            s.body.velocity.x = s._vec0.x
+            s.tempVec3.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(30)
+            s.body.velocity.x = s.tempVec3.x
             // s.body.velocity.y = 0
-            s.body.velocity.z = s._vec0.z
+            s.body.velocity.z = s.tempVec3.z
           },
           playIdle() {
             s.fadeToAction('idle', 0.2)
@@ -217,11 +219,11 @@ class Role {
           },
           playStrike() {
             s.fadeToAction('jumpattack', 0.2)
-            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
-            console.log(s._vec0)
-            s.body.velocity.x = s._vec0.x
+            s.tempVec3.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
+            console.log(s.tempVec3)
+            s.body.velocity.x = s.tempVec3.x
             s.body.velocity.y = 30
-            s.body.velocity.z = s._vec0.z
+            s.body.velocity.z = s.tempVec3.z
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             setTimeout(() => {
               // s.body.velocity.y -= downVelocity
@@ -230,11 +232,11 @@ class Role {
           },
           playJumpAttack(context, event, o) {
             s.fadeToAction('jumpattack', 0.2)
-            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
-            console.log(s._vec0)
-            s.body.velocity.x = s._vec0.x
+            s.tempVec3.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
+            console.log(s.tempVec3)
+            s.body.velocity.x = s.tempVec3.x
             s.body.velocity.y = 20
-            s.body.velocity.z = s._vec0.z
+            s.body.velocity.z = s.tempVec3.z
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             setTimeout(() => {
               // s.body.velocity.y -= downVelocity
@@ -242,6 +244,21 @@ class Role {
             }, 200)
           },
           jump() {
+            s.body.velocity.y = 20
+
+            // s.tempVec3.copy(s.body.position).sub(s.prevPos)///todo: use this instead of deltaPos to improve performance.
+            // console.log(s.tempVec3)
+            // s.body.velocity.x += s.tempVec3.x
+            // s.body.velocity.y += s.tempVec3.y
+            // s.body.velocity.z += s.tempVec3.z
+
+            // console.log(s.deltaPos)
+
+            s.body.velocity.x += s.deltaPos.x
+            s.body.velocity.y += s.deltaPos.y
+            s.body.velocity.z += s.deltaPos.z
+          },
+          doubleJump() {
             s.body.velocity.y = 20
           },
           playJump() {
@@ -256,7 +273,7 @@ class Role {
 
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
-      // if (state.changed) console.log('role: state:', state.value)
+      if (state.changed) console.log('role: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // s.currentState = state.value
@@ -331,6 +348,11 @@ class Role {
       s.shadow.position.x = s.body.position.x
       s.shadow.position.z = s.body.position.z
       s.mixer.update(dt)
+
+      // console.log(s.body.position.x - s.prevPos.x)
+      s.deltaPos.copy(s.body.position).sub(s.prevPos).multiplyScalar(60) //todo: use deltaTime instead of 60
+
+      s.prevPos.copy(s.body.position)
     })
   }
 

@@ -26,6 +26,29 @@ function init() {
   box.body.position.copy(box.mesh.position)
 
   window.floatingBox = new FloatingBox()
+  floatingBox.box.body.position.y = 6
+  floatingBox.box.body.position.z = -35
+  floatingBox.timeBias = 0
+
+  window.floatingBox2 = new FloatingBox()
+  floatingBox2.box.body.position.y = 6 * 2
+  floatingBox2.box.body.position.z = -40
+  floatingBox2.timeBias = 2
+
+  window.floatingBox3 = new FloatingBox()
+  floatingBox3.box.body.position.y = 6 * 3
+  floatingBox3.box.body.position.z = -35
+  floatingBox3.timeBias = 4
+
+  window.floatingBox4 = new FloatingBox()
+  floatingBox4.box.body.position.y = 6 * 4
+  floatingBox4.box.body.position.z = -40
+  floatingBox4.timeBias = 6
+
+  window.floatingBox5 = new FloatingBox()
+  floatingBox5.box.body.position.y = 6 * 5
+  floatingBox5.box.body.position.z = -35
+  floatingBox5.timeBias = 8
 
   window.role = new Role(0, 5, 0)
   role.load()
@@ -114,7 +137,7 @@ function animate(time) {
   })
 
   if (window.camera && window.role.gltf) {
-    camera.position.set(role.gltf.scene.position.x, 30, role.gltf.scene.position.z + 30)
+    camera.position.set(role.gltf.scene.position.x, role.gltf.scene.position.y + 30, role.gltf.scene.position.z + 30)
     // camera.lookAt(role.gltf.scene.position)
   }
 

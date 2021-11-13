@@ -3,8 +3,9 @@ class FloatingBox {
   constructor() {
     let s = this
     s.box = new Box(10, 1, 10)
-    s.box.mesh.position.set(0, 5, -35)
-    s.box.body.position.copy(s.box.mesh.position)
+    // s.box.body.position.set(0, 5, -35)
+    // s.box.mesh.position.copy(s.box.body.position)
+    s.timeBias = 0
 
     let tempPos = new THREE.Vector3()
     let prevPos = new THREE.Vector3()
@@ -22,9 +23,9 @@ class FloatingBox {
     })
 
     function update(dt, time) {
-      console.log(isCollide) ///todo: Why role stand on floatingBox not move, will log isCollide false, and cause glitch? Solved by use prevIsCollide to debounce.
+      // console.log(isCollide) ///todo: Why role stand on floatingBox not move, will log isCollide false, and cause glitch? Solved by use prevIsCollide to debounce.
       // console.log(this)
-      s.box.body.position.x = Math.sin(time / 1000) * 20
+      s.box.body.position.x = Math.sin(time / 1000 + s.timeBias) * 20
       // s.box.body.position.z += Math.sin(time/100)
       s.box.mesh.position.copy(s.box.body.position)
 

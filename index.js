@@ -1,3 +1,10 @@
+import { Ground } from './ground.js'
+import { Box } from './box.js'
+import { Attacker } from './attacker.js'
+import { Role } from './role.js'
+import { Axes } from './axes.js'
+import { Enemy } from './enemy.js'
+
 // glsl function
 var vec2 = function (x, y) {
   return new THREE.Vector2(...arguments)
@@ -20,7 +27,12 @@ animate()
 
 function init() {
   window.ground = new Ground() // todo: refactor
+  scene.add(ground.mesh)
+  world.add(ground.body)
+
   window.box = new Box()
+  scene.add(box.mesh)
+  world.add(box.body)
 
   window.role = new Role(0, 5, 0)
   role.load()

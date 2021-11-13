@@ -35,3 +35,5 @@ class Axes {
     updates.push(update)
   }
 }
+
+export { Axes }

@@ -242,3 +242,5 @@ class Enemy {
     s.action_act = s.oaction[name]
   }
 }
+
+export { Enemy }

@@ -44,3 +44,5 @@ class Attacker {
     }, 2000)
   }
 }
+
+export { Attacker }

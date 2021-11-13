@@ -451,3 +451,5 @@ class Role {
     })
   }
 }
+
+export { Role }

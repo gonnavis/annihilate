@@ -3,7 +3,7 @@ class Ground {
     let s = this
     s.mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(2000, 2000), new THREE.MeshPhongMaterial({ color: 0x999999 /*depthWrite: false*/ }))
     s.mesh.rotation.x = -Math.PI / 2
-    scene.add(s.mesh)
+    // scene.add(s.mesh)
 
     let shape = new CANNON.Plane()
     s.body = new CANNON.Body({
@@ -16,6 +16,8 @@ class Ground {
     // s.body.addEventListener("collide", function (event) {
     //   console.log('collide floor')
     // })
-    world.addBody(s.body)
+    // world.addBody(s.body)
   }
 }
+
+export { Ground }

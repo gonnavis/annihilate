@@ -7,6 +7,8 @@ class Box {
     s.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(width, height, depth), new THREE.MeshPhongMaterial({ color: 0x555555 /*depthWrite: false*/ }))
     // s.mesh.rotation.x = - Math.PI / 2;
     s.mesh.position.copy(pos)
+    s.mesh.castShadow = true
+    s.mesh.receiveShadow = true
     scene.add(s.mesh)
 
     let shape = new CANNON.Box(new CANNON.Vec3(width / 2, depth / 2, height / 2))

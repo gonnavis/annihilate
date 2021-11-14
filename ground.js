@@ -3,6 +3,7 @@ class Ground {
     let s = this
     s.mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(2000, 2000), new THREE.MeshPhongMaterial({ color: 0x999999 /*depthWrite: false*/ }))
     s.mesh.rotation.x = -Math.PI / 2
+    s.mesh.receiveShadow = true
     scene.add(s.mesh)
 
     let shape = new CANNON.Plane()

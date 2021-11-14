@@ -6,28 +6,29 @@ class Enemy {
     s.oaction = {}
     s.mixer
 
-    const geometry = new THREE.CircleGeometry(1.5, 32)
-    const material = new THREE.ShaderMaterial({
-      transparent: true,
-      vertexShader: `
-        varying vec2 vUv;
-        void main(){
-          vUv = uv;
-          gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1);
-        }
-      `,
-      fragmentShader: `
-        varying vec2 vUv;
-        void main(){
-          gl_FragColor = vec4(0,0,0,smoothstep(.0,.9,1.-length(vUv*2.-1.))*.3);
-        }
-      `,
-    })
-    s.shadow = new THREE.Mesh(geometry, material) // pseudo shadow
-    s.shadow.rotation.x = -Math.PI / 2
-    s.shadow.position.y = 0.02
-    s.shadow.renderOrder = 2 // need same as position.y order of all pseudo shadows
-    scene.add(s.shadow)
+    // pseudo shadow
+    // const geometry = new THREE.CircleGeometry(1.5, 32)
+    // const material = new THREE.ShaderMaterial({
+    //   transparent: true,
+    //   vertexShader: `
+    //     varying vec2 vUv;
+    //     void main(){
+    //       vUv = uv;
+    //       gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1);
+    //     }
+    //   `,
+    //   fragmentShader: `
+    //     varying vec2 vUv;
+    //     void main(){
+    //       gl_FragColor = vec4(0,0,0,smoothstep(.0,.9,1.-length(vUv*2.-1.))*.3);
+    //     }
+    //   `,
+    // })
+    // s.shadow = new THREE.Mesh(geometry, material) // pseudo shadow
+    // s.shadow.rotation.x = -Math.PI / 2
+    // s.shadow.position.y = 0.02
+    // s.shadow.renderOrder = 2 // need same as position.y order of all pseudo shadows
+    // scene.add(s.shadow)
 
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -149,8 +150,8 @@ class Enemy {
       if (s.xstateService.state.value === 'loading') return
       s.mixer.update(dt)
       s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
-      s.shadow.position.x = s.body.position.x
-      s.shadow.position.z = s.body.position.z
+      // s.shadow.position.x = s.body.position.x
+      // s.shadow.position.z = s.body.position.z
 
       if (!role.gltf) return
       if (s.xstateService.state.value !== 'dead') {
@@ -185,6 +186,12 @@ class Enemy {
           // console.log('enemy loaded')
           // console.log(gltf)
           s.gltf = gltf
+
+          s.gltf.scene.traverse(function (child) {
+            child.castShadow = true
+            child.receiveShadow = true
+          })
+
           s.scene.add(gltf.scene)
           gltf.scene.scale.set(0.7, 0.7, 0.7)
           // gltf.scene.position.set(x,y,z)

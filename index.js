@@ -84,7 +84,19 @@ function init_three() {
   scene.add(light)
 
   light = new THREE.DirectionalLight(0xffffff)
-  light.position.set(0, 20, 10)
+  light.position.set(0, 50, 0)
+  light.castShadow = true
+  light.shadow.mapSize.width = 2048
+  light.shadow.mapSize.height = 2048
+  light.shadow.camera.near = 1
+  light.shadow.camera.far = 500
+  light.shadow.camera.right = 100
+  light.shadow.camera.left = -100
+  light.shadow.camera.top = 100
+  light.shadow.camera.bottom = -100
+  // light.shadow.radius = 2;
+  light.shadow.radius = 0
+  // light.shadow.bias = - 0.00006;
   scene.add(light)
 
   var grid = new THREE.GridHelper(200, 40, 0x000000, 0x000000)
@@ -98,6 +110,9 @@ function init_three() {
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.gammaOutput = true
   renderer.gammaFactor = 1.3
+  renderer.shadowMap.enabled = true
+  // renderer.shadowMap.type = THREE.VSMShadowMap;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap
   container.appendChild(renderer.domElement)
 
   window.addEventListener('resize', onWindowResize, false)

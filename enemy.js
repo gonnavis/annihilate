@@ -87,7 +87,7 @@ class Enemy {
             s.fadeToAction('jump', 0.2)
           },
           throwAttacker() {
-            if (window.role.gltf && s.gltf) attacker = new Attacker(scene, updates, s, window.role.gltf.scene.position)
+            if (window.role.gltf && s.gltf) new Attacker(scene, updates, s, window.role.gltf.scene.position)
           },
           dead() {
             s.fadeToAction('death', 0.2)

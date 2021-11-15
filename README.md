@@ -53,3 +53,5 @@ Fix: Do not inflict damage at the beginning of an attack.
 Integrate common state, like `air`.
 
 Rename `dash` to `dodge`. `dodge` can force change orientation.
+
+Switch to ES6 module and use [cannon-es](https://github.com/pmndrs/cannon-es).

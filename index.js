@@ -3,7 +3,7 @@ window.CANNON = CANNON
 import cannonDebugger from './lib/cannon-es-debugger.js'
 // THREE.cannonDebugger = cannonDebugger
 
-import { Ground } from './ground.js'
+// import { Ground } from './ground.js'
 import { Level } from './level.js'
 import { Box } from './box.js'
 import { FloatingBox } from './floatingBox.js'
@@ -43,7 +43,7 @@ init()
 requestAnimationFrame(animate)
 
 function init() {
-  window.ground = new Ground() // todo: refactor
+  // window.ground = new Ground() // todo: refactor
 
   window.level = new Level()
   level.load()
@@ -52,42 +52,42 @@ function init() {
   box.mesh.position.set(-30, 1, 0)
   box.body.position.copy(box.mesh.position)
 
-  window.floatingBox = new FloatingBox()
-  floatingBox.box.body.position.y = 6
-  floatingBox.box.body.position.z = -35
-  floatingBox.timeBias = 0
+  // window.floatingBox = new FloatingBox()
+  // floatingBox.box.body.position.y = 6
+  // floatingBox.box.body.position.z = -35
+  // floatingBox.timeBias = 0
 
-  window.floatingBox2 = new FloatingBox()
-  floatingBox2.box.body.position.y = 6 * 2
-  floatingBox2.box.body.position.z = -40
-  floatingBox2.timeBias = 2
+  // window.floatingBox2 = new FloatingBox()
+  // floatingBox2.box.body.position.y = 6 * 2
+  // floatingBox2.box.body.position.z = -40
+  // floatingBox2.timeBias = 2
 
-  window.floatingBox3 = new FloatingBox()
-  floatingBox3.box.body.position.y = 6 * 3
-  floatingBox3.box.body.position.z = -35
-  floatingBox3.timeBias = 4
+  // window.floatingBox3 = new FloatingBox()
+  // floatingBox3.box.body.position.y = 6 * 3
+  // floatingBox3.box.body.position.z = -35
+  // floatingBox3.timeBias = 4
 
-  window.floatingBox4 = new FloatingBox()
-  floatingBox4.box.body.position.y = 6 * 4
-  floatingBox4.box.body.position.z = -40
-  floatingBox4.timeBias = 6
+  // window.floatingBox4 = new FloatingBox()
+  // floatingBox4.box.body.position.y = 6 * 4
+  // floatingBox4.box.body.position.z = -40
+  // floatingBox4.timeBias = 6
 
-  window.floatingBox5 = new FloatingBox()
-  floatingBox5.box.body.position.y = 6 * 5
-  floatingBox5.box.body.position.z = -35
-  floatingBox5.timeBias = 8
+  // window.floatingBox5 = new FloatingBox()
+  // floatingBox5.box.body.position.y = 6 * 5
+  // floatingBox5.box.body.position.z = -35
+  // floatingBox5.timeBias = 8
 
   window.role = new Role(0, 5, 0)
   role.load()
-  window.axes = new Axes()
+  // window.axes = new Axes()
 
-  window.enemys = []
-  window.enemy = new Enemy(15, 5, -15)
-  enemys.push(enemy)
-  enemy.load()
-  window.enemy2 = new Enemy(15, 5, 15)
-  enemys.push(enemy2)
-  enemy2.load()
+  // window.enemys = []
+  // window.enemy = new Enemy(15, 5, -15)
+  // enemys.push(enemy)
+  // enemy.load()
+  // window.enemy2 = new Enemy(15, 5, 15)
+  // enemys.push(enemy2)
+  // enemy2.load()
 }
 
 function init_three() {
@@ -179,7 +179,7 @@ function animate(time) {
   })
 
   if (window.camera && window.role.gltf) {
-    camera.position.set(role.gltf.scene.position.x, role.gltf.scene.position.y + 30, role.gltf.scene.position.z + 30)
+    camera.position.set(role.gltf.scene.position.x, role.gltf.scene.position.y + 50, role.gltf.scene.position.z + 50)
     // camera.lookAt(role.gltf.scene.position)
   }
 

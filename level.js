@@ -9,30 +9,38 @@ class Level {
     return new Promise((resolve, reject) => {
       var loader = new THREE.GLTFLoader()
       loader.load(
-        './model/level/level.glb',
-        // './model/level/level.nav.glb',
+        // './model/level/level.glb',
+        './model/level/level.nav.glb',
         function (gltf) {
           s.gltf = gltf
           s.mesh = s.gltf.scene.children[0]
 
           // const geometry = new THREE.ConeBufferGeometry(5, 10, 5)
-          const geometry = new THREE.ConeGeometry(5, 10, 5)
-          const material = new THREE.MeshBasicMaterial({ color: 0xffff00 })
-          const cone = new THREE.Mesh(geometry, material)
-          s.mesh = cone
-          s.mesh.visible = false
+          // const geometry = new THREE.ConeGeometry(5, 10, 5)
+          // const material = new THREE.MeshBasicMaterial({ color: 0xffff00 })
+          // const cone = new THREE.Mesh(geometry, material)
+          // s.mesh = cone
           // return;
 
+          // s.mesh.visible = false
+
+          s.mesh.scale.setScalar(10)
           scene.add(s.mesh)
 
           // s.mesh.geometry.computeVertexNormals()
 
+          let tempGeometry = new THREE.Geometry().fromBufferGeometry(s.mesh.geometry)
+          s.tempGeometry = tempGeometry
+          tempGeometry.scale(10, 10, 10)
+          tempGeometry.computeVertexNormals()
+          tempGeometry.computeFaceNormals()
+
           let vertices = []
-          geometry.vertices.forEach((vertex) => {
+          tempGeometry.vertices.forEach((vertex) => {
             vertices.push(new CANNON.Vec3(vertex.x, vertex.y, vertex.z))
           })
           let faces = []
-          geometry.faces.forEach((face) => {
+          tempGeometry.faces.forEach((face) => {
             faces.push([face.a, face.b, face.c])
           })
           // console.log(vertices)
@@ -48,7 +56,7 @@ class Level {
             mass: 0,
           })
           s.body.addShape(shape)
-          s.body.position.set(30, 5, 0)
+          s.body.position.set(0, 0, 0)
           // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
           // s.body.addEventListener('collide', function (event) {
           //   console.log('collide Level')

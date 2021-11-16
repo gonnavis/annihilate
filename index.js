@@ -35,6 +35,7 @@ window.renderer = null
 window.model = null
 window.face = null
 window.updates = []
+window.cameraWrap = new THREE.Group()
 
 init_three()
 init_cannon()
@@ -46,21 +47,23 @@ function init() {
   // window.ground = new Ground() // todo: refactor
 
   window.level = new Level()
-  level.load()
+  level.load(() => {
+    // level.mesh.material = floatingBox.box.mesh.material
+  })
 
   window.box = new Box(20, 4, 80)
   box.mesh.position.set(-30, 1, 0)
   box.body.position.copy(box.mesh.position)
 
-  // window.floatingBox = new FloatingBox()
-  // floatingBox.box.body.position.y = 6
-  // floatingBox.box.body.position.z = -35
-  // floatingBox.timeBias = 0
+  window.floatingBox = new FloatingBox()
+  floatingBox.box.body.position.y = 6
+  floatingBox.box.body.position.z = -35
+  floatingBox.timeBias = 0
 
-  // window.floatingBox2 = new FloatingBox()
-  // floatingBox2.box.body.position.y = 6 * 2
-  // floatingBox2.box.body.position.z = -40
-  // floatingBox2.timeBias = 2
+  window.floatingBox2 = new FloatingBox()
+  floatingBox2.box.body.position.y = 6 * 2
+  floatingBox2.box.body.position.z = -40
+  floatingBox2.timeBias = 2
 
   // window.floatingBox3 = new FloatingBox()
   // floatingBox3.box.body.position.y = 6 * 3
@@ -94,13 +97,16 @@ function init_three() {
   container = document.createElement('div')
   document.body.appendChild(container)
 
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.25, 100)
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 10, 1000)
   camera.position.set(0, 30, 30)
   camera.lookAt(0, 0, 0)
 
   scene = new THREE.Scene()
   scene.background = new THREE.Color(0xe0e0e0)
-  scene.fog = new THREE.Fog(0xe0e0e0, 20, 100)
+  // scene.fog = new THREE.Fog(0xe0e0e0, 20, 100)
+
+  scene.add(cameraWrap)
+  cameraWrap.add(camera)
 
   clock = new THREE.Clock()
 
@@ -139,7 +145,7 @@ function init_three() {
   renderer.gammaFactor = 1.3
   renderer.shadowMap.enabled = true
   // renderer.shadowMap.type = THREE.VSMShadowMap;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap
+  // renderer.shadowMap.type = THREE.PCFSoftShadowMap
   container.appendChild(renderer.domElement)
 
   window.addEventListener('resize', onWindowResize, false)
@@ -179,7 +185,7 @@ function animate(time) {
   })
 
   if (window.camera && window.role.gltf) {
-    camera.position.set(role.gltf.scene.position.x, role.gltf.scene.position.y + 50, role.gltf.scene.position.z + 50)
+    camera.position.set(role.gltf.scene.position.x, role.gltf.scene.position.y + 100, role.gltf.scene.position.z + 100)
     // camera.lookAt(role.gltf.scene.position)
   }
 

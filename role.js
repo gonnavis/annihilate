@@ -291,9 +291,9 @@ class Role {
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
       // if (event.body !== window.axes.body) {
-        ///todo: Is cannon.js has collision mask?
-        // todo: refactor: window.ground
-        s.xstateService.send('land')
+      ///todo: Is cannon.js has collision mask?
+      // todo: refactor: window.ground
+      s.xstateService.send('land')
       // }
     })
 
@@ -332,6 +332,9 @@ class Role {
       // s.shadow.position.x = s.body.position.x
       // s.shadow.position.z = s.body.position.z
       s.mixer.update(dt)
+
+      // if (s.okey.KeyQ) cameraWrap.rotation.y -= 0.03
+      // if (s.okey.KeyE) cameraWrap.rotation.y += 0.03
     })
   }
 

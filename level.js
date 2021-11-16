@@ -4,7 +4,7 @@ class Level {
     let s = this
   }
 
-  load() {
+  load(callback) {
     let s = this
     return new Promise((resolve, reject) => {
       var loader = new THREE.GLTFLoader()
@@ -14,6 +14,8 @@ class Level {
         function (gltf) {
           s.gltf = gltf
           s.mesh = s.gltf.scene.children[0]
+          // s.mesh.material = new THREE.MeshPhongMaterial()
+          s.mesh.geometry.computeVertexNormals() // for level.nav can receiveShadow.
 
           // const geometry = new THREE.ConeBufferGeometry(5, 10, 5)
           // const geometry = new THREE.ConeGeometry(5, 10, 5)
@@ -24,13 +26,17 @@ class Level {
 
           // s.mesh.visible = false
 
+          // s.mesh.rotation.y = Math.PI / 2
           s.mesh.scale.setScalar(10)
+          s.mesh.castShadow = true
+          s.mesh.receiveShadow = true
           scene.add(s.mesh)
 
           // s.mesh.geometry.computeVertexNormals()
 
           let tempGeometry = new THREE.Geometry().fromBufferGeometry(s.mesh.geometry)
           s.tempGeometry = tempGeometry
+          tempGeometry.rotateY(s.mesh.rotation.y)
           tempGeometry.scale(10, 10, 10)
           tempGeometry.computeVertexNormals()
           tempGeometry.computeFaceNormals()
@@ -67,7 +73,7 @@ class Level {
 
           resolve()
         },
-        undefined,
+        callback,
         function (e) {
           console.error(e)
           reject()

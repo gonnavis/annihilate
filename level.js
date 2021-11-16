@@ -10,15 +10,24 @@ class Level {
       var loader = new THREE.GLTFLoader()
       loader.load(
         './model/level/level.glb',
+        // './model/level/level.nav.glb',
         function (gltf) {
           s.gltf = gltf
-          scene.add(s.gltf.scene)
+          s.mesh = s.gltf.scene.children[0]
 
-          // s.gltf.scene.children[0].geometry.computeVertexNormals()
+          // const geometry = new THREE.ConeBufferGeometry(5, 20, 32)
+          // const material = new THREE.MeshBasicMaterial({ color: 0xffff00 })
+          // const cone = new THREE.Mesh(geometry, material)
+          // s.mesh = cone;
+          // s.mesh.visible = false
 
-          // let shape = threeToCannon(s.gltf.scene.children[0]).shape
-          // let shape = threeToCannon(s.gltf.scene.children[0], { type: ShapeType.HULL }).shape ///todo: Why no faceNormals, and cause error? three-to-connon not input normal info to new ConvexPolyhedron()?
-          let shape = threeToCannon(s.gltf.scene.children[0], {type: ShapeType.MESH}).shape ///todo: not recommended.
+          scene.add(s.mesh)
+
+          // s.mesh.geometry.computeVertexNormals()
+
+          let shape = threeToCannon(s.mesh).shape
+          // let shape = threeToCannon(s.mesh, { type: ShapeType.HULL }).shape ///todo: Why no faceNormals, and cause error? three-to-connon not input normal info to new ConvexPolyhedron()?
+          // let shape = threeToCannon(s.mesh, { type: ShapeType.MESH }).shape ///todo: not recommended.
           // let shape = new CANNON.Plane()
           s.shape = shape
           s.body = new CANNON.Body({
@@ -32,7 +41,7 @@ class Level {
           // })
           world.addBody(s.body)
 
-          s.gltf.scene.position.copy(s.body.position)
+          s.mesh.position.copy(s.body.position)
 
           resolve()
         },

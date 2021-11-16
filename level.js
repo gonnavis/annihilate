@@ -18,7 +18,7 @@ class Level {
 
           // let shape = threeToCannon(s.gltf.scene.children[0]).shape
           // let shape = threeToCannon(s.gltf.scene.children[0], { type: ShapeType.HULL }).shape ///todo: Why no faceNormals, and cause error? three-to-connon not input normal info to new ConvexPolyhedron()?
-          let shape = threeToCannon(s.gltf.scene.children[0], {type: ShapeType.MESH}).shape
+          let shape = threeToCannon(s.gltf.scene.children[0], {type: ShapeType.MESH}).shape ///todo: not recommended.
           // let shape = new CANNON.Plane()
           s.shape = shape
           s.body = new CANNON.Body({

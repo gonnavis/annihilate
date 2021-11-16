@@ -15,10 +15,10 @@ class Level {
           s.gltf = gltf
           s.mesh = s.gltf.scene.children[0]
 
-          // const geometry = new THREE.ConeBufferGeometry(5, 20, 32)
-          // const material = new THREE.MeshBasicMaterial({ color: 0xffff00 })
-          // const cone = new THREE.Mesh(geometry, material)
-          // s.mesh = cone;
+          const geometry = new THREE.ConeBufferGeometry(5, 10, 5)
+          const material = new THREE.MeshBasicMaterial({ color: 0xffff00 })
+          const cone = new THREE.Mesh(geometry, material)
+          s.mesh = cone;
           // s.mesh.visible = false
 
           scene.add(s.mesh)
@@ -34,7 +34,7 @@ class Level {
             mass: 0,
           })
           s.body.addShape(shape)
-          s.body.position.set(30, 0, 0)
+          s.body.position.set(30, 5, 0)
           // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
           // s.body.addEventListener('collide', function (event) {
           //   console.log('collide Level')

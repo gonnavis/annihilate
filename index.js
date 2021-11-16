@@ -1,3 +1,8 @@
+import * as CANNON from './lib/cannon-es.js'
+window.CANNON = CANNON
+import cannonDebugger from './lib/cannon-es-debugger.js'
+// THREE.cannonDebugger = cannonDebugger
+
 import { Ground } from './ground.js'
 import { Level } from './level.js'
 import { Box } from './box.js'
@@ -33,7 +38,7 @@ window.updates = []
 
 init_three()
 init_cannon()
-window.cannonDebugRenderer = new THREE.CannonDebugRenderer(scene, world)
+window.cannonDebugRenderer = cannonDebugger(scene, world.bodies)
 init()
 requestAnimationFrame(animate)
 

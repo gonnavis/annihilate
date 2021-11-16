@@ -45,7 +45,7 @@ class Attacker {
     updates.push(update)
 
     setTimeout(() => {
-      world.remove(s.body)
+      world.removeBody(s.body)
       updates.splice(updates.indexOf(update), 1)
     }, 2000)
   }

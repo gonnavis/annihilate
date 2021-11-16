@@ -21,6 +21,9 @@ requestAnimationFrame(animate)
 function init() {
   window.ground = new Ground() // todo: refactor
 
+  window.level = new Level()
+  level.load()
+
   window.box = new Box(20, 4, 80)
   box.mesh.position.set(-30, 1, 0)
   box.body.position.copy(box.mesh.position)

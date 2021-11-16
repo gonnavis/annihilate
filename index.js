@@ -1,4 +1,4 @@
-import * as CANNON from './lib/cannon-es.js'
+import * as CANNON from './lib/cannon-es_my.js'
 window.CANNON = CANNON
 import cannonDebugger from './lib/cannon-es-debugger.js'
 // THREE.cannonDebugger = cannonDebugger

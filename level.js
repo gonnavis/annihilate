@@ -15,17 +15,31 @@ class Level {
           s.gltf = gltf
           s.mesh = s.gltf.scene.children[0]
 
-          const geometry = new THREE.ConeBufferGeometry(5, 10, 5)
+          // const geometry = new THREE.ConeBufferGeometry(5, 10, 5)
+          const geometry = new THREE.ConeGeometry(5, 10, 5)
           const material = new THREE.MeshBasicMaterial({ color: 0xffff00 })
           const cone = new THREE.Mesh(geometry, material)
-          s.mesh = cone;
-          // s.mesh.visible = false
+          s.mesh = cone
+          s.mesh.visible = false
+          // return;
 
           scene.add(s.mesh)
 
           // s.mesh.geometry.computeVertexNormals()
 
-          let shape = threeToCannon(s.mesh).shape
+          let vertices = []
+          geometry.vertices.forEach((vertex) => {
+            vertices.push(new CANNON.Vec3(vertex.x, vertex.y, vertex.z))
+          })
+          let faces = []
+          geometry.faces.forEach((face) => {
+            faces.push([face.a, face.b, face.c])
+          })
+          // console.log(vertices)
+          // console.log(faces)
+          let shape = new CANNON.ConvexPolyhedron({ vertices, faces })
+
+          // let shape = threeToCannon(s.mesh).shape
           // let shape = threeToCannon(s.mesh, { type: ShapeType.HULL }).shape ///todo: Why no faceNormals, and cause error? three-to-connon not input normal info to new ConvexPolyhedron()?
           // let shape = threeToCannon(s.mesh, { type: ShapeType.MESH }).shape ///todo: not recommended.
           // let shape = new CANNON.Plane()

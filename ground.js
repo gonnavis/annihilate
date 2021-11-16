@@ -20,3 +20,5 @@ class Ground {
     world.addBody(s.body)
   }
 }
+
+export { Ground }

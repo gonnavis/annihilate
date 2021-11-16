@@ -1,16 +1,35 @@
+import { Ground } from './ground.js'
+import { Level } from './level.js'
+import { Box } from './box.js'
+import { FloatingBox } from './floatingBox.js'
+import { Role } from './role.js'
+import { Axes } from './axes.js'
+import { Enemy } from './enemy.js'
+
 // glsl function
-var vec2 = function (x, y) {
+window.vec2 = function (x, y) {
   return new THREE.Vector2(...arguments)
 }
-var vec3 = function (x, y, z) {
+window.vec3 = function (x, y, z) {
   return new THREE.Vector3(...arguments)
 }
 
 // setting
 
-var container, stats, clock, gui, mixer, actions, activeAction, previousAction
-var camera, scene, renderer, model, face
-var updates = []
+window.container = null
+window.stats = null
+window.clock = null
+window.gui = null
+window.mixer = null
+window.actions = null
+window.activeAction = null
+window.previousAction = null
+window.camera = null
+window.scene = null
+window.renderer = null
+window.model = null
+window.face = null
+window.updates = []
 
 init_three()
 init_cannon()

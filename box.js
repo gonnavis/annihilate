@@ -26,3 +26,5 @@ class Box {
     world.addBody(s.body)
   }
 }
+
+export { Box }

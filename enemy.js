@@ -1,3 +1,4 @@
+import { Attacker } from './attacker.js'
 class Enemy {
   constructor(x, y, z) {
     let s = this
@@ -249,3 +250,5 @@ class Enemy {
     s.action_act = s.oaction[name]
   }
 }
+
+export { Enemy }

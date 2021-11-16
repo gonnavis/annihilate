@@ -1,3 +1,4 @@
+import { Box } from './box.js'
 class FloatingBox {
   ///todo: extends Box
   constructor() {
@@ -51,3 +52,5 @@ class FloatingBox {
     updates.push(update)
   }
 }
+
+export { FloatingBox }

@@ -40,3 +40,5 @@ class Level {
     })
   }
 }
+
+export { Level }

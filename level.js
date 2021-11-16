@@ -16,6 +16,7 @@ class Level {
           s.mesh = s.gltf.scene.children[0]
           // s.mesh.material = new THREE.MeshPhongMaterial()
           s.mesh.geometry.computeVertexNormals() // for level.nav can receiveShadow.
+          s.mesh.material.shadowSide = THREE.FrontSide // need used with `light.shadow.bias` ( plane's shadow )
 
           // const geometry = new THREE.ConeBufferGeometry(5, 10, 5)
           // const geometry = new THREE.ConeGeometry(5, 10, 5)

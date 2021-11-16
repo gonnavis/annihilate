@@ -103,7 +103,7 @@ class Enemy {
                 s.body.velocity.set(0, 0, 0) // continuously clear velocity, otherwise may not cleared.
                 s.body.collisionResponse = false
                 s.body.position.y -= 0.0005
-                console.log('interval')
+                // console.log('interval')
                 setTimeout(() => {
                   clearInterval(interval)
                   // },5000)

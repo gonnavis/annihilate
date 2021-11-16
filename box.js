@@ -14,7 +14,6 @@ class Box {
     let shape = new CANNON.Box(new CANNON.Vec3(width / 2, depth / 2, height / 2))
     s.body = new CANNON.Body({
       mass: 0,
-      collisionResponse: 0,
     })
     s.body.addShape(shape)
     // s.body.position.set(0,0,0)

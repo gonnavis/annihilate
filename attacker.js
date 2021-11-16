@@ -10,7 +10,7 @@ class Attacker {
       mass: 0,
       type: CANNON.Body.KINEMATIC,
     })
-    s.body.collisionResponse = 0
+    s.body.collisionResponse = false
     let shape = new CANNON.Cylinder(body_size, body_size, 0.3, 8)
     s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     s.body.addShape(shape)

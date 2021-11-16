@@ -9,7 +9,7 @@ class Axes {
       mass: 0,
       type: CANNON.Body.KINEMATIC,
     })
-    s.body.collisionResponse = 0
+    s.body.collisionResponse = false
     let shape = new CANNON.Box(new CANNON.Vec3(body_size, body_size, body_size))
     s.body.addShape(shape)
     world.addBody(s.body)

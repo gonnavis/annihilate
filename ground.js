@@ -9,7 +9,6 @@ class Ground {
     let shape = new CANNON.Plane()
     s.body = new CANNON.Body({
       mass: 0,
-      collisionResponse: 0,
     })
     s.body.addShape(shape)
     s.body.position.set(0, 0, 0)

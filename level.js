@@ -14,14 +14,15 @@ class Level {
           s.gltf = gltf
           scene.add(s.gltf.scene)
 
+          // s.gltf.scene.children[0].geometry.computeVertexNormals()
+
           // let shape = threeToCannon(s.gltf.scene.children[0]).shape
-          let shape = threeToCannon(s.gltf.scene.children[0], { type: ShapeType.HULL }).shape
-          // let shape = threeToCannon(s.gltf.scene.children[0], {type: ShapeType.MESH}).shape
+          // let shape = threeToCannon(s.gltf.scene.children[0], { type: ShapeType.HULL }).shape ///todo: Why no faceNormals, and cause error? three-to-connon not input normal info to new ConvexPolyhedron()?
+          let shape = threeToCannon(s.gltf.scene.children[0], {type: ShapeType.MESH}).shape
           // let shape = new CANNON.Plane()
           s.shape = shape
           s.body = new CANNON.Body({
             mass: 0,
-            // collisionResponse: 0,
           })
           s.body.addShape(shape)
           s.body.position.set(30, 0, 0)

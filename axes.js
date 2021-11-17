@@ -3,14 +3,13 @@ class Axes {
   constructor() {
     let s = this
 
-    let body_size = 1
     s.is_hit = false
     s.body = new CANNON.Body({
       mass: 0,
       type: CANNON.Body.KINEMATIC,
     })
     s.body.collisionResponse = false
-    let shape = new CANNON.Box(new CANNON.Vec3(body_size, body_size, body_size))
+    let shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.3, 1))
     s.body.addShape(shape)
     world.addBody(s.body)
 
@@ -26,10 +25,13 @@ class Axes {
 
     function update() {
       if (role.gltf) {
-        let vec3_temp = vec3()
-        // role.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(vec3_temp)
-        // role.gltf.scene.getObjectByName('KnifeTip').getWorldPosition(vec3_temp)
-        s.body.position.copy(vec3_temp)
+        let tempVec3 = vec3() ///todo: performance
+        let tempQuat = new THREE.Quaternion() ///todo: performance
+        // role.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
+        role.swordDelegate.getWorldPosition(tempVec3)
+        role.swordDelegate.getWorldQuaternion(tempQuat)
+        s.body.position.copy(tempVec3)
+        s.body.quaternion.copy(tempQuat)
       }
     }
     updates.push(update)

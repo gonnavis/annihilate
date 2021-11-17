@@ -4,9 +4,11 @@
 
 https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html ( use mixamo mutant model )
 
+https://raw.githack.com/gonnavis/annihilate/PaladinModel/index.html ( use mixamo paladin model )
+
 https://raw.githack.com/gonnavis/annihilate/main/index.html ( use self rig-and-animated naive model )
 
-Current actively developing at [branch: MutantModel](https://github.com/gonnavis/annihilate/tree/MutantModel) & [branch: AmmoJS](https://github.com/gonnavis/annihilate/tree/AmmoJS).
+Current actively developing at [branch: MutantModel](https://github.com/gonnavis/annihilate/tree/MutantModel) & [branch: PaladinModel](https://github.com/gonnavis/annihilate/tree/PaladinModel).
 
 ### Brief
 

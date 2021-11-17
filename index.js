@@ -137,8 +137,8 @@ function init_three() {
   renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(window.innerWidth, window.innerHeight)
-  renderer.gammaOutput = true
-  renderer.gammaFactor = 1.3
+  // renderer.gammaOutput = true
+  // renderer.gammaFactor = 1.3
   renderer.shadowMap.enabled = true
   // renderer.shadowMap.type = THREE.VSMShadowMap;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap

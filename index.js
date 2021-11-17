@@ -38,7 +38,9 @@ window.updates = []
 
 init_three()
 init_cannon()
-window.cannonDebugRenderer = cannonDebugger(scene, world.bodies)
+window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, {
+  autoUpdate: false,
+})
 init()
 requestAnimationFrame(animate)
 

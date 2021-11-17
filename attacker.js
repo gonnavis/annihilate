@@ -12,7 +12,7 @@ class Attacker {
     })
     s.body.collisionResponse = false
     let shape = new CANNON.Cylinder(body_size, body_size, 0.3, 8)
-    s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
+    // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2) ///Why cannon-es not need this rotate?
     s.body.addShape(shape)
     s.body.position.copy(owner.body.position)
     world.addBody(s.body)

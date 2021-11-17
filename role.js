@@ -201,27 +201,27 @@ class Role {
             s.fadeToAction('punch', 0.2)
           },
           playDashAttack() {
-            s.fadeToAction('punch', 0.2)
-            let to = { t: 0 }
-            let _rotationY = s.gltf.scene.rotation.y
-            gsap.to(to, {
-              duration: 0.5,
-              t: -Math.PI * 2,
-              onUpdate: () => {
-                // console.log(to.t)
-                s.gltf.scene.rotation.y = _rotationY + to.t
-              },
-            })
+            s.fadeToAction('strike', 0.2)
+            // let to = { t: 0 }
+            // let _rotationY = s.gltf.scene.rotation.y
+            // gsap.to(to, {
+            //   duration: 0.5,
+            //   t: -Math.PI * 2,
+            //   onUpdate: () => {
+            //     // console.log(to.t)
+            //     s.gltf.scene.rotation.y = _rotationY + to.t
+            //   },
+            // })
           },
           playFist() {
             s.fadeToAction('fist', 0.2)
           },
           playStrike() {
-            s.fadeToAction('jumpattack', 0.2)
-            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
-            console.log(s._vec0)
+            s.fadeToAction('strike', 0.2)
+            s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(50)
+            // console.log(s._vec0)
             s.body.velocity.x = s._vec0.x
-            s.body.velocity.y = 30
+            // s.body.velocity.y = 30
             s.body.velocity.z = s._vec0.z
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             setTimeout(() => {
@@ -249,6 +249,7 @@ class Role {
             s.fadeToAction('jump', 0.2)
           },
           playHit() {
+            s.oaction.hit.timeScale = 3
             s.fadeToAction('hit', 0.2)
           },
         },
@@ -257,7 +258,7 @@ class Role {
 
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
-      // if (state.changed) console.log('role: state:', state.value)
+      if (state.changed) console.log('role: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // s.currentState = state.value
@@ -377,10 +378,10 @@ class Role {
             let action = s.mixer.clipAction(animation)
             s.oaction[name] = action
             // if (['jump', 'punch', 'fist', 'jumpattack', 'dodge', 'hit'].includes(name)) {
-            if (['punch', 'jumpattack', 'hit'].includes(name)) {
+            if (['punch', 'punch', 'fist', 'jumpattack', 'strike', 'hit'].includes(name)) {
               action.loop = THREE.LoopOnce
             }
-            if ([].includes(name)) {
+            if (['jump'].includes(name)) {
               action.loop = THREE.LoopOnce
               action.clampWhenFinished = true
             }
@@ -418,6 +419,7 @@ class Role {
     //   .play();
 
     s.action_act.stop()
+    // s.action_act.paused = true
     s.oaction[name].reset().play()
     s.action_act = s.oaction[name]
   }

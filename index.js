@@ -155,6 +155,7 @@ function init_cannon() {
   window.fixedTimeStep = 1 / 60
   window.maxSubSteps = 3
   window.world = new CANNON.World()
+  world.defaultMaterial.restitution = 0 ///todo: Why no effect, still bounce?
   world.defaultContactMaterial.friction = 0.05
   world.gravity.set(0, -50, 0)
   world.broadphase = new CANNON.NaiveBroadphase()

@@ -28,7 +28,7 @@ class Axes {
       if (role.gltf) {
         let vec3_temp = vec3()
         // role.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(vec3_temp)
-        role.gltf.scene.getObjectByName('KnifeTip').getWorldPosition(vec3_temp)
+        // role.gltf.scene.getObjectByName('KnifeTip').getWorldPosition(vec3_temp)
         s.body.position.copy(vec3_temp)
       }
     }

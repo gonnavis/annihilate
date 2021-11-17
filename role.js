@@ -352,8 +352,7 @@ class Role {
     return new Promise((resolve, reject) => {
       var loader = new THREE.GLTFLoader()
       loader.load(
-        './model/mutant/a.gltf',
-        // '/_3d_model/mixamo/Mutant/a/a.gltf',
+        './model/paladin/all.gltf',
         function (gltf) {
           console.log(gltf.animations)
           s.gltf = gltf
@@ -363,8 +362,7 @@ class Role {
             child.receiveShadow = true
             if (child.isMesh) {
               child.material = new THREE.MeshBasicMaterial()
-              child.material.map = new THREE.TextureLoader().load('./model/mutant/a.jpg')
-              // child.material.map = new THREE.TextureLoader().load('/_3d_model/mixamo/Mutant/a/a.jpg')
+              child.material.map = new THREE.TextureLoader().load('./model/paladin/Paladin_diffuse.jpg')
               child.material.map.flipY = false
               child.material.skinning = true
             }
@@ -378,7 +376,8 @@ class Role {
             let name = animation.name.toLowerCase()
             let action = s.mixer.clipAction(animation)
             s.oaction[name] = action
-            if (['jump', 'punch', 'fist', 'jumpattack', 'dodge', 'hit'].includes(name)) {
+            // if (['jump', 'punch', 'fist', 'jumpattack', 'dodge', 'hit'].includes(name)) {
+            if (['punch', 'jumpattack', 'hit'].includes(name)) {
               action.loop = THREE.LoopOnce
             }
             if ([].includes(name)) {

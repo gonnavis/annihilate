@@ -189,8 +189,10 @@ class Enemy {
           s.gltf = gltf
 
           s.gltf.scene.traverse(function (child) {
-            child.castShadow = true
-            child.receiveShadow = true
+            if (child.isMesh) {
+              child.castShadow = true
+              child.receiveShadow = true
+            }
           })
 
           s.scene.add(gltf.scene)

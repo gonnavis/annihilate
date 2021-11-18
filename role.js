@@ -381,9 +381,9 @@ class Role {
           s.shieldBone.add(s.shieldDelegate)
 
           s.gltf.scene.traverse(function (child) {
-            child.castShadow = true
-            child.receiveShadow = true
             if (child.isMesh) {
+              child.castShadow = true
+              child.receiveShadow = true
               child.material = new THREE.MeshBasicMaterial()
               child.material.map = new THREE.TextureLoader().load('./model/paladin/Paladin_diffuse.jpg')
               child.material.map.flipY = false

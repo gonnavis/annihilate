@@ -269,7 +269,7 @@ class Role {
 
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
-      // if (state.changed) console.log('role: state:', state.value)
+      if (state.changed) console.log('role: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // s.currentState = state.value
@@ -340,7 +340,11 @@ class Role {
         s.body.position.z += s.direction.y
       }
 
-      s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
+      if (['attack', 'fist', 'strike'].some(s.xstateService.state.matches)) {
+        s.body.position.set(s.gltf.scene.position.x, s.gltf.scene.position.y + body_size, s.gltf.scene.position.z)
+      } else {
+        s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
+      }
       // s.shadow.position.x = s.body.position.x
       // s.shadow.position.z = s.body.position.z
       s.mixer.update(dt)

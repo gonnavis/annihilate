@@ -282,7 +282,7 @@ class Role {
     })
     let shape = new CANNON.Sphere(body_size)
     // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
-    s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
+    // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     s.body.angularDamping = 1
     s.body.addShape(shape)
     s.body.position.set(x, y, z) ///formal
@@ -348,7 +348,7 @@ class Role {
     // }
   }
 
-  load() {
+  load(callback) {
     let s = this
     return new Promise((resolve, reject) => {
       var loader = new THREE.GLTFLoader()
@@ -404,6 +404,8 @@ class Role {
           })
           s.xstateService.send('loaded')
           resolve()
+
+          callback()
         },
         undefined,
         function (e) {

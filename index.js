@@ -81,8 +81,10 @@ function init() {
   floatingBox5.box.body.position.z = -35
   floatingBox5.timeBias = 8
 
-  window.role = new Role(0, 5, 0)
-  role.load()
+  window.role = new Role(0, 5, -15)
+  role.load(() => {
+    role.gltf.scene.rotation.set(0, Math.PI / 2, 0)
+  })
   window.axes = new Axes()
   window.shield = new Shield()
 

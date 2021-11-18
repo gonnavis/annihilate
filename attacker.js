@@ -34,6 +34,7 @@ class Attacker {
       if (e.body === shield.body) {
         // Don't dispose attacker at here, because collide event will fire multiple times in one tick, and shield/role fire order based on the order they added to world.
         // We want shield collide event always fire first, so use vars `isCollideShield` and `isCollideRole`.
+        ///todo: No, shield collide event always fire first is wrong, need check real colliding point.
         this.isCollideShield = true
         console.log('shield', performance.now())
       } else if (e.body === role.body) {

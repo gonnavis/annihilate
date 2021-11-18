@@ -8,6 +8,7 @@ class Role {
     s.actkey = ''
     // s.speed = 0.15
     s.speed = 0.3
+    s.attackSpeed = 1.6
     s.direction = vec2()
     s.facing = vec2(0, 1)
     s._vec0 = new THREE.Vector3()
@@ -81,6 +82,7 @@ class Role {
               attack: { target: 'prepareFist' },
               dash: { target: 'dash' },
             },
+            tags: ['canDamage'],
           },
           prepareFist: {
             on: {
@@ -88,6 +90,7 @@ class Role {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
+            tags: ['canDamage'],
           },
           fist: {
             entry: 'playFist',
@@ -97,6 +100,7 @@ class Role {
               dash: { target: 'dash' },
               attack: { target: 'prepareStrike' },
             },
+            tags: ['canDamage'],
           },
           prepareStrike: {
             on: {
@@ -104,6 +108,7 @@ class Role {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
+            tags: ['canDamage'],
           },
           strike: {
             // top down strike
@@ -113,6 +118,7 @@ class Role {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
+            tags: ['canDamage'],
           },
           jumpAttack: {
             entry: ['playJumpAttack'],
@@ -120,6 +126,7 @@ class Role {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
+            tags: ['canDamage'],
           },
           jump: {
             entry: ['playJump', 'jump'],
@@ -163,6 +170,7 @@ class Role {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
+            tags: ['canDamage'],
           },
           jumpDash: {
             entry: 'entryJumpDash',

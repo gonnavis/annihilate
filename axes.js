@@ -15,7 +15,8 @@ class Axes {
     world.addBody(s.body)
 
     s.body.addEventListener('collide', (e) => {
-      if (['attack', 'fist', 'strike', 'jumpAttack', 'dashAttack'].some(role.xstateService.state.matches)) {
+      // if (['attack', 'prepareFist', 'fist', 'prepareStrike', 'strike', 'jumpAttack', 'dashAttack'].some(role.xstateService.state.matches)) {
+      if (role.xstateService.state.hasTag('canDamage')) {
         window.enemys.forEach((enemy) => {
           if (e.body === enemy.body) {
             enemy.hit() // todo: refactor: do not check role's state at here.

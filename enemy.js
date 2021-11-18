@@ -38,6 +38,7 @@ class Enemy {
         id: 'enemy',
         context: {
           health: 100,
+          // health: 150,
         },
         initial: 'loading',
         states: {
@@ -139,9 +140,9 @@ class Enemy {
     s.body = new CANNON.Body({
       mass: 1,
     })
-    let shape = new CANNON.Sphere(body_size)
-    // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
-    s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
+    // let shape = new CANNON.Sphere(body_size)
+    let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
+    // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     s.body.angularDamping = 1
     s.body.addShape(shape)
     s.body.position.set(x, y, z)

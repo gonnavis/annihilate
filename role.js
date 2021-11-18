@@ -232,16 +232,17 @@ class Role {
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(50)
             // console.log(s._vec0)
 
-            setTimeout(() => {
-              s.body.velocity.x = s._vec0.x
-              // s.body.velocity.y = 30
-              s.body.velocity.z = s._vec0.z
-              // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
-              // s.body.velocity.y -= downVelocity
-              s.body.velocity.y = -s.body.position.y * 5
-            }, 500)
+            // setTimeout(() => {
+            //   s.body.velocity.x = s._vec0.x
+            //   // s.body.velocity.y = 30
+            //   s.body.velocity.z = s._vec0.z
+            //   // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
+            //   // s.body.velocity.y -= downVelocity
+            //   s.body.velocity.y = -s.body.position.y * 5
+            // }, 500)
           },
           playJumpAttack(context, event, o) {
+            s.oaction['jumpattack'].timeScale = 1.6
             s.fadeToAction('jumpattack', 0.2)
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
             console.log(s._vec0)
@@ -287,7 +288,7 @@ class Role {
     // s.xstateService.send( 'idle' )
     // => 'resolved'
 
-    let body_size = 1.5
+    let body_size = 1.3
     let physicsMaterial = new CANNON.Material({
       friction: 0,
     })
@@ -295,8 +296,8 @@ class Role {
       mass: 1,
       // material: physicsMaterial,
     })
-    let shape = new CANNON.Sphere(body_size)
-    // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
+    // let shape = new CANNON.Sphere(body_size)
+    let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
     // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     s.body.angularDamping = 1
     s.body.addShape(shape)

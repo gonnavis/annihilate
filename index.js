@@ -161,7 +161,7 @@ function init_three() {
 
 function init_cannon() {
   window.fixedTimeStep = 1 / 60
-  // window.fixedTimeStep = 1 / 3000
+  // window.fixedTimeStep = 1 / 120
   window.maxSubSteps = 3
   // window.maxSubSteps = 30
   window.world = new CANNON.World()
@@ -196,7 +196,7 @@ function animate(time) {
   }
 
   cannonDebugRenderer.update()
-  world.step(fixedTimeStep, dt)
+  world.step(fixedTimeStep, dt, maxSubSteps)
   renderer.render(scene, camera)
 
   stats.update()

@@ -206,6 +206,7 @@ class Role {
             s.fadeToAction('running', 0.2)
           },
           playAttack() {
+            s.oaction['punch'].timeScale = 1.6
             s.fadeToAction('punch', 0.2)
           },
           playDashAttack() {
@@ -222,9 +223,11 @@ class Role {
             // })
           },
           playFist() {
+            s.oaction['fist'].timeScale = 1.6
             s.fadeToAction('fist', 0.2)
           },
           playStrike() {
+            s.oaction['strike'].timeScale = 1.6
             s.fadeToAction('strike', 0.2)
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(50)
             // console.log(s._vec0)
@@ -258,7 +261,7 @@ class Role {
             s.fadeToAction('jump', 0.2)
           },
           playHit() {
-            s.oaction.hit.timeScale = 3
+            s.oaction['hit'].timeScale = 3
             s.fadeToAction('hit', 0.2)
           },
           playBlocked() {

@@ -37,7 +37,7 @@ class Enemy {
       {
         id: 'enemy',
         context: {
-          health: 100,
+          health: 150,
           // health: Infinity,
         },
         initial: 'loading',

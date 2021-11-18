@@ -71,7 +71,7 @@ class Role {
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
-              blocked: { target: 'blocked' }, ///todo: Can block when running or in other states?
+              // blocked: { target: 'blocked' }, // Note: Can block when running or in other states? No, more by intended operation, less by luck.
             },
             tags: ['canMove'],
           },

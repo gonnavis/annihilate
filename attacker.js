@@ -52,7 +52,8 @@ class Attacker {
       s.body.position.x += movement.x
       s.body.position.z += movement.z
 
-      if (this.isCollideShield) {
+      if (this.isCollideShield && role.xstateService.state.matches('idle')) {
+        // Note: Can block when running or in other states? No, more by intended operation, less by luck.
         role.xstateService.send('blocked')
         setTimeout(() => {
           // setTimeout to prevent cannon-es error log: Cannot read properties of undefined (reading 'wakeUpAfterNarrowphase').

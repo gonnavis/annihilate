@@ -161,7 +161,9 @@ function init_three() {
 
 function init_cannon() {
   window.fixedTimeStep = 1 / 60
+  // window.fixedTimeStep = 1 / 3000
   window.maxSubSteps = 3
+  // window.maxSubSteps = 30
   window.world = new CANNON.World()
   world.defaultMaterial.restitution = 0 ///todo: Why no effect, still bounce?
   world.defaultContactMaterial.friction = 0.05
@@ -179,6 +181,7 @@ function onWindowResize() {
 //
 
 function animate(time) {
+  // console.log('animate')
   requestAnimationFrame(animate)
 
   var dt = clock.getDelta()

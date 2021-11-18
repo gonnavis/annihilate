@@ -365,7 +365,7 @@ class Role {
 
           s.shieldDelegate = new THREE.Object3D()
           // s.shieldDelegate.position.z = 50
-          s.shieldDelegate.position.y = 20
+          // s.shieldDelegate.position.y = 20
           s.shieldBone = s.gltf.scene.getObjectByName('Shield_joint')
           s.shieldBone.add(s.shieldDelegate)
 

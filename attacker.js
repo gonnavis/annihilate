@@ -2,8 +2,10 @@
 class Attacker {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
     let s = this
-    let movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(0.5)
+    let movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(1.5)
     this.isDisposed = false
+    this.isCollideShield = false
+    this.isCollideRole = false
 
     let body_size = 2
     // s.is_hit = false
@@ -30,16 +32,13 @@ class Attacker {
 
       // if (!s.is_hit && e.body === role.body) { // used stateMachine, should not need is_hit.
       if (e.body === shield.body) {
+        // Don't dispose attacker at here, because collide event will fire multiple times in one tick, and shield/role fire order based on the order they added to world.
+        // We want shield collide event always fire first, so use vars `isCollideShield` and `isCollideRole`.
+        this.isCollideShield = true
         console.log('shield', performance.now())
-        setTimeout(() => {
-          // setTimeout to prevent cannon-es error log: Cannot read properties of undefined (reading 'wakeUpAfterNarrowphase').
-          if (!this.isDisposed) this.dispose()
-        }, 0)
       } else if (e.body === role.body) {
+        this.isCollideRole = true
         console.log('role', performance.now())
-        // s.is_hit = true
-        // console.log('asdf')
-        role.hit()
       }
       window.enemys.forEach((enemy) => {
         if (e.body === enemy.body && e.body !== owner.body) {
@@ -51,6 +50,21 @@ class Attacker {
     this.update = () => {
       s.body.position.x += movement.x
       s.body.position.z += movement.z
+
+      if (this.isCollideShield) {
+        setTimeout(() => {
+          // setTimeout to prevent cannon-es error log: Cannot read properties of undefined (reading 'wakeUpAfterNarrowphase').
+          if (!this.isDisposed) this.dispose()
+        }, 0)
+      } else if (this.isCollideRole) {
+        // s.is_hit = true
+        // console.log('asdf')
+        role.hit()
+      }
+
+      // restore
+      this.isCollideShield = false
+      this.isCollideRole = false
     }
     updates.push(this.update)
 

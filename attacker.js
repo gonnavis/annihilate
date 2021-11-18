@@ -2,7 +2,8 @@
 class Attacker {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
     let s = this
-    let movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(1.5)
+    let speed = 1.5
+    let movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed)
     this.isDisposed = false
     this.isCollideShield = false
     this.isCollideRole = false
@@ -19,7 +20,7 @@ class Attacker {
     // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2) ///Why cannon-es not need this rotate?
     s.body.addShape(shape)
     s.body.position.copy(owner.body.position)
-    s.body.position.y += .5
+    // s.body.position.y += 0.5
     world.addBody(s.body)
 
     s.body.addEventListener('collide', (e) => {

@@ -8,6 +8,7 @@ class Role {
     s.actkey = ''
     // s.speed = 0.15
     s.speed = 0.3
+    s.attackSpeed = 1.6
     s.direction = vec2()
     s.facing = vec2(0, 1)
     s._vec0 = new THREE.Vector3()
@@ -83,6 +84,7 @@ class Role {
               attack: { target: 'prepareFist' },
               dash: { target: 'dash' },
             },
+            tags: ['canDamage'],
           },
           prepareFist: {
             on: {
@@ -90,6 +92,7 @@ class Role {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
+            tags: ['canDamage'],
           },
           fist: {
             entry: 'playFist',
@@ -99,6 +102,7 @@ class Role {
               dash: { target: 'dash' },
               attack: { target: 'prepareStrike' },
             },
+            tags: ['canDamage'],
           },
           prepareStrike: {
             on: {
@@ -106,6 +110,7 @@ class Role {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
+            tags: ['canDamage'],
           },
           strike: {
             // top down strike
@@ -115,6 +120,7 @@ class Role {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
+            tags: ['canDamage'],
           },
           jumpAttack: {
             entry: ['playJumpAttack'],
@@ -122,6 +128,7 @@ class Role {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
+            tags: ['canDamage'],
           },
           jump: {
             entry: ['playJump', 'jump'],
@@ -171,6 +178,7 @@ class Role {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
+            tags: ['canDamage'],
           },
           jumpDash: {
             entry: 'entryJumpDash',
@@ -206,7 +214,7 @@ class Role {
             s.fadeToAction('running', 0.2)
           },
           playAttack() {
-            s.oaction['punch'].timeScale = 1.6
+            s.oaction['punch'].timeScale = s.attackSpeed
             s.fadeToAction('punch', 0.2)
           },
           playDashAttack() {
@@ -223,11 +231,11 @@ class Role {
             // })
           },
           playFist() {
-            s.oaction['fist'].timeScale = 1.6
+            s.oaction['fist'].timeScale = s.attackSpeed
             s.fadeToAction('fist', 0.2)
           },
           playStrike() {
-            s.oaction['strike'].timeScale = 1.6
+            s.oaction['strike'].timeScale = s.attackSpeed
             s.fadeToAction('strike', 0.2)
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(50)
             // console.log(s._vec0)
@@ -242,7 +250,7 @@ class Role {
             // }, 500)
           },
           playJumpAttack(context, event, o) {
-            s.oaction['jumpattack'].timeScale = 1.6
+            s.oaction['jumpattack'].timeScale = s.attackSpeed
             s.fadeToAction('jumpattack', 0.2)
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
             console.log(s._vec0)

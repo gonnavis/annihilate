@@ -38,7 +38,7 @@ class Enemy {
         id: 'enemy',
         context: {
           health: 100,
-          // health: 150,
+          // health: Infinity,
         },
         initial: 'loading',
         states: {
@@ -123,7 +123,7 @@ class Enemy {
 
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
-      // console.log('enemy: state:',state)
+      // if (state.changed) console.log('enemy: state:', state.value)
       // if (state.changed) console.log(state.value,state)
       // s.currentState = state.value
       ///currentState === s.xstateService.state.value
@@ -142,6 +142,7 @@ class Enemy {
     })
     // let shape = new CANNON.Sphere(body_size)
     let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
+    // let shape = new CANNON.Cylinder(body_size, body_size, 5, 8)
     // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     s.body.angularDamping = 1
     s.body.addShape(shape)

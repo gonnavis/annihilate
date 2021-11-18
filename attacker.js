@@ -52,6 +52,7 @@ class Attacker {
       s.body.position.z += movement.z
 
       if (this.isCollideShield) {
+        role.xstateService.send('blocked')
         setTimeout(() => {
           // setTimeout to prevent cannon-es error log: Cannot read properties of undefined (reading 'wakeUpAfterNarrowphase').
           if (!this.isDisposed) this.dispose()

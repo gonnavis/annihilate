@@ -60,6 +60,7 @@ class Role {
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
+              blocked: { target: 'blocked' },
             },
           },
           run: {
@@ -70,6 +71,7 @@ class Role {
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
+              blocked: { target: 'blocked' }, ///todo: Can block when running or in other states?
             },
             tags: ['canMove'],
           },
@@ -144,6 +146,12 @@ class Role {
           },
           hit: {
             entry: ['playHit'],
+            on: {
+              finish: { target: 'idle' },
+            },
+          },
+          blocked: {
+            entry: ['playBlocked'],
             on: {
               finish: { target: 'idle' },
             },
@@ -251,6 +259,9 @@ class Role {
           playHit() {
             s.oaction.hit.timeScale = 3
             s.fadeToAction('hit', 0.2)
+          },
+          playBlocked() {
+            s.fadeToAction('impact', 0.2)
           },
         },
       }
@@ -389,7 +400,7 @@ class Role {
             let action = s.mixer.clipAction(animation)
             s.oaction[name] = action
             // if (['jump', 'punch', 'fist', 'jumpattack', 'dodge', 'hit'].includes(name)) {
-            if (['punch', 'punch', 'fist', 'jumpattack', 'strike', 'hit'].includes(name)) {
+            if (['punch', 'punch', 'fist', 'jumpattack', 'strike', 'hit', 'impact'].includes(name)) {
               action.loop = THREE.LoopOnce
             }
             if (['jump'].includes(name)) {

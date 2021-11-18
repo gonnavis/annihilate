@@ -36,10 +36,10 @@ class Attacker {
         // We want shield collide event always fire first, so use vars `isCollideShield` and `isCollideRole`.
         ///todo: No, shield collide event always fire first is wrong, need check real colliding point.
         this.isCollideShield = true
-        console.log('shield', performance.now())
+        // console.log('shield', performance.now())
       } else if (e.body === role.body) {
         this.isCollideRole = true
-        console.log('role', performance.now())
+        // console.log('role', performance.now())
       }
       window.enemys.forEach((enemy) => {
         if (e.body === enemy.body && e.body !== owner.body) {

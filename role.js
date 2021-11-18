@@ -270,7 +270,7 @@ class Role {
 
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
-      // if (state.changed) console.log('role: state:', state.value)
+      if (state.changed) console.log('role: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // s.currentState = state.value
@@ -400,11 +400,13 @@ class Role {
             let name = animation.name.toLowerCase()
             let action = s.mixer.clipAction(animation)
             s.oaction[name] = action
+
             // if (['jump', 'punch', 'fist', 'jumpattack', 'dodge', 'hit'].includes(name)) {
-            if (['punch', 'punch', 'fist', 'jumpattack', 'strike', 'hit', 'impact'].includes(name)) {
-              action.loop = THREE.LoopOnce
-            }
-            if (['jump'].includes(name)) {
+            // if ([].includes(name)) {
+            //   action.loop = THREE.LoopOnce
+            // }
+
+            if (['punch', 'punch', 'fist', 'jumpattack', 'strike', 'hit', 'impact', 'jump'].includes(name)) {
               action.loop = THREE.LoopOnce
               action.clampWhenFinished = true
             }
@@ -443,10 +445,27 @@ class Role {
     //   .fadeIn( duration )
     //   .play();
 
-    s.action_act.stop()
-    // s.action_act.paused = true
-    s.oaction[name].reset().play()
-    s.action_act = s.oaction[name]
+    let nextAction = s.oaction[name]
+
+    if (1) {
+      // fade
+      nextAction.reset()
+      // nextAction.stop()
+      nextAction.play()
+      // nextAction.enabled = true
+      // nextAction.setEffectiveTimeScale(1)
+      // nextAction.setEffectiveWeight(1)
+      // nextAction.time = 0
+      s.action_act.crossFadeTo(nextAction, 0.1)
+      // Note: If action_act loopOnce, need crossFade before finished. Or clampWhenFinished.
+      s.action_act = nextAction
+    } else {
+      // not fade
+      s.action_act.stop()
+      // s.action_act.paused = true
+      nextAction.reset().play()
+      s.action_act = nextAction
+    }
   }
 
   events() {

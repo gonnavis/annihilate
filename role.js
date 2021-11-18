@@ -8,7 +8,7 @@ class Role {
     s.actkey = ''
     // s.speed = 0.15
     s.speed = 0.3
-    s.attackSpeed = 1.6
+    s.attackSpeed = 1
     s.direction = vec2()
     s.facing = vec2(0, 1)
     s._vec0 = new THREE.Vector3()
@@ -218,7 +218,7 @@ class Role {
             s.fadeToAction('punch', 0.2)
           },
           playDashAttack() {
-            s.fadeToAction('strike', 0.2)
+            s.fadeToAction('dashAttack', 0.2)
             // let to = { t: 0 }
             // let _rotationY = s.gltf.scene.rotation.y
             // gsap.to(to, {
@@ -250,8 +250,8 @@ class Role {
             // }, 500)
           },
           playJumpAttack(context, event, o) {
-            s.oaction['jumpattack'].timeScale = s.attackSpeed
-            s.fadeToAction('jumpattack', 0.2)
+            s.oaction['jumpAttack'].timeScale = s.attackSpeed * 4
+            s.fadeToAction('jumpAttack', 0.2)
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
             console.log(s._vec0)
             s.body.velocity.x = s._vec0.x
@@ -315,7 +315,7 @@ class Role {
     s.body.addEventListener('collide', (event) => {
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
-      if (event.body !== window.axes.body && event.body !== window.shield.body) {
+      if (event.body !== window.axes.body) {
         ///todo: Is cannon.js has collision mask?
         // todo: refactor: window.ground
         s.xstateService.send('land')
@@ -377,28 +377,22 @@ class Role {
     return new Promise((resolve, reject) => {
       var loader = new THREE.GLTFLoader()
       loader.load(
-        './model/paladin/all.gltf',
+        './model/maria/all.gltf',
         function (gltf) {
           console.log(gltf.animations)
           s.gltf = gltf
 
           s.swordDelegate = new THREE.Object3D()
           s.swordDelegate.position.z = 50
-          s.swordBone = s.gltf.scene.getObjectByName('Sword_joint')
+          s.swordBone = s.gltf.scene.getObjectByName('sword_joint')
           s.swordBone.add(s.swordDelegate)
-
-          s.shieldDelegate = new THREE.Object3D()
-          // s.shieldDelegate.position.z = 50
-          // s.shieldDelegate.position.y = 20
-          s.shieldBone = s.gltf.scene.getObjectByName('Shield_joint')
-          s.shieldBone.add(s.shieldDelegate)
 
           s.gltf.scene.traverse(function (child) {
             if (child.isMesh) {
               child.castShadow = true
               child.receiveShadow = true
               child.material = new THREE.MeshBasicMaterial()
-              child.material.map = new THREE.TextureLoader().load('./model/paladin/Paladin_diffuse.jpg')
+              child.material.map = new THREE.TextureLoader().load('./model/maria/maria_diffuse.jpg')
               child.material.map.flipY = false
               child.material.skinning = true
             }
@@ -409,7 +403,8 @@ class Role {
           // s.gltf.scene.position.set(x,y,z)
           s.mixer = new THREE.AnimationMixer(s.gltf.scene)
           s.gltf.animations.forEach((animation) => {
-            let name = animation.name.toLowerCase()
+            // let name = animation.name.toLowerCase()
+            let name = animation.name
             let action = s.mixer.clipAction(animation)
             s.oaction[name] = action
 
@@ -418,7 +413,7 @@ class Role {
             //   action.loop = THREE.LoopOnce
             // }
 
-            if (['punch', 'punch', 'fist', 'jumpattack', 'strike', 'hit', 'impact', 'jump'].includes(name)) {
+            if (['punch', 'punch', 'fist', 'jumpAttack', 'strike', 'hit', 'impact', 'jump', 'dashAttack'].includes(name)) {
               action.loop = THREE.LoopOnce
               action.clampWhenFinished = true
             }

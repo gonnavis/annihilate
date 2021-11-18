@@ -16,7 +16,7 @@ An action game prototype made in 2018.
 
 Now open-sourced and:
 
-1. switched from <a href="https://github.com/jakesgordon/javascript-state-machine" target="_blank">state-machine.js</a> to <a href="https://github.com/statelyai/xstate" target="_blank">XState</a>.
+1. Switched from <a href="https://github.com/jakesgordon/javascript-state-machine" target="_blank">state-machine.js</a> to <a href="https://github.com/statelyai/xstate" target="_blank">XState</a>.
 
     state diagram of role: https://stately.ai/viz/f8c7eb66-db73-4bc4-b3ca-7e1ef2276923
     
@@ -24,9 +24,11 @@ Now open-sourced and:
 
     state diagram of enemy: https://stately.ai/viz/92f4cb2a-6e1a-4607-9a6c-5006490edd62
     
-2. try to switch from cannon.js to ammo.js, at [branch: AmmoJS](https://github.com/gonnavis/annihilate/tree/AmmoJS) ([demo](https://raw.githack.com/gonnavis/annihilate/AmmoJS/index.html)).
+2. Switched from [cannon.js](https://github.com/schteppe/cannon.js) to [cannon-es](https://github.com/pmndrs/cannon-es).
     
-3. try to use <a href="https://github.com/ecsyjs/ecsy" target="_blank">ecsy.js</a> at [branch: ecsy](https://github.com/gonnavis/annihilate/tree/ecsy).
+3. Try to make a parallel [ammo.js](https://github.com/kripken/ammo.js/) version, at [branch: AmmoJS](https://github.com/gonnavis/annihilate/tree/AmmoJS) ([demo](https://raw.githack.com/gonnavis/annihilate/AmmoJS/index.html)).
+    
+4. Try to use <a href="https://github.com/ecsyjs/ecsy" target="_blank">ecsy.js</a> at [branch: ecsy](https://github.com/gonnavis/annihilate/tree/ecsy).
 
 ![image](https://user-images.githubusercontent.com/10785634/118347405-b6f14b80-b575-11eb-9269-38ef89051949.png)
 
@@ -46,7 +48,7 @@ Art: **Divinity Original Sin 2** ...
 
 Code: [three-to-cannon](https://github.com/donmccurdy/three-to-cannon), [three-pathfinding](https://github.com/donmccurdy/three-pathfinding), [Sketchbook](https://discourse.threejs.org/t/vehicle-physics-with-cannon-js/11769) ...
 
-Other: [other1](https://twitter.com/gonnavis/status/1442426877390385153) [other2](https://twitter.com/FluidNinjaLIVE/status/1445897813020196869) [other3](https://twitter.com/80Level/status/1450084674307600387) ...
+[Other](https://twitter.com/gonnavis): [1](https://twitter.com/gonnavis/status/1442426877390385153) [2](https://twitter.com/FluidNinjaLIVE/status/1445897813020196869) [3](https://twitter.com/80Level/status/1450084674307600387) ...
 
 ### Todo: 
 

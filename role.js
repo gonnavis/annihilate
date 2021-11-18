@@ -228,14 +228,15 @@ class Role {
             s.fadeToAction('strike', 0.2)
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(50)
             // console.log(s._vec0)
-            s.body.velocity.x = s._vec0.x
-            // s.body.velocity.y = 30
-            s.body.velocity.z = s._vec0.z
-            // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
+
             setTimeout(() => {
+              s.body.velocity.x = s._vec0.x
+              // s.body.velocity.y = 30
+              s.body.velocity.z = s._vec0.z
+              // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
               // s.body.velocity.y -= downVelocity
               s.body.velocity.y = -s.body.position.y * 5
-            }, 200)
+            }, 500)
           },
           playJumpAttack(context, event, o) {
             s.fadeToAction('jumpattack', 0.2)

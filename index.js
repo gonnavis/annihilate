@@ -9,6 +9,7 @@ import { Box } from './box.js'
 import { FloatingBox } from './floatingBox.js'
 import { Role } from './role.js'
 import { Axes } from './axes.js'
+import { Shield } from './shield.js'
 import { Enemy } from './enemy.js'
 
 // glsl function
@@ -82,6 +83,7 @@ function init() {
   window.role = new Role(0, 5, 0)
   role.load()
   window.axes = new Axes()
+  window.shield = new Shield()
 
   window.enemys = []
   window.enemy = new Enemy(15, 5, -15)

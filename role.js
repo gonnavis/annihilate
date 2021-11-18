@@ -363,6 +363,11 @@ class Role {
           s.swordBone = s.gltf.scene.getObjectByName('Sword_joint')
           s.swordBone.add(s.swordDelegate)
 
+          s.shieldDelegate = new THREE.Object3D()
+          // s.shieldDelegate.position.z = 50
+          s.shieldBone = s.gltf.scene.getObjectByName('Shield_joint')
+          s.shieldBone.add(s.shieldDelegate)
+
           s.gltf.scene.traverse(function (child) {
             child.castShadow = true
             child.receiveShadow = true

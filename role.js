@@ -258,7 +258,7 @@ class Role {
 
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
-      if (state.changed) console.log('role: state:', state.value)
+      // if (state.changed) console.log('role: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // s.currentState = state.value
@@ -365,6 +365,7 @@ class Role {
 
           s.shieldDelegate = new THREE.Object3D()
           // s.shieldDelegate.position.z = 50
+          s.shieldDelegate.position.y = 20
           s.shieldBone = s.gltf.scene.getObjectByName('Shield_joint')
           s.shieldBone.add(s.shieldDelegate)
 

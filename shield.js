@@ -5,8 +5,8 @@ class Shield {
 
     s.is_hit = false
     s.body = new CANNON.Body({
-      mass: 0,
-      type: CANNON.Body.KINEMATIC,
+      mass: 1,
+      // type: CANNON.Body.KINEMATIC,
     })
     s.body.collisionResponse = false
     let shape = new CANNON.Box(new CANNON.Vec3(0.7, 0.3, 1))

@@ -36,6 +36,7 @@ window.renderer = null
 window.model = null
 window.face = null
 window.updates = []
+window.attackers = []
 
 init_three()
 init_cannon()
@@ -89,9 +90,10 @@ function init() {
   window.enemy = new Enemy(15, 5, -15)
   enemys.push(enemy)
   enemy.load()
-  window.enemy2 = new Enemy(15, 5, 15)
-  enemys.push(enemy2)
-  enemy2.load()
+
+  // window.enemy2 = new Enemy(15, 5, 15)
+  // enemys.push(enemy2)
+  // enemy2.load()
 }
 
 function init_three() {

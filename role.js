@@ -218,6 +218,7 @@ class Role {
             s.fadeToAction('punch', 0.2)
           },
           playDashAttack() {
+            s.oaction['strike'].timeScale = s.attackSpeed
             s.fadeToAction('strike', 0.2)
             // let to = { t: 0 }
             // let _rotationY = s.gltf.scene.rotation.y

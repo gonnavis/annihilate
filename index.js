@@ -13,6 +13,7 @@ import { GreatSword } from './greatSword.js'
 import { Sword } from './sword.js'
 import { Shield } from './shield.js'
 import { Enemy } from './enemy.js'
+import { RoleControls } from './roleControls.js'
 
 // glsl function
 window.vec2 = function (x, y) {
@@ -98,7 +99,8 @@ function init() {
   window.sword = new Sword()
   window.shield = new Shield()
 
-  window.role = maria
+  new RoleControls(maria) ///todo: Use ECS?
+  // new RoleControls(paladin)
 
   // window.enemys = []
   // window.enemy = new Enemy(15, 5, -15)

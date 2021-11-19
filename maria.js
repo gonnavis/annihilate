@@ -4,13 +4,9 @@ class Maria {
     s.health = 100
     s.oaction = {}
     s.mixer
-    s.okey = {}
-    s.actkey = ''
     // s.speed = 0.15
     s.speed = 0.3
     s.attackSpeed = 1
-    s.direction = vec2()
-    s.facing = vec2(0, 1)
     s._vec0 = new THREE.Vector3()
 
     // pseudo shadow
@@ -331,36 +327,8 @@ class Maria {
       }
     })
 
-    s.events()
-
     updates.push(function update(dt) {
       if (s.xstateService.state.matches('loading')) return
-
-      s.direction.set(0, 0)
-      if (s.okey.KeyW || s.okey.ArrowUp) s.direction.add(vec2(0, -1))
-      if (s.okey.KeyS || s.okey.ArrowDown) s.direction.add(vec2(0, 1))
-      if (s.okey.KeyA || s.okey.ArrowLeft) s.direction.add(vec2(-1, 0))
-      if (s.okey.KeyD || s.okey.ArrowRight) s.direction.add(vec2(1, 0))
-      s.direction.normalize().multiplyScalar(s.speed)
-
-      if (s.xstateService.state.hasTag('canMove')) {
-        // change facing
-        s.gltf.scene.rotation.y = -s.facing.angle() + Math.PI / 2 ///formal
-        // s.gltf.scene.rotation.y = -s.facing.angle()+Math.PI///test
-      }
-
-      if (s.direction.length() > 0) {
-        s.xstateService.send('run')
-        s.facing.copy(s.direction)
-      } else {
-        // console.log('111111111111111')
-        s.xstateService.send('stop')
-      }
-
-      if (s.xstateService.state.hasTag('canMove')) {
-        s.body.position.x += s.direction.x
-        s.body.position.z += s.direction.y
-      }
 
       s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
       // s.shadow.position.x = s.body.position.x
@@ -484,37 +452,6 @@ class Maria {
       nextAction.reset().play()
       s.action_act = nextAction
     }
-  }
-
-  events() {
-    let s = this
-    window.addEventListener('keydown', (e) => {
-      // console.log(e.key,e.code,e.keyCode)
-      s.okey[e.code] = true
-
-      if (!s.gltf) return
-      if (e.code === s.actkey) return
-      switch (e.code) {
-        case 'KeyJ':
-        case 'Numpad4':
-          s.xstateService.send('attack')
-          break
-        case 'KeyK':
-        case 'Numpad5':
-          s.xstateService.send('jump')
-          break
-        case 'KeyI':
-        case 'Numpad8':
-          s.xstateService.send('dash')
-          break
-      }
-      s.actkey = e.code
-    })
-    window.addEventListener('keyup', (e) => {
-      // console.log(e)
-      s.okey[e.code] = false
-      s.actkey = ''
-    })
   }
 }
 

@@ -7,21 +7,24 @@ class FloatingBox {
     // s.box.body.position.set(0, 5, -35)
     // s.box.mesh.position.copy(s.box.body.position)
     s.timeBias = 0
+    s.carryings = []
 
     let tempPos = new THREE.Vector3()
     let prevPos = new THREE.Vector3()
-    let isContact = false
+    // let isContact = false
 
     s.box.body.addEventListener('beginContact', (e) => {
-      if (e.body === role.body) {
-        console.log('beginContact body')
-        isContact = true
+      if (e.body.belongTo.isEntity) {
+        // console.log('beginContact body')
+        // isContact = true
+        s.carryings.push(e.body)
       }
     })
     s.box.body.addEventListener('endContact', (e) => {
-      if (e.body === role.body) {
-        console.log('endContact body')
-        isContact = false
+      if (e.body.belongTo.isEntity) {
+        // console.log('endContact body')
+        // isContact = false
+        s.carryings.splice(s.carryings.indexOf(e.body), 1)
       }
     })
 
@@ -29,12 +32,12 @@ class FloatingBox {
       s.box.body.position.x = Math.sin(time / 1000 + s.timeBias) * 20
       s.box.mesh.position.copy(s.box.body.position)
 
-      if (isContact) {
-        // Role follow floatingBox
+      s.carryings.forEach((body) => {
+        // Role/Entity follow floatingBox
         tempPos.copy(s.box.body.position).sub(prevPos)
-        role.body.position.x += tempPos.x
-        role.body.position.z += tempPos.z
-      }
+        body.position.x += tempPos.x
+        body.position.z += tempPos.z
+      })
 
       prevPos.copy(s.box.body.position)
     }

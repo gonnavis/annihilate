@@ -289,7 +289,7 @@ class Maria {
 
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
-      if (state.changed) console.log('maria: state:', state.value)
+      // if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // s.currentState = state.value

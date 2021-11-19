@@ -67,6 +67,10 @@ class RoleControls {
       }
     })
   }
+  setRole(role) {
+    this.role = role
+    window.role = role
+  }
 }
 
 export { RoleControls }

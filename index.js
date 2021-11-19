@@ -15,6 +15,8 @@ import { Shield } from './shield.js'
 import { Enemy } from './enemy.js'
 import { RoleControls } from './roleControls.js'
 
+const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
+
 // glsl function
 window.vec2 = function (x, y) {
   return new THREE.Vector2(...arguments)
@@ -41,6 +43,10 @@ window.face = null
 window.updates = []
 window.attackers = []
 
+let xstate
+let xstateService
+
+init_xstate()
 init_three()
 init_cannon()
 window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, {
@@ -48,6 +54,50 @@ window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, {
 })
 init()
 requestAnimationFrame(animate)
+
+function init_xstate() {
+  xstate = createMachine(
+    {
+      id: 'index',
+      initial: 'initial',
+      states: {
+        initial: {
+          on: { maria: { target: 'maria' } },
+          on: { paladin: { target: 'paladin' } },
+        },
+        maria: {
+          entry: 'entryMaria',
+          on: {
+            paladin: { target: 'paladin' },
+          },
+        },
+        paladin: {
+          entry: 'entryPaladin',
+          on: {
+            maria: { target: 'maria' },
+          },
+        },
+      },
+    },
+    {
+      actions: {
+        entryMaria: () => {
+          roleControls.setRole(maria)
+          domMaria.disabled = true
+          domPaladin.disabled = false
+        },
+        entryPaladin: () => {
+          roleControls.setRole(paladin)
+          domPaladin.disabled = true
+          domMaria.disabled = false
+        },
+      },
+    }
+  )
+
+  xstateService = interpret(xstate)
+  xstateService.start()
+}
 
 function init() {
   window.ground = new Ground() // todo: refactor
@@ -104,6 +154,15 @@ function init() {
 
   // window.roleControls = new RoleControls(maria) ///todo: Use ECS?
   window.roleControls = new RoleControls(paladin)
+
+  xstateService.send('paladin')
+
+  domMaria.addEventListener('click', (e) => {
+    xstateService.send('maria')
+  })
+  domPaladin.addEventListener('click', (e) => {
+    xstateService.send('paladin')
+  })
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 
@@ -252,8 +311,11 @@ function animate(time) {
 
   var dt = clock.getDelta()
 
-  maria.xstateService.send('attack')
-  // paladin.xstateService.send('attack')
+  if (role === maria) {
+    paladin.xstateService.send('attack')
+  } else {
+    maria.xstateService.send('attack')
+  }
 
   updates.forEach((update) => {
     update(dt, time)

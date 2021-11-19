@@ -15,6 +15,7 @@ class Box {
     s.body = new CANNON.Body({
       mass: 0,
     })
+    s.body.name = 'box'
     s.body.addShape(shape)
     // s.body.position.set(0,0,0)
     s.body.position.copy(pos)

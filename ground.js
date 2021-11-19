@@ -10,6 +10,7 @@ class Ground {
     s.body = new CANNON.Body({
       mass: 0,
     })
+    s.body.name = 'ground'
     s.body.addShape(shape)
     s.body.position.set(0, 0, 0)
     s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)

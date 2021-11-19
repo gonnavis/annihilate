@@ -140,6 +140,7 @@ class Enemy {
     s.body = new CANNON.Body({
       mass: 1,
     })
+    s.body.name = 'enemy'
     let shape = new CANNON.Sphere(body_size)
     // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
     // let shape = new CANNON.Cylinder(body_size, body_size, 5, 8)

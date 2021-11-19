@@ -8,6 +8,7 @@ class Axes {
       mass: 0,
       type: CANNON.Body.KINEMATIC,
     })
+    s.body.name = 'axes'
     s.body.collisionResponse = false
     let shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.3, 1))
     s.body.addShape(shape)

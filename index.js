@@ -169,6 +169,19 @@ function init_cannon() {
   world.defaultContactMaterial.friction = 0.05
   world.gravity.set(0, -50, 0)
   world.broadphase = new CANNON.NaiveBroadphase()
+
+  world.addEventListener('beginContact', (event) => {
+    // if (event.bodyA.name === 'ground' || event.bodyB.name === 'ground') return
+    // if (event.bodyA.name === 'role' || event.bodyB.name === 'role') {
+    if ((event.bodyA.name === 'role' || event.bodyB.name === 'role') && (event.bodyA.name === 'box' || event.bodyB.name === 'box')) {
+      console.log('beginContact:', event.bodyA ? event.bodyA.name : null, event.bodyB ? event.bodyB.name : null)
+    }
+  })
+  world.addEventListener('endContact', (event) => {
+    if ((event.bodyA.name === 'role' || event.bodyB.name === 'role') && (event.bodyA.name === 'box' || event.bodyB.name === 'box')) {
+      console.log('endContact:', event.bodyA ? event.bodyA.name : null, event.bodyB ? event.bodyB.name : null)
+    }
+  })
 }
 
 function onWindowResize() {

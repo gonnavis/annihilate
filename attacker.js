@@ -14,6 +14,7 @@ class Attacker {
       mass: 0,
       type: CANNON.Body.KINEMATIC,
     })
+    s.body.name = 'attacker'
     s.body.collisionResponse = false
     // let shape = new CANNON.Cylinder(body_size, body_size, 0.3, 8)
     let shape = new CANNON.Cylinder(body_size, body_size, 1.5, 8)

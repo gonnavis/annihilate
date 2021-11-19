@@ -171,6 +171,15 @@ function init_cannon() {
   world.broadphase = new CANNON.NaiveBroadphase()
 
   world.addEventListener('beginContact', (event) => {
+    if (!event.bodyA) {
+      console.log('-beginContact;', event.bodyB.name)
+      return
+    }
+    if (!event.bodyB) {
+      console.log('-beginContact;', event.bodyA.name)
+      return
+    }
+
     // if (event.bodyA.name === 'ground' || event.bodyB.name === 'ground') return
     // if (event.bodyA.name === 'role' || event.bodyB.name === 'role') {
     if ((event.bodyA.name === 'role' || event.bodyB.name === 'role') && (event.bodyA.name === 'box' || event.bodyB.name === 'box')) {
@@ -178,6 +187,15 @@ function init_cannon() {
     }
   })
   world.addEventListener('endContact', (event) => {
+    if (!event.bodyA) {
+      console.log('-endContact;', event.bodyB.name)
+      return
+    }
+    if (!event.bodyB) {
+      console.log('-endContact;', event.bodyA.name)
+      return
+    }
+
     if ((event.bodyA.name === 'role' || event.bodyB.name === 'role') && (event.bodyA.name === 'box' || event.bodyB.name === 'box')) {
       console.log('endContact:', event.bodyA ? event.bodyA.name : null, event.bodyB ? event.bodyB.name : null)
     }

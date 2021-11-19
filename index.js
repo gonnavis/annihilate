@@ -7,8 +7,8 @@ import { Ground } from './ground.js'
 import { Level } from './level.js'
 import { Box } from './box.js'
 import { FloatingBox } from './floatingBox.js'
-import { Role } from './role.js'
-import { Axes } from './axes.js'
+import { Maria } from './maria.js'
+import { GreatSword } from './greatSword.js'
 import { Enemy } from './enemy.js'
 
 // glsl function
@@ -80,16 +80,19 @@ function init() {
   floatingBox5.box.body.position.z = -35
   floatingBox5.timeBias = 8
 
-  window.role = new Role(0, 5, -15)
-  role.load(() => {
-    role.gltf.scene.rotation.set(0, Math.PI / 2, 0)
+  // window.maria = new Maria(0, 5, -15)
+  window.maria = new Maria(0, 5, 0)
+  maria.load(() => {
+    // maria.gltf.scene.rotation.set(0, Math.PI / 2, 0)
   })
-  window.axes = new Axes()
+  window.greatSword = new GreatSword()
 
-  window.enemys = []
-  window.enemy = new Enemy(15, 5, -15)
-  enemys.push(enemy)
-  enemy.load()
+  window.role = maria
+
+  // window.enemys = []
+  // window.enemy = new Enemy(15, 5, -15)
+  // enemys.push(enemy)
+  // enemy.load()
 
   // window.enemy2 = new Enemy(15, 5, 15)
   // enemys.push(enemy2)

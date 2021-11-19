@@ -1,4 +1,4 @@
-class Role {
+class Maria {
   constructor(x, y, z) {
     let s = this
     s.health = 100
@@ -42,7 +42,7 @@ class Role {
 
     s.xstate = createMachine(
       {
-        id: 'role',
+        id: 'maria',
         context: {
           health: 100,
         },
@@ -291,7 +291,7 @@ class Role {
 
     // s.currentState
     s.xstateService = interpret(s.xstate).onTransition((state) => {
-      if (state.changed) console.log('role: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // s.currentState = state.value
@@ -324,7 +324,7 @@ class Role {
     s.body.addEventListener('collide', (event) => {
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
-      if (event.body !== window.axes.body) {
+      if (event.body !== window.greatSword.body) {
         ///todo: Is cannon.js has collision mask?
         // todo: refactor: window.ground
         s.xstateService.send('land')
@@ -518,4 +518,4 @@ class Role {
   }
 }
 
-export { Role }
+export { Maria }

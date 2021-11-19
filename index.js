@@ -99,8 +99,10 @@ function init() {
   window.sword = new Sword()
   window.shield = new Shield()
 
-  new RoleControls(maria) ///todo: Use ECS?
+  window.roleControls = new RoleControls(maria) ///todo: Use ECS?
   // new RoleControls(paladin)
+
+  ///todo: fix bug after ```roleControls.role = paladin```.
 
   // window.enemys = []
   // window.enemy = new Enemy(15, 5, -15)

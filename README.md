@@ -6,7 +6,7 @@ https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html ( use mixamo 
 
 https://raw.githack.com/gonnavis/annihilate/PaladinModel/index.html ( use mixamo paladin model )
 
-https://raw.githack.com/gonnavis/annihilate/MariaModel/index.html ( use mixamo maria model, doing )
+https://raw.githack.com/gonnavis/annihilate/MariaModel/index.html ( use mixamo maria model )
 
 https://raw.githack.com/gonnavis/annihilate/main/index.html ( use self rig-and-animated naive model )
 

@@ -183,7 +183,7 @@ function init_cannon() {
     // if (event.bodyA.name === 'ground' || event.bodyB.name === 'ground') return
     // if (event.bodyA.name === 'role' || event.bodyB.name === 'role') {
     if ((event.bodyA.name === 'role' || event.bodyB.name === 'role') && (event.bodyA.name === 'box' || event.bodyB.name === 'box')) {
-      console.log('beginContact:', event.bodyA ? event.bodyA.name : null, event.bodyB ? event.bodyB.name : null)
+      console.log('beginContact:', event.bodyA.name, event.bodyB.name)
     }
   })
   world.addEventListener('endContact', (event) => {
@@ -197,7 +197,7 @@ function init_cannon() {
     }
 
     if ((event.bodyA.name === 'role' || event.bodyB.name === 'role') && (event.bodyA.name === 'box' || event.bodyB.name === 'box')) {
-      console.log('endContact:', event.bodyA ? event.bodyA.name : null, event.bodyB ? event.bodyB.name : null)
+      console.log('endContact:', event.bodyA.name, event.bodyB.name)
     }
   })
 }

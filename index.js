@@ -90,6 +90,7 @@ function init() {
     // maria.gltf.scene.rotation.set(0, Math.PI / 2, 0)
   })
   window.greatSword = new GreatSword()
+  greatSword.owner = maria
 
   window.paladin = new Paladin(10, 5, 0)
   // window.paladin = new Paladin(0, 5, 0)
@@ -97,10 +98,12 @@ function init() {
     // paladin.gltf.scene.rotation.set(0, Math.PI / 2, 0)
   })
   window.sword = new Sword()
+  sword.owner = paladin
   window.shield = new Shield()
+  shield.owner = paladin
 
-  window.roleControls = new RoleControls(maria) ///todo: Use ECS?
-  // new RoleControls(paladin)
+  // window.roleControls = new RoleControls(maria) ///todo: Use ECS?
+  window.roleControls = new RoleControls(paladin)
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 

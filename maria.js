@@ -1,6 +1,7 @@
 class Maria {
   constructor(x, y, z) {
     let s = this
+    this.isEntity = true
     s.health = 100
     s.oaction = {}
     s.mixer
@@ -306,9 +307,10 @@ class Maria {
       friction: 0,
     })
     s.body = new CANNON.Body({
-      mass: 1,
+      mass: 80,
       // material: physicsMaterial,
     })
+    s.body.owner = this
     let shape = new CANNON.Sphere(body_size)
     // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
     // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)

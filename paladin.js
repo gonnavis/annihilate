@@ -1,6 +1,7 @@
 class Paladin {
   constructor(x, y, z) {
     let s = this
+    this.isEntity = true
     s.health = 100
     s.oaction = {}
     s.mixer
@@ -298,7 +299,7 @@ class Paladin {
       friction: 0,
     })
     s.body = new CANNON.Body({
-      mass: 1,
+      mass: 100,
       // material: physicsMaterial,
     })
     s.body.name = 'paladin'

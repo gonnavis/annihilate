@@ -2,6 +2,7 @@
 class Sword {
   constructor() {
     let s = this
+    this.owner = null
 
     s.is_hit = false
     s.body = new CANNON.Body({
@@ -14,24 +15,21 @@ class Sword {
     s.body.addShape(shape)
     world.addBody(s.body)
 
-    // s.body.addEventListener('collide', (e) => {
-    //   // if (['attack', 'prepareFist', 'fist', 'prepareStrike', 'strike', 'jumpAttack', 'dashAttack'].some(role.xstateService.state.matches)) {
-    //   if (role.xstateService.state.hasTag('canDamage')) {
-    //     window.enemys.forEach((enemy) => {
-    //       if (e.body === enemy.body) {
-    //         enemy.hit() // todo: refactor: do not check role's state at here.
-    //       }
-    //     })
-    //   }
-    // })
+    s.body.addEventListener('collide', (e) => {
+      if (e.body.owner?.isEntity === true && e.body.owner !== this.owner) {
+        if (this.owner.xstateService.state.hasTag('canDamage')) {
+          e.body.owner.hit()
+        }
+      }
+    })
 
     function update() {
-      if (role.gltf) {
+      if (s.owner?.gltf) {
         let tempVec3 = vec3() ///todo: performance
         let tempQuat = new THREE.Quaternion() ///todo: performance
-        // role.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
-        role.swordDelegate.getWorldPosition(tempVec3)
-        role.swordDelegate.getWorldQuaternion(tempQuat)
+        // s.owner.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
+        s.owner.swordDelegate.getWorldPosition(tempVec3)
+        s.owner.swordDelegate.getWorldQuaternion(tempQuat)
         s.body.position.copy(tempVec3)
         s.body.quaternion.copy(tempQuat)
       }

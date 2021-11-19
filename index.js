@@ -167,6 +167,53 @@ function init_cannon() {
   world.defaultContactMaterial.friction = 0.05
   world.gravity.set(0, -50, 0)
   world.broadphase = new CANNON.NaiveBroadphase()
+
+  world.addEventListener('beginContact', (event) => {
+    if (event.bodyA) {
+      event.bodyA.dispatchEvent({ type: 'beginContact', body: event.bodyB })
+    }
+    if (event.bodyB) {
+      event.bodyB.dispatchEvent({ type: 'beginContact', body: event.bodyA })
+    }
+
+    // test log
+    // if (!event.bodyA) {
+    //   console.log('-beginContact;', event.bodyB.name)
+    //   return
+    // }
+    // if (!event.bodyB) {
+    //   console.log('-beginContact;', event.bodyA.name)
+    //   return
+    // }
+
+    // // if (event.bodyA.name === 'ground' || event.bodyB.name === 'ground') return
+    // // if (event.bodyA.name === 'role' || event.bodyB.name === 'role') {
+    // if ((event.bodyA.name === 'role' || event.bodyB.name === 'role') && (event.bodyA.name === 'box' || event.bodyB.name === 'box')) {
+    //   console.log('beginContact:', event.bodyA.name, event.bodyB.name)
+    // }
+  })
+  world.addEventListener('endContact', (event) => {
+    if (event.bodyA) {
+      event.bodyA.dispatchEvent({ type: 'endContact', body: event.bodyB })
+    }
+    if (event.bodyB) {
+      event.bodyB.dispatchEvent({ type: 'endContact', body: event.bodyA })
+    }
+
+    // test log
+    // if (!event.bodyA) {
+    //   console.log('-endContact;', event.bodyB.name)
+    //   return
+    // }
+    // if (!event.bodyB) {
+    //   console.log('-endContact;', event.bodyA.name)
+    //   return
+    // }
+
+    // if ((event.bodyA.name === 'role' || event.bodyB.name === 'role') && (event.bodyA.name === 'box' || event.bodyB.name === 'box')) {
+    //   console.log('endContact:', event.bodyA.name, event.bodyB.name)
+    // }
+  })
 }
 
 function onWindowResize() {

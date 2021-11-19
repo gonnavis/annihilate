@@ -8,7 +8,10 @@ import { Level } from './level.js'
 import { Box } from './box.js'
 import { FloatingBox } from './floatingBox.js'
 import { Maria } from './maria.js'
+import { Paladin } from './paladin.js'
 import { GreatSword } from './greatSword.js'
+import { Sword } from './sword.js'
+import { Shield } from './shield.js'
 import { Enemy } from './enemy.js'
 
 // glsl function
@@ -86,6 +89,14 @@ function init() {
     // maria.gltf.scene.rotation.set(0, Math.PI / 2, 0)
   })
   window.greatSword = new GreatSword()
+
+  window.paladin = new Paladin(10, 5, 0)
+  // window.paladin = new Paladin(0, 5, 0)
+  paladin.load(() => {
+    // paladin.gltf.scene.rotation.set(0, Math.PI / 2, 0)
+  })
+  window.sword = new Sword()
+  window.shield = new Shield()
 
   window.role = maria
 

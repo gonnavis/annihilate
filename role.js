@@ -192,7 +192,8 @@ class Role {
       {
         actions: {
           entryDash() {
-            s.fadeToAction('dash', 0.2)
+            s.fadeToAction('dash')
+
             // s.body.mass = 0
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(60)
             s.body.velocity.x = s._vec0.x
@@ -200,7 +201,7 @@ class Role {
             s.body.velocity.z = s._vec0.z
           },
           entryJumpDash() {
-            s.fadeToAction('dash', 0.2)
+            s.fadeToAction('dash', 0)
             // s.body.mass = 0
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(30)
             s.body.velocity.x = s._vec0.x
@@ -208,17 +209,25 @@ class Role {
             s.body.velocity.z = s._vec0.z
           },
           playIdle() {
-            s.fadeToAction('idle', 0.2)
+            s.fadeToAction('idle')
           },
           playRun() {
-            s.fadeToAction('running', 0.2)
+            s.fadeToAction('running')
           },
           playAttack() {
             s.oaction['punch'].timeScale = s.attackSpeed
-            s.fadeToAction('punch', 0.2)
+            s.fadeToAction('punch')
           },
           playDashAttack() {
-            s.fadeToAction('dashAttack', 0.2)
+            s.oaction['dashAttack'].timeScale = 2
+            s.fadeToAction('dashAttack')
+
+            setTimeout(() => {
+              s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(70)
+              s.body.velocity.x = s._vec0.x
+              s.body.velocity.z = s._vec0.z
+            }, 100)
+
             // let to = { t: 0 }
             // let _rotationY = s.gltf.scene.rotation.y
             // gsap.to(to, {
@@ -232,11 +241,11 @@ class Role {
           },
           playFist() {
             s.oaction['fist'].timeScale = s.attackSpeed
-            s.fadeToAction('fist', 0.2)
+            s.fadeToAction('fist')
           },
           playStrike() {
             s.oaction['strike'].timeScale = s.attackSpeed
-            s.fadeToAction('strike', 0.2)
+            s.fadeToAction('strike')
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(50)
             // console.log(s._vec0)
 
@@ -251,7 +260,7 @@ class Role {
           },
           playJumpAttack(context, event, o) {
             s.oaction['jumpAttack'].timeScale = s.attackSpeed * 4
-            s.fadeToAction('jumpAttack', 0.2)
+            s.fadeToAction('jumpAttack')
             s._vec0.set(0, 0, 1).applyEuler(s.gltf.scene.rotation).multiplyScalar(15)
             console.log(s._vec0)
             s.body.velocity.x = s._vec0.x
@@ -267,14 +276,14 @@ class Role {
             s.body.velocity.y = 20
           },
           playJump() {
-            s.fadeToAction('jump', 0.2)
+            s.fadeToAction('jump')
           },
           playHit() {
             s.oaction['hit'].timeScale = 3
-            s.fadeToAction('hit', 0.2)
+            s.fadeToAction('hit')
           },
           playBlocked() {
-            s.fadeToAction('impact', 0.2)
+            s.fadeToAction('impact')
           },
         },
       }
@@ -296,7 +305,7 @@ class Role {
     // s.xstateService.send( 'idle' )
     // => 'resolved'
 
-    let body_size = 1.3
+    let body_size = 1.6
     let physicsMaterial = new CANNON.Material({
       friction: 0,
     })
@@ -383,7 +392,9 @@ class Role {
           s.gltf = gltf
 
           s.swordDelegate = new THREE.Object3D()
+          s.swordDelegate.position.x = -24
           s.swordDelegate.position.z = 50
+          s.swordDelegate.rotation.y = -0.55
           s.swordBone = s.gltf.scene.getObjectByName('sword_joint')
           s.swordBone.add(s.swordDelegate)
 
@@ -437,7 +448,7 @@ class Role {
     })
   }
 
-  fadeToAction(name, duration) {
+  fadeToAction(name, duration = 0.1) {
     let s = this
 
     // previousAction = s.action_act;
@@ -463,7 +474,7 @@ class Role {
       // nextAction.setEffectiveTimeScale(1)
       // nextAction.setEffectiveWeight(1)
       // nextAction.time = 0
-      s.action_act.crossFadeTo(nextAction, 0.1)
+      s.action_act.crossFadeTo(nextAction, duration)
       // Note: If action_act loopOnce, need crossFade before finished. Or clampWhenFinished.
       s.action_act = nextAction
     } else {

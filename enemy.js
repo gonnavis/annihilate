@@ -136,7 +136,7 @@ class Enemy {
     // s.xstateService.send( 'idle' )
     // => 'resolved'
 
-    let body_size = 1.5
+    let body_size = 1.6
     s.body = new CANNON.Body({
       mass: 1,
     })

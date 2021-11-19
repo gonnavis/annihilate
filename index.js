@@ -102,8 +102,8 @@ function init() {
   window.shield = new Shield()
   shield.owner = paladin
 
-  // window.roleControls = new RoleControls(maria) ///todo: Use ECS?
-  window.roleControls = new RoleControls(paladin)
+  window.roleControls = new RoleControls(maria) ///todo: Use ECS?
+  // window.roleControls = new RoleControls(paladin)
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 

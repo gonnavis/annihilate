@@ -8,7 +8,7 @@ class Shield {
       mass: 1,
       // type: CANNON.Body.KINEMATIC,
     })
-    s.body.name = 'shield'
+    s.body.belongTo = this
     s.body.collisionResponse = false
     let shape = new CANNON.Box(new CANNON.Vec3(0.7, 0.3, 1))
     s.body.addShape(shape)

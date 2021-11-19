@@ -310,7 +310,7 @@ class Maria {
       mass: 80,
       // material: physicsMaterial,
     })
-    s.body.owner = this
+    s.body.belongTo = this
     let shape = new CANNON.Sphere(body_size)
     // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
     // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)

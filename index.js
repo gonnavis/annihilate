@@ -85,25 +85,25 @@ function init() {
   floatingBox5.timeBias = 8
 
   // window.maria = new Maria(0, 5, -15)
-  window.maria = new Maria(0, 5, 0)
+  window.maria = new Maria(5, 5, 0)
   maria.load(() => {
-    // maria.gltf.scene.rotation.set(0, Math.PI / 2, 0)
+    maria.gltf.scene.rotation.set(0, -Math.PI / 2, 0)
   })
   window.greatSword = new GreatSword()
   greatSword.owner = maria
 
-  window.paladin = new Paladin(10, 5, 0)
+  window.paladin = new Paladin(0, 5, 0)
   // window.paladin = new Paladin(0, 5, 0)
   paladin.load(() => {
-    // paladin.gltf.scene.rotation.set(0, Math.PI / 2, 0)
+    paladin.gltf.scene.rotation.set(0, Math.PI / 2, 0)
   })
   window.sword = new Sword()
   sword.owner = paladin
   window.shield = new Shield()
   shield.owner = paladin
 
-  window.roleControls = new RoleControls(maria) ///todo: Use ECS?
-  // window.roleControls = new RoleControls(paladin)
+  // window.roleControls = new RoleControls(maria) ///todo: Use ECS?
+  window.roleControls = new RoleControls(paladin)
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 
@@ -251,6 +251,9 @@ function animate(time) {
   requestAnimationFrame(animate)
 
   var dt = clock.getDelta()
+
+  maria.xstateService.send('attack')
+  // paladin.xstateService.send('attack')
 
   updates.forEach((update) => {
     update(dt, time)

@@ -151,6 +151,7 @@ class Paladin {
           hit: {
             entry: ['playHit'],
             on: {
+              hit: { target: 'hit' },
               finish: { target: 'idle' },
             },
           },
@@ -375,7 +376,7 @@ class Paladin {
             }
           })
           scene.add(s.gltf.scene)
-          s.gltf.scene.scale.setScalar(2.7)
+          s.gltf.scene.scale.setScalar(2.9)
           // s.gltf.scene.scale.set(.7,.7,.7)
           // s.gltf.scene.position.set(x,y,z)
           s.mixer = new THREE.AnimationMixer(s.gltf.scene)

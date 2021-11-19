@@ -151,6 +151,7 @@ class Maria {
           hit: {
             entry: ['playHit'],
             on: {
+              hit: { target: 'hit' },
               finish: { target: 'idle' },
             },
           },

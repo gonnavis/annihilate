@@ -11,7 +11,7 @@ class Sword {
     })
     s.body.belongTo = this
     s.body.collisionResponse = false
-    let shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.3, 1))
+    let shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.3, 1.2))
     s.body.addShape(shape)
     world.addBody(s.body)
 

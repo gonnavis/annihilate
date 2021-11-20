@@ -14,6 +14,7 @@ import { Sword } from './sword.js'
 import { Shield } from './shield.js'
 import { Enemy } from './enemy.js'
 import { RoleControls } from './roleControls.js'
+import { Ai } from './ai.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -83,11 +84,15 @@ function init_xstate() {
       actions: {
         entryMaria: () => {
           roleControls.setRole(maria)
+          ai.setTarget(maria)
+          ai.setRole(paladin)
           domMaria.disabled = true
           domPaladin.disabled = false
         },
         entryPaladin: () => {
           roleControls.setRole(paladin)
+          ai.setTarget(paladin)
+          ai.setRole(maria)
           domPaladin.disabled = true
           domMaria.disabled = false
         },
@@ -154,6 +159,8 @@ function init() {
 
   // window.roleControls = new RoleControls(maria) ///todo: Use ECS?
   window.roleControls = new RoleControls(paladin)
+
+  window.ai = new Ai(maria, paladin)
 
   xstateService.send('paladin')
 
@@ -321,12 +328,6 @@ function animate(time) {
   requestAnimationFrame(animate)
 
   var dt = clock.getDelta()
-
-  if (role === maria) {
-    paladin.xstateService.send('attack')
-  } else {
-    maria.xstateService.send('attack')
-  }
 
   updates.forEach((entity) => {
     entity.update(dt, time)

@@ -50,18 +50,18 @@ class RoleControls {
     this.direction.normalize().multiplyScalar(this.role.speed)
     // console.log(this.direction)
 
-    if (this.role.xstateService.state.hasTag('canMove')) {
-      // change facing
-      this.role.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2 ///formal
-      // this.role.gltf.scene.rotation.y = -this.facing.angle()+Math.PI///test
-    }
-
     if (this.direction.length() > 0) {
       this.role.xstateService.send('run')
       this.facing.copy(this.direction)
     } else {
       // console.log('111111111111111')
       this.role.xstateService.send('stop')
+    }
+
+    if (this.role.xstateService.state.hasTag('canMove')) {
+      // change facing
+      this.role.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2 ///formal
+      // this.role.gltf.scene.rotation.y = -this.facing.angle()+Math.PI///test
     }
 
     if (this.role.xstateService.state.hasTag('canMove')) {

@@ -153,19 +153,33 @@ class Maria {
               dash: { target: 'dash' },
             },
           },
+          jumpAttackStart: {
+            entry: ['playJumpAttackStart'],
+            on: {
+              finish: { target: 'jumpAttack' },
+              hit: { target: 'hit' },
+            },
+          },
           jumpAttack: {
             entry: ['playJumpAttack'],
+            on: {
+              finish: { target: 'jumpAttackEnd' },
+              hit: { target: 'hit' },
+            },
+            tags: ['canDamage'],
+          },
+          jumpAttackEnd: {
+            entry: ['playJumpAttackEnd'],
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
-            tags: ['canDamage'],
           },
           jump: {
             entry: ['playJump', 'jump'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
+              attack: { target: 'jumpAttackStart' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
@@ -176,7 +190,7 @@ class Maria {
             entry: ['playJump', 'jump'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
+              attack: { target: 'jumpAttackStart' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
             },
@@ -196,7 +210,7 @@ class Maria {
             },
           },
           dash: {
-            entry: 'entryDash',
+            entry: 'playDash',
             after: {
               300: { target: 'idle' },
             },
@@ -223,7 +237,8 @@ class Maria {
       },
       {
         actions: {
-          entryDash: () => {
+          playDash: () => {
+            this.oaction['dash'].timeScale = 2
             this.fadeToAction('dash')
 
             // this.body.mass = 0
@@ -258,11 +273,11 @@ class Maria {
             this.oaction['dashAttack'].timeScale = 2
             this.fadeToAction('dashAttack')
 
-            setTimeout(() => {
-              this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(70)
-              this.body.velocity.x = this._vec0.x
-              this.body.velocity.z = this._vec0.z
-            }, 100)
+            // setTimeout(() => {
+            //   this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(70)
+            //   this.body.velocity.x = this._vec0.x
+            //   this.body.velocity.z = this._vec0.z
+            // }, 100)
 
             // let to = { t: 0 }
             // let _rotationY = this.gltf.scene.rotation.y
@@ -295,19 +310,24 @@ class Maria {
             this.oaction['strikeEnd'].timeScale = this.attackSpeed
             this.fadeToAction('strikeEnd', 0)
           },
+          playJumpAttackStart: (context, event, o) => {
+            this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 4
+            this.fadeToAction('jumpAttackStart')
+
+            // this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(10)
+            // this.body.velocity.x = this._vec0.x
+            this.body.velocity.y = 20
+            // this.body.velocity.z = this._vec0.z
+          },
           playJumpAttack: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed * 4
             this.fadeToAction('jumpAttack')
-            this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
-            console.log(this._vec0)
-            this.body.velocity.x = this._vec0.x
-            this.body.velocity.y = 20
-            this.body.velocity.z = this._vec0.z
-            // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
-            setTimeout(() => {
-              // this.body.velocity.y -= downVelocity
-              this.body.velocity.y = -this.body.position.y * 5
-            }, 200)
+
+            this.body.velocity.y = -this.body.position.y * 5
+          },
+          playJumpAttackEnd: (context, event, o) => {
+            this.oaction['jumpAttackEnd'].timeScale = this.attackSpeed * 4
+            this.fadeToAction('jumpAttackEnd')
           },
           jump: () => {
             this.body.velocity.y = 20
@@ -432,7 +452,7 @@ class Maria {
             //   action.loop = THREE.LoopOnce
             // }
 
-            if (['punch', 'punchStart', 'fist', 'fistStart', 'jumpAttack', 'strike', 'strikeStart', 'strikeEnd', 'hit', 'impact', 'jump', 'dashAttack'].includes(name)) {
+            if (['punch', 'punchStart', 'fist', 'fistStart', 'jumpAttack', 'jumpAttackStart', 'jumpAttackEnd', 'strike', 'strikeStart', 'strikeEnd', 'hit', 'impact', 'jump', 'dashAttack', 'dash'].includes(name)) {
               action.loop = THREE.LoopOnce
               action.clampWhenFinished = true
             }
@@ -471,7 +491,7 @@ class Maria {
 
     let nextAction = this.oaction[name]
 
-    if (1) {
+    if (duration > 0) {
       // fade
       nextAction.reset()
       // nextAction.stop()

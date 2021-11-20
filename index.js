@@ -294,6 +294,17 @@ function init_cannon() {
     //   console.log('endContact:', event.bodyA.name, event.bodyB.name)
     // }
   })
+
+  window.addEventListener('keydown', (e) => {
+    switch (e.code) {
+      case 'Digit1':
+        xstateService.send('maria')
+        break
+      case 'Digit2':
+        xstateService.send('paladin')
+        break
+    }
+  })
 }
 
 function onWindowResize() {

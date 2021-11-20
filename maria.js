@@ -160,6 +160,7 @@ class Maria {
             on: {
               finish: { target: 'jumpAttack' },
               hit: { target: 'hit' },
+              // dash: { target: 'dash' },
             },
           },
           jumpAttack: {
@@ -167,6 +168,7 @@ class Maria {
             on: {
               finish: { target: 'jumpAttackEnd' },
               hit: { target: 'hit' },
+              // // dash: { target: 'dash' },
             },
             tags: ['canDamage'],
           },
@@ -175,6 +177,7 @@ class Maria {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              // // dash: { target: 'dash' },
             },
           },
           jump: {

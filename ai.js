@@ -4,6 +4,10 @@ class Ai {
     this.target = target
     this.distance = distance
 
+    this.enabled = true
+
+    this.isAttack = true
+
     updates.push(this)
 
     this.okey = {}
@@ -13,6 +17,8 @@ class Ai {
   }
 
   update(dt) {
+    if (!this.enabled) return
+
     // if (this.role.service.state.matches('loading')) return
 
     this.direction.x = this.target.body.position.x - this.role.body.position.x
@@ -23,8 +29,11 @@ class Ai {
       this.role.service.send('run')
       this.facing.copy(this.direction)
     } else {
-      // this.role.service.send('stop')
-      this.role.service.send('attack')
+      if (this.isAttack) {
+        this.role.service.send('attack')
+      } else {
+        this.role.service.send('stop')
+      }
     }
 
     if (this.role.service.state.hasTag('canMove')) {

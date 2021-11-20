@@ -3,6 +3,8 @@ window.CANNON = CANNON
 import cannonDebugger from './lib/cannon-es-debugger.js'
 // THREE.cannonDebugger = cannonDebugger
 
+import { GUI } from './lib/lil-gui.module.min.js'
+
 import { Ground } from './ground.js'
 import { Level } from './level.js'
 import { Box } from './box.js'
@@ -46,6 +48,8 @@ window.attackers = []
 
 let fsm
 window.service = null
+
+const gui = new GUI({ width: 310 })
 
 init_xstate()
 init_three()
@@ -185,6 +189,8 @@ function init() {
   })
 
   window.service.send('maria')
+
+  gui.add(window.ai, 'enabled').name('simple enemy AI')
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 

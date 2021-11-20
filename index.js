@@ -45,7 +45,7 @@ window.updates = []
 window.attackers = []
 
 let xstate
-let xstateService
+window.xstateService = null
 
 init_xstate()
 init_three()
@@ -63,8 +63,8 @@ function init_xstate() {
       initial: 'initial',
       states: {
         initial: {
-          on: { maria: { target: 'maria' } },
           on: { paladin: { target: 'paladin' } },
+          on: { maria: { target: 'maria' } }, // todo: Why can't maria first?
         },
         maria: {
           entry: 'entryMaria',
@@ -83,6 +83,10 @@ function init_xstate() {
     {
       actions: {
         entryMaria: () => {
+          console.log(111)
+          if (!window.roleControls) window.roleControls = new RoleControls(maria) ///todo: Use ECS?
+          if (!window.ai) window.ai = new Ai(paladin, maria, 5)
+
           roleControls.setRole(maria)
           ai.setTarget(maria)
           ai.setRole(paladin)
@@ -91,6 +95,9 @@ function init_xstate() {
           domPaladin.disabled = false
         },
         entryPaladin: () => {
+          if (!window.roleControls) window.roleControls = new RoleControls(paladin) ///todo: Use ECS?
+          if (!window.ai) window.ai = new Ai(maria, paladin, 4)
+
           roleControls.setRole(paladin)
           ai.setTarget(paladin)
           ai.setRole(maria)
@@ -102,8 +109,8 @@ function init_xstate() {
     }
   )
 
-  xstateService = interpret(xstate)
-  xstateService.start()
+  window.xstateService = interpret(xstate)
+  window.xstateService.start()
 }
 
 function init() {
@@ -159,20 +166,25 @@ function init() {
   window.shield = new Shield()
   shield.owner = paladin
 
-  window.roleControls = new RoleControls(maria) ///todo: Use ECS?
-  window.ai = new Ai(paladin, maria, 4)
-  xstateService.send('maria')
-
-  // window.roleControls = new RoleControls(paladin)
-  // window.ai = new Ai(maria, paladin, 5)
-  // xstateService.send('paladin')
-
   domMaria.addEventListener('click', (e) => {
-    xstateService.send('maria')
+    window.xstateService.send('maria')
   })
   domPaladin.addEventListener('click', (e) => {
-    xstateService.send('paladin')
+    window.xstateService.send('paladin')
   })
+
+  window.addEventListener('keydown', (e) => {
+    switch (e.code) {
+      case 'Digit1':
+        window.xstateService.send('maria')
+        break
+      case 'Digit2':
+        window.xstateService.send('paladin')
+        break
+    }
+  })
+
+  window.xstateService.send('maria')
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 
@@ -304,17 +316,6 @@ function init_cannon() {
     //   console.log('endContact:', event.bodyA.name, event.bodyB.name)
     // }
   })
-
-  window.addEventListener('keydown', (e) => {
-    switch (e.code) {
-      case 'Digit1':
-        xstateService.send('maria')
-        break
-      case 'Digit2':
-        xstateService.send('paladin')
-        break
-    }
-  })
 }
 
 function onWindowResize() {
@@ -335,6 +336,8 @@ function animate(time) {
   updates.forEach((entity) => {
     entity.update(dt, time)
   })
+
+  if (window.xstateService.state.matches('initial')) return
 
   if (window.camera && window.role.gltf) {
     camera.position.set(role.gltf.scene.position.x, role.gltf.scene.position.y + 30, role.gltf.scene.position.z + 30)

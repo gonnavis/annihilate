@@ -3,6 +3,8 @@ class Shield {
   constructor() {
     let s = this
 
+    updates.push(this)
+
     s.is_hit = false
     s.body = new CANNON.Body({
       mass: 1,
@@ -23,19 +25,19 @@ class Shield {
     //     })
     //   }
     // })
+  }
 
-    function update() {
-      if (paladin.gltf) {
-        let tempVec3 = vec3() ///todo: performance
-        let tempQuat = new THREE.Quaternion() ///todo: performance
-        // paladin.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
-        paladin.shieldDelegate.getWorldPosition(tempVec3)
-        paladin.shieldDelegate.getWorldQuaternion(tempQuat)
-        s.body.position.copy(tempVec3)
-        s.body.quaternion.copy(tempQuat)
-      }
+  update() {
+    let s = this
+    if (paladin.gltf) {
+      let tempVec3 = vec3() ///todo: performance
+      let tempQuat = new THREE.Quaternion() ///todo: performance
+      // paladin.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
+      paladin.shieldDelegate.getWorldPosition(tempVec3)
+      paladin.shieldDelegate.getWorldQuaternion(tempQuat)
+      s.body.position.copy(tempVec3)
+      s.body.quaternion.copy(tempQuat)
     }
-    updates.push(update)
   }
 }
 

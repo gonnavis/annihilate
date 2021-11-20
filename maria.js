@@ -1,7 +1,11 @@
 class Maria {
   constructor(x, y, z) {
     let s = this
-    this.isEntity = true
+
+    this.isCharacter = true
+
+    updates.push(this)
+
     s.health = 100
     s.oaction = {}
     s.mixer
@@ -303,7 +307,7 @@ class Maria {
     // s.xstateService.send( 'idle' )
     // => 'resolved'
 
-    let body_size = 1.6
+    this.body_size = 1.6
     let physicsMaterial = new CANNON.Material({
       friction: 0,
     })
@@ -312,8 +316,8 @@ class Maria {
       // material: physicsMaterial,
     })
     s.body.belongTo = this
-    let shape = new CANNON.Sphere(body_size)
-    // let shape = new CANNON.Cylinder(body_size, body_size, 3, 8)
+    let shape = new CANNON.Sphere(this.body_size)
+    // let shape = new CANNON.Cylinder(this.body_size, this.body_size, 3, 8)
     // s.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     s.body.angularDamping = 1
     s.body.addShape(shape)
@@ -329,15 +333,16 @@ class Maria {
         s.xstateService.send('land')
       }
     })
+  }
 
-    updates.push(function update(dt) {
-      if (s.xstateService.state.matches('loading')) return
+  update(dt) {
+    let s = this
+    if (s.xstateService.state.matches('loading')) return
 
-      s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
-      // s.shadow.position.x = s.body.position.x
-      // s.shadow.position.z = s.body.position.z
-      s.mixer.update(dt)
-    })
+    s.gltf.scene.position.set(s.body.position.x, s.body.position.y - this.body_size, s.body.position.z)
+    // s.shadow.position.x = s.body.position.x
+    // s.shadow.position.z = s.body.position.z
+    s.mixer.update(dt)
   }
 
   hit() {

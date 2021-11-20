@@ -328,8 +328,8 @@ function animate(time) {
     maria.xstateService.send('attack')
   }
 
-  updates.forEach((update) => {
-    update(dt, time)
+  updates.forEach((entity) => {
+    entity.update(dt, time)
   })
 
   if (window.camera && window.role.gltf) {

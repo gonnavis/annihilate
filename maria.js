@@ -56,7 +56,7 @@ class Maria {
             entry: 'playIdle',
             on: {
               run: { target: 'run' },
-              attack: { target: 'attack' },
+              attack: { target: 'attackStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
@@ -67,13 +67,21 @@ class Maria {
             entry: 'playRun',
             on: {
               stop: { target: 'idle' },
-              attack: { target: 'attack' },
+              attack: { target: 'attackStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
               // blocked: { target: 'blocked' }, // Note: Can block when running or in other states? No, more by intended operation, less by luck.
             },
             tags: ['canMove'],
+          },
+          attackStart: {
+            entry: 'playAttackStart',
+            on: {
+              finish: { target: 'attack' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
           },
           attack: {
             entry: 'playAttack',
@@ -87,11 +95,19 @@ class Maria {
           },
           prepareFist: {
             on: {
-              finish: { target: 'fist' },
+              finish: { target: 'fistStart' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
+          },
+          fistStart: {
+            entry: 'playFistStart',
+            on: {
+              finish: { target: 'fist' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
           },
           fist: {
             entry: 'playFist',
@@ -105,6 +121,15 @@ class Maria {
           },
           prepareStrike: {
             on: {
+              finish: { target: 'strikeStart' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+            tags: ['canDamage'],
+          },
+          strikeStart: {
+            entry: 'playStrikeStart',
+            on: {
               finish: { target: 'strike' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
@@ -112,14 +137,21 @@ class Maria {
             tags: ['canDamage'],
           },
           strike: {
-            // top down strike
             entry: 'playStrike',
+            on: {
+              finish: { target: 'strikeEnd' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+            tags: ['canDamage'],
+          },
+          strikeEnd: {
+            entry: 'playStrikeEnd',
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
-            tags: ['canDamage'],
           },
           jumpAttack: {
             entry: ['playJumpAttack'],
@@ -214,9 +246,13 @@ class Maria {
           playRun: () => {
             this.fadeToAction('running')
           },
+          playAttackStart: () => {
+            this.oaction['punchStart'].timeScale = this.attackSpeed
+            this.fadeToAction('punchStart')
+          },
           playAttack: () => {
             this.oaction['punch'].timeScale = this.attackSpeed
-            this.fadeToAction('punch')
+            this.fadeToAction('punch', 0)
           },
           playDashAttack: () => {
             this.oaction['dashAttack'].timeScale = 2
@@ -239,24 +275,25 @@ class Maria {
             //   },
             // })
           },
+          playFistStart: () => {
+            this.oaction['fistStart'].timeScale = this.attackSpeed
+            this.fadeToAction('fistStart')
+          },
           playFist: () => {
             this.oaction['fist'].timeScale = this.attackSpeed
-            this.fadeToAction('fist')
+            this.fadeToAction('fist', 0)
+          },
+          playStrikeStart: () => {
+            this.oaction['strikeStart'].timeScale = this.attackSpeed
+            this.fadeToAction('strikeStart')
           },
           playStrike: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
-            this.fadeToAction('strike')
-            this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(50)
-            // console.log(this._vec0)
-
-            // setTimeout(() => {
-            //   this.body.velocity.x = this._vec0.x
-            //   // this.body.velocity.y = 30
-            //   this.body.velocity.z = this._vec0.z
-            //   // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
-            //   // this.body.velocity.y -= downVelocity
-            //   this.body.velocity.y = -this.body.position.y * 5
-            // }, 500)
+            this.fadeToAction('strike', 0)
+          },
+          playStrikeEnd: () => {
+            this.oaction['strikeEnd'].timeScale = this.attackSpeed
+            this.fadeToAction('strikeEnd', 0)
           },
           playJumpAttack: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed * 4
@@ -291,7 +328,7 @@ class Maria {
 
     // this.currentState
     this.xstateService = interpret(this.xstate).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -395,7 +432,7 @@ class Maria {
             //   action.loop = THREE.LoopOnce
             // }
 
-            if (['punch', 'punch', 'fist', 'jumpAttack', 'strike', 'hit', 'impact', 'jump', 'dashAttack'].includes(name)) {
+            if (['punch', 'punchStart', 'fist', 'fistStart', 'jumpAttack', 'strike', 'strikeStart', 'strikeEnd', 'hit', 'impact', 'jump', 'dashAttack'].includes(name)) {
               action.loop = THREE.LoopOnce
               action.clampWhenFinished = true
             }

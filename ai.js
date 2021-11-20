@@ -1,7 +1,8 @@
 class Ai {
-  constructor(role, target) {
+  constructor(role, target, distance = 3) {
     this.role = role
     this.target = target
+    this.distance = distance
 
     updates.push(this)
 
@@ -18,7 +19,7 @@ class Ai {
     this.direction.y = this.target.body.position.z - this.role.body.position.z
     // console.log(this.direction)
 
-    if (this.direction.length() > 5) {
+    if (this.direction.length() > this.distance) {
       this.role.xstateService.send('run')
       this.facing.copy(this.direction)
     } else {
@@ -43,6 +44,9 @@ class Ai {
   }
   setTarget(target) {
     this.target = target
+  }
+  setDistance(distance) {
+    this.distance = distance
   }
 }
 

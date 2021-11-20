@@ -86,6 +86,7 @@ function init_xstate() {
           roleControls.setRole(maria)
           ai.setTarget(maria)
           ai.setRole(paladin)
+          ai.setDistance(4)
           domMaria.disabled = true
           domPaladin.disabled = false
         },
@@ -93,6 +94,7 @@ function init_xstate() {
           roleControls.setRole(paladin)
           ai.setTarget(paladin)
           ai.setRole(maria)
+          ai.setDistance(5)
           domPaladin.disabled = true
           domMaria.disabled = false
         },
@@ -160,7 +162,7 @@ function init() {
   // window.roleControls = new RoleControls(maria) ///todo: Use ECS?
   window.roleControls = new RoleControls(paladin)
 
-  window.ai = new Ai(maria, paladin)
+  window.ai = new Ai(maria, paladin, 5)
 
   xstateService.send('paladin')
 

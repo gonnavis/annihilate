@@ -2,15 +2,17 @@
 
 ### Play online
 
-https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html ( use mixamo mutant model )
+ [ Maria and Paladin ](https://raw.githack.com/gonnavis/annihilate/MariaAndPaladin/index.html)
 
-https://raw.githack.com/gonnavis/annihilate/PaladinModel/index.html ( use mixamo paladin model )
+ [ use mixamo Mutant model ](https://raw.githack.com/gonnavis/annihilate/MutantModel/index.html)
 
-https://raw.githack.com/gonnavis/annihilate/MariaModel/index.html ( use mixamo maria model )
+ [ use mixamo Paladin model ](https://raw.githack.com/gonnavis/annihilate/PaladinModel/index.html)
 
-https://raw.githack.com/gonnavis/annihilate/main/index.html ( use self rig-and-animated naive model )
+ [ use mixamo Maria model ](https://raw.githack.com/gonnavis/annihilate/MariaModel/index.html)
 
-Current actively developing at [branch: MutantModel](https://github.com/gonnavis/annihilate/tree/MutantModel) & [branch: PaladinModel](https://github.com/gonnavis/annihilate/tree/PaladinModel) & [branch: MariaModel](https://github.com/gonnavis/annihilate/tree/MariaModel).
+ [ use self rig-and-animated naive model ](https://raw.githack.com/gonnavis/annihilate/main/index.html)
+
+Current developing at separate branch, such as: [branch: MutantModel](https://github.com/gonnavis/annihilate/tree/MutantModel), [branch: MariaAndPaladin](https://github.com/gonnavis/annihilate/tree/MariaAndPaladin).
 
 ### Brief
 

@@ -10,7 +10,9 @@ class Maria {
     // this.speed = 0.15
     this.speed = 0.3
     this.attackSpeed = 1
-    this._vec0 = new THREE.Vector3()
+    this.tmpVec3 = new THREE.Vector3()
+    this.direction = vec2() // direction may be zero length.
+    this.facing = vec2(0, 1) // facing always not zero length.
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -227,7 +229,7 @@ class Maria {
             tags: ['canDamage'],
           },
           jumpDash: {
-            entry: 'entryJumpDash',
+            entry: 'playJumpDash',
             on: {
               land: { target: 'idle' },
             },
@@ -241,19 +243,22 @@ class Maria {
             this.oaction['dash'].timeScale = 2
             this.fadeToAction('dash')
 
-            // this.body.mass = 0
-            this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(60)
-            this.body.velocity.x = this._vec0.x
-            // this.body.velocity.y = 0
-            this.body.velocity.z = this._vec0.z
+            // change facing
+            this.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2
+            // move
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(60)
+            this.body.velocity.x = this.tmpVec3.x
+            this.body.velocity.z = this.tmpVec3.z
           },
-          entryJumpDash: () => {
+          playJumpDash: () => {
             this.fadeToAction('dash', 0)
-            // this.body.mass = 0
-            this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(30)
-            this.body.velocity.x = this._vec0.x
-            // this.body.velocity.y = 0
-            this.body.velocity.z = this._vec0.z
+
+            // change facing
+            this.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2
+            // move
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(30)
+            this.body.velocity.x = this.tmpVec3.x
+            this.body.velocity.z = this.tmpVec3.z
           },
           playIdle: () => {
             this.fadeToAction('idle')
@@ -274,9 +279,9 @@ class Maria {
             this.fadeToAction('dashAttack')
 
             // setTimeout(() => {
-            //   this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(70)
-            //   this.body.velocity.x = this._vec0.x
-            //   this.body.velocity.z = this._vec0.z
+            //   this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(70)
+            //   this.body.velocity.x = this.tmpVec3.x
+            //   this.body.velocity.z = this.tmpVec3.z
             // }, 100)
 
             // let to = { t: 0 }
@@ -314,10 +319,10 @@ class Maria {
             this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 4
             this.fadeToAction('jumpAttackStart')
 
-            // this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(10)
-            // this.body.velocity.x = this._vec0.x
+            // this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(10)
+            // this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 20
-            // this.body.velocity.z = this._vec0.z
+            // this.body.velocity.z = this.tmpVec3.z
           },
           playJumpAttack: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed * 4

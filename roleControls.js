@@ -7,8 +7,6 @@ class RoleControls {
 
     this.okey = {}
     this.actkey = ''
-    this.direction = vec2()
-    this.facing = vec2(0, 1)
 
     window.addEventListener('keydown', (e) => {
       // console.log(e.key,e.code,e.keyCode)
@@ -42,17 +40,17 @@ class RoleControls {
   update(dt) {
     // if (this.role.xstateService.state.matches('loading')) return
 
-    this.direction.set(0, 0)
-    if (this.okey.KeyW || this.okey.ArrowUp) this.direction.add(vec2(0, -1))
-    if (this.okey.KeyS || this.okey.ArrowDown) this.direction.add(vec2(0, 1))
-    if (this.okey.KeyA || this.okey.ArrowLeft) this.direction.add(vec2(-1, 0))
-    if (this.okey.KeyD || this.okey.ArrowRight) this.direction.add(vec2(1, 0))
-    this.direction.normalize().multiplyScalar(this.role.speed)
-    // console.log(this.direction)
+    this.role.direction.set(0, 0)
+    if (this.okey.KeyW || this.okey.ArrowUp) this.role.direction.add(vec2(0, -1))
+    if (this.okey.KeyS || this.okey.ArrowDown) this.role.direction.add(vec2(0, 1))
+    if (this.okey.KeyA || this.okey.ArrowLeft) this.role.direction.add(vec2(-1, 0))
+    if (this.okey.KeyD || this.okey.ArrowRight) this.role.direction.add(vec2(1, 0))
+    this.role.direction.normalize().multiplyScalar(this.role.speed)
+    // console.log(this.role.direction)
 
-    if (this.direction.length() > 0) {
+    if (this.role.direction.length() > 0) {
       this.role.xstateService.send('run')
-      this.facing.copy(this.direction)
+      this.role.facing.copy(this.role.direction)
     } else {
       // console.log('111111111111111')
       this.role.xstateService.send('stop')
@@ -60,13 +58,10 @@ class RoleControls {
 
     if (this.role.xstateService.state.hasTag('canMove')) {
       // change facing
-      this.role.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2 ///formal
-      // this.role.gltf.scene.rotation.y = -this.facing.angle()+Math.PI///test
-    }
-
-    if (this.role.xstateService.state.hasTag('canMove')) {
-      this.role.body.position.x += this.direction.x
-      this.role.body.position.z += this.direction.y
+      this.role.gltf.scene.rotation.y = -this.role.facing.angle() + Math.PI / 2
+      // move
+      this.role.body.position.x += this.role.direction.x
+      this.role.body.position.z += this.role.direction.y
     }
   }
   setRole(role) {

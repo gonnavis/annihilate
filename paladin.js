@@ -10,7 +10,9 @@ class Paladin {
     // this.speed = 0.15
     this.speed = 0.3
     this.attackSpeed = 1.6
-    this._vec0 = new THREE.Vector3()
+    this.tmpVec3 = new THREE.Vector3()
+    this.direction = vec2() // direction may be zero length.
+    this.facing = vec2(0, 1) // facing always not zero length.
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -164,7 +166,7 @@ class Paladin {
             },
           },
           dash: {
-            entry: 'entryDash',
+            entry: 'playDash',
             after: {
               300: { target: 'idle' },
             },
@@ -181,7 +183,7 @@ class Paladin {
             tags: ['canDamage'],
           },
           jumpDash: {
-            entry: 'entryJumpDash',
+            entry: 'playJumpDash',
             on: {
               land: { target: 'idle' },
             },
@@ -191,21 +193,26 @@ class Paladin {
       },
       {
         actions: {
-          entryDash: () => {
-            this.fadeToAction('dash', 0.2)
-            // this.body.mass = 0
-            this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(60)
-            this.body.velocity.x = this._vec0.x
-            // this.body.velocity.y = 0
-            this.body.velocity.z = this._vec0.z
+          playDash: () => {
+            this.oaction['dash'].timeScale = 2
+            this.fadeToAction('dash')
+
+            // change facing
+            this.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2
+            // move
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(60)
+            this.body.velocity.x = this.tmpVec3.x
+            this.body.velocity.z = this.tmpVec3.z
           },
-          entryJumpDash: () => {
-            this.fadeToAction('dash', 0.2)
-            // this.body.mass = 0
-            this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(30)
-            this.body.velocity.x = this._vec0.x
-            // this.body.velocity.y = 0
-            this.body.velocity.z = this._vec0.z
+          playJumpDash: () => {
+            this.fadeToAction('dash', 0)
+
+            // change facing
+            this.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2
+            // move
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(30)
+            this.body.velocity.x = this.tmpVec3.x
+            this.body.velocity.z = this.tmpVec3.z
           },
           playIdle: () => {
             this.fadeToAction('idle', 0.2)
@@ -238,13 +245,13 @@ class Paladin {
           playStrike: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0.2)
-            this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(50)
-            // console.log(this._vec0)
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(50)
+            // console.log(this.tmpVec3)
 
             // setTimeout(() => {
-            //   this.body.velocity.x = this._vec0.x
+            //   this.body.velocity.x = this.tmpVec3.x
             //   // this.body.velocity.y = 30
-            //   this.body.velocity.z = this._vec0.z
+            //   this.body.velocity.z = this.tmpVec3.z
             //   // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             //   // this.body.velocity.y -= downVelocity
             //   this.body.velocity.y = -this.body.position.y * 5
@@ -253,11 +260,11 @@ class Paladin {
           playJumpAttack: (context, event, o) => {
             this.oaction['jumpattack'].timeScale = this.attackSpeed
             this.fadeToAction('jumpattack', 0.2)
-            this._vec0.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
-            console.log(this._vec0)
-            this.body.velocity.x = this._vec0.x
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
+            // console.log(this.tmpVec3)
+            this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 20
-            this.body.velocity.z = this._vec0.z
+            this.body.velocity.z = this.tmpVec3.z
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             setTimeout(() => {
               // this.body.velocity.y -= downVelocity

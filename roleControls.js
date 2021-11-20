@@ -17,15 +17,15 @@ class RoleControls {
       switch (e.code) {
         case 'KeyJ':
         case 'Numpad4':
-          this.role.xstateService.send('attack')
+          this.role.service.send('attack')
           break
         case 'KeyK':
         case 'Numpad5':
-          this.role.xstateService.send('jump')
+          this.role.service.send('jump')
           break
         case 'KeyI':
         case 'Numpad8':
-          this.role.xstateService.send('dash')
+          this.role.service.send('dash')
           break
       }
       this.actkey = e.code
@@ -38,7 +38,7 @@ class RoleControls {
   }
 
   update(dt) {
-    // if (this.role.xstateService.state.matches('loading')) return
+    // if (this.role.service.state.matches('loading')) return
 
     this.role.direction.set(0, 0)
     if (this.okey.KeyW || this.okey.ArrowUp) this.role.direction.add(vec2(0, -1))
@@ -49,14 +49,14 @@ class RoleControls {
     // console.log(this.role.direction)
 
     if (this.role.direction.length() > 0) {
-      this.role.xstateService.send('run')
+      this.role.service.send('run')
       this.role.facing.copy(this.role.direction)
     } else {
       // console.log('111111111111111')
-      this.role.xstateService.send('stop')
+      this.role.service.send('stop')
     }
 
-    if (this.role.xstateService.state.hasTag('canMove')) {
+    if (this.role.service.state.hasTag('canMove')) {
       // change facing
       this.role.gltf.scene.rotation.y = -this.role.facing.angle() + Math.PI / 2
       // move

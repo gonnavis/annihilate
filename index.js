@@ -44,8 +44,8 @@ window.face = null
 window.updates = []
 window.attackers = []
 
-let xstate
-window.xstateService = null
+let fsm
+window.service = null
 
 init_xstate()
 init_three()
@@ -57,7 +57,7 @@ init()
 requestAnimationFrame(animate)
 
 function init_xstate() {
-  xstate = createMachine(
+  fsm = createMachine(
     {
       id: 'index',
       initial: 'initial',
@@ -109,8 +109,8 @@ function init_xstate() {
     }
   )
 
-  window.xstateService = interpret(xstate)
-  window.xstateService.start()
+  window.service = interpret(fsm)
+  window.service.start()
 }
 
 function init() {
@@ -167,24 +167,24 @@ function init() {
   shield.owner = paladin
 
   domMaria.addEventListener('click', (e) => {
-    window.xstateService.send('maria')
+    window.service.send('maria')
   })
   domPaladin.addEventListener('click', (e) => {
-    window.xstateService.send('paladin')
+    window.service.send('paladin')
   })
 
   window.addEventListener('keydown', (e) => {
     switch (e.code) {
       case 'Digit1':
-        window.xstateService.send('maria')
+        window.service.send('maria')
         break
       case 'Digit2':
-        window.xstateService.send('paladin')
+        window.service.send('paladin')
         break
     }
   })
 
-  window.xstateService.send('maria')
+  window.service.send('maria')
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 
@@ -337,7 +337,7 @@ function animate(time) {
     entity.update(dt, time)
   })
 
-  if (window.xstateService.state.matches('initial')) return
+  if (window.service.state.matches('initial')) return
 
   if (window.camera && window.role.gltf) {
     camera.position.set(role.gltf.scene.position.x, role.gltf.scene.position.y + 30, role.gltf.scene.position.z + 30)

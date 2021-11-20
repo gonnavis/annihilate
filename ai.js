@@ -13,28 +13,28 @@ class Ai {
   }
 
   update(dt) {
-    // if (this.role.xstateService.state.matches('loading')) return
+    // if (this.role.service.state.matches('loading')) return
 
     this.direction.x = this.target.body.position.x - this.role.body.position.x
     this.direction.y = this.target.body.position.z - this.role.body.position.z
     // console.log(this.direction)
 
     if (this.direction.length() > this.distance) {
-      this.role.xstateService.send('run')
+      this.role.service.send('run')
       this.facing.copy(this.direction)
     } else {
-      // this.role.xstateService.send('stop')
-      this.role.xstateService.send('attack')
+      // this.role.service.send('stop')
+      this.role.service.send('attack')
     }
 
-    if (this.role.xstateService.state.hasTag('canMove')) {
+    if (this.role.service.state.hasTag('canMove')) {
       // change facing
       this.role.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2 ///formal
       // this.role.gltf.scene.rotation.y = -this.facing.angle()+Math.PI///test
     }
 
     this.direction.normalize().multiplyScalar(this.role.speed)
-    if (this.role.xstateService.state.hasTag('canMove')) {
+    if (this.role.service.state.hasTag('canMove')) {
       this.role.body.position.x += this.direction.x
       this.role.body.position.z += this.direction.y
     }

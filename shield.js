@@ -15,7 +15,7 @@ class Shield {
     world.addBody(this.body)
 
     // this.body.addEventListener('collide', (e) => {
-    //   if (['attack', 'fist', 'strike', 'jumpAttack', 'dashAttack'].some(paladin.xstateService.state.matches)) {
+    //   if (['attack', 'fist', 'strike', 'jumpAttack', 'dashAttack'].some(paladin.service.state.matches)) {
     //     window.enemys.forEach((enemy) => {
     //       if (e.body === enemy.body) {
     //         enemy.hit() // todo: refactor: do not check paladin's state at here.

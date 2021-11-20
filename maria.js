@@ -41,7 +41,7 @@ class Maria {
 
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
-    this.xstate = createMachine(
+    this.fsm = createMachine(
       {
         id: 'maria',
         context: {
@@ -352,19 +352,19 @@ class Maria {
     )
 
     // this.currentState
-    this.xstateService = interpret(this.xstate).onTransition((state) => {
+    this.service = interpret(this.fsm).onTransition((state) => {
       if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
-      ///currentState === this.xstateService.state.value
+      ///currentState === this.service.state.value
     })
 
     // Start the service
-    this.xstateService.start()
+    this.service.start()
     // => 'pending'
 
-    // this.xstateService.send( 'idle' )
+    // this.service.send( 'idle' )
     // => 'resolved'
 
     this.body_size = 1.6
@@ -390,13 +390,13 @@ class Maria {
       if (event.body !== window.greatSword.body) {
         ///todo: Is cannon.js has collision mask?
         // todo: refactor: window.ground
-        this.xstateService.send('land')
+        this.service.send('land')
       }
     })
   }
 
   update(dt) {
-    if (this.xstateService.state.matches('loading')) return
+    if (this.service.state.matches('loading')) return
 
     this.gltf.scene.position.set(this.body.position.x, this.body.position.y - this.body_size, this.body.position.z)
     // this.shadow.position.x = this.body.position.x
@@ -409,9 +409,9 @@ class Maria {
     // this.health-=50
     // console.log(this.health)
     // if(this.health<=0){
-    //   this.xstateService.send('dead')
+    //   this.service.send('dead')
     // }else{
-    this.xstateService.send('hit')
+    this.service.send('hit')
     // }
   }
 
@@ -465,9 +465,9 @@ class Maria {
           this.action_act = this.oaction.idle
           this.action_act.play()
           this.mixer.addEventListener('finished', (e) => {
-            this.xstateService.send('finish')
+            this.service.send('finish')
           })
-          this.xstateService.send('loaded')
+          this.service.send('loaded')
           resolve()
 
           callback()

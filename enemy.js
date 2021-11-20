@@ -33,7 +33,7 @@ class Enemy {
 
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
-    s.xstate = createMachine(
+    s.fsm = createMachine(
       {
         id: 'enemy',
         context: {
@@ -122,18 +122,18 @@ class Enemy {
     )
 
     // s.currentState
-    s.xstateService = interpret(s.xstate).onTransition((state) => {
+    s.service = interpret(s.fsm).onTransition((state) => {
       // if (state.changed) console.log('enemy: state:', state.value)
       // if (state.changed) console.log(state.value,state)
       // s.currentState = state.value
-      ///currentState === s.xstateService.state.value
+      ///currentState === s.service.state.value
     })
 
     // Start the service
-    s.xstateService.start()
+    s.service.start()
     // => 'pending'
 
-    // s.xstateService.send( 'idle' )
+    // s.service.send( 'idle' )
     // => 'resolved'
 
     let body_size = 1.6
@@ -150,14 +150,14 @@ class Enemy {
     world.addBody(s.body)
 
     updates.push(function (dt) {
-      if (s.xstateService.state.value === 'loading') return
+      if (s.service.state.value === 'loading') return
       s.mixer.update(dt)
       s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
       // s.shadow.position.x = s.body.position.x
       // s.shadow.position.z = s.body.position.z
 
       if (!role.gltf) return
-      if (s.xstateService.state.value !== 'dead') {
+      if (s.service.state.value !== 'dead') {
         {
           // look at role
           let vec2_diff = vec2(role.gltf.scene.position.x - s.gltf.scene.position.x, role.gltf.scene.position.z - s.gltf.scene.position.z)
@@ -169,14 +169,14 @@ class Enemy {
     })
 
     setInterval(() => {
-      s.xstateService.send('attack')
+      s.service.send('attack')
     }, 3000)
   }
 
   hit() {
     // console.log('hit function')
     let s = this
-    s.xstateService.send('hit')
+    s.service.send('hit')
   }
 
   load() {
@@ -218,9 +218,9 @@ class Enemy {
           s.action_act.play()
           s.mixer.addEventListener('finished', (e) => {
             // console.log('finished')
-            s.xstateService.send('idle')
+            s.service.send('idle')
           })
-          s.xstateService.send('loaded')
+          s.service.send('loaded')
           resolve()
         },
         undefined,

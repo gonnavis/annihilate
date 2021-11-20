@@ -18,7 +18,7 @@ class Sword {
 
     this.body.addEventListener('collide', (e) => {
       if (e.body.belongTo?.isCharacter === true && e.body.belongTo !== this.owner) {
-        if (this.owner.xstateService.state.hasTag('canDamage')) {
+        if (this.owner.service.state.hasTag('canDamage')) {
           e.body.belongTo.hit()
         }
       }

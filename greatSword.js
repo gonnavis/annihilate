@@ -20,7 +20,7 @@ class GreatSword {
       // console.log('greatSword collide', e.body.belongTo)
       if (e.body.belongTo?.isCharacter === true && e.body.belongTo !== this.owner) {
         // console.log(1111111111)
-        if (this.owner.xstateService.state.hasTag('canDamage')) {
+        if (this.owner.service.state.hasTag('canDamage')) {
           e.body.belongTo.hit()
         }
       }

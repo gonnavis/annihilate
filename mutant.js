@@ -205,7 +205,6 @@ class Mutant {
         actions: {
           entryDash: () => {
             this.fadeToAction('dash', 0.2)
-            // this.body.mass = 0
             this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(60)
             this.body.velocity.x = this.tmpVec3.x
             // this.body.velocity.y = 0
@@ -213,7 +212,6 @@ class Mutant {
           },
           entryJumpDash: () => {
             this.fadeToAction('dash', 0.2)
-            // this.body.mass = 0
             this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(30)
             this.body.velocity.x = this.tmpVec3.x
             // this.body.velocity.y = 0
@@ -306,20 +304,28 @@ class Mutant {
     // this.service.send( 'idle' )
     // => 'resolved'
 
-    this.body_size = 1.8
     let physicsMaterial = new CANNON.Material({
       friction: 0,
     })
     this.body = new CANNON.Body({
-      mass: 1,
+      mass: 100,
       // material: physicsMaterial,
     })
     this.body.belongTo = this
-    let shape = new CANNON.Sphere(this.body_size)
-    // let shape = new CANNON.Cylinder(this.body_size, this.body_size, 3, 8)
-    this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
+
+    this.bodyRadius = 1.5
+    this.bodyHeight = 4.3
+    // this.bodyHeight = 10
+    this.bodyCylinderHeight = this.bodyHeight - this.bodyRadius * 2
+    let sphereShapeUp = new CANNON.Sphere(this.bodyRadius)
+    let sphereShapeDown = new CANNON.Sphere(this.bodyRadius)
+    let cylinderShape = new CANNON.Cylinder(this.bodyRadius, this.bodyRadius, this.bodyCylinderHeight, 8)
+    // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     this.body.angularDamping = 1
-    this.body.addShape(shape)
+    this.body.addShape(sphereShapeUp, new CANNON.Vec3(0, this.bodyCylinderHeight / 2, 0))
+    this.body.addShape(sphereShapeDown, new CANNON.Vec3(0, -this.bodyCylinderHeight / 2, 0))
+    this.body.addShape(cylinderShape)
+
     this.body.position.set(x, y, z) ///formal
     // this.body.position.set(10.135119435295582, -0.000010295802922222208, -14.125613840025014)///test
     world.addBody(this.body)
@@ -337,7 +343,7 @@ class Mutant {
   update(dt) {
     if (this.service.state.matches('loading')) return
 
-    this.gltf.scene.position.set(this.body.position.x, this.body.position.y - this.body_size, this.body.position.z)
+    this.gltf.scene.position.set(this.body.position.x, this.body.position.y - this.bodyHeight / 2, this.body.position.z)
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
     this.mixer.update(dt)

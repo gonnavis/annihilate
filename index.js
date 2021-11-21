@@ -152,9 +152,9 @@ function init() {
   floatingBox5.timeBias = 8
 
   // window.maria = new Maria(0, 5, -15)
-  window.maria = new Maria(0, 5, 0)
+  window.maria = new Maria(-5, 5, 0)
   maria.load(() => {
-    maria.gltf.scene.rotation.set(0, Math.PI / 2, 0)
+    maria.gltf.scene.rotation.set(0, Math.PI, 0)
   })
   window.greatSword = new GreatSword()
   greatSword.owner = maria
@@ -162,14 +162,14 @@ function init() {
   window.paladin = new Paladin(5, 5, 0)
   // window.paladin = new Paladin(0, 5, 0)
   paladin.load(() => {
-    paladin.gltf.scene.rotation.set(0, -Math.PI / 2, 0)
+    paladin.gltf.scene.rotation.set(0, Math.PI, 0)
   })
   window.sword = new Sword()
   sword.owner = paladin
   window.shield = new Shield()
   shield.owner = paladin
 
-  window.mutant = new Mutant(15, 5, -15)
+  window.mutant = new Mutant(0, 5, -20)
   window.handKnife = new HandKnife()
   handKnife.owner = mutant
   mutant.load()

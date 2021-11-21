@@ -8,7 +8,7 @@ class Mutant {
     this.oaction = {}
     this.mixer
     // this.speed = 0.15
-    this.speed = 0.3
+    this.speed = 0.1
     this.attackSpeed = 0.5
     this.tmpVec3 = new THREE.Vector3()
     this.direction = vec2() // direction may be zero length.
@@ -373,6 +373,11 @@ class Mutant {
         (gltf) => {
           console.log(gltf.animations)
           this.gltf = gltf
+
+          this.rightEquipDelegate = new THREE.Object3D()
+          this.rightEquipDelegate.rotation.x = 1.3
+          this.rightEquipBone = this.gltf.scene.getObjectByName('KnifeTip')
+          this.rightEquipBone.add(this.rightEquipDelegate)
 
           this.gltf.scene.traverse((child) => {
             child.castShadow = true

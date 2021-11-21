@@ -18,6 +18,7 @@ import { Shield } from './shield.js'
 import { Enemy } from './enemy.js'
 import { RoleControls } from './roleControls.js'
 import { Ai } from './ai.js'
+import { HandKnife } from './handKnife.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -169,6 +170,8 @@ function init() {
   shield.owner = paladin
 
   window.mutant = new Mutant(15, 5, -15)
+  window.handKnife = new HandKnife()
+  handKnife.owner = mutant
   mutant.load()
 
   window.ai = new Ai(mutant, paladin, 4)

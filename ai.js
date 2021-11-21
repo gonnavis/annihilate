@@ -17,7 +17,10 @@ class Ai {
   }
 
   update(dt) {
-    if (!this.enabled) return
+    if (!this.enabled) {
+      this.role.service.send('stop')
+      return
+    }
 
     // if (this.role.service.state.matches('loading')) return
 

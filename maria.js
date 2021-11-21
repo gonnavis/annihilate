@@ -9,7 +9,8 @@ class Maria {
     this.mixer
     // this.speed = 0.15
     this.speed = 0.3
-    this.attackSpeed = 1.2
+    // this.attackSpeed = 1.2
+    this.attackSpeed = 1.4
     this.tmpVec3 = new THREE.Vector3()
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.

@@ -21,7 +21,11 @@ class GreatSword {
       if (e.body.belongTo?.isCharacter === true && e.body.belongTo !== this.owner) {
         // console.log(1111111111)
         if (this.owner.service.state.hasTag('canDamage')) {
-          e.body.belongTo.hit()
+          if (this.owner.service.state.matches('strike')) {
+            e.body.belongTo.knockDown()
+          } else {
+            e.body.belongTo.hit()
+          }
         }
       }
     })

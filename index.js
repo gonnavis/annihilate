@@ -89,7 +89,10 @@ function init_xstate() {
         entryMaria: () => {
           console.log(111)
           if (!window.roleControls) window.roleControls = new RoleControls(maria) ///todo: Use ECS?
-          if (!window.ai) window.ai = new Ai(paladin, maria, 5)
+          if (!window.ai) {
+            window.ai = new Ai(paladin, maria, 5)
+            ai.enabled = false
+          }
 
           roleControls.setRole(maria)
           ai.setTarget(maria)
@@ -100,7 +103,10 @@ function init_xstate() {
         },
         entryPaladin: () => {
           if (!window.roleControls) window.roleControls = new RoleControls(paladin) ///todo: Use ECS?
-          if (!window.ai) window.ai = new Ai(maria, paladin, 4)
+          if (!window.ai) {
+            window.ai = new Ai(maria, paladin, 4)
+            ai.enabled = false
+          }
 
           roleControls.setRole(paladin)
           ai.setTarget(paladin)

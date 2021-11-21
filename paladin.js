@@ -61,6 +61,7 @@ class Paladin {
               attack: { target: 'attack' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
               blocked: { target: 'blocked' },
             },
@@ -72,6 +73,7 @@ class Paladin {
               attack: { target: 'attack' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
               // blocked: { target: 'blocked' }, // Note: Can block when running or in other states? No, more by intended operation, less by luck.
             },
@@ -82,6 +84,7 @@ class Paladin {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               attack: { target: 'prepareFist' },
               dash: { target: 'dash' },
             },
@@ -91,6 +94,7 @@ class Paladin {
             on: {
               finish: { target: 'fist' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
@@ -100,6 +104,7 @@ class Paladin {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
               attack: { target: 'prepareStrike' },
             },
@@ -109,6 +114,7 @@ class Paladin {
             on: {
               finish: { target: 'strike' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
@@ -119,6 +125,7 @@ class Paladin {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
@@ -128,6 +135,7 @@ class Paladin {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
             },
             tags: ['canDamage'],
           },
@@ -138,6 +146,7 @@ class Paladin {
               attack: { target: 'jumpAttack' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'jumpDash' },
             },
             tags: ['canMove'],
@@ -148,6 +157,7 @@ class Paladin {
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'jumpDash' },
             },
             tags: ['canMove'],
@@ -156,6 +166,13 @@ class Paladin {
             entry: ['playHit'],
             on: {
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
+              finish: { target: 'idle' },
+            },
+          },
+          knockDown: {
+            entry: ['playKnockDown'],
+            on: {
               finish: { target: 'idle' },
             },
           },
@@ -179,6 +196,7 @@ class Paladin {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
             },
             tags: ['canDamage'],
           },
@@ -258,8 +276,8 @@ class Paladin {
             // }, 500)
           },
           playJumpAttack: (context, event, o) => {
-            this.oaction['jumpattack'].timeScale = this.attackSpeed
-            this.fadeToAction('jumpattack', 0.2)
+            this.oaction['jumpAttack'].timeScale = this.attackSpeed
+            this.fadeToAction('jumpAttack', 0.2)
             this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
             // console.log(this.tmpVec3)
             this.body.velocity.x = this.tmpVec3.x
@@ -278,8 +296,12 @@ class Paladin {
             this.fadeToAction('jump', 0.2)
           },
           playHit: () => {
-            this.oaction['hit'].timeScale = 3
+            this.oaction['hit'].timeScale = 1.7
             this.fadeToAction('hit', 0.2)
+          },
+          playKnockDown: () => {
+            this.oaction['knockDown'].timeScale = 2
+            this.fadeToAction('knockDown', 0.2)
           },
           playBlocked: () => {
             this.fadeToAction('impact', 0.2)
@@ -352,6 +374,10 @@ class Paladin {
     // }
   }
 
+  knockDown() {
+    this.service.send('knockDown')
+  }
+
   load(callback) {
     return new Promise((resolve, reject) => {
       var loader = new THREE.GLTFLoader()
@@ -388,24 +414,32 @@ class Paladin {
           // this.gltf.scene.position.set(x,y,z)
           this.mixer = new THREE.AnimationMixer(this.gltf.scene)
           this.gltf.animations.forEach((animation) => {
-            let name = animation.name.toLowerCase()
+            // let name = animation.name.toLowerCase()
+            let name = animation.name
             let action = this.mixer.clipAction(animation)
             this.oaction[name] = action
 
-            // if (['jump', 'punch', 'fist', 'jumpattack', 'dodge', 'hit'].includes(name)) {
+            // if (['jump', 'punch', 'fist', 'jumpAttack', 'dodge', 'hit'].includes(name)) {
             // if ([].includes(name)) {
             //   action.loop = THREE.LoopOnce
             // }
 
-            if (['punch', 'punch', 'fist', 'jumpattack', 'strike', 'hit', 'impact', 'jump'].includes(name)) {
+            if (['punch', 'punch', 'fist', 'jumpAttack', 'strike', 'hit', 'knockDown', 'impact', 'jump'].includes(name)) {
               action.loop = THREE.LoopOnce
               action.clampWhenFinished = true
             }
           })
           this.action_act = this.oaction.idle
           this.action_act.play()
-          this.mixer.addEventListener('finished', (e) => {
-            this.service.send('finish')
+          this.mixer.addEventListener('finished', (event) => {
+            // console.log('finish e: ', e)
+            if (event.action === this.oaction.knockDown) {
+              setTimeout(() => {
+                this.service.send('finish')
+              }, 300)
+            } else {
+              this.service.send('finish')
+            }
           })
           this.service.send('loaded')
           resolve()
@@ -421,7 +455,7 @@ class Paladin {
     })
   }
 
-  fadeToAction(name, duration) {
+  fadeToAction(name, duration = 0.1) {
     // previousAction = this.action_act;
     // activeAction = this.oaction[ name ];
     // if ( previousAction !== activeAction ) {
@@ -445,7 +479,11 @@ class Paladin {
       // nextAction.setEffectiveTimeScale(1)
       // nextAction.setEffectiveWeight(1)
       // nextAction.time = 0
-      this.action_act.crossFadeTo(nextAction, 0.1)
+      if (this.action_act === this.oaction.knockDown && nextAction === this.oaction.idle) {
+        this.action_act.crossFadeTo(nextAction, 0.2)
+      } else {
+        this.action_act.crossFadeTo(nextAction, duration)
+      }
       // Note: If action_act loopOnce, need crossFade before finished. Or clampWhenFinished.
       this.action_act = nextAction
     } else {

@@ -12,7 +12,7 @@
 
  [ use self rig-and-animated naive model ](https://raw.githack.com/gonnavis/annihilate/main/index.html)
 
-Current developing at separate branch, such as: [branch: MutantModel](https://github.com/gonnavis/annihilate/tree/MutantModel), [branch: MariaAndPaladin](https://github.com/gonnavis/annihilate/tree/MariaAndPaladin).
+Current developing at separate branch, such as: [branch: dev](https://github.com/gonnavis/annihilate/tree/dev), [branch: MutantModel](https://github.com/gonnavis/annihilate/tree/MutantModel), [branch: MariaAndPaladin](https://github.com/gonnavis/annihilate/tree/MariaAndPaladin).
 
 ### Brief
 

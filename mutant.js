@@ -58,7 +58,7 @@ class Mutant {
             entry: 'playIdle',
             on: {
               run: { target: 'run' },
-              attack: { target: 'attack' },
+              attack: { target: 'attackStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
@@ -69,13 +69,22 @@ class Mutant {
             entry: 'playRun',
             on: {
               stop: { target: 'idle' },
-              attack: { target: 'attack' },
+              attack: { target: 'attackStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             tags: ['canMove'],
+          },
+          attackStart: {
+            entry: 'playAttackStart',
+            on: {
+              finish: { target: 'attack' },
+              hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
+              dash: { target: 'dash' },
+            },
           },
           attack: {
             entry: 'playAttack',
@@ -88,6 +97,14 @@ class Mutant {
             },
             tags: ['canDamage'],
           },
+          // attackEnd: { // todo:
+          //   entry: 'playAttackEnd',
+          //   on: {
+          //     finish: { target: 'attack' },
+          //     hit: { target: 'hit' },
+          //     dash: { target: 'dash' },
+          //   },
+          // },
           prepareFist: {
             on: {
               finish: { target: 'fist' },
@@ -110,38 +127,72 @@ class Mutant {
           },
           prepareStrike: {
             on: {
+              finish: { target: 'strikeStart' },
+              hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
+              dash: { target: 'dash' },
+            },
+            tags: ['canDamage'],
+          },
+          strikeStart: {
+            entry: 'playStrikeStart',
+            on: {
               finish: { target: 'strike' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
-            tags: ['canDamage'],
           },
           strike: {
             // top down strike
             entry: 'playStrike',
             on: {
-              finish: { target: 'idle' },
+              finish: { target: 'strikeEnd' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
           },
+          strikeEnd: {
+            entry: 'playStrikeEnd',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
+              dash: { target: 'dash' },
+            },
+          },
+          jumpAttackStart: {
+            entry: ['playJumpAttackStart'],
+            on: {
+              finish: { target: 'jumpAttack' },
+              hit: { target: 'hit' },
+              // dash: { target: 'dash' },
+            },
+          },
           jumpAttack: {
             entry: ['playJumpAttack'],
             on: {
-              finish: { target: 'idle' },
+              finish: { target: 'jumpAttackEnd' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
             },
             tags: ['canDamage'],
           },
+          jumpAttackEnd: {
+            entry: ['playJumpAttackEnd'],
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              // // dash: { target: 'dash' },
+            },
+          },
           jump: {
             entry: ['playJump', 'jump'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
+              attack: { target: 'jumpAttackStart' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
@@ -153,7 +204,7 @@ class Mutant {
             entry: ['playJump', 'jump'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
+              attack: { target: 'jumpAttackStart' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
               dash: { target: 'jumpDash' },
@@ -223,6 +274,10 @@ class Mutant {
           playRun: () => {
             this.fadeToAction('running', 0.2)
           },
+          playAttackStart: () => {
+            this.oaction['punchStart'].timeScale = this.attackSpeed
+            this.fadeToAction('punchStart')
+          },
           playAttack: () => {
             this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0.2)
@@ -244,6 +299,10 @@ class Mutant {
             this.oaction['fist'].timeScale = this.attackSpeed
             this.fadeToAction('fist', 0.2)
           },
+          playStrikeStart: () => {
+            this.oaction['jumpAttackStart'].timeScale = this.attackSpeed
+            this.fadeToAction('jumpAttackStart')
+          },
           playStrike: () => {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed
             this.fadeToAction('jumpAttack', 0.2)
@@ -258,18 +317,30 @@ class Mutant {
             //   this.body.velocity.y = -this.body.position.y * 5
             // }, 200)
           },
-          playJumpAttack: (context, event, o) => {
-            this.fadeToAction('jumpAttack', 0.2)
+          playStrikeEnd: () => {
+            this.oaction['jumpAttackEnd'].timeScale = this.attackSpeed
+            this.fadeToAction('jumpAttackEnd', 0)
+          },
+          playJumpAttackStart: (context, event, o) => {
+            this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 4
+            this.fadeToAction('jumpAttackStart')
+
             this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
             console.log(this.tmpVec3)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 20
             this.body.velocity.z = this.tmpVec3.z
+          },
+          playJumpAttack: (context, event, o) => {
+            this.fadeToAction('jumpAttack', 0.2)
+
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
-            setTimeout(() => {
-              // this.body.velocity.y -= downVelocity
-              this.body.velocity.y = -this.body.position.y * 5
-            }, 200)
+            // this.body.velocity.y -= downVelocity
+            this.body.velocity.y = -this.body.position.y * 5
+          },
+          playJumpAttackEnd: (context, event, o) => {
+            this.oaction['jumpAttackEnd'].timeScale = this.attackSpeed * 4
+            this.fadeToAction('jumpAttackEnd')
           },
           jump: () => {
             this.body.velocity.y = 20
@@ -403,7 +474,7 @@ class Mutant {
             // if ([].includes(name)) {
             //   action.loop = THREE.LoopOnce
             // }
-            if (['jump', 'punch', 'fist', 'jumpAttack', 'dash', 'hit', 'knockDown'].includes(name)) {
+            if (['jump', 'punch', 'punchStart', 'fist', 'jumpAttack', 'jumpAttackStart', 'jumpAttackEnd', 'dash', 'hit', 'knockDown'].includes(name)) {
               action.loop = THREE.LoopOnce
               action.clampWhenFinished = true
             }

@@ -9,7 +9,7 @@ class Mutant {
     this.mixer
     // this.speed = 0.15
     this.speed = 0.3
-    this.attackSpeed = 1.6
+    this.attackSpeed = 0.5
     this.tmpVec3 = new THREE.Vector3()
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.
@@ -61,6 +61,7 @@ class Mutant {
               attack: { target: 'attack' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
           },
@@ -71,6 +72,7 @@ class Mutant {
               attack: { target: 'attack' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             tags: ['canMove'],
@@ -80,6 +82,7 @@ class Mutant {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               attack: { target: 'prepareFist' },
               dash: { target: 'dash' },
             },
@@ -89,6 +92,7 @@ class Mutant {
             on: {
               finish: { target: 'fist' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
@@ -98,6 +102,7 @@ class Mutant {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
               attack: { target: 'prepareStrike' },
             },
@@ -107,6 +112,7 @@ class Mutant {
             on: {
               finish: { target: 'strike' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
@@ -117,6 +123,7 @@ class Mutant {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
@@ -126,6 +133,7 @@ class Mutant {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
             },
             tags: ['canDamage'],
           },
@@ -136,6 +144,7 @@ class Mutant {
               attack: { target: 'jumpAttack' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'jumpDash' },
             },
             tags: ['canMove'],
@@ -146,6 +155,7 @@ class Mutant {
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
               dash: { target: 'jumpDash' },
             },
             tags: ['canMove'],
@@ -154,6 +164,13 @@ class Mutant {
             entry: ['playHit'],
             on: {
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
+              finish: { target: 'idle' },
+            },
+          },
+          knockDown: {
+            entry: ['playKnockDown'],
+            on: {
               finish: { target: 'idle' },
             },
           },
@@ -171,6 +188,7 @@ class Mutant {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
             },
             tags: ['canDamage'],
           },
@@ -208,6 +226,7 @@ class Mutant {
             this.fadeToAction('running', 0.2)
           },
           playAttack: () => {
+            this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0.2)
           },
           playDashAttack: () => {
@@ -224,23 +243,25 @@ class Mutant {
             })
           },
           playFist: () => {
+            this.oaction['fist'].timeScale = this.attackSpeed
             this.fadeToAction('fist', 0.2)
           },
           playStrike: () => {
-            this.fadeToAction('jumpattack', 0.2)
-            this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
-            console.log(this.tmpVec3)
-            this.body.velocity.x = this.tmpVec3.x
-            this.body.velocity.y = 30
-            this.body.velocity.z = this.tmpVec3.z
+            this.oaction['jumpAttack'].timeScale = this.attackSpeed
+            this.fadeToAction('jumpAttack', 0.2)
+            // this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
+            // console.log(this.tmpVec3)
+            // this.body.velocity.x = this.tmpVec3.x
+            // this.body.velocity.y = 30
+            // this.body.velocity.z = this.tmpVec3.z
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
-            setTimeout(() => {
-              // this.body.velocity.y -= downVelocity
-              this.body.velocity.y = -this.body.position.y * 5
-            }, 200)
+            // setTimeout(() => {
+            //   // this.body.velocity.y -= downVelocity
+            //   this.body.velocity.y = -this.body.position.y * 5
+            // }, 200)
           },
           playJumpAttack: (context, event, o) => {
-            this.fadeToAction('jumpattack', 0.2)
+            this.fadeToAction('jumpAttack', 0.2)
             this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
             console.log(this.tmpVec3)
             this.body.velocity.x = this.tmpVec3.x
@@ -260,6 +281,10 @@ class Mutant {
           },
           playHit: () => {
             this.fadeToAction('hit', 0.2)
+          },
+          playKnockDown: () => {
+            // this.oaction['knockDown'].timeScale = 2
+            this.fadeToAction('knockDown', 0.2)
           },
         },
       }
@@ -281,7 +306,7 @@ class Mutant {
     // this.service.send( 'idle' )
     // => 'resolved'
 
-    this.body_size = 1.6
+    this.body_size = 1.8
     let physicsMaterial = new CANNON.Material({
       friction: 0,
     })
@@ -329,6 +354,10 @@ class Mutant {
     // }
   }
 
+  knockDown() {
+    this.service.send('knockDown')
+  }
+
   load(callback) {
     return new Promise((resolve, reject) => {
       var loader = new THREE.GLTFLoader()
@@ -356,13 +385,14 @@ class Mutant {
           // this.gltf.scene.position.set(x,y,z)
           this.mixer = new THREE.AnimationMixer(this.gltf.scene)
           this.gltf.animations.forEach((animation) => {
-            let name = animation.name.toLowerCase()
+            // let name = animation.name.toLowerCase()
+            let name = animation.name
             let action = this.mixer.clipAction(animation)
             this.oaction[name] = action
-            if (['jump', 'punch', 'fist', 'jumpattack', 'dodge', 'hit'].includes(name)) {
-              action.loop = THREE.LoopOnce
-            }
-            if ([].includes(name)) {
+            // if ([].includes(name)) {
+            //   action.loop = THREE.LoopOnce
+            // }
+            if (['jump', 'punch', 'fist', 'jumpAttack', 'dash', 'hit', 'knockDown'].includes(name)) {
               action.loop = THREE.LoopOnce
               action.clampWhenFinished = true
             }

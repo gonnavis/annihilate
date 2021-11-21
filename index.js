@@ -93,13 +93,7 @@ function init_xstate() {
           if (!window.roleControls) window.roleControls = new RoleControls(maria) ///todo: Use ECS?
           roleControls.setRole(maria)
 
-          // if (!window.ai) {
-          //   window.ai = new Ai(paladin, maria, 5)
-          //   ai.enabled = false
-          // }
-          // ai.setTarget(maria)
-          // ai.setRole(paladin)
-          // ai.setDistance(4)
+          ai.setTarget(maria)
 
           domMaria.disabled = true
           domPaladin.disabled = false
@@ -108,13 +102,7 @@ function init_xstate() {
           if (!window.roleControls) window.roleControls = new RoleControls(paladin) ///todo: Use ECS?
           roleControls.setRole(paladin)
 
-          // if (!window.ai) {
-          //   window.ai = new Ai(maria, paladin, 4)
-          //   ai.enabled = false
-          // }
-          // ai.setTarget(paladin)
-          // ai.setRole(maria)
-          // ai.setDistance(5)
+          ai.setTarget(paladin)
 
           domPaladin.disabled = true
           domMaria.disabled = false
@@ -184,7 +172,7 @@ function init() {
   mutant.load()
 
   window.ai = new Ai(mutant, paladin, 4)
-  ai.isAttack = false
+  // ai.isAttack = false
 
   domMaria.addEventListener('click', (e) => {
     window.service.send('maria')

@@ -12,7 +12,7 @@
 
  [ use self rig-and-animated naive model ](https://raw.githack.com/gonnavis/annihilate/main/index.html)
 
-Current developing at separate branch, such as: [branch: MutantModel](https://github.com/gonnavis/annihilate/tree/MutantModel), [branch: MariaAndPaladin](https://github.com/gonnavis/annihilate/tree/MariaAndPaladin).
+Current developing at separate branch, such as: [branch: dev](https://github.com/gonnavis/annihilate/tree/dev), [branch: MutantModel](https://github.com/gonnavis/annihilate/tree/MutantModel), [branch: MariaAndPaladin](https://github.com/gonnavis/annihilate/tree/MariaAndPaladin).
 
 ### Brief
 
@@ -42,7 +42,7 @@ Now open-sourced and:
     
 Action: **DMC**, **Guilty Gear**, **Prince of Persia** ...
     
-Level design: **Super Mario 3D World** ...
+Level design: **Super Mario 3D Land** ...
     
 Multiplayer Strategy: **Into the Breach** ...
 
@@ -52,7 +52,7 @@ Art: **Divinity Original Sin 2** ...
 
 Code: [three-pathfinding](https://github.com/donmccurdy/three-pathfinding), [Sketchbook](https://discourse.threejs.org/t/vehicle-physics-with-cannon-js/11769) ...
 
-[Other](https://twitter.com/gonnavis): [1](https://twitter.com/gonnavis/status/1442426877390385153) [2](https://twitter.com/FluidNinjaLIVE/status/1445897813020196869) [3](https://twitter.com/80Level/status/1450084674307600387) [4](https://twitter.com/TempleDoorGames/status/1460624431802249219) ...
+[Other](https://twitter.com/gonnavis): [1](https://twitter.com/gonnavis/status/1442426877390385153) [2](https://twitter.com/FluidNinjaLIVE/status/1445897813020196869) [3](https://twitter.com/80Level/status/1450084674307600387) [4](https://twitter.com/TempleDoorGames/status/1460624431802249219) [5](https://twitter.com/riotgames/status/1462201413195350018) ...
 
 ### Todo: 
 

@@ -11,6 +11,7 @@ import { Box } from './box.js'
 import { FloatingBox } from './floatingBox.js'
 import { Maria } from './maria.js'
 import { Paladin } from './paladin.js'
+import { Mutant } from './mutant.js'
 import { GreatSword } from './greatSword.js'
 import { Sword } from './sword.js'
 import { Shield } from './shield.js'
@@ -67,8 +68,9 @@ function init_xstate() {
       initial: 'initial',
       states: {
         initial: {
+          // todo: Why can't init/send first of this list?
+          on: { maria: { target: 'maria' } },
           on: { paladin: { target: 'paladin' } },
-          on: { maria: { target: 'maria' } }, // todo: Why can't maria first?
         },
         maria: {
           entry: 'entryMaria',
@@ -89,29 +91,31 @@ function init_xstate() {
         entryMaria: () => {
           console.log(111)
           if (!window.roleControls) window.roleControls = new RoleControls(maria) ///todo: Use ECS?
-          if (!window.ai) {
-            window.ai = new Ai(paladin, maria, 5)
-            ai.enabled = false
-          }
-
           roleControls.setRole(maria)
-          ai.setTarget(maria)
-          ai.setRole(paladin)
-          ai.setDistance(4)
+
+          // if (!window.ai) {
+          //   window.ai = new Ai(paladin, maria, 5)
+          //   ai.enabled = false
+          // }
+          // ai.setTarget(maria)
+          // ai.setRole(paladin)
+          // ai.setDistance(4)
+
           domMaria.disabled = true
           domPaladin.disabled = false
         },
         entryPaladin: () => {
           if (!window.roleControls) window.roleControls = new RoleControls(paladin) ///todo: Use ECS?
-          if (!window.ai) {
-            window.ai = new Ai(maria, paladin, 4)
-            ai.enabled = false
-          }
-
           roleControls.setRole(paladin)
-          ai.setTarget(paladin)
-          ai.setRole(maria)
-          ai.setDistance(5)
+
+          // if (!window.ai) {
+          //   window.ai = new Ai(maria, paladin, 4)
+          //   ai.enabled = false
+          // }
+          // ai.setTarget(paladin)
+          // ai.setRole(maria)
+          // ai.setDistance(5)
+
           domPaladin.disabled = true
           domMaria.disabled = false
         },
@@ -176,6 +180,12 @@ function init() {
   window.shield = new Shield()
   shield.owner = paladin
 
+  window.mutant = new Mutant(15, 5, -15)
+  mutant.load()
+
+  window.ai = new Ai(mutant, paladin, 4)
+  ai.isAttack = false
+
   domMaria.addEventListener('click', (e) => {
     window.service.send('maria')
   })
@@ -194,7 +204,8 @@ function init() {
     }
   })
 
-  window.service.send('maria')
+  // window.service.send('maria')
+  window.service.send('paladin')
 
   gui.add(window.ai, 'enabled').name('simple enemy AI')
 

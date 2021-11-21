@@ -153,6 +153,7 @@ class Mutant {
           hit: {
             entry: ['playHit'],
             on: {
+              hit: { target: 'hit' },
               finish: { target: 'idle' },
             },
           },
@@ -288,6 +289,7 @@ class Mutant {
       mass: 1,
       // material: physicsMaterial,
     })
+    this.body.belongTo = this
     let shape = new CANNON.Sphere(this.body_size)
     // let shape = new CANNON.Cylinder(this.body_size, this.body_size, 3, 8)
     this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)

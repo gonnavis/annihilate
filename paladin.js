@@ -336,7 +336,7 @@ class Paladin {
     this.body.belongTo = this
 
     this.bodyRadius = 1.2
-    this.bodyHeight = 4.3
+    this.bodyHeight = 4.6
     // this.bodyHeight = 10
     this.bodyCylinderHeight = this.bodyHeight - this.bodyRadius * 2
     let sphereShapeUp = new CANNON.Sphere(this.bodyRadius)

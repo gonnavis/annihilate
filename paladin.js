@@ -58,7 +58,7 @@ class Paladin {
             entry: 'playIdle',
             on: {
               run: { target: 'run' },
-              attack: { target: 'attack' },
+              attack: { target: 'attackStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
@@ -70,7 +70,7 @@ class Paladin {
             entry: 'playRun',
             on: {
               stop: { target: 'idle' },
-              attack: { target: 'attack' },
+              attack: { target: 'attackStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
@@ -78,6 +78,14 @@ class Paladin {
               // blocked: { target: 'blocked' }, // Note: Can block when running or in other states? No, more by intended operation, less by luck.
             },
             tags: ['canMove'],
+          },
+          attackStart: {
+            entry: 'playAttackStart',
+            on: {
+              finish: { target: 'attack' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
           },
           attack: {
             entry: 'playAttack',
@@ -112,23 +120,38 @@ class Paladin {
           },
           prepareStrike: {
             on: {
-              finish: { target: 'strike' },
+              finish: { target: 'strikeStart' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
           },
+          strikeStart: {
+            entry: 'playStrikeStart',
+            on: {
+              finish: { target: 'strike' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+          },
           strike: {
-            // top down strike
             entry: 'playStrike',
             on: {
-              finish: { target: 'idle' },
+              finish: { target: 'strikeEnd' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
+          },
+          strikeEnd: {
+            entry: 'playStrikeEnd',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
           },
           jumpAttack: {
             entry: ['playJumpAttack'],
@@ -238,6 +261,10 @@ class Paladin {
           playRun: () => {
             this.fadeToAction('running', 0.2)
           },
+          playAttackStart: () => {
+            this.oaction['punchStart'].timeScale = this.attackSpeed
+            this.fadeToAction('punchStart')
+          },
           playAttack: () => {
             this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0.2)
@@ -260,6 +287,10 @@ class Paladin {
             this.oaction['fist'].timeScale = this.attackSpeed
             this.fadeToAction('fist', 0.2)
           },
+          playStrikeStart: () => {
+            this.oaction['strikeStart'].timeScale = this.attackSpeed
+            this.fadeToAction('strikeStart')
+          },
           playStrike: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0.2)
@@ -274,6 +305,10 @@ class Paladin {
             //   // this.body.velocity.y -= downVelocity
             //   this.body.velocity.y = -this.body.position.y * 5
             // }, 500)
+          },
+          playStrikeEnd: () => {
+            this.oaction['strikeEnd'].timeScale = this.attackSpeed
+            this.fadeToAction('strikeEnd', 0)
           },
           playJumpAttack: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed
@@ -432,7 +467,7 @@ class Paladin {
             //   action.loop = THREE.LoopOnce
             // }
 
-            if (['punch', 'punch', 'fist', 'jumpAttack', 'strike', 'hit', 'knockDown', 'impact', 'jump'].includes(name)) {
+            if (['punch', 'punchStart', 'fist', 'jumpAttack', 'strike', 'strikeStart', 'strikeEnd', 'hit', 'knockDown', 'impact', 'jump'].includes(name)) {
               action.loop = THREE.LoopOnce
               action.clampWhenFinished = true
             }

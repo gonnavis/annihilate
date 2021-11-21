@@ -137,7 +137,6 @@ class Maria {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
-            tags: ['canDamage'],
           },
           strike: {
             entry: 'playStrike',

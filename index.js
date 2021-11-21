@@ -91,7 +91,7 @@ function init_xstate() {
           if (!window.roleControls) window.roleControls = new RoleControls(maria) ///todo: Use ECS?
           if (!window.ai) {
             window.ai = new Ai(paladin, maria, 5)
-            ai.enabled = false
+            // ai.enabled = false
           }
 
           roleControls.setRole(maria)
@@ -105,7 +105,7 @@ function init_xstate() {
           if (!window.roleControls) window.roleControls = new RoleControls(paladin) ///todo: Use ECS?
           if (!window.ai) {
             window.ai = new Ai(maria, paladin, 4)
-            ai.enabled = false
+            // ai.enabled = false
           }
 
           roleControls.setRole(paladin)

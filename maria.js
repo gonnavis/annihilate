@@ -89,7 +89,6 @@ class Maria {
             },
           },
           attackStartNotWhirlwind: {
-            entry: 'playAttackStart',
             on: {
               finish: { target: 'attack' },
               hit: { target: 'hit' },

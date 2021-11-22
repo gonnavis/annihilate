@@ -202,7 +202,18 @@ function init() {
   window.service.send('maria')
   // window.service.send('paladin')
 
+  window.setting = {
+    'show debugRenderer': () => {
+      if (!window.cannonDebugRenderer) {
+        window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, {
+          autoUpdate: false,
+        })
+      }
+    },
+  }
+
   // gui.add(window.ai, 'enabled').name('simple enemy AI')
+  gui.add(setting, 'show debugRenderer')
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 

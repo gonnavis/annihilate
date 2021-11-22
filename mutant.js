@@ -1,6 +1,7 @@
 class Mutant {
   constructor(x, y, z) {
     this.isCharacter = true
+    this.isEnemy = true
 
     updates.push(this)
 
@@ -358,6 +359,11 @@ class Mutant {
             this.fadeToAction('knockDown', 0.2)
           },
           playDead: () => {
+            this.body.mass = 0
+            this.body.collisionResponse = false
+            setTimeout(() => {
+              this.body.velocity.set(0, 0, 0)
+            }, 0)
             // this.oaction['knockDown'].timeScale = 2
             this.fadeToAction('knockDown', 0.2)
           },
@@ -367,7 +373,7 @@ class Mutant {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('mutant: state:', state.value)
+      // if (state.changed) console.log('mutant: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -406,7 +412,8 @@ class Mutant {
     this.body.position.set(x, y, z) ///formal
     // this.body.position.set(10.135119435295582, -0.000010295802922222208, -14.125613840025014)///test
     world.addBody(this.body)
-    this.body.addEventListener('collide', (event) => {
+    // this.body.addEventListener('collide', (event) => {
+    this.body.addEventListener('beginContact', (event) => {
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
       // if (event.body !== window.axes.body) {
@@ -427,12 +434,12 @@ class Mutant {
   }
 
   hit() {
-    console.log('hit()')
+    // console.log('hit()')
     this.health -= 20
     // todo: Add hit2 state to prevent multiple hits in one attack?
     //   Or use beginContact instead of collide event?
     //   Both?
-    console.log(this.health)
+    // console.log(this.health)
     this.service.send('hit')
     if (this.health <= 0) {
       this.service.send('dead')
@@ -440,9 +447,9 @@ class Mutant {
   }
 
   knockDown() {
-    console.log('knockDown()')
+    // console.log('knockDown()')
     this.health -= 20 // todo: Merge with hit().
-    console.log(this.health)
+    // console.log(this.health)
     this.service.send('knockDown')
     if (this.health <= 0) {
       this.service.send('dead')

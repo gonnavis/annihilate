@@ -1,6 +1,7 @@
 class Maria {
   constructor(x, y, z) {
     this.isCharacter = true
+    this.isRole = true
 
     updates.push(this)
 
@@ -401,7 +402,8 @@ class Maria {
     this.body.position.set(x, y, z) ///formal
     // this.body.position.set(10.135119435295582, -0.000010295802922222208, -14.125613840025014)///test
     world.addBody(this.body)
-    this.body.addEventListener('collide', (event) => {
+    // this.body.addEventListener('collide', (event) => {
+    this.body.addEventListener('beginContact', (event) => {
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
       if (event.body !== window.greatSword.body) {

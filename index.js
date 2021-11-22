@@ -56,9 +56,9 @@ const gui = new GUI({ width: 310 })
 init_xstate()
 init_three()
 init_cannon()
-window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, {
-  autoUpdate: false,
-})
+// window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, {
+//   autoUpdate: false,
+// })
 init()
 requestAnimationFrame(animate)
 
@@ -94,7 +94,7 @@ function init_xstate() {
           if (!window.roleControls) window.roleControls = new RoleControls(maria) ///todo: Use ECS?
           roleControls.setRole(maria)
 
-          ai.setTarget(maria)
+          // ai.setTarget(maria)
 
           domMaria.disabled = true
           domPaladin.disabled = false
@@ -103,7 +103,7 @@ function init_xstate() {
           if (!window.roleControls) window.roleControls = new RoleControls(paladin) ///todo: Use ECS?
           roleControls.setRole(paladin)
 
-          ai.setTarget(paladin)
+          // ai.setTarget(paladin)
 
           domPaladin.disabled = true
           domMaria.disabled = false
@@ -169,13 +169,17 @@ function init() {
   window.shield = new Shield()
   shield.owner = paladin
 
-  window.mutant = new Mutant(0, 5, -20)
-  window.handKnife = new HandKnife()
-  handKnife.owner = mutant
-  mutant.load()
+  window.mutants = []
+  for (let i = 0; i < 10; i++) {
+    let mutant = new Mutant((Math.random() - 0.5) * 50, 5, (Math.random() - 0.5) * 50)
+    let handKnife = new HandKnife()
+    handKnife.owner = mutant
+    mutant.load()
+    mutants.push(mutant)
 
-  window.ai = new Ai(mutant, paladin, 4)
-  // ai.isAttack = false
+    let ai = new Ai(mutant, maria, 4)
+    // ai.isAttack = false
+  }
 
   domMaria.addEventListener('click', (e) => {
     window.service.send('maria')
@@ -198,7 +202,7 @@ function init() {
   window.service.send('maria')
   // window.service.send('paladin')
 
-  gui.add(window.ai, 'enabled').name('simple enemy AI')
+  // gui.add(window.ai, 'enabled').name('simple enemy AI')
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 
@@ -358,7 +362,7 @@ function animate(time) {
     // camera.lookAt(role.gltf.scene.position)
   }
 
-  cannonDebugRenderer.update()
+  if (window.cannonDebugRenderer) cannonDebugRenderer.update()
   world.step(fixedTimeStep, dt, maxSubSteps)
   renderer.render(scene, camera)
 

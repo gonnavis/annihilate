@@ -19,7 +19,7 @@ class GreatSword {
     // this.body.addEventListener('collide', (e) => {
     this.body.addEventListener('beginContact', (e) => {
       // console.log('greatSword collide', e.body.belongTo)
-      if (e.body.belongTo?.isCharacter === true && e.body.belongTo !== this.owner) {
+      if (e.body.belongTo?.isEnemy === true && e.body.belongTo !== this.owner) {
         // console.log(1111111111)
         if (this.owner.service.state.hasTag('canDamage')) {
           if (this.owner.service.state.matches('strike')) {

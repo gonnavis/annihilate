@@ -372,7 +372,7 @@ class Maria {
             this.fadeToAction('impact')
           },
           playWhirlwind: () => {
-            // this.fadeToAction('whirlwind')
+            this.fadeToAction('whirlwind',0)
 
             let to = { t: 0 }
             let _rotationY = this.gltf.scene.rotation.y
@@ -518,7 +518,7 @@ class Maria {
             //   action.loop = THREE.LoopOnce
             // }
 
-            if (['punch', 'punchStart', 'fist', 'fistStart', 'jumpAttack', 'jumpAttackStart', 'jumpAttackEnd', 'strike', 'strikeStart', 'strikeEnd', 'hit', 'impact', 'jump', 'dashAttack', 'dash'].includes(name)) {
+            if (['punch', 'punchStart', 'fist', 'fistStart', 'jumpAttack', 'jumpAttackStart', 'jumpAttackEnd', 'strike', 'strikeStart', 'strikeEnd', 'hit', 'impact', 'jump', 'dashAttack', 'dash','whirlwind'].includes(name)) {
               action.loop = THREE.LoopOnce
               action.clampWhenFinished = true
             }

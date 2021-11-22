@@ -94,6 +94,8 @@ class Maria {
               hit: { target: 'hit' },
               attack: { target: 'prepareFist' },
               dash: { target: 'dash' },
+
+              whirlwind: { target: 'whirlwind' },
             },
             tags: ['canDamage'],
           },
@@ -239,6 +241,19 @@ class Maria {
             },
             exit: 'exitJumpDash',
           },
+          whirlwind: {
+            entry: 'playWhirlwind',
+            exit: 'exitWhirlwind',
+            on: {
+              keyJDown: { target: 'whirlwind' },
+              // finish: { target: 'idle' },
+              // finish: { target: 'attack' },
+              keyJUp: { target: 'attack' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+            tags: ['canDamage'],
+          },
         },
       },
       {
@@ -275,8 +290,13 @@ class Maria {
             this.fadeToAction('punchStart')
           },
           playAttack: () => {
-            this.oaction['punch'].timeScale = this.attackSpeed
-            this.fadeToAction('punch', 0)
+            if (roleControls.okey.KeyJ) {
+              // todo: refactor: not access roleControls here.
+              this.service.send('whirlwind')
+            } else {
+              this.oaction['punch'].timeScale = this.attackSpeed
+              this.fadeToAction('punch', 0)
+            }
           },
           playDashAttack: () => {
             this.oaction['dashAttack'].timeScale = this.attackSpeed
@@ -351,13 +371,35 @@ class Maria {
           playBlocked: () => {
             this.fadeToAction('impact')
           },
+          playWhirlwind: () => {
+            // this.fadeToAction('whirlwind')
+
+            let to = { t: 0 }
+            let _rotationY = this.gltf.scene.rotation.y
+            this.tweenWhirlwind = gsap.to(to, {
+              duration: 0.3,
+              t: Math.PI * 2,
+              // repeat: Infinity,
+              ease: 'none',
+              onUpdate: () => {
+                // console.log(to.t)
+                this.gltf.scene.rotation.y = _rotationY + to.t
+              },
+              // onComplete: () => {
+              //   this.service.send('finish')
+              // },
+            })
+          },
+          exitWhirlwind: () => {
+            this.tweenWhirlwind.kill()
+          },
         },
       }
     )
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -484,7 +526,12 @@ class Maria {
           this.action_act = this.oaction.idle
           this.action_act.play()
           this.mixer.addEventListener('finished', (e) => {
+            // console.log('finished ------------------------------------------------')
+            // if (this.action_act === this.oaction.punchStart) {
+            //   this.service.send('whirlwind')
+            // } else {
             this.service.send('finish')
+            // }
           })
           this.service.send('loaded')
           resolve()

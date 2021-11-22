@@ -63,6 +63,14 @@ class RoleControls {
       this.role.body.position.x += this.role.direction.x
       this.role.body.position.z += this.role.direction.y
     }
+
+    if (this.okey.KeyJ) {
+      // code here run after animation finished event, in one tick.
+      this.role.service.send('keyJDown')
+      // console.log('whirlwind')
+    } else {
+      this.role.service.send('keyJUp')
+    }
   }
   setRole(role) {
     this.role = role

@@ -70,8 +70,8 @@ function init_xstate() {
       states: {
         initial: {
           // todo: Why can't init/send first of this list?
-          on: { maria: { target: 'maria' } },
           on: { paladin: { target: 'paladin' } },
+          on: { maria: { target: 'maria' } },
         },
         maria: {
           entry: 'entryMaria',
@@ -195,8 +195,8 @@ function init() {
     }
   })
 
-  // window.service.send('maria')
-  window.service.send('paladin')
+  window.service.send('maria')
+  // window.service.send('paladin')
 
   gui.add(window.ai, 'enabled').name('simple enemy AI')
 

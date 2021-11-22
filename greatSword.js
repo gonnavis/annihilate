@@ -16,7 +16,8 @@ class GreatSword {
     this.body.addShape(shape)
     world.addBody(this.body)
 
-    this.body.addEventListener('collide', (e) => {
+    // this.body.addEventListener('collide', (e) => {
+    this.body.addEventListener('beginContact', (e) => {
       // console.log('greatSword collide', e.body.belongTo)
       if (e.body.belongTo?.isCharacter === true && e.body.belongTo !== this.owner) {
         // console.log(1111111111)

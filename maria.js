@@ -254,7 +254,7 @@ class Maria {
             entry: 'playWhirlwind',
             exit: 'exitWhirlwind',
             on: {
-              keyJDown: { target: 'whirlwind' },
+              // keyJDown: { target: 'whirlwind' },
               // finish: { target: 'idle' },
               // finish: { target: 'attack' },
               keyJUp: { target: 'attack' },
@@ -383,12 +383,13 @@ class Maria {
           playWhirlwind: () => {
             this.fadeToAction('whirlwind', 0)
 
+            // console.log(111)
             let to = { t: 0 }
             let _rotationY = this.gltf.scene.rotation.y
             this.tweenWhirlwind = gsap.to(to, {
               duration: 0.3,
               t: Math.PI * 2,
-              // repeat: Infinity,
+              repeat: Infinity,
               ease: 'none',
               onUpdate: () => {
                 // console.log(to.t)

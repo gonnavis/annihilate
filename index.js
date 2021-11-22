@@ -6,7 +6,7 @@ import cannonDebugger from './lib/cannon-es-debugger.js'
 import { GUI } from './lib/lil-gui.module.min.js'
 
 import { Ground } from './ground.js'
-import { Level } from './level.js'
+// import { Level } from './level.js'
 import { Box } from './box.js'
 import { FloatingBox } from './floatingBox.js'
 import { Maria } from './maria.js'
@@ -119,8 +119,8 @@ function init_xstate() {
 function init() {
   window.ground = new Ground() // todo: refactor
 
-  window.level = new Level()
-  level.load()
+  // window.level = new Level()
+  // level.load()
 
   window.box = new Box(20, 4, 80)
   box.mesh.position.set(-30, 1, 0)

@@ -5,7 +5,8 @@ class Mutant {
 
     updates.push(this)
 
-    this.health = 100
+    // this.health = 100
+    this.health = Infinity
     this.oaction = {}
     this.mixer
     // this.speed = 0.15

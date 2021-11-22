@@ -56,9 +56,9 @@ const gui = new GUI({ width: 310 })
 init_xstate()
 init_three()
 init_cannon()
-// window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, {
-//   autoUpdate: false,
-// })
+window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, {
+  autoUpdate: false,
+})
 init()
 requestAnimationFrame(animate)
 
@@ -170,7 +170,7 @@ function init() {
   shield.owner = paladin
 
   window.mutants = []
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 0; i++) {
     let mutant = new Mutant((Math.random() - 0.5) * 50, 5, (Math.random() - 0.5) * 50)
     let handKnife = new HandKnife()
     handKnife.owner = mutant

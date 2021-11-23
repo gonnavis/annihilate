@@ -125,30 +125,13 @@ function init() {
   box.mesh.position.set(-30, 1, 0)
   box.body.position.copy(box.mesh.position)
 
-  window.floatingBox = new FloatingBox()
-  floatingBox.box.body.position.y = 6
-  floatingBox.box.body.position.z = -35
-  floatingBox.timeBias = 0
-
-  window.floatingBox2 = new FloatingBox()
-  floatingBox2.box.body.position.y = 6 * 2
-  floatingBox2.box.body.position.z = -40
-  floatingBox2.timeBias = 2
-
-  window.floatingBox3 = new FloatingBox()
-  floatingBox3.box.body.position.y = 6 * 3
-  floatingBox3.box.body.position.z = -35
-  floatingBox3.timeBias = 4
-
-  window.floatingBox4 = new FloatingBox()
-  floatingBox4.box.body.position.y = 6 * 4
-  floatingBox4.box.body.position.z = -40
-  floatingBox4.timeBias = 6
-
-  window.floatingBox5 = new FloatingBox()
-  floatingBox5.box.body.position.y = 6 * 5
-  floatingBox5.box.body.position.z = -35
-  floatingBox5.timeBias = 8
+  window.floatingBoxes = []
+  for (let i = 0; i < 5; i++) {
+    let floatingBox = new FloatingBox(10, 1, 10)
+    floatingBox.body.position.x = i * 20
+    floatingBox.body.position.y = 6 * (i + 1)
+    floatingBox.body.position.z = -35 - (i % 2) * 5
+  }
 
   // window.maria = new Maria(0, 5, -15)
   window.maria = new Maria(-5, 5, 0)
@@ -169,7 +152,7 @@ function init() {
   shield.owner = paladin
 
   window.mutants = []
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 0; i++) {
     let mutant = new Mutant((Math.random() - 0.5) * 50, 5, (Math.random() - 0.5) * 50)
     let handKnife = new HandKnife()
     handKnife.owner = mutant

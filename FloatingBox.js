@@ -25,10 +25,11 @@ class FloatingBox {
     // floating box
 
     // this.body.velocity.set(this.speed, 0, 0)
+    this.body.position.x = -10
   }
 
   update(dt, time) {
-    this.body.velocity.x = Math.sin(time / 1000 + this.timeBias) * 20
+    this.body.velocity.x = Math.sin(time * 0.001 + this.timeBias) * 20
     // if (this.body.position.x < -20) {
     //   this.body.velocity.set(this.speed, 0, 0)
     // }

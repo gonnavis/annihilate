@@ -6,6 +6,7 @@ import cannonDebugger from './lib/cannon-es-debugger.js'
 import { GUI } from './lib/lil-gui.module.min.js'
 
 import { Ground } from './Ground.js'
+import { Hill } from './Hill.js'
 // import { Level } from './Level.js'
 import { Box } from './Box.js'
 import { FloatingBox } from './FloatingBox.js'
@@ -56,9 +57,7 @@ const gui = new GUI({ width: 310 })
 init_xstate()
 init_three()
 init_cannon()
-// window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, {
-//   autoUpdate: false,
-// })
+// window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, { autoUpdate: false })
 init()
 requestAnimationFrame(animate)
 
@@ -121,12 +120,20 @@ function init() {
   // window.level = new Level()
   // level.load()
 
-  window.box = new Box(20, 4, 80)
-  box.mesh.position.set(-30, 1, 0)
-  box.body.position.copy(box.mesh.position)
+  // ground box
+  window.groundBox = new Box(20, 4, 80)
+  groundBox.mesh.position.set(-30, 1, 0)
+  groundBox.body.position.copy(groundBox.mesh.position)
+
+  window.hill = new Hill()
+
+  // air box
+  window.airBox = new Box(40, 4, 80)
+  airBox.mesh.position.set(-55, 35, -90)
+  airBox.body.position.copy(airBox.mesh.position)
 
   window.floatingBoxes = []
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 7; i++) {
     let floatingBox = new FloatingBox(10, 1, 10)
     // floatingBox.body.position.x = i * 20
     floatingBox.body.position.y = 6 * (i + 1)
@@ -217,13 +224,13 @@ function init_three() {
   container = document.createElement('div')
   document.body.appendChild(container)
 
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.25, 100)
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
   camera.position.set(0, 30, 30)
   camera.lookAt(0, 0, 0)
 
   scene = new THREE.Scene()
   scene.background = new THREE.Color(0xe0e0e0)
-  scene.fog = new THREE.Fog(0xe0e0e0, 20, 100)
+  // scene.fog = new THREE.Fog(0xe0e0e0, 20, 100)
 
   clock = new THREE.Clock()
 

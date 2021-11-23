@@ -60,7 +60,7 @@ class Maria {
             entry: 'playIdle',
             on: {
               run: { target: 'run' },
-              attack: { target: 'attackStart' },
+              attack: { target: 'attackStartWithCharge' },
               bash: { target: 'bashStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
@@ -72,7 +72,7 @@ class Maria {
             entry: 'playRun',
             on: {
               stop: { target: 'idle' },
-              attack: { target: 'attackStart' },
+              attack: { target: 'attackStartWithCharge' },
               bash: { target: 'bashStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
@@ -97,8 +97,31 @@ class Maria {
               dash: { target: 'dash' },
             },
           },
-          attackStart: {
+          attackStartWithCharge: {
             entry: 'playAttackStart',
+            on: {
+              finish: { target: 'charging' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+              keyJUp: { target: 'attackStart' },
+            },
+          },
+          charging: {
+            on: {
+              keyJUp: { target: 'chargeAttack' },
+            },
+          },
+          chargeAttack: {
+            entry: 'playChargeAttack',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              // attack: { target: 'prepareFist' },
+              dash: { target: 'dash' },
+            },
+            tags: ['canDamage'],
+          },
+          attackStart: {
             on: {
               // finish: { target: 'whirlwind' },
               finish: { target: 'attack' },
@@ -367,6 +390,10 @@ class Maria {
             this.fadeToAction('punch', 0)
             // }
           },
+          playChargeAttack: () => {
+            this.oaction['punch'].timeScale = this.attackSpeed
+            this.fadeToAction('punch', 0)
+          },
           playDashAttack: () => {
             this.oaction['dashAttack'].timeScale = this.attackSpeed
             this.fadeToAction('dashAttack')
@@ -469,7 +496,7 @@ class Maria {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value

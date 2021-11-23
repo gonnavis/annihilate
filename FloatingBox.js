@@ -25,7 +25,7 @@ class FloatingBox {
     // floating box
 
     // this.body.velocity.set(this.speed, 0, 0)
-    // this.body.position.x = -10
+    this.body.position.x = 10
   }
 
   update(dt, time) {

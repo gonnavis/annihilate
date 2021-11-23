@@ -2,6 +2,7 @@ class FloatingBox {
   constructor(width = 1, height = 1, depth = 1) {
     updates.push(this)
 
+    this.timeBias = 0
     this.speed = 10
 
     // box
@@ -23,16 +24,17 @@ class FloatingBox {
 
     // floating box
 
-    this.body.velocity.set(this.speed, 0, 0)
+    // this.body.velocity.set(this.speed, 0, 0)
   }
 
   update(dt, time) {
-    if (this.body.position.x < -20) {
-      this.body.velocity.set(this.speed, 0, 0)
-    }
-    if (this.body.position.x > 20) {
-      this.body.velocity.set(-this.speed, 0, 0)
-    }
+    this.body.velocity.x = Math.sin(time / 1000 + this.timeBias) * 20
+    // if (this.body.position.x < -20) {
+    //   this.body.velocity.set(this.speed, 0, 0)
+    // }
+    // if (this.body.position.x > 20) {
+    //   this.body.velocity.set(-this.speed, 0, 0)
+    // }
 
     this.mesh.position.copy(this.body.position)
   }

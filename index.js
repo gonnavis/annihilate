@@ -128,9 +128,13 @@ function init() {
   window.floatingBoxes = []
   for (let i = 0; i < 5; i++) {
     let floatingBox = new FloatingBox(10, 1, 10)
-    floatingBox.body.position.x = i * 20
+    // floatingBox.body.position.x = i * 20
     floatingBox.body.position.y = 6 * (i + 1)
-    floatingBox.body.position.z = -35 - (i % 2) * 5
+    floatingBox.body.position.z = -35 - i * 7
+    // floatingBox.body.position.z = -35 - (i % 2) * 5
+    // floatingBox.timeBias = i * 2
+
+    floatingBoxes.push(floatingBox)
   }
 
   // window.maria = new Maria(0, 5, -15)

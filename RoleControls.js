@@ -9,15 +9,23 @@ class RoleControls {
     this.actkey = ''
 
     window.addEventListener('keydown', (e) => {
-      // console.log(e.key,e.code,e.keyCode)
+      // console.log('repeat', e.repeat, e.code)
+
+      // if (e.repeat) return
+      // console.log(e.key, e.code, e.keyCode)
+
+      if (this.okey[e.code]) return // Prevent: keyD -> keyJ long press -> keyD up, cause double attack bug.
+      // e.prepeat & if (e.code === this.actkey) return, both not work.
+
       this.okey[e.code] = true
 
       // if (!this.gltf) return
-      if (e.code === this.actkey) return
+      // if (e.code === this.actkey) return
       switch (e.code) {
         case 'KeyJ':
         case 'Numpad4':
           this.role.service.send('attack')
+          // console.log('---keydown J')
           break
         case 'KeyK':
         case 'Numpad5':

@@ -1,5 +1,7 @@
 class Teleporter {
   constructor(width = 1, height = 1, depth = 1) {
+    this.dest = new THREE.Vector3()
+
     this.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(width, height, depth), new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true }))
     this.mesh.castShadow = true
     // this.mesh.receiveShadow = true
@@ -14,7 +16,7 @@ class Teleporter {
     this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     this.body.addEventListener('beginContact', (event) => {
       if (event.body.belongTo?.isCharacter) {
-        event.body.position.set(-50, 50, -60)
+        event.body.position.copy(this.dest)
       }
     })
     world.addBody(this.body)

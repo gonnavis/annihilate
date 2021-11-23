@@ -129,6 +129,12 @@ function init() {
   window.teleporter = new Teleporter()
   teleporter.body.position.set(-35, 5, -35)
   teleporter.mesh.position.copy(teleporter.body.position)
+  teleporter.dest.set(-50, 60, -50)
+
+  window.teleporter2 = new Teleporter()
+  teleporter2.body.position.set(-30, 5, -35)
+  teleporter2.mesh.position.copy(teleporter2.body.position)
+  teleporter2.dest.set(-50, 600, -50)
 
   window.hill = new Hill()
 

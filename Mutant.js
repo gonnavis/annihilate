@@ -400,13 +400,12 @@ class Mutant {
     this.bodyHeight = 4.3
     // this.bodyHeight = 10
     this.bodyCylinderHeight = this.bodyHeight - this.bodyRadius * 2
-    let sphereShapeUp = new CANNON.Sphere(this.bodyRadius)
-    let sphereShapeDown = new CANNON.Sphere(this.bodyRadius)
+    let sphereShape = new CANNON.Sphere(this.bodyRadius)
     let cylinderShape = new CANNON.Cylinder(this.bodyRadius, this.bodyRadius, this.bodyCylinderHeight, 8)
     // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     this.body.angularDamping = 1
-    this.body.addShape(sphereShapeUp, new CANNON.Vec3(0, this.bodyCylinderHeight / 2, 0))
-    this.body.addShape(sphereShapeDown, new CANNON.Vec3(0, -this.bodyCylinderHeight / 2, 0))
+    this.body.addShape(sphereShape, new CANNON.Vec3(0, this.bodyCylinderHeight / 2, 0))
+    this.body.addShape(sphereShape, new CANNON.Vec3(0, -this.bodyCylinderHeight / 2, 0))
     this.body.addShape(cylinderShape)
 
     this.body.position.set(x, y, z) ///formal

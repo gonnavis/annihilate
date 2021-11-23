@@ -20,6 +20,7 @@ import { Enemy } from './Enemy.js'
 import { RoleControls } from './RoleControls.js'
 import { Ai } from './Ai.js'
 import { HandKnife } from './HandKnife.js'
+import { Teleporter } from './Teleporter.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -125,6 +126,10 @@ function init() {
   groundBox.mesh.position.set(-30, 1, 0)
   groundBox.body.position.copy(groundBox.mesh.position)
 
+  window.teleporter = new Teleporter()
+  teleporter.body.position.set(-35, 5, -35)
+  teleporter.mesh.position.copy(teleporter.body.position)
+
   window.hill = new Hill()
 
   // air box
@@ -207,6 +212,9 @@ function init() {
 
   // gui.add(window.ai, 'enabled').name('simple enemy AI')
   gui.add(setting, 'show debugRenderer')
+  gui.add(teleporter.mesh.position, 'x', -50, 50, 1)
+  gui.add(teleporter.mesh.position, 'y', -50, 50, 1)
+  gui.add(teleporter.mesh.position, 'z', -50, 50, 1)
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 

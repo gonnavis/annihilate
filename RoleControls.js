@@ -27,12 +27,27 @@ class RoleControls {
         case 'Numpad8':
           this.role.service.send('dash')
           break
+        case 'KeyU':
+        case 'Numpad7':
+          this.role.service.send('bash')
+          break
       }
       this.actkey = e.code
     })
     window.addEventListener('keyup', (e) => {
       // console.log(e)
       this.okey[e.code] = false
+
+      switch (e.code) {
+        case 'KeyJ':
+        case 'Numpad4':
+          this.role.service.send('keyJUp')
+          break
+        case 'KeyU':
+        case 'Numpad7':
+          this.role.service.send('keyUUp')
+          break
+      }
       this.actkey = ''
     })
   }
@@ -64,13 +79,13 @@ class RoleControls {
       this.role.body.position.z += this.role.direction.y
     }
 
-    if (this.okey.KeyJ) {
-      // code here run after animation finished event, in one tick.
-      this.role.service.send('keyJDown')
-      // console.log('whirlwind')
-    } else {
-      this.role.service.send('keyJUp')
-    }
+    // if (this.okey.KeyJ) {
+    //   // code here run after animation finished event, in one tick.
+    //   this.role.service.send('keyJDown')
+    //   // console.log('whirlwind')
+    // } else {
+    //   this.role.service.send('keyJUp')
+    // }
   }
   setRole(role) {
     this.role = role

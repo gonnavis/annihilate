@@ -61,6 +61,7 @@ class Maria {
             on: {
               run: { target: 'run' },
               attack: { target: 'attackStart' },
+              bash: { target: 'bashStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
@@ -72,6 +73,7 @@ class Maria {
             on: {
               stop: { target: 'idle' },
               attack: { target: 'attackStart' },
+              bash: { target: 'bashStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
@@ -79,13 +81,30 @@ class Maria {
             },
             tags: ['canMove'],
           },
-          attackStart: {
-            entry: 'playAttackStart',
+          bashStart: {
+            entry: 'playBashStart',
             on: {
               finish: { target: 'whirlwind' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
-              keyJUp: { target: 'attackStartNotWhirlwind' },
+              keyUUp: { target: 'bashStartNotWhirlwind' },
+            },
+          },
+          bashStartNotWhirlwind: {
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+          },
+          attackStart: {
+            entry: 'playAttackStart',
+            on: {
+              // finish: { target: 'whirlwind' },
+              finish: { target: 'attack' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+              // keyJUp: { target: 'attackStartNotWhirlwind' },
             },
           },
           attackStartNotWhirlwind: {
@@ -256,7 +275,7 @@ class Maria {
               // keyJDown: { target: 'whirlwind' },
               // finish: { target: 'idle' },
               // finish: { target: 'attack' },
-              keyJUp: { target: 'attack' },
+              keyUUp: { target: 'attack' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
@@ -330,6 +349,10 @@ class Maria {
           },
           playRun: () => {
             this.fadeToAction('running')
+          },
+          playBashStart: () => {
+            this.oaction['punchStart'].timeScale = this.attackSpeed
+            this.fadeToAction('punchStart')
           },
           playAttackStart: () => {
             this.oaction['punchStart'].timeScale = this.attackSpeed
@@ -446,7 +469,7 @@ class Maria {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value

@@ -319,7 +319,10 @@ function init_cannon() {
   world.defaultContactMaterial.friction = 0.05
   world.gravity.set(0, -50, 0)
   world.broadphase = new CANNON.NaiveBroadphase()
-  world.defaultContactMaterial.contactEquationRelaxation = 10 // Prevent bounce, especially after jumpAttack. // todo: Why relaxation affect bounce?
+
+  world.defaultContactMaterial.contactEquationRelaxation = 10
+  // Prevent bounce, especially after jumpAttack. // todo: Why relaxation affect bounce?
+  // But can cause sink when climbing hill problem.
 
   world.addEventListener('beginContact', (event) => {
     if (event.bodyA) {

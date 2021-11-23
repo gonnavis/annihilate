@@ -1,3 +1,5 @@
+import { SwordBlaster } from './SwordBlaster.js'
+
 class Maria {
   constructor(x, y, z) {
     this.isCharacter = true
@@ -12,6 +14,7 @@ class Maria {
     this.speed = 0.3
     // this.attackSpeed = 1.2
     this.attackSpeed = 1.4
+    this.chargeAttackCoe = 2
     this.tmpVec3 = new THREE.Vector3()
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.
@@ -452,8 +455,10 @@ class Maria {
             // }
           },
           playChargeAttack: () => {
-            this.oaction['punch'].timeScale = this.attackSpeed * 2
+            this.oaction['punch'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('punch', 0)
+
+            let swordBlaster = new SwordBlaster(this, 1)
           },
           playDashAttack: () => {
             this.oaction['dashAttack'].timeScale = this.attackSpeed
@@ -481,7 +486,7 @@ class Maria {
             this.fadeToAction('fistStart')
           },
           playChargeFistStart: () => {
-            this.oaction['fistStart'].timeScale = this.attackSpeed * 2
+            this.oaction['fistStart'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('fistStart')
           },
           playFist: () => {
@@ -489,15 +494,17 @@ class Maria {
             this.fadeToAction('fist', 0)
           },
           playChargeFist: () => {
-            this.oaction['fist'].timeScale = this.attackSpeed * 2
+            this.oaction['fist'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('fist', 0)
+
+            let swordBlaster = new SwordBlaster(this, 2)
           },
           playStrikeStart: () => {
             this.oaction['strikeStart'].timeScale = this.attackSpeed
             this.fadeToAction('strikeStart')
           },
           playChargeStrikeStart: () => {
-            this.oaction['strikeStart'].timeScale = this.attackSpeed * 2
+            this.oaction['strikeStart'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('strikeStart')
           },
           playStrike: () => {
@@ -505,15 +512,17 @@ class Maria {
             this.fadeToAction('strike', 0)
           },
           playChargeStrike: () => {
-            this.oaction['strike'].timeScale = this.attackSpeed * 2
+            this.oaction['strike'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('strike', 0)
+
+            let swordBlaster = new SwordBlaster(this, 3)
           },
           playStrikeEnd: () => {
             this.oaction['strikeEnd'].timeScale = this.attackSpeed
             this.fadeToAction('strikeEnd', 0)
           },
           playChargeStrikeEnd: () => {
-            this.oaction['strikeEnd'].timeScale = this.attackSpeed * 2
+            this.oaction['strikeEnd'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('strikeEnd', 0)
           },
           playJumpAttackStart: (context, event, o) => {
@@ -707,7 +716,7 @@ class Maria {
           this.service.send('loaded')
           resolve()
 
-          callback()
+          if (callback) callback()
         },
         undefined,
         (e) => {
@@ -752,6 +761,11 @@ class Maria {
       nextAction.reset().play()
       this.action_act = nextAction
     }
+  }
+
+  setFacing(x, z) {
+    this.facing.set(x, z)
+    this.gltf.scene.rotation.set(0, this.facing.angle() - Math.PI / 2, 0)
   }
 }
 

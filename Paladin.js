@@ -488,7 +488,7 @@ class Paladin {
           this.service.send('loaded')
           resolve()
 
-          callback()
+          if (callback) callback()
         },
         undefined,
         (e) => {
@@ -537,6 +537,11 @@ class Paladin {
       nextAction.reset().play()
       this.action_act = nextAction
     }
+  }
+
+  setFacing(x, z) {
+    this.facing.set(x, z)
+    this.gltf.scene.rotation.set(0, this.facing.angle() - Math.PI / 2, 0)
   }
 }
 

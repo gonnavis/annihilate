@@ -163,7 +163,8 @@ function init() {
   // window.maria = new Maria(0, 5, -15)
   window.maria = new Maria(-5, 5, 0)
   maria.load(() => {
-    maria.gltf.scene.rotation.set(0, Math.PI, 0)
+    // maria.gltf.scene.rotation.set(0, Math.PI, 0)
+    maria.setFacing(0, -1)
   })
   window.greatSword = new GreatSword()
   greatSword.owner = maria
@@ -171,7 +172,8 @@ function init() {
   window.paladin = new Paladin(5, 5, 0)
   // window.paladin = new Paladin(0, 5, 0)
   paladin.load(() => {
-    paladin.gltf.scene.rotation.set(0, Math.PI, 0)
+    // paladin.gltf.scene.rotation.set(0, Math.PI, 0)
+    paladin.setFacing(0, -1)
   })
   window.sword = new Sword()
   sword.owner = paladin

@@ -444,12 +444,6 @@ class Maria {
     this.body.addShape(sphereShapeDown, new CANNON.Vec3(0, -this.bodyCylinderHeight / 2, 0))
     this.body.addShape(cylinderShape)
 
-    let shape = new CANNON.Sphere(this.bodySize)
-    // let shape = new CANNON.Cylinder(this.bodySize, this.bodySize, 3, 8)
-    // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
-    this.body.angularDamping = 1
-    this.body.addShape(shape)
-
     this.body.position.set(x, y, z) ///formal
     // this.body.position.set(10.135119435295582, -0.000010295802922222208, -14.125613840025014)///test
     world.addBody(this.body)

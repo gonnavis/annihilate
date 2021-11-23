@@ -305,6 +305,7 @@ function init_cannon() {
   world.defaultContactMaterial.friction = 0.05
   world.gravity.set(0, -50, 0)
   world.broadphase = new CANNON.NaiveBroadphase()
+  world.defaultContactMaterial.contactEquationStiffness = 1e3
 
   world.addEventListener('beginContact', (event) => {
     if (event.bodyA) {

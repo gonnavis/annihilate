@@ -272,10 +272,48 @@ class Maria {
 
             // change facing
             this.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2
+
             // move
+
+            // move use velocity, will affected by restitution, so ground or air different.
             this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(60)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.z = this.tmpVec3.z
+
+            // // move use initial pos + absolute bias, can't use, will cause big problem.
+            // // Related to world.defaultContactMaterial.contactEquationRelaxation.
+            // let to = { t: 0 }
+            // let _posX = this.body.position.x
+            // let _posZ = this.body.position.z
+            // this.tweenDash = gsap.to(to, {
+            //   duration: 0.3,
+            //   t: 1,
+            //   // ease: 'none',
+            //   onUpdate: () => {
+            //     // console.log(to.t)
+            //     this.body.position.x = _posX + this.facing.x * to.t * 50
+            //     this.body.position.z = _posZ + this.facing.y * to.t * 50
+            //   },
+            //   // onComplete: () => {
+            //   //   this.service.send('finish')
+            //   // },
+            // })
+
+            // // move use per frame delta. Same problem as initial pos + absolute bias, why?
+            // let to = { t: 0 }
+            // this.tweenDash = gsap.to(to, {
+            //   duration: 0.3,
+            //   t: 1,
+            //   // ease: 'none',
+            //   onUpdate: () => {
+            //     // console.log(to.t)
+            //     this.body.position.x += this.facing.x * 3
+            //     this.body.position.z += this.facing.y * 3
+            //   },
+            //   // onComplete: () => {
+            //   //   this.service.send('finish')
+            //   // },
+            // })
           },
           playJumpDash: () => {
             this.fadeToAction('dash', 0)

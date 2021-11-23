@@ -156,7 +156,7 @@ function init() {
   shield.owner = paladin
 
   window.mutants = []
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 10; i++) {
     let mutant = new Mutant((Math.random() - 0.5) * 50, 5, (Math.random() - 0.5) * 50)
     let handKnife = new HandKnife()
     handKnife.owner = mutant

@@ -97,6 +97,7 @@ class Maria {
               dash: { target: 'dash' },
             },
           },
+
           attackStartWithCharge: {
             entry: 'playAttackStart',
             on: {
@@ -116,11 +117,71 @@ class Maria {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
-              // attack: { target: 'prepareFist' },
+              attack: { target: 'prepareChargeFist' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
           },
+          prepareChargeFist: {
+            on: {
+              finish: { target: 'chargeFistStart' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+            tags: ['canDamage'],
+          },
+          chargeFistStart: {
+            entry: 'playChargeFistStart',
+            on: {
+              finish: { target: 'chargeFist' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+          },
+          chargeFist: {
+            entry: 'playChargeFist',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+              attack: { target: 'prepareChargeStrike' },
+            },
+            tags: ['canDamage'],
+          },
+          prepareChargeStrike: {
+            on: {
+              finish: { target: 'chargeStrikeStart' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+            tags: ['canDamage'],
+          },
+          chargeStrikeStart: {
+            entry: 'playChargeStrikeStart',
+            on: {
+              finish: { target: 'chargeStrike' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+          },
+          chargeStrike: {
+            entry: 'playChargeStrike',
+            on: {
+              finish: { target: 'chargeStrikeEnd' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+            tags: ['canDamage'],
+          },
+          chargeStrikeEnd: {
+            entry: 'playChargeStrikeEnd',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+          },
+
           attackStart: {
             on: {
               // finish: { target: 'whirlwind' },
@@ -391,7 +452,7 @@ class Maria {
             // }
           },
           playChargeAttack: () => {
-            this.oaction['punch'].timeScale = this.attackSpeed
+            this.oaction['punch'].timeScale = this.attackSpeed * 2
             this.fadeToAction('punch', 0)
           },
           playDashAttack: () => {
@@ -419,20 +480,40 @@ class Maria {
             this.oaction['fistStart'].timeScale = this.attackSpeed
             this.fadeToAction('fistStart')
           },
+          playChargeFistStart: () => {
+            this.oaction['fistStart'].timeScale = this.attackSpeed * 2
+            this.fadeToAction('fistStart')
+          },
           playFist: () => {
             this.oaction['fist'].timeScale = this.attackSpeed
+            this.fadeToAction('fist', 0)
+          },
+          playChargeFist: () => {
+            this.oaction['fist'].timeScale = this.attackSpeed * 2
             this.fadeToAction('fist', 0)
           },
           playStrikeStart: () => {
             this.oaction['strikeStart'].timeScale = this.attackSpeed
             this.fadeToAction('strikeStart')
           },
+          playChargeStrikeStart: () => {
+            this.oaction['strikeStart'].timeScale = this.attackSpeed * 2
+            this.fadeToAction('strikeStart')
+          },
           playStrike: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0)
           },
+          playChargeStrike: () => {
+            this.oaction['strike'].timeScale = this.attackSpeed * 2
+            this.fadeToAction('strike', 0)
+          },
           playStrikeEnd: () => {
             this.oaction['strikeEnd'].timeScale = this.attackSpeed
+            this.fadeToAction('strikeEnd', 0)
+          },
+          playChargeStrikeEnd: () => {
+            this.oaction['strikeEnd'].timeScale = this.attackSpeed * 2
             this.fadeToAction('strikeEnd', 0)
           },
           playJumpAttackStart: (context, event, o) => {

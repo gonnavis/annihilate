@@ -390,7 +390,7 @@ class Paladin {
     this.body.addEventListener('beginContact', (event) => {
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
-      if (event.body !== window.sword.body && event.body !== window.shield.body) {
+      if (event.body !== window.sword.body && event.body !== window.shield.body && !event.body.isTrigger) {
         ///todo: Is cannon.js has collision mask?
         // todo: refactor: window.ground
         this.service.send('land')

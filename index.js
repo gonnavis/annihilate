@@ -127,12 +127,12 @@ function init() {
   groundBox.body.position.copy(groundBox.mesh.position)
 
   window.teleporter = new Teleporter()
-  teleporter.body.position.set(-35, 5, -35)
+  teleporter.body.position.set(-35, 10, -35)
   teleporter.mesh.position.copy(teleporter.body.position)
   teleporter.dest.set(-50, 60, -50)
 
   window.teleporter2 = new Teleporter()
-  teleporter2.body.position.set(-30, 5, -35)
+  teleporter2.body.position.set(-30, 10, -35)
   teleporter2.mesh.position.copy(teleporter2.body.position)
   teleporter2.dest.set(-50, 600, -50)
 
@@ -217,10 +217,12 @@ function init() {
   }
 
   // gui.add(window.ai, 'enabled').name('simple enemy AI')
+
   gui.add(setting, 'show debugRenderer')
-  gui.add(teleporter.mesh.position, 'x', -50, 50, 1)
-  gui.add(teleporter.mesh.position, 'y', -50, 50, 1)
-  gui.add(teleporter.mesh.position, 'z', -50, 50, 1)
+
+  // gui.add(teleporter.mesh.position, 'x', -50, 50, 1)
+  // gui.add(teleporter.mesh.position, 'y', -50, 50, 1)
+  // gui.add(teleporter.mesh.position, 'z', -50, 50, 1)
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 

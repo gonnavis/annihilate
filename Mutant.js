@@ -418,7 +418,9 @@ class Mutant {
       // if (event.body !== window.axes.body) {
       ///todo: Is cannon.js has collision mask?
       // todo: refactor: window.ground
-      this.service.send('land')
+      if (!event.body.isTrigger) {
+        this.service.send('land')
+      }
       // }
     })
   }

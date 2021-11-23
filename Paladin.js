@@ -429,7 +429,7 @@ class Paladin {
       loader.load(
         './model/paladin/all.gltf',
         (gltf) => {
-          console.log(gltf.animations)
+          // console.log(gltf.animations)
           this.gltf = gltf
 
           this.swordDelegate = new THREE.Object3D()

@@ -90,7 +90,6 @@ function init_xstate() {
     {
       actions: {
         entryMaria: () => {
-          console.log(111)
           if (!window.roleControls) window.roleControls = new RoleControls(maria) ///todo: Use ECS?
           roleControls.setRole(maria)
 

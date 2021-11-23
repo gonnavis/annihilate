@@ -329,7 +329,7 @@ class Mutant {
             this.fadeToAction('jumpAttackStart')
 
             this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
-            console.log(this.tmpVec3)
+            // console.log(this.tmpVec3)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 20
             this.body.velocity.z = this.tmpVec3.z
@@ -463,7 +463,7 @@ class Mutant {
         './model/mutant/a.gltf',
         // '/_3d_model/mixamo/Mutant/a/a.gltf',
         (gltf) => {
-          console.log(gltf.animations)
+          // console.log(gltf.animations)
           this.gltf = gltf
 
           this.rightEquipDelegate = new THREE.Object3D()

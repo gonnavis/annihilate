@@ -19,6 +19,7 @@ class Maria {
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.
     this.mass = 80
+    this.chargedLevel = 0
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -112,6 +113,24 @@ class Maria {
             },
           },
           charging: {
+            after: {
+              500: { target: 'charged1' },
+            },
+            on: {
+              keyJUp: { target: 'attack' },
+            },
+          },
+          charged1: {
+            entry: 'playCharged1',
+            after: {
+              500: { target: 'charged2' },
+            },
+            on: {
+              keyJUp: { target: 'chargeAttack' },
+            },
+          },
+          charged2: {
+            entry: 'playCharged2',
             on: {
               keyJUp: { target: 'chargeAttack' },
             },
@@ -453,6 +472,10 @@ class Maria {
           },
           playIdle: () => {
             this.fadeToAction('idle')
+
+            this.chargedLevel = 0
+            this.sword.material.emissive.setScalar(0)
+            this.sword.material.color.setRGB(1, 1, 1)
           },
           playRun: () => {
             this.fadeToAction('running')
@@ -474,11 +497,21 @@ class Maria {
             this.fadeToAction('punch', 0)
             // }
           },
+          playCharged1: () => {
+            this.chargedLevel = 1
+            this.sword.material.emissive.setScalar(0.3)
+          },
+          playCharged2: () => {
+            this.chargedLevel = 2
+            maria.sword.material.color.setRGB(0, 1, 1)
+          },
           playChargeAttack: () => {
             this.oaction['punch'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('punch', 0)
 
-            let swordBlaster = new SwordBlaster(this, 1)
+            if (this.chargedLevel === 2) {
+              let swordBlaster = new SwordBlaster(this, 1)
+            }
           },
           playDashAttack: () => {
             this.oaction['dashAttack'].timeScale = this.attackSpeed
@@ -517,7 +550,9 @@ class Maria {
             this.oaction['fist'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('fist', 0)
 
-            let swordBlaster = new SwordBlaster(this, 2)
+            if (this.chargedLevel === 2) {
+              let swordBlaster = new SwordBlaster(this, 2)
+            }
           },
           playStrikeStart: () => {
             this.oaction['strikeStart'].timeScale = this.attackSpeed
@@ -535,7 +570,9 @@ class Maria {
             this.oaction['strike'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('strike', 0)
 
-            let swordBlaster = new SwordBlaster(this, 3)
+            if (this.chargedLevel === 2) {
+              let swordBlaster = new SwordBlaster(this, 3)
+            }
           },
           playStrikeEnd: () => {
             this.oaction['strikeEnd'].timeScale = this.attackSpeed

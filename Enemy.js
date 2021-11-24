@@ -90,7 +90,7 @@ class Enemy {
             s.fadeToAction('jump', 0.2)
           },
           throwAttacker() {
-            if (window.role.gltf && s.gltf) new Attacker(scene, updates, s, window.role.gltf.scene.position)
+            if (window.role.gltf && s.gltf) new Attacker(scene, updates, s, window.role.mesh.position)
           },
           dead() {
             s.fadeToAction('death', 0.2)
@@ -100,7 +100,7 @@ class Enemy {
             let interval
             setTimeout(() => {
               interval = setInterval(() => {
-                // s.gltf.scene.position.y-=.001
+                // s.mesh.position.y-=.001
                 s.body.velocity.set(0, 0, 0) // continuously clear velocity, otherwise may not cleared.
                 s.body.collisionResponse = false
                 s.body.position.y -= 0.0005
@@ -152,7 +152,7 @@ class Enemy {
     updates.push(function (dt) {
       if (s.service.state.value === 'loading') return
       s.mixer.update(dt)
-      s.gltf.scene.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
+      s.mesh.position.set(s.body.position.x, s.body.position.y - body_size, s.body.position.z)
       // s.shadow.position.x = s.body.position.x
       // s.shadow.position.z = s.body.position.z
 
@@ -160,10 +160,10 @@ class Enemy {
       if (s.service.state.value !== 'dead') {
         {
           // look at role
-          let vec2_diff = vec2(role.gltf.scene.position.x - s.gltf.scene.position.x, role.gltf.scene.position.z - s.gltf.scene.position.z)
+          let vec2_diff = vec2(role.mesh.position.x - s.mesh.position.x, role.mesh.position.z - s.mesh.position.z)
           let angle = vec2_diff.angle()
           // console.log(angle)
-          s.gltf.scene.rotation.y = -angle + Math.PI / 2
+          s.mesh.rotation.y = -angle + Math.PI / 2
         }
       }
     })
@@ -189,18 +189,19 @@ class Enemy {
           // console.log('enemy loaded')
           // console.log(gltf)
           s.gltf = gltf
+          s.mesh = s.gltf.scene
 
-          s.gltf.scene.traverse(function (child) {
+          s.mesh.traverse(function (child) {
             if (child.isMesh) {
               child.castShadow = true
               child.receiveShadow = true
             }
           })
 
-          s.scene.add(gltf.scene)
-          gltf.scene.scale.set(0.7, 0.7, 0.7)
-          // gltf.scene.position.set(x,y,z)
-          s.mixer = new THREE.AnimationMixer(gltf.scene)
+          s.scene.add(s.mesh)
+          s.mesh.scale.set(0.7, 0.7, 0.7)
+          // mesh.position.set(x,y,z)
+          s.mixer = new THREE.AnimationMixer(s.mesh)
           gltf.animations.forEach((animation) => {
             let name = animation.name.toLowerCase()
             let action = s.mixer.clipAction(animation)

@@ -163,7 +163,7 @@ function init() {
   // window.maria = new Maria(0, 5, -15)
   window.maria = new Maria(-5, 5, 0)
   maria.load(() => {
-    // maria.gltf.scene.rotation.set(0, Math.PI, 0)
+    // maria.mesh.rotation.set(0, Math.PI, 0)
     maria.setFacing(0, -1)
   })
   window.greatSword = new GreatSword()
@@ -172,7 +172,7 @@ function init() {
   window.paladin = new Paladin(5, 5, 0)
   // window.paladin = new Paladin(0, 5, 0)
   paladin.load(() => {
-    // paladin.gltf.scene.rotation.set(0, Math.PI, 0)
+    // paladin.mesh.rotation.set(0, Math.PI, 0)
     paladin.setFacing(0, -1)
   })
   window.sword = new Sword()
@@ -273,7 +273,7 @@ function init_three() {
   light.position.set(0, 20, 0)
   scene.add(light)
 
-  window.shadowLight = new THREE.DirectionalLight(0xffffff)
+  window.shadowLight = new THREE.DirectionalLight(0xaaaaaa)
   shadowLight.position.set(0, 100, 0)
   shadowLight.castShadow = true
   shadowLight.shadow.mapSize.width = 2048
@@ -400,8 +400,8 @@ function animate(time) {
   if (window.service.state.matches('initial')) return
 
   if (window.camera && window.role.gltf) {
-    camera.position.set(role.gltf.scene.position.x, role.gltf.scene.position.y + 30, role.gltf.scene.position.z + 30)
-    // camera.lookAt(role.gltf.scene.position)
+    camera.position.set(role.mesh.position.x, role.mesh.position.y + 30, role.mesh.position.z + 30)
+    // camera.lookAt(role.mesh.position)
     shadowLight.position.x = shadowLight.target.position.x = window.role.body.position.x
     shadowLight.position.z = shadowLight.target.position.z = window.role.body.position.z
   }

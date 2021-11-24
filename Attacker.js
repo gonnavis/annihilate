@@ -1,4 +1,4 @@
-//new Attacker(scene, updates, enemy.gltf.scene.position, gltf.scene.position)
+//new Attacker(scene, updates, enemy.mesh.position, mesh.position)
 class Attacker {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
     let s = this

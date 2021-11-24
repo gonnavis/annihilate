@@ -1,4 +1,3 @@
-//new Attacker(scene, updates, enemy.gltf.scene.position, gltf.scene.position)
 class GreatSword {
   constructor() {
     updates.push(this)
@@ -36,7 +35,7 @@ class GreatSword {
     if (this.owner.gltf) {
       let tempVec3 = vec3() ///todo: performance
       let tempQuat = new THREE.Quaternion() ///todo: performance
-      // this.owner.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
+      // this.owner.mesh.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
       this.owner.swordDelegate.getWorldPosition(tempVec3)
       this.owner.swordDelegate.getWorldQuaternion(tempQuat)
       this.body.position.copy(tempVec3)

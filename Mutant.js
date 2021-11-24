@@ -259,14 +259,14 @@ class Mutant {
         actions: {
           entryDash: () => {
             this.fadeToAction('dash', 0.2)
-            this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(60)
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(60)
             this.body.velocity.x = this.tmpVec3.x
             // this.body.velocity.y = 0
             this.body.velocity.z = this.tmpVec3.z
           },
           entryJumpDash: () => {
             this.fadeToAction('dash', 0.2)
-            this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(30)
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(30)
             this.body.velocity.x = this.tmpVec3.x
             // this.body.velocity.y = 0
             this.body.velocity.z = this.tmpVec3.z
@@ -288,13 +288,13 @@ class Mutant {
           playDashAttack: () => {
             this.fadeToAction('punch', 0.2)
             let to = { t: 0 }
-            let _rotationY = this.gltf.scene.rotation.y
+            let _rotationY = this.mesh.rotation.y
             gsap.to(to, {
               duration: 0.5,
               t: -Math.PI * 2,
               onUpdate: () => {
                 // console.log(to.t)
-                this.gltf.scene.rotation.y = _rotationY + to.t
+                this.mesh.rotation.y = _rotationY + to.t
               },
             })
           },
@@ -309,7 +309,7 @@ class Mutant {
           playStrike: () => {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed
             this.fadeToAction('jumpAttack', 0.2)
-            // this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
+            // this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(15)
             // console.log(this.tmpVec3)
             // this.body.velocity.x = this.tmpVec3.x
             // this.body.velocity.y = 30
@@ -328,7 +328,7 @@ class Mutant {
             this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 4
             this.fadeToAction('jumpAttackStart')
 
-            this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(15)
             // console.log(this.tmpVec3)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 20
@@ -428,7 +428,7 @@ class Mutant {
   update(dt) {
     if (this.service.state.matches('loading')) return
 
-    this.gltf.scene.position.set(this.body.position.x, this.body.position.y - this.bodyHeight / 2, this.body.position.z)
+    this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyHeight / 2, this.body.position.z)
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
     this.mixer.update(dt)
@@ -466,28 +466,29 @@ class Mutant {
         (gltf) => {
           // console.log(gltf.animations)
           this.gltf = gltf
+          this.mesh = this.gltf.scene
 
           this.rightEquipDelegate = new THREE.Object3D()
           this.rightEquipDelegate.rotation.x = 1.3
-          this.rightEquipBone = this.gltf.scene.getObjectByName('KnifeTip')
+          this.rightEquipBone = this.mesh.getObjectByName('KnifeTip')
           this.rightEquipBone.add(this.rightEquipDelegate)
 
-          this.gltf.scene.traverse((child) => {
+          this.mesh.traverse((child) => {
             child.castShadow = true
             child.receiveShadow = true
             if (child.isMesh) {
-              child.material = new THREE.MeshBasicMaterial()
+              child.material = new THREE.MeshStandardMaterial()
               child.material.map = new THREE.TextureLoader().load('./model/mutant/a.jpg')
               // child.material.map = new THREE.TextureLoader().load('/_3d_model/mixamo/Mutant/a/a.jpg')
               child.material.map.flipY = false
               child.material.skinning = true
             }
           })
-          scene.add(this.gltf.scene)
-          this.gltf.scene.scale.setScalar(2.7)
-          // this.gltf.scene.scale.set(.7,.7,.7)
-          // this.gltf.scene.position.set(x,y,z)
-          this.mixer = new THREE.AnimationMixer(this.gltf.scene)
+          scene.add(this.mesh)
+          this.mesh.scale.setScalar(2.7)
+          // this.mesh.scale.set(.7,.7,.7)
+          // this.mesh.position.set(x,y,z)
+          this.mixer = new THREE.AnimationMixer(this.mesh)
           this.gltf.animations.forEach((animation) => {
             // let name = animation.name.toLowerCase()
             let name = animation.name

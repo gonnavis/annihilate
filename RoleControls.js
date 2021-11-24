@@ -81,7 +81,7 @@ class RoleControls {
 
     if (this.role.service.state.hasTag('canMove')) {
       // change facing
-      this.role.gltf.scene.rotation.y = -this.role.facing.angle() + Math.PI / 2
+      this.role.mesh.rotation.y = -this.role.facing.angle() + Math.PI / 2
       // move
       this.role.body.position.x += this.role.direction.x
       this.role.body.position.z += this.role.direction.y

@@ -397,7 +397,7 @@ class Maria {
             this.fadeToAction('dash')
 
             // change facing
-            this.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2
+            this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
 
             // move
 
@@ -445,7 +445,7 @@ class Maria {
             this.fadeToAction('dash', 0)
 
             // change facing
-            this.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2
+            this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
             // move
             this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(30)
             this.body.velocity.x = this.tmpVec3.x
@@ -485,19 +485,19 @@ class Maria {
             this.fadeToAction('dashAttack')
 
             // setTimeout(() => {
-            //   this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(70)
+            //   this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(70)
             //   this.body.velocity.x = this.tmpVec3.x
             //   this.body.velocity.z = this.tmpVec3.z
             // }, 100)
 
             // let to = { t: 0 }
-            // let _rotationY = this.gltf.scene.rotation.y
+            // let _rotationY = this.mesh.rotation.y
             // gsap.to(to, {
             //   duration: 0.5,
             //   t: -Math.PI * 2,
             //   onUpdate: () => {
             //     // console.log(to.t)
-            //     this.gltf.scene.rotation.y = _rotationY + to.t
+            //     this.mesh.rotation.y = _rotationY + to.t
             //   },
             // })
           },
@@ -546,10 +546,10 @@ class Maria {
             this.fadeToAction('strikeEnd', 0)
           },
           playJumpAttackStartWithCharge: (context, event, o) => {
-            this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 0.4
+            this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 0.5
             this.fadeToAction('jumpAttackStart')
 
-            // this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(10)
+            // this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(10)
             // this.body.velocity.x = this.tmpVec3.x
             // this.body.velocity.y = 20
             // this.body.velocity.z = this.tmpVec3.z
@@ -563,7 +563,7 @@ class Maria {
 
             this.body.mass = this.mass
 
-            // this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(10)
+            // this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(10)
             // this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 20
             // this.body.velocity.z = this.tmpVec3.z
@@ -603,7 +603,7 @@ class Maria {
 
             // console.log(111)
             let to = { t: 0 }
-            let _rotationY = this.gltf.scene.rotation.y
+            let _rotationY = this.mesh.rotation.y
             this.tweenWhirlwind = gsap.to(to, {
               duration: 0.3,
               t: Math.PI * 2,
@@ -611,7 +611,7 @@ class Maria {
               ease: 'none',
               onUpdate: () => {
                 // console.log(to.t)
-                this.gltf.scene.rotation.y = _rotationY + to.t
+                this.mesh.rotation.y = _rotationY + to.t
               },
               // onComplete: () => {
               //   this.service.send('finish')
@@ -680,7 +680,7 @@ class Maria {
   update(dt) {
     if (this.service.state.matches('loading')) return
 
-    this.gltf.scene.position.set(this.body.position.x, this.body.position.y - this.bodyHeight / 2, this.body.position.z)
+    this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyHeight / 2, this.body.position.z)
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
     this.mixer.update(dt)
@@ -705,29 +705,33 @@ class Maria {
         (gltf) => {
           // console.log(gltf.animations)
           this.gltf = gltf
+          this.mesh = this.gltf.scene
 
           this.swordDelegate = new THREE.Object3D()
           this.swordDelegate.position.x = -24
           this.swordDelegate.position.z = 50
           this.swordDelegate.rotation.y = -0.55
-          this.swordBone = this.gltf.scene.getObjectByName('sword_joint')
+          this.swordBone = this.mesh.getObjectByName('sword_joint')
           this.swordBone.add(this.swordDelegate)
 
-          this.gltf.scene.traverse((child) => {
+          this.sword = this.mesh.getObjectByName('Maria_sword')
+
+          this.mesh.traverse((child) => {
             if (child.isMesh) {
               child.castShadow = true
               child.receiveShadow = true
-              child.material = new THREE.MeshBasicMaterial()
+              child.material = new THREE.MeshStandardMaterial()
               child.material.map = new THREE.TextureLoader().load('./model/maria/maria_diffuse.jpg')
               child.material.map.flipY = false
               child.material.skinning = true
             }
           })
-          scene.add(this.gltf.scene)
-          this.gltf.scene.scale.setScalar(2.7)
-          // this.gltf.scene.scale.set(.7,.7,.7)
-          // this.gltf.scene.position.set(x,y,z)
-          this.mixer = new THREE.AnimationMixer(this.gltf.scene)
+
+          scene.add(this.mesh)
+          this.mesh.scale.setScalar(2.7)
+          // this.mesh.scale.set(.7,.7,.7)
+          // this.mesh.position.set(x,y,z)
+          this.mixer = new THREE.AnimationMixer(this.mesh)
           this.gltf.animations.forEach((animation) => {
             // let name = animation.name.toLowerCase()
             let name = animation.name
@@ -806,7 +810,7 @@ class Maria {
 
   setFacing(x, z) {
     this.facing.set(x, z)
-    this.gltf.scene.rotation.set(0, this.facing.angle() - Math.PI / 2, 0)
+    this.mesh.rotation.set(0, this.facing.angle() - Math.PI / 2, 0)
   }
 }
 

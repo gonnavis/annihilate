@@ -1,4 +1,3 @@
-//new Attacker(scene, updates, enemy.gltf.scene.position, gltf.scene.position)
 class Shield {
   constructor() {
     updates.push(this)
@@ -29,7 +28,7 @@ class Shield {
     if (paladin.gltf) {
       let tempVec3 = vec3() ///todo: performance
       let tempQuat = new THREE.Quaternion() ///todo: performance
-      // paladin.gltf.scene.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
+      // paladin.mesh.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
       paladin.shieldDelegate.getWorldPosition(tempVec3)
       paladin.shieldDelegate.getWorldQuaternion(tempQuat)
       this.body.position.copy(tempVec3)

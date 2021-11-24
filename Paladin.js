@@ -240,7 +240,7 @@ class Paladin {
             this.fadeToAction('dash')
 
             // change facing
-            this.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2
+            this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
             // move
             this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(60)
             this.body.velocity.x = this.tmpVec3.x
@@ -250,7 +250,7 @@ class Paladin {
             this.fadeToAction('dash', 0)
 
             // change facing
-            this.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2
+            this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
             // move
             this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(30)
             this.body.velocity.x = this.tmpVec3.x
@@ -274,13 +274,13 @@ class Paladin {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0.2)
             // let to = { t: 0 }
-            // let _rotationY = this.gltf.scene.rotation.y
+            // let _rotationY = this.mesh.rotation.y
             // gsap.to(to, {
             //   duration: 0.5,
             //   t: -Math.PI * 2,
             //   onUpdate: () => {
             //     // console.log(to.t)
-            //     this.gltf.scene.rotation.y = _rotationY + to.t
+            //     this.mesh.rotation.y = _rotationY + to.t
             //   },
             // })
           },
@@ -295,7 +295,7 @@ class Paladin {
           playStrike: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0.2)
-            this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(50)
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(50)
             // console.log(this.tmpVec3)
 
             // setTimeout(() => {
@@ -314,7 +314,7 @@ class Paladin {
           playJumpAttack: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed
             this.fadeToAction('jumpAttack', 0.2)
-            this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(15)
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(15)
             // console.log(this.tmpVec3)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 20
@@ -401,7 +401,7 @@ class Paladin {
   update(dt) {
     if (this.service.state.matches('loading')) return
 
-    this.gltf.scene.position.set(this.body.position.x, this.body.position.y - this.bodyCylinderHeight, this.body.position.z) // todo: Why not this.bodyCylinderHeight / 2 ?
+    this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyCylinderHeight, this.body.position.z) // todo: Why not this.bodyCylinderHeight / 2 ?
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
     this.mixer.update(dt)
@@ -430,33 +430,34 @@ class Paladin {
         (gltf) => {
           // console.log(gltf.animations)
           this.gltf = gltf
+          this.mesh = this.gltf.scene
 
           this.swordDelegate = new THREE.Object3D()
           this.swordDelegate.position.z = 50
-          this.swordBone = this.gltf.scene.getObjectByName('Sword_joint')
+          this.swordBone = this.mesh.getObjectByName('Sword_joint')
           this.swordBone.add(this.swordDelegate)
 
           this.shieldDelegate = new THREE.Object3D()
           // this.shieldDelegate.position.z = 50
           // this.shieldDelegate.position.y = 20
-          this.shieldBone = this.gltf.scene.getObjectByName('Shield_joint')
+          this.shieldBone = this.mesh.getObjectByName('Shield_joint')
           this.shieldBone.add(this.shieldDelegate)
 
-          this.gltf.scene.traverse((child) => {
+          this.mesh.traverse((child) => {
             if (child.isMesh) {
               child.castShadow = true
               child.receiveShadow = true
-              child.material = new THREE.MeshBasicMaterial()
+              child.material = new THREE.MeshStandardMaterial()
               child.material.map = new THREE.TextureLoader().load('./model/paladin/Paladin_diffuse.jpg')
               child.material.map.flipY = false
               child.material.skinning = true
             }
           })
-          scene.add(this.gltf.scene)
-          this.gltf.scene.scale.setScalar(2.9)
-          // this.gltf.scene.scale.set(.7,.7,.7)
-          // this.gltf.scene.position.set(x,y,z)
-          this.mixer = new THREE.AnimationMixer(this.gltf.scene)
+          scene.add(this.mesh)
+          this.mesh.scale.setScalar(2.9)
+          // this.mesh.scale.set(.7,.7,.7)
+          // this.mesh.position.set(x,y,z)
+          this.mixer = new THREE.AnimationMixer(this.mesh)
           this.gltf.animations.forEach((animation) => {
             // let name = animation.name.toLowerCase()
             let name = animation.name
@@ -541,7 +542,7 @@ class Paladin {
 
   setFacing(x, z) {
     this.facing.set(x, z)
-    this.gltf.scene.rotation.set(0, this.facing.angle() - Math.PI / 2, 0)
+    this.mesh.rotation.set(0, this.facing.angle() - Math.PI / 2, 0)
   }
 }
 

@@ -10,7 +10,7 @@ class Level {
         // './model/level/level.nav.glb',
         (gltf) => {
           this.gltf = gltf
-          this.mesh = this.gltf.scene.children[0]
+          this.mesh = this.mesh.children[0]
 
           // const geometry = new THREE.ConeBufferGeometry(5, 10, 5)
           const geometry = new THREE.ConeGeometry(5, 10, 5)

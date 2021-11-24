@@ -41,8 +41,8 @@ class Ai {
 
     if (this.role.service.state.hasTag('canMove')) {
       // change facing
-      this.role.gltf.scene.rotation.y = -this.facing.angle() + Math.PI / 2 ///formal
-      // this.role.gltf.scene.rotation.y = -this.facing.angle()+Math.PI///test
+      this.role.mesh.rotation.y = -this.facing.angle() + Math.PI / 2 ///formal
+      // this.role.mesh.rotation.y = -this.facing.angle()+Math.PI///test
     }
 
     this.direction.normalize().multiplyScalar(this.role.speed)

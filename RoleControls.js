@@ -70,8 +70,9 @@ class RoleControls {
     if (this.okey.KeyD || this.okey.ArrowRight) this.role.direction.add(vec2(1, 0))
     this.role.direction.normalize().multiplyScalar(this.role.speed)
     // console.log(this.role.direction)
+    let directionLengthSq = this.role.direction.lengthSq()
 
-    if (this.role.direction.length() > 0) {
+    if (directionLengthSq > 0) {
       this.role.service.send('run')
     } else {
       // console.log('111111111111111')
@@ -80,7 +81,9 @@ class RoleControls {
 
     if (this.role.service.state.hasTag('canMove')) {
       // change facing
-      this.role.facing.copy(this.role.direction)
+      if (directionLengthSq > 0) {
+        this.role.facing.copy(this.role.direction)
+      }
       this.role.mesh.rotation.y = -this.role.facing.angle() + Math.PI / 2
       // move
       this.role.body.position.x += this.role.direction.x

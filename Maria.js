@@ -1,4 +1,5 @@
 import { SwordBlaster } from './SwordBlaster.js'
+import { Earthquake } from './Earthquake.js'
 
 class Maria {
   constructor(x, y, z) {
@@ -313,7 +314,7 @@ class Maria {
           jumpChargeAttack: {
             entry: ['playJumpChargeAttack'],
             on: {
-              finish: { target: 'jumpAttackEnd' },
+              finish: { target: 'jumpChargeAttackEnd' },
               hit: { target: 'hit' },
               // // dash: { target: 'dash' },
             },
@@ -323,7 +324,7 @@ class Maria {
             entry: ['playJumpAttack'],
             on: {
               finish: { target: 'jumpAttackEnd' },
-              hit: { target: 'hit' },
+              // hit: { target: 'hit' },
               // // dash: { target: 'dash' },
             },
             tags: ['canDamage'],
@@ -333,6 +334,14 @@ class Maria {
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
+              // // dash: { target: 'dash' },
+            },
+          },
+          jumpChargeAttackEnd: {
+            entry: ['playJumpChargeAttackEnd'],
+            on: {
+              finish: { target: 'idle' },
+              // hit: { target: 'hit' },
               // // dash: { target: 'dash' },
             },
           },
@@ -621,10 +630,19 @@ class Maria {
 
             this.body.mass = this.mass
             this.body.velocity.y = -this.body.position.y * 5
+
+            this.body.collisionResponse = false
           },
           playJumpAttackEnd: (context, event, o) => {
             this.oaction['jumpAttackEnd'].timeScale = this.attackSpeed * 4
             this.fadeToAction('jumpAttackEnd')
+          },
+          playJumpChargeAttackEnd: (context, event, o) => {
+            this.oaction['jumpAttackEnd'].timeScale = this.attackSpeed * 4
+            this.fadeToAction('jumpAttackEnd')
+
+            new Earthquake(this)
+            this.body.collisionResponse = true
           },
           jump: () => {
             this.body.velocity.y = 20

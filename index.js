@@ -58,7 +58,7 @@ const gui = new GUI({ width: 310 })
 init_xstate()
 init_three()
 init_cannon()
-// window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, { autoUpdate: false })
+window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, { autoUpdate: false })
 init()
 requestAnimationFrame(animate)
 
@@ -326,7 +326,7 @@ function init_cannon() {
   world.gravity.set(0, -50, 0)
   world.broadphase = new CANNON.NaiveBroadphase()
 
-  world.defaultContactMaterial.contactEquationRelaxation = 10
+  // world.defaultContactMaterial.contactEquationRelaxation = 10
   // Prevent bounce, especially after jumpAttack. // todo: Why relaxation affect bounce?
   // But can cause sink when climbing hill problem.
 

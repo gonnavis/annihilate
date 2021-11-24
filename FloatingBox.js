@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class FloatingBox {
   constructor(width = 1, height = 1, depth = 1) {
     updates.push(this)

@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class Mutant {
   constructor(x, y, z) {
     this.isCharacter = true

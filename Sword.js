@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class Sword {
   constructor() {
     updates.push(this)

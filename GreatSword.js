@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class GreatSword {
   constructor() {
     updates.push(this)

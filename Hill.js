@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class Hill {
   constructor() {
     let pos = new THREE.Vector3(-80, 0, -100)

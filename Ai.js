@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class Ai {
   constructor(role, target, distance = 3) {
     this.role = role

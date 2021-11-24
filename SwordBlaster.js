@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class SwordBlaster {
   constructor(owner, type) {
     this.owner = owner

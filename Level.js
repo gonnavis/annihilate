@@ -1,3 +1,4 @@
+import { g } from './global.js'
 import { threeToCannon, ShapeType } from './lib/three-to-cannon.modern_my.js'
 class Level {
   constructor() {}

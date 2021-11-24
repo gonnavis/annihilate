@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class Paladin {
   constructor(x, y, z) {
     this.isCharacter = true

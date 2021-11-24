@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class RoleControls {
   constructor(role) {
     this.role = role

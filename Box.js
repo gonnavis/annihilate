@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class Box {
   constructor(width = 1, height = 1, depth = 1) {
     const pos = new THREE.Vector3()

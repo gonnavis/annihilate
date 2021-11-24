@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class Ground {
   constructor() {
     this.mesh = new THREE.Mesh(

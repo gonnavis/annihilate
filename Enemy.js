@@ -1,3 +1,4 @@
+import { g } from './global.js'
 import { Attacker } from './Attacker.js'
 class Enemy {
   constructor(x, y, z) {

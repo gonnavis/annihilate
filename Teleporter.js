@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class Teleporter {
   constructor(width = 1, height = 1, depth = 1) {
     this.dest = new THREE.Vector3()

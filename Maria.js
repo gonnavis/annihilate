@@ -1,3 +1,4 @@
+import { g } from './global.js'
 import { SwordBlaster } from './SwordBlaster.js'
 
 class Maria {

@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class HandKnife {
   constructor() {
     updates.push(this)

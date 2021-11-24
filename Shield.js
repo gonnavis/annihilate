@@ -1,3 +1,4 @@
+import { g } from './global.js'
 class Shield {
   constructor() {
     updates.push(this)

@@ -269,25 +269,26 @@ function init_three() {
 
   // lights
 
-  var light = new THREE.HemisphereLight(0xffffff, 0x444444)
+  let light = new THREE.HemisphereLight(0xffffff, 0x444444)
   light.position.set(0, 20, 0)
   scene.add(light)
 
-  light = new THREE.DirectionalLight(0xffffff)
-  light.position.set(0, 50, 0)
-  light.castShadow = true
-  light.shadow.mapSize.width = 2048
-  light.shadow.mapSize.height = 2048
-  light.shadow.camera.near = 1
-  light.shadow.camera.far = 500
-  light.shadow.camera.right = 100
-  light.shadow.camera.left = -100
-  light.shadow.camera.top = 100
-  light.shadow.camera.bottom = -100
-  // light.shadow.radius = 2;
-  light.shadow.radius = 0
-  // light.shadow.bias = - 0.00006;
-  scene.add(light)
+  window.shadowLight = new THREE.DirectionalLight(0xffffff)
+  shadowLight.position.set(0, 100, 0)
+  shadowLight.castShadow = true
+  shadowLight.shadow.mapSize.width = 2048
+  shadowLight.shadow.mapSize.height = 2048
+  shadowLight.shadow.camera.near = 1
+  shadowLight.shadow.camera.far = 500
+  shadowLight.shadow.camera.right = 100
+  shadowLight.shadow.camera.left = -100
+  shadowLight.shadow.camera.top = 100
+  shadowLight.shadow.camera.bottom = -100
+  // shadowLight.shadow.radius = 2;
+  shadowLight.shadow.radius = 0
+  // shadowLight.shadow.bias = - 0.00006;
+  scene.add(shadowLight)
+  scene.add(shadowLight.target)
 
   var grid = new THREE.GridHelper(200, 40, 0x000000, 0x000000)
   grid.position.y = 0.1
@@ -401,6 +402,8 @@ function animate(time) {
   if (window.camera && window.role.gltf) {
     camera.position.set(role.gltf.scene.position.x, role.gltf.scene.position.y + 30, role.gltf.scene.position.z + 30)
     // camera.lookAt(role.gltf.scene.position)
+    shadowLight.position.x = shadowLight.target.position.x = window.role.body.position.x
+    shadowLight.position.z = shadowLight.target.position.z = window.role.body.position.z
   }
 
   if (window.cannonDebugRenderer) cannonDebugRenderer.update()

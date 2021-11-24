@@ -18,6 +18,7 @@ class Maria {
     this.tmpVec3 = new THREE.Vector3()
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.
+    this.mass = 80
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -272,6 +273,16 @@ class Maria {
               dash: { target: 'dash' },
             },
           },
+          jumpAttackStartWithCharge: {
+            entry: ['playJumpAttackStartWithCharge'],
+            on: {
+              finish: { target: 'jumpChargeAttack' },
+              hit: { target: 'hit' },
+              // dash: { target: 'dash' },
+
+              keyJUp: { target: 'jumpAttackStart' },
+            },
+          },
           jumpAttackStart: {
             entry: ['playJumpAttackStart'],
             on: {
@@ -279,6 +290,15 @@ class Maria {
               hit: { target: 'hit' },
               // dash: { target: 'dash' },
             },
+          },
+          jumpChargeAttack: {
+            entry: ['playJumpChargeAttack'],
+            on: {
+              finish: { target: 'jumpAttackEnd' },
+              hit: { target: 'hit' },
+              // // dash: { target: 'dash' },
+            },
+            tags: ['canDamage'],
           },
           jumpAttack: {
             entry: ['playJumpAttack'],
@@ -301,7 +321,7 @@ class Maria {
             entry: ['playJump', 'jump'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'jumpAttackStart' },
+              attack: { target: 'jumpAttackStartWithCharge' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
@@ -312,7 +332,7 @@ class Maria {
             entry: ['playJump', 'jump'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'jumpAttackStart' },
+              attack: { target: 'jumpAttackStartWithCharge' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
             },
@@ -525,9 +545,23 @@ class Maria {
             this.oaction['strikeEnd'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('strikeEnd', 0)
           },
+          playJumpAttackStartWithCharge: (context, event, o) => {
+            this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 0.4
+            this.fadeToAction('jumpAttackStart')
+
+            // this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(10)
+            // this.body.velocity.x = this.tmpVec3.x
+            // this.body.velocity.y = 20
+            // this.body.velocity.z = this.tmpVec3.z
+
+            this.body.mass = 0
+            this.body.velocity.set(0, 0, 0)
+          },
           playJumpAttackStart: (context, event, o) => {
             this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 4
-            this.fadeToAction('jumpAttackStart')
+            // this.fadeToAction('jumpAttackStart')
+
+            this.body.mass = this.mass
 
             // this.tmpVec3.set(0, 0, 1).applyEuler(this.gltf.scene.rotation).multiplyScalar(10)
             // this.body.velocity.x = this.tmpVec3.x
@@ -538,6 +572,13 @@ class Maria {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed * 4
             this.fadeToAction('jumpAttack')
 
+            this.body.velocity.y = -this.body.position.y * 5
+          },
+          playJumpChargeAttack: (context, event, o) => {
+            this.oaction['jumpAttack'].timeScale = this.attackSpeed * 4
+            this.fadeToAction('jumpAttack')
+
+            this.body.mass = this.mass
             this.body.velocity.y = -this.body.position.y * 5
           },
           playJumpAttackEnd: (context, event, o) => {
@@ -604,7 +645,7 @@ class Maria {
       friction: 0,
     })
     this.body = new CANNON.Body({
-      mass: 80,
+      mass: this.mass,
       // material: physicsMaterial,
     })
     this.body.belongTo = this

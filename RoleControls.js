@@ -73,7 +73,6 @@ class RoleControls {
 
     if (this.role.direction.length() > 0) {
       this.role.service.send('run')
-      this.role.facing.copy(this.role.direction)
     } else {
       // console.log('111111111111111')
       this.role.service.send('stop')
@@ -81,6 +80,7 @@ class RoleControls {
 
     if (this.role.service.state.hasTag('canMove')) {
       // change facing
+      this.role.facing.copy(this.role.direction)
       this.role.mesh.rotation.y = -this.role.facing.angle() + Math.PI / 2
       // move
       this.role.body.position.x += this.role.direction.x

@@ -415,7 +415,11 @@ class Maria {
             this.oaction['dash'].timeScale = 2
             this.fadeToAction('dash')
 
-            // change facing
+            // force change facing
+            if (this.direction.lengthSq() > 0) {
+              this.facing.copy(this.direction)
+            }
+            // console.log(this.facing)
             this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
 
             // move
@@ -583,7 +587,7 @@ class Maria {
             this.fadeToAction('strikeEnd', 0)
           },
           playJumpAttackStartWithCharge: (context, event, o) => {
-            this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 0.5
+            this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 0.6
             this.fadeToAction('jumpAttackStart')
 
             // this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(10)

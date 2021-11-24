@@ -394,6 +394,8 @@ class Mutant {
     this.body = new CANNON.Body({
       mass: 100,
       // material: physicsMaterial,
+      collisionFilterGroup: g.GROUP_ENEMY,
+      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ROLE_WEAPON,
     })
     this.body.belongTo = this
 

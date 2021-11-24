@@ -9,6 +9,8 @@ class Sword {
     this.body = new CANNON.Body({
       mass: 0,
       type: CANNON.Body.KINEMATIC,
+      collisionFilterGroup: g.GROUP_ROLE_WEAPON,
+      collisionFilterMask: g.GROUP_ENEMY,
     })
     this.body.belongTo = this
     this.body.collisionResponse = false
@@ -18,11 +20,11 @@ class Sword {
 
     // this.body.addEventListener('collide', (e) => {
     this.body.addEventListener('beginContact', (e) => {
-      if (e.body.belongTo?.isEnemy === true && e.body.belongTo !== this.owner) {
-        if (this.owner.service.state.hasTag('canDamage')) {
-          e.body.belongTo.hit()
-        }
+      // if (e.body.belongTo?.isEnemy === true && e.body.belongTo !== this.owner) {
+      if (this.owner.service.state.hasTag('canDamage')) {
+        e.body.belongTo.hit()
       }
+      // }
     })
   }
 

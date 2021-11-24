@@ -689,6 +689,8 @@ class Maria {
     this.body = new CANNON.Body({
       mass: this.mass,
       // material: physicsMaterial,
+      collisionFilterGroup: g.GROUP_ROLE,
+      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ENEMY_WEAPON,
     })
     this.body.belongTo = this
 

@@ -369,6 +369,8 @@ class Paladin {
     this.body = new CANNON.Body({
       mass: 100,
       // material: physicsMaterial,
+      collisionFilterGroup: g.GROUP_ROLE,
+      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ENEMY_WEAPON,
     })
     this.body.belongTo = this
 

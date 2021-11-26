@@ -8,7 +8,7 @@ import cannonDebugger from './lib/cannon-es-debugger.js'
 import { GUI } from './lib/lil-gui.module.min.js'
 
 import { Ground } from './Ground.js'
-// import { Hill } from './Hill.js'
+import { Hill } from './Hill.js'
 // import { Level } from './Level.js'
 import { Box } from './Box.js'
 import { FloatingBox } from './FloatingBox.js'
@@ -143,7 +143,7 @@ function init() {
   teleporter3.mesh.position.copy(teleporter3.body.position)
   teleporter3.dest.set(-25, 60, -35)
 
-  // window.hill = new Hill()
+  window.hill = new Hill()
 
   // air box
   window.airBox = new Box(40, 4, 80)

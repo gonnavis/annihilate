@@ -1,16 +1,23 @@
 import { g } from './global.js'
 import { Geometry } from './lib/three.js/examples/jsm/deprecated/Geometry.js'
+// import { mergeVertices } from './lib/three.js/examples/jsm/utils/BufferGeometryUtils.js'
 class Hill {
   constructor() {
+    // let pos = new THREE.Vector3(-0, 0, -0)
     let pos = new THREE.Vector3(-80, 0, -100)
 
     const bufferGeometry = new THREE.ConeGeometry(120, 80, 8)
+    // let bufferGeometry = new THREE.BoxGeometry(6, 6, 6)
+    // bufferGeometry = mergeVertices(bufferGeometry, 2)
+    // bufferGeometry.computeVertexNormals()
     const geometry = new Geometry().fromBufferGeometry(bufferGeometry)
+    geometry.mergeVertices()
     const material = new THREE.MeshPhongMaterial({ color: 0x555555 })
     const cone = new THREE.Mesh(bufferGeometry, material)
     this.mesh = cone
     this.mesh.receiveShadow = true
     scene.add(this.mesh)
+    // console.log(bufferGeometry)
     // console.log(geometry)
 
     let vertices = []
@@ -23,6 +30,7 @@ class Hill {
     //   let z = bufferGeometry.attributes.position.array[i++]
     //   vertices.push(new CANNON.Vec3(x, y, z))
     // }
+    // console.log(vertices)
 
     let faces = []
     geometry.faces.forEach((face) => {
@@ -34,6 +42,7 @@ class Hill {
     //   let c = bufferGeometry.index.array[i++]
     //   faces.push([a, b, c])
     // }
+    // console.log(faces)
 
     // console.log(vertices)
     // console.log(faces)

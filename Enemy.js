@@ -1,5 +1,8 @@
 import { g } from './global.js'
+
+import * as THREE from './lib/three.js/build/three.module.js'
 import { Attacker } from './Attacker.js'
+import { GLTFLoader } from './lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 class Enemy {
   constructor(x, y, z) {
     let s = this
@@ -183,7 +186,7 @@ class Enemy {
   load() {
     let s = this
     return new Promise((resolve, reject) => {
-      var loader = new THREE.GLTFLoader()
+      var loader = new GLTFLoader()
       loader.load(
         './model/RobotExpressive/RobotExpressive.glb',
         function (gltf) {

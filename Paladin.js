@@ -1,4 +1,7 @@
 import { g } from './global.js'
+
+import * as THREE from './lib/three.js/build/three.module.js'
+import { GLTFLoader } from './lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 class Paladin {
   constructor(x, y, z) {
     this.isCharacter = true
@@ -427,7 +430,7 @@ class Paladin {
 
   load(callback) {
     return new Promise((resolve, reject) => {
-      var loader = new THREE.GLTFLoader()
+      var loader = new GLTFLoader()
       loader.load(
         './model/paladin/all.gltf',
         (gltf) => {

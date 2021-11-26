@@ -1,4 +1,6 @@
 import { g } from './global.js'
+
+import * as THREE from './lib/three.js/build/three.module.js'
 class Box {
   constructor(width = 1, height = 1, depth = 1) {
     const pos = new THREE.Vector3()

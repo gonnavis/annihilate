@@ -1,4 +1,7 @@
 import { g } from './global.js'
+
+import * as THREE from './lib/three.js/build/three.module.js'
+import { GLTFLoader } from './lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 class Mutant {
   constructor(x, y, z) {
     this.isCharacter = true
@@ -462,7 +465,7 @@ class Mutant {
 
   load(callback) {
     return new Promise((resolve, reject) => {
-      var loader = new THREE.GLTFLoader()
+      var loader = new GLTFLoader()
       loader.load(
         './model/mutant/a.gltf',
         // '/_3d_model/mixamo/Mutant/a/a.gltf',

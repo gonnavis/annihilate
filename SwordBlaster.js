@@ -1,4 +1,6 @@
 import { g } from './global.js'
+
+import * as THREE from './lib/three.js/build/three.module.js'
 class SwordBlaster {
   constructor(owner, type) {
     this.owner = owner

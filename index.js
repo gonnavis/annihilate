@@ -1,5 +1,6 @@
 import { g } from './global.js'
 
+import * as THREE from './lib/three.js/build/three.module.js'
 import * as CANNON from './lib/cannon-es_my.js'
 window.CANNON = CANNON
 import cannonDebugger from './lib/cannon-es-debugger.js'

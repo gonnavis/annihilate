@@ -183,7 +183,8 @@ function init() {
   shield.owner = paladin
 
   window.mutants = []
-  for (let i = 0; i < 10; i++) {
+  let mutantsCount = g.getQueryStringByName('mutants') === 'false' ? 0 : 10
+  for (let i = 0; i < mutantsCount; i++) {
     let mutant = new Mutant((Math.random() - 0.5) * 50, 5, (Math.random() - 0.5) * 50)
     let handKnife = new HandKnife()
     handKnife.owner = mutant

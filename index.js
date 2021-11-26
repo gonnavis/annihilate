@@ -1,6 +1,9 @@
 import { g } from './global.js'
 
 import * as THREE from './lib/three.js/build/three.module.js'
+import { EffectComposer } from './lib/three.js/examples/jsm/postprocessing/EffectComposer.js'
+import { SSRPass } from './lib/three.js/examples/jsm/postprocessing/SSRPass.js'
+
 import * as CANNON from './lib/cannon-es_my.js'
 window.CANNON = CANNON
 import cannonDebugger from './lib/cannon-es-debugger.js'
@@ -55,6 +58,8 @@ window.attackers = []
 
 let fsm
 window.service = null
+
+let composer
 
 const gui = new GUI({ width: 310 })
 
@@ -312,6 +317,22 @@ function init_three() {
 
   window.addEventListener('resize', onWindowResize, false)
 
+  // composer
+
+  composer = new EffectComposer(renderer)
+  let ssrPass = new SSRPass({
+    renderer,
+    scene,
+    camera,
+    width: innerWidth,
+    height: innerHeight,
+    // groundReflector: params.groundReflector ? groundReflector : null,
+    // selects: params.groundReflector ? selects : null,
+  })
+
+  composer.addPass(ssrPass)
+  // composer.addPass(new ShaderPass(GammaCorrectionShader))
+
   // stats
   stats = new Stats()
   container.appendChild(stats.dom)
@@ -412,7 +433,8 @@ function animate(time) {
 
   if (window.cannonDebugRenderer) cannonDebugRenderer.update()
   world.step(fixedTimeStep, dt, maxSubSteps)
-  renderer.render(scene, camera)
+  // renderer.render(scene, camera)
+  composer.render()
 
   stats.update()
 }

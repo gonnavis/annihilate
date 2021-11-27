@@ -2,6 +2,8 @@ import { g } from './global.js'
 
 import * as THREE from './lib/three.js/build/three.module.js'
 window.THREE = THREE
+import { OrbitControls } from './lib/three.js/examples/jsm/controls/OrbitControls.js'
+
 import * as CANNON from './lib/cannon-es_my.js'
 window.CANNON = CANNON
 import cannonDebugger from './lib/cannon-es-debugger.js'
@@ -166,6 +168,7 @@ function init() {
 
   // window.maria = new Maria(0, 5, -15)
   window.maria = new Maria(-5, 5, 0)
+  // window.maria = new Maria(0, 0, 0)
   maria.load(() => {
     // maria.mesh.rotation.set(0, Math.PI, 0)
     maria.setFacing(0, -1)
@@ -318,7 +321,7 @@ function init_three() {
   stats = new Stats()
   container.appendChild(stats.dom)
 
-  // controls = new THREE.OrbitControls(camera, renderer.domElement);
+  // window.controls = new OrbitControls(camera, renderer.domElement)
 }
 
 function init_cannon() {
@@ -406,7 +409,7 @@ function animate(time) {
   if (window.service.state.matches('initial')) return
 
   if (window.camera && window.role.gltf) {
-    camera.position.set(role.mesh.position.x, role.mesh.position.y + 30, role.mesh.position.z + 30)
+    if (!window.controls) camera.position.set(role.mesh.position.x, role.mesh.position.y + 30, role.mesh.position.z + 30)
     // camera.lookAt(role.mesh.position)
     shadowLight.position.x = shadowLight.target.position.x = window.role.body.position.x
     shadowLight.position.z = shadowLight.target.position.z = window.role.body.position.z

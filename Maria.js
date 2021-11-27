@@ -3,6 +3,7 @@ import { g } from './global.js'
 import * as THREE from './lib/three.js/build/three.module.js'
 import { SwordBlaster } from './SwordBlaster.js'
 import { GLTFLoader } from './lib/three.js/examples/jsm/loaders/GLTFLoader.js'
+import { SwordBlink } from './SwordBlink.js'
 
 class Maria {
   constructor(x, y, z) {
@@ -23,7 +24,7 @@ class Maria {
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.
     this.mass = 80
-    this.chargedLevel = 0
+    this.chargedLevel = 0 // 0: normal/slow combo | 1: fast combo | 2: fast combo & swordBlaster
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -508,10 +509,14 @@ class Maria {
           playCharged1: () => {
             this.chargedLevel = 1
             this.sword.material.emissive.setScalar(0.3)
+
+            this.swordBlink.blink(1)
           },
           playCharged2: () => {
             this.chargedLevel = 2
             maria.sword.material.color.setRGB(0, 1, 1)
+
+            this.swordBlink.blink(2)
           },
           playChargeAttack: () => {
             this.oaction['punch'].timeScale = this.attackSpeed * this.chargeAttackCoe
@@ -754,15 +759,6 @@ class Maria {
           this.gltf = gltf
           this.mesh = this.gltf.scene
 
-          this.swordDelegate = new THREE.Object3D()
-          this.swordDelegate.position.x = -24
-          this.swordDelegate.position.z = 50
-          this.swordDelegate.rotation.y = -0.55
-          this.swordBone = this.mesh.getObjectByName('sword_joint')
-          this.swordBone.add(this.swordDelegate)
-
-          this.sword = this.mesh.getObjectByName('Maria_sword')
-
           this.mesh.traverse((child) => {
             if (child.isMesh) {
               child.castShadow = true
@@ -806,6 +802,37 @@ class Maria {
             this.service.send('finish')
             // }
           })
+
+          //
+
+          this.swordDelegate = new THREE.Object3D()
+
+          // this.swordDelegate.position.x = -28.34566578619436 // -0.765333 / maria.swordBone.getWorldScale(new THREE.Vector3()).x
+          this.swordDelegate.position.x = -26.34566578619436
+          // this.swordDelegate.position.y = -0.9035928499267991 // -0.024397 / maria.swordBone.getWorldScale(new THREE.Vector3()).y
+          this.swordDelegate.position.y = 7.096407150073201
+          // this.swordDelegate.position.z = 52.96816695583054 // 1.43014 / maria.swordBone.getWorldScale(new THREE.Vector3()).z
+          this.swordDelegate.position.z = 46.96816695583054
+
+          this.swordDelegate.rotation.x = -0.14150082377618828 // -8.1074*THREE.Math.DEG2RAD
+          // this.swordDelegate.rotation.x = -0.21150082377618826
+          // this.swordDelegate.rotation.y = -0.5987526531891747 // -34.306*THREE.Math.DEG2RAD
+          this.swordDelegate.rotation.y = -0.5387526531891745
+          // this.swordDelegate.rotation.z = 0.4663257961941049 // 26.7185*THREE.Math.DEG2RAD
+          this.swordDelegate.rotation.z = -0.6
+
+          this.swordBone = this.mesh.getObjectByName('sword_joint')
+          this.swordBone.add(this.swordDelegate)
+
+          this.sword = this.mesh.getObjectByName('Maria_sword')
+
+          this.swordBlink = new SwordBlink()
+          // scene.add(swordBlink.mesh)
+          this.swordDelegate.add(this.swordBlink.mesh)
+          this.swordDelegate.add(this.swordBlink.mesh2)
+
+          //
+
           this.service.send('loaded')
           resolve()
 

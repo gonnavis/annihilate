@@ -1,6 +1,7 @@
 import { g } from './global.js'
 
 import * as THREE from './lib/three.js/build/three.module.js'
+window.THREE = THREE
 import * as CANNON from './lib/cannon-es_my.js'
 window.CANNON = CANNON
 import cannonDebugger from './lib/cannon-es-debugger.js'
@@ -273,11 +274,11 @@ function init_three() {
 
   // lights
 
-  let light = new THREE.HemisphereLight(0xffffff, 0x444444)
+  let light = new THREE.HemisphereLight(0x888888, 0x333333)
   light.position.set(0, 20, 0)
   scene.add(light)
 
-  window.shadowLight = new THREE.DirectionalLight(0xaaaaaa)
+  window.shadowLight = new THREE.DirectionalLight(0x888888)
   shadowLight.position.set(0, 100, 0)
   shadowLight.castShadow = true
   shadowLight.shadow.mapSize.width = 2048
@@ -305,6 +306,7 @@ function init_three() {
   renderer.setSize(window.innerWidth, window.innerHeight)
   // renderer.gammaOutput = true
   // renderer.gammaFactor = 1.3
+  renderer.outputEncoding = THREE.sRGBEncoding
   renderer.shadowMap.enabled = true
   // renderer.shadowMap.type = THREE.VSMShadowMap;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap

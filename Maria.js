@@ -770,6 +770,7 @@ class Maria {
               child.material = new THREE.MeshStandardMaterial()
               child.material.map = new THREE.TextureLoader().load('./model/maria/maria_diffuse.jpg')
               child.material.map.flipY = false
+              child.material.map.encoding = THREE.sRGBEncoding
               child.material.skinning = true
             }
           })

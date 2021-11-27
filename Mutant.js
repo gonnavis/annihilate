@@ -487,6 +487,7 @@ class Mutant {
               child.material.map = new THREE.TextureLoader().load('./model/mutant/a.jpg')
               // child.material.map = new THREE.TextureLoader().load('/_3d_model/mixamo/Mutant/a/a.jpg')
               child.material.map.flipY = false
+              child.material.map.encoding = THREE.sRGBEncoding
               child.material.skinning = true
             }
           })

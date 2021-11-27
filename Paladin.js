@@ -456,6 +456,7 @@ class Paladin {
               child.material = new THREE.MeshStandardMaterial()
               child.material.map = new THREE.TextureLoader().load('./model/paladin/Paladin_diffuse.jpg')
               child.material.map.flipY = false
+              child.material.map.encoding = THREE.sRGBEncoding
               child.material.skinning = true
             }
           })

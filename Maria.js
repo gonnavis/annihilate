@@ -829,7 +829,6 @@ class Maria {
           this.swordBlink = new SwordBlink()
           // scene.add(swordBlink.mesh)
           this.swordDelegate.add(this.swordBlink.mesh)
-          this.swordDelegate.add(this.swordBlink.mesh2)
 
           //
 

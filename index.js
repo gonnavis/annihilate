@@ -321,7 +321,7 @@ function init_three() {
   stats = new Stats()
   container.appendChild(stats.dom)
 
-  // window.controls = new OrbitControls(camera, renderer.domElement)
+  if (g.getQueryStringByName('orbit') === 'true') window.controls = new OrbitControls(camera, renderer.domElement)
 }
 
 function init_cannon() {

@@ -60,7 +60,9 @@ class RoleControls {
     if (this.tickKey.KeyJ && this.tickKey.KeyK && this.tickKey.KeyL) {
       console.log('pop')
     } else {
-      switch (Object.keys(this.tickKey)[0]) {
+      switch (
+        Object.keys(this.tickKey)[0] // note: The order of Object.keys may not by added order, but should no big problem.
+      ) {
         case 'KeyJ':
         case 'Numpad4':
           this.role.service.send('attack')

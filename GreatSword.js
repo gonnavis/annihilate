@@ -26,7 +26,7 @@ class GreatSword {
       // if (e.body.belongTo?.isEnemy === true && e.body.belongTo !== this.owner) {
       // console.log(1111111111)
       if (this.owner.service.state.hasTag('canDamage')) {
-        if (this.owner.service.state.matches('strike')) {
+        if (this.owner.service.state.hasTag('knockDown')) {
           e.body.belongTo.knockDown()
         } else {
           e.body.belongTo.hit()

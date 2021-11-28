@@ -118,26 +118,32 @@ class Maria {
             },
           },
           charging: {
-            after: {
-              500: { target: 'charged1' },
-            },
             on: {
               keyJUp: { target: 'attack' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+            after: {
+              500: { target: 'charged1' },
             },
           },
           charged1: {
             entry: 'playCharged1',
-            after: {
-              500: { target: 'charged2' },
-            },
             on: {
               keyJUp: { target: 'chargeAttack' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+            after: {
+              500: { target: 'charged2' },
             },
           },
           charged2: {
             entry: 'playCharged2',
             on: {
               keyJUp: { target: 'chargeAttack' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
           },
           chargeAttack: {
@@ -199,7 +205,7 @@ class Maria {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
-            tags: ['canDamage'],
+            tags: ['canDamage', 'knockDown'],
           },
           chargeStrikeEnd: {
             entry: 'playChargeStrikeEnd',
@@ -287,7 +293,7 @@ class Maria {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
-            tags: ['canDamage'],
+            tags: ['canDamage', 'knockDown'],
           },
           strikeEnd: {
             entry: 'playStrikeEnd',
@@ -377,11 +383,11 @@ class Maria {
           },
           dash: {
             entry: 'playDash',
-            after: {
-              300: { target: 'idle' },
-            },
             on: {
               attack: { target: 'dashAttack' },
+            },
+            after: {
+              300: { target: 'idle' },
             },
           },
           dashAttack: {

@@ -84,6 +84,7 @@ class Maria {
             entry: 'playBlock',
             on: {
               keyLUp: { target: 'idle' },
+              hadouken: { target: 'hadouken' },
               // Caution: Synchronize the state of roleControls' keyLUp/Down, if add more transitions/states below.
               // run: { target: 'run' },
               // attack: { target: 'attackStartWithCharge' },
@@ -91,6 +92,14 @@ class Maria {
               // jump: { target: 'jump' },
               // hit: { target: 'hit' },
               // dash: { target: 'dash' },
+            },
+          },
+          hadouken: {
+            entry: 'playHadouken',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
           },
           run: {
@@ -542,6 +551,12 @@ class Maria {
             if (this.chargedLevel === 2) {
               let swordBlaster = new SwordBlaster(this, 1)
             }
+          },
+          playHadouken: () => {
+            this.oaction['punch'].timeScale = this.attackSpeed * this.chargeAttackCoe
+            this.fadeToAction('punch', 0)
+
+            let swordBlaster = new SwordBlaster(this, 3)
           },
           playDashAttack: () => {
             this.oaction['dashAttack'].timeScale = this.attackSpeed

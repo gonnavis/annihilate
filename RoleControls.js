@@ -11,36 +11,45 @@ class RoleControls {
     this.holdKey = {}
     this.tickKey = {}
     this.seqKey = [] // sequentialKey
+    this.timeoutSeqKey = null
     // this.actkey = ''
 
     window.addEventListener('keydown', (e) => {
       // console.log('repeat', e.repeat, e.code)
 
-      if (e.repeat) return
+      // if (e.repeat) return
       // console.log(e.key, e.code, e.keyCode)
 
+      if (this.holdKey[e.code]) return // Prevent: keyD -> keyJ long press -> keyD up, cause double attack bug.
+      // e.prepeat & if (e.code === this.actkey) return, both not work.
+
+      this.holdKey[e.code] = true
+      this.tickKey[e.code] = true
+
+      // console.log(performance.now())
+      clearTimeout(this.timeoutSeqKey)
       if (this.role.service.state.matches('block')) {
         if (e.code === 'KeyJ') {
           if (this.seqKey.length === 2 && this.seqKey[0] === 'KeyS' && this.seqKey[1] === 'KeyD') {
             console.log('hadouken')
+            this.role.service.send('hadouken')
           } else if (this.seqKey.length === 3 && this.seqKey[0] === 'KeyD' && this.seqKey[1] === 'KeyS' && this.seqKey[2] === 'KeyD') {
             console.log('shoryuken')
+            this.role.service.send('shoryuken')
           }
           this.seqKey.length = 0
         } else if (e.code === 'KeyK') {
           if (this.seqKey.length === 2 && this.seqKey[0] === 'KeyS' && this.seqKey[1] === 'KeyA') {
             console.log('ajejebloken')
+            this.role.service.send('ajejebloken')
           }
           this.seqKey.length = 0
         } else {
           this.seqKey.push(e.code)
         }
-      } else {
-        if (this.holdKey[e.code]) return // Prevent: keyD -> keyJ long press -> keyD up, cause double attack bug.
-        // e.prepeat & if (e.code === this.actkey) return, both not work.
-
-        this.holdKey[e.code] = true
-        this.tickKey[e.code] = true
+        this.timeoutSeqKey = setTimeout(() => {
+          this.seqKey.length = 0
+        }, 300)
       }
 
       // if (!this.gltf) return

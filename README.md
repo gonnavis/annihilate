@@ -36,7 +36,7 @@ Now open-sourced and:
 
 ![image](https://user-images.githubusercontent.com/10785634/118347405-b6f14b80-b575-11eb-9269-38ef89051949.png)
 
-[Video](https://twitter.com/gonnavis/status/1434951076365561859)
+[Video](https://twitter.com/gonnavis/status/1434951076365561859) [Video2](https://twitter.com/gonnavis/status/1461371351197880325) [Video3](https://twitter.com/gonnavis/status/1463220288468905987)
 
 ### Ref and Goal:
     

@@ -13,8 +13,6 @@ class Ai {
 
     updates.push(this)
 
-    this.okey = {}
-    this.actkey = ''
     this.direction = vec2(0, 0)
     this.facing = vec2(0, 1)
   }

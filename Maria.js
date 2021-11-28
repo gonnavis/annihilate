@@ -504,13 +504,8 @@ class Maria {
             this.fadeToAction('punchStart')
           },
           playAttack: () => {
-            // if (roleControls.okey.KeyJ) {
-            //   // todo: refactor: not access roleControls here.
-            //   this.service.send('whirlwind')
-            // } else {
             this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0)
-            // }
           },
           playCharged1: () => {
             this.chargedLevel = 1
@@ -683,7 +678,7 @@ class Maria {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('maria: state:', state.value)
+      // if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value

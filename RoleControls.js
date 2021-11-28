@@ -8,7 +8,7 @@ class RoleControls {
 
     updates.push(this)
 
-    this.okey = {}
+    this.oKey = {}
     this.actkey = ''
 
     window.addEventListener('keydown', (e) => {
@@ -17,10 +17,10 @@ class RoleControls {
       // if (e.repeat) return
       // console.log(e.key, e.code, e.keyCode)
 
-      if (this.okey[e.code]) return // Prevent: keyD -> keyJ long press -> keyD up, cause double attack bug.
+      if (this.oKey[e.code]) return // Prevent: keyD -> keyJ long press -> keyD up, cause double attack bug.
       // e.prepeat & if (e.code === this.actkey) return, both not work.
 
-      this.okey[e.code] = true
+      this.oKey[e.code] = true
 
       // if (!this.gltf) return
       // if (e.code === this.actkey) return
@@ -44,10 +44,17 @@ class RoleControls {
           break
       }
       this.actkey = e.code
+
+      // console.log(Object.fromEntries(Object.entries(this.oKey).filter((n) => n[1])))
+      console.log(
+        Object.entries(this.oKey)
+          .filter((n) => n[1])
+          .map((n) => n[0])
+      )
     })
     window.addEventListener('keyup', (e) => {
       // console.log(e)
-      this.okey[e.code] = false
+      this.oKey[e.code] = false
 
       switch (e.code) {
         case 'KeyJ':
@@ -64,13 +71,14 @@ class RoleControls {
   }
 
   update(dt) {
+    console.log('update')
     // if (this.role.service.state.matches('loading')) return
 
     this.role.direction.set(0, 0)
-    if (this.okey.KeyW || this.okey.ArrowUp) this.role.direction.add(vec2(0, -1))
-    if (this.okey.KeyS || this.okey.ArrowDown) this.role.direction.add(vec2(0, 1))
-    if (this.okey.KeyA || this.okey.ArrowLeft) this.role.direction.add(vec2(-1, 0))
-    if (this.okey.KeyD || this.okey.ArrowRight) this.role.direction.add(vec2(1, 0))
+    if (this.oKey.KeyW || this.oKey.ArrowUp) this.role.direction.add(vec2(0, -1))
+    if (this.oKey.KeyS || this.oKey.ArrowDown) this.role.direction.add(vec2(0, 1))
+    if (this.oKey.KeyA || this.oKey.ArrowLeft) this.role.direction.add(vec2(-1, 0))
+    if (this.oKey.KeyD || this.oKey.ArrowRight) this.role.direction.add(vec2(1, 0))
     this.role.direction.normalize().multiplyScalar(this.role.speed)
     // console.log(this.role.direction)
     let directionLengthSq = this.role.direction.lengthSq()
@@ -93,7 +101,7 @@ class RoleControls {
       this.role.body.position.z += this.role.direction.y
     }
 
-    // if (this.okey.KeyJ) {
+    // if (this.oKey.KeyJ) {
     //   // code here run after animation finished event, in one tick.
     //   this.role.service.send('keyJDown')
     //   // console.log('whirlwind')

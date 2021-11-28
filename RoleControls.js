@@ -94,7 +94,7 @@ class RoleControls {
     // console.log('update')
     // if (this.role.service.state.matches('loading')) return
 
-    if (this.tickKey.KeyJ && this.tickKey.KeyK && this.tickKey.KeyL) {
+    if ((this.tickKey.KeyJ || this.tickKey.Numpad4) && (this.tickKey.KeyK || this.tickKey.Numpad5) && (this.tickKey.KeyL || this.tickKey.Numpad6)) {
       // console.log('pop')
       this.role.pop?.pop() // Whether need use: this.role.service.send('pop') ?
     } else {

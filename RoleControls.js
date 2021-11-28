@@ -32,17 +32,17 @@ class RoleControls {
         let now = performance.now()
         console.log(now - this.prevTime)
         this.prevTime = now
-        if (e.code === 'KeyJ') {
-          if (this.seqKey.length === 2 && this.seqKey[0] === 'KeyS' && this.seqKey[1] === 'KeyD') {
+        if (e.code === 'KeyJ' || e.code === 'Numpad4') {
+          if (this.seqKey.length === 2 && (this.seqKey[0] === 'KeyS' || this.seqKey[0] === 'ArrowDown') && (this.seqKey[1] === 'KeyD' || this.seqKey[1] === 'ArrowRight')) {
             console.log('-- hadouken')
             this.role.service.send('hadouken')
-          } else if (this.seqKey.length === 3 && this.seqKey[0] === 'KeyD' && this.seqKey[1] === 'KeyS' && this.seqKey[2] === 'KeyD') {
+          } else if (this.seqKey.length === 3 && (this.seqKey[0] === 'KeyD' || this.seqKey[0] === 'ArrowRight') && (this.seqKey[1] === 'KeyS' || this.seqKey[1] === 'ArrowDown') && (this.seqKey[2] === 'KeyD' || this.seqKey[2] === 'ArrowRight')) {
             console.log('-- shoryuken')
             this.role.service.send('shoryuken')
           }
           this.seqKey.length = 0
-        } else if (e.code === 'KeyK') {
-          if (this.seqKey.length === 2 && this.seqKey[0] === 'KeyS' && this.seqKey[1] === 'KeyA') {
+        } else if (e.code === 'KeyK' || e.code === 'Numpad5') {
+          if (this.seqKey.length === 2 && (this.seqKey[0] === 'KeyS' || this.seqKey[0] === 'ArrowDown') && (this.seqKey[1] === 'KeyA' || this.seqKey[1] === 'ArrowLeft')) {
             console.log('-- ajejebloken')
             this.role.service.send('ajejebloken')
           }

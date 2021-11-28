@@ -745,7 +745,6 @@ class Maria {
               repeat: Infinity,
               ease: 'none',
               onUpdate: () => {
-                // console.log(to.t)
                 this.mesh.rotation.y = _rotationY + to.t
               },
               // onComplete: () => {
@@ -755,10 +754,7 @@ class Maria {
           },
           exitAjejebloken: () => {
             this.tweenAjejebloken.kill()
-            setTimeout(() => {
-              // console.log('set facing')
-              this.setFacing(this.facing.x, this.facing.y)
-            }, 0)
+            this.setFacing(this.facing.x, this.facing.y)
           },
         },
       }

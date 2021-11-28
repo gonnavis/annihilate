@@ -27,6 +27,7 @@ import { RoleControls } from './RoleControls.js'
 import { Ai } from './Ai.js'
 import { HandKnife } from './HandKnife.js'
 import { Teleporter } from './Teleporter.js'
+import { Ball } from './Ball.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -123,6 +124,9 @@ function init_xstate() {
 
 function init() {
   window.ground = new Ground() // todo: refactor
+
+  window.ball = new Ball(2)
+  ball.body.position.set(0, 5, -5)
 
   // window.level = new Level()
   // level.load()

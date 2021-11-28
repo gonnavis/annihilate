@@ -15,7 +15,7 @@ class GreatSword {
       collisionFilterMask: g.GROUP_ENEMY,
     })
     this.body.belongTo = this
-    this.body.collisionResponse = false
+    // this.body.collisionResponse = false
     let shape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 2))
     this.body.addShape(shape)
     world.addBody(this.body)

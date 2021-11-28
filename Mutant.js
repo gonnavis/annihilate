@@ -226,6 +226,7 @@ class Mutant {
             entry: ['playKnockDown'],
             on: {
               finish: { target: 'idle' },
+              dead: { target: 'dead' },
             },
           },
           dash: {

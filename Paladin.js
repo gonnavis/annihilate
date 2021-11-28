@@ -549,7 +549,7 @@ class Paladin {
 
   setFacing(x, z) {
     this.facing.set(x, z)
-    this.mesh.rotation.set(0, this.facing.angle() - Math.PI / 2, 0)
+    this.mesh.rotation.set(0, -this.facing.angle() + Math.PI / 2, 0)
   }
 }
 

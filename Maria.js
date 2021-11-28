@@ -85,6 +85,7 @@ class Maria {
             on: {
               keyLUp: { target: 'idle' },
               hadouken: { target: 'hadouken' },
+              ajejebloken: { target: 'ajejebloken' },
               // Caution: Synchronize the state of roleControls' keyLUp/Down, if add more transitions/states below.
               // run: { target: 'run' },
               // attack: { target: 'attackStartWithCharge' },
@@ -101,6 +102,19 @@ class Maria {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
+          },
+          ajejebloken: {
+            entry: 'playAjejebloken',
+            exit: 'exitAjejebloken',
+            on: {
+              // finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              // dash: { target: 'dash' },
+            },
+            after: {
+              2000: { target: 'idle' },
+            },
+            tags: ['canDamage'],
           },
           run: {
             entry: 'playRun',
@@ -706,13 +720,53 @@ class Maria {
           exitWhirlwind: () => {
             this.tweenWhirlwind.kill()
           },
+          playAjejebloken: () => {
+            this.fadeToAction('whirlwind', 0)
+
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(0.2)
+            gsap.to(
+              {},
+              {
+                duration: 2,
+                onUpdate: () => {
+                  // todo: use delta time.
+                  this.body.position.x += this.tmpVec3.x
+                  this.body.position.z += this.tmpVec3.z
+                },
+              }
+            )
+
+            // console.log(111)
+            let to = { t: 0 }
+            let _rotationY = this.mesh.rotation.y
+            this.tweenAjejebloken = gsap.to(to, {
+              duration: 0.3,
+              t: Math.PI * 2,
+              repeat: Infinity,
+              ease: 'none',
+              onUpdate: () => {
+                // console.log(to.t)
+                this.mesh.rotation.y = _rotationY + to.t
+              },
+              // onComplete: () => {
+              //   this.service.send('finish')
+              // },
+            })
+          },
+          exitAjejebloken: () => {
+            this.tweenAjejebloken.kill()
+            setTimeout(() => {
+              // console.log('set facing')
+              this.setFacing(this.facing.x, this.facing.y)
+            }, 0)
+          },
         },
       }
     )
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -921,7 +975,8 @@ class Maria {
 
   setFacing(x, z) {
     this.facing.set(x, z)
-    this.mesh.rotation.set(0, this.facing.angle() - Math.PI / 2, 0)
+    this.mesh.rotation.set(0, -this.facing.angle() + Math.PI / 2, 0)
+    // todo: add function: this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2.
   }
 }
 

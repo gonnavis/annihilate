@@ -13,6 +13,7 @@ class RoleControls {
     this.seqKey = [] // sequentialKey
     this.timeoutSeqKey = null
     // this.actkey = ''
+    this.prevTime = 0
 
     window.addEventListener('keydown', (e) => {
       // console.log('repeat', e.repeat, e.code)
@@ -26,21 +27,23 @@ class RoleControls {
       this.holdKey[e.code] = true
       this.tickKey[e.code] = true
 
-      // console.log(performance.now())
       clearTimeout(this.timeoutSeqKey)
       if (this.role.service.state.matches('block')) {
+        let now = performance.now()
+        console.log(now - this.prevTime)
+        this.prevTime = now
         if (e.code === 'KeyJ') {
           if (this.seqKey.length === 2 && this.seqKey[0] === 'KeyS' && this.seqKey[1] === 'KeyD') {
-            console.log('hadouken')
+            console.log('-- hadouken')
             this.role.service.send('hadouken')
           } else if (this.seqKey.length === 3 && this.seqKey[0] === 'KeyD' && this.seqKey[1] === 'KeyS' && this.seqKey[2] === 'KeyD') {
-            console.log('shoryuken')
+            console.log('-- shoryuken')
             this.role.service.send('shoryuken')
           }
           this.seqKey.length = 0
         } else if (e.code === 'KeyK') {
           if (this.seqKey.length === 2 && this.seqKey[0] === 'KeyS' && this.seqKey[1] === 'KeyA') {
-            console.log('ajejebloken')
+            console.log('-- ajejebloken')
             this.role.service.send('ajejebloken')
           }
           this.seqKey.length = 0
@@ -49,7 +52,8 @@ class RoleControls {
         }
         this.timeoutSeqKey = setTimeout(() => {
           this.seqKey.length = 0
-        }, 300)
+        }, 150)
+        console.log(this.seqKey)
       }
 
       // if (!this.gltf) return
@@ -62,8 +66,6 @@ class RoleControls {
       //     .filter((n) => n[1])
       //     .map((n) => n[0])
       // )
-
-      // console.log(this.seqKey)
     })
     window.addEventListener('keyup', (e) => {
       // console.log(e)

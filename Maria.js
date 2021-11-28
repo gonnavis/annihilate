@@ -84,6 +84,7 @@ class Maria {
             entry: 'playBlock',
             on: {
               keyLUp: { target: 'idle' },
+              // Caution: Synchronize the state of roleControls' keyLUp/Down, if add more transitions/states below.
               // run: { target: 'run' },
               // attack: { target: 'attackStartWithCharge' },
               // bash: { target: 'bashStart' },

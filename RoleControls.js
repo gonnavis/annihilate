@@ -10,19 +10,38 @@ class RoleControls {
 
     this.holdKey = {}
     this.tickKey = {}
+    this.seqKey = [] // sequentialKey
     // this.actkey = ''
 
     window.addEventListener('keydown', (e) => {
       // console.log('repeat', e.repeat, e.code)
 
-      // if (e.repeat) return
+      if (e.repeat) return
       // console.log(e.key, e.code, e.keyCode)
 
-      if (this.holdKey[e.code]) return // Prevent: keyD -> keyJ long press -> keyD up, cause double attack bug.
-      // e.prepeat & if (e.code === this.actkey) return, both not work.
+      if (this.role.service.state.matches('block')) {
+        if (e.code === 'KeyJ') {
+          if (this.seqKey.length === 2 && this.seqKey[0] === 'KeyS' && this.seqKey[1] === 'KeyD') {
+            console.log('hadouken')
+          } else if (this.seqKey.length === 3 && this.seqKey[0] === 'KeyD' && this.seqKey[1] === 'KeyS' && this.seqKey[2] === 'KeyD') {
+            console.log('shoryuken')
+          }
+          this.seqKey.length = 0
+        } else if (e.code === 'KeyK') {
+          if (this.seqKey.length === 2 && this.seqKey[0] === 'KeyS' && this.seqKey[1] === 'KeyA') {
+            console.log('ajejebloken')
+          }
+          this.seqKey.length = 0
+        } else {
+          this.seqKey.push(e.code)
+        }
+      } else {
+        if (this.holdKey[e.code]) return // Prevent: keyD -> keyJ long press -> keyD up, cause double attack bug.
+        // e.prepeat & if (e.code === this.actkey) return, both not work.
 
-      this.holdKey[e.code] = true
-      this.tickKey[e.code] = true
+        this.holdKey[e.code] = true
+        this.tickKey[e.code] = true
+      }
 
       // if (!this.gltf) return
       // if (e.code === this.actkey) return
@@ -34,6 +53,8 @@ class RoleControls {
       //     .filter((n) => n[1])
       //     .map((n) => n[0])
       // )
+
+      // console.log(this.seqKey)
     })
     window.addEventListener('keyup', (e) => {
       // console.log(e)
@@ -51,6 +72,7 @@ class RoleControls {
         case 'KeyL':
         case 'Numpad6':
           this.role.service.send('keyLUp')
+          this.seqKey.length = 0
           break
       }
       // this.actkey = ''

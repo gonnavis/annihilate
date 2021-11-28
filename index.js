@@ -59,6 +59,12 @@ window.attackers = []
 let fsm
 window.service = null
 
+let cameraPosX = 0
+let cameraPosY = 30
+// let cameraPosY = 0
+let cameraPosZ = 30
+// let cameraPosZ = 0
+
 const gui = new GUI({ width: 310 })
 
 init_xstate()
@@ -266,7 +272,7 @@ function init_three() {
   document.body.appendChild(container)
 
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
-  camera.position.set(0, 30, 30)
+  camera.position.set(cameraPosX, cameraPosY, cameraPosZ)
   camera.lookAt(0, 0, 0)
 
   scene = new THREE.Scene()
@@ -409,8 +415,10 @@ function animate(time) {
   if (window.service.state.matches('initial')) return
 
   if (window.camera && window.role.gltf) {
-    if (!window.controls) camera.position.set(role.mesh.position.x, role.mesh.position.y + 30, role.mesh.position.z + 30)
-    // camera.lookAt(role.mesh.position)
+    if (!window.controls) {
+      camera.position.set(role.mesh.position.x + cameraPosX, role.mesh.position.y + cameraPosY, role.mesh.position.z + cameraPosZ)
+      // camera.lookAt(role.mesh.position)
+    }
     shadowLight.position.x = shadowLight.target.position.x = window.role.body.position.x
     shadowLight.position.z = shadowLight.target.position.z = window.role.body.position.z
   }

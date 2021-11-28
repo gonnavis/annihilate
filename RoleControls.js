@@ -48,6 +48,10 @@ class RoleControls {
         case 'Numpad7':
           this.role.service.send('keyUUp')
           break
+        case 'KeyL':
+        case 'Numpad6':
+          this.role.service.send('keyLUp')
+          break
       }
       // this.actkey = ''
     })
@@ -80,6 +84,10 @@ class RoleControls {
         case 'KeyU':
         case 'Numpad7':
           this.role.service.send('bash')
+          break
+        case 'KeyL':
+        case 'Numpad6':
+          this.role.service.send('block')
           break
       }
     }

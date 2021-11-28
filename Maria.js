@@ -76,7 +76,20 @@ class Maria {
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
-              blocked: { target: 'blocked' },
+              block: { target: 'block' },
+              // blocked: { target: 'blocked' },
+            },
+          },
+          block: {
+            entry: 'playBlock',
+            on: {
+              keyLUp: { target: 'idle' },
+              // run: { target: 'run' },
+              // attack: { target: 'attackStartWithCharge' },
+              // bash: { target: 'bashStart' },
+              // jump: { target: 'jump' },
+              // hit: { target: 'hit' },
+              // dash: { target: 'dash' },
             },
           },
           run: {
@@ -88,6 +101,7 @@ class Maria {
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
+              block: { target: 'block' },
               // blocked: { target: 'blocked' }, // Note: Can block when running or in other states? No, more by intended operation, less by luck.
             },
             tags: ['canMove'],
@@ -376,12 +390,12 @@ class Maria {
               finish: { target: 'idle' },
             },
           },
-          blocked: {
-            entry: ['playBlocked'],
-            on: {
-              finish: { target: 'idle' },
-            },
-          },
+          // blocked: {
+          //   entry: ['playBlocked'],
+          //   on: {
+          //     finish: { target: 'idle' },
+          //   },
+          // },
           dash: {
             entry: 'playDash',
             on: {
@@ -647,9 +661,12 @@ class Maria {
             this.oaction['hit'].timeScale = 3
             this.fadeToAction('hit')
           },
-          playBlocked: () => {
-            this.fadeToAction('impact')
+          playBlock: () => {
+            this.fadeToAction('block')
           },
+          // playBlocked: () => {
+          //   this.fadeToAction('impact')
+          // },
           playWhirlwind: () => {
             this.fadeToAction('whirlwind', 0)
 

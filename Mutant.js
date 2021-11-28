@@ -364,8 +364,9 @@ class Mutant {
             this.fadeToAction('knockDown', 0.2)
           },
           playDead: () => {
-            this.body.mass = 0
-            this.body.collisionResponse = false
+            // this.body.mass = 0
+            // this.body.collisionResponse = false
+            this.body.collisionFilterMask = g.GROUP_SCENE
             setTimeout(() => {
               this.body.velocity.set(0, 0, 0)
             }, 0)

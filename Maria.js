@@ -4,6 +4,7 @@ import * as THREE from './lib/three.js/build/three.module.js'
 import { SwordBlaster } from './SwordBlaster.js'
 import { GLTFLoader } from './lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 import { SwordBlink } from './SwordBlink.js'
+import { Pop } from './Pop.js'
 
 class Maria {
   constructor(x, y, z) {
@@ -830,6 +831,8 @@ class Maria {
           this.swordBlink = new SwordBlink()
           // scene.add(swordBlink.mesh)
           this.swordDelegate.add(this.swordBlink.mesh)
+
+          this.pop = new Pop(this)
 
           //
 

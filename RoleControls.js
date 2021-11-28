@@ -58,7 +58,8 @@ class RoleControls {
     // if (this.role.service.state.matches('loading')) return
 
     if (this.tickKey.KeyJ && this.tickKey.KeyK && this.tickKey.KeyL) {
-      console.log('pop')
+      // console.log('pop')
+      this.role.pop?.pop() // Whether need use: this.role.service.send('pop') ?
     } else {
       switch (
         Object.keys(this.tickKey)[0] // note: The order of Object.keys may not by added order, but should no big problem.

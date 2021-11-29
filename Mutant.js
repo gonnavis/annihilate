@@ -215,12 +215,16 @@ class Mutant {
           },
           hit: {
             entry: ['playHit'],
+            // exit: ['exitHit'],
             on: {
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' }, // todo: knockDown only when hit.
               finish: { target: 'idle' },
               dead: { target: 'dead' },
             },
+          },
+          airHit: {
+            // todo
           },
           knockDown: {
             entry: ['playKnockDown'],
@@ -358,6 +362,10 @@ class Mutant {
           },
           playHit: () => {
             this.fadeToAction('hit', 0.2)
+            // this.body.mass = 0
+          },
+          exitHit: () => {
+            // this.body.mass = this.mass
           },
           playKnockDown: () => {
             // this.oaction['knockDown'].timeScale = 2
@@ -396,8 +404,9 @@ class Mutant {
     let physicsMaterial = new CANNON.Material({
       friction: 0,
     })
+    this.mass = 100
     this.body = new CANNON.Body({
-      mass: 100,
+      mass: this.mass,
       // material: physicsMaterial,
       collisionFilterGroup: g.GROUP_ENEMY,
       collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ROLE_WEAPON,
@@ -444,7 +453,7 @@ class Mutant {
 
   hit() {
     // console.log('hit()')
-    this.health -= 20
+    // this.health -= 20
     // todo: Add hit2 state to prevent multiple hits in one attack?
     //   Or use beginContact instead of collide event?
     //   Both?

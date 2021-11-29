@@ -85,6 +85,11 @@ class RoleControls {
           this.role.service.send('keyLUp')
           this.seqKey.length = 0
           break
+        case 'KeyO':
+        case 'Numpad9':
+          this.role.service.send('keyOUp')
+          this.seqKey.length = 0
+          break
       }
       // this.actkey = ''
     })

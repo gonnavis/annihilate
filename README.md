@@ -75,6 +75,8 @@ I + J = Dash Attack
 
 O = Launch
 
+O hold = Launch with Jump
+
 ### Ref and Goal:
     
 Action: **DMC**, **Guilty Gear**, **Prince of Persia** ...

@@ -468,6 +468,7 @@ class Maria {
             entry: ['playJump', 'jump'],
             on: {
               land: { target: 'idle' },
+              attack: { target: 'jumpAttack' },
               bash: { target: 'jumpBashAttackStartWithCharge' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },

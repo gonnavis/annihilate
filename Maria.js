@@ -412,12 +412,57 @@ class Maria {
             entry: ['playJump', 'jump'],
             on: {
               land: { target: 'idle' },
+              attack: { target: 'jumpAttack' },
               bash: { target: 'jumpBashAttackStartWithCharge' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
             },
             tags: ['canMove'],
+          },
+          jumpAttack: {
+            entry: 'playJumpAttack',
+            exit: 'exitJumpAttack',
+            on: {
+              // finish: { target: 'jump' },
+              finish: { target: 'idle' }, // todo: jumpIdle/airIdle or drop.
+              // todo: hit jumpDash/airDash
+              attack: { target: 'prepareJumpFist' },
+            },
+            tags: ['canDamage'],
+          },
+          prepareJumpFist: {
+            entry: 'playPrepareJumpFist',
+            exit: 'exitPrepareJumpFist',
+            on: {
+              finish: { target: 'jumpFist' },
+            },
+          },
+          jumpFist: {
+            entry: 'playJumpFist',
+            exit: 'exitJumpFist',
+            on: {
+              // finish: { target: 'jump' },
+              finish: { target: 'idle' },
+              attack: { target: 'prepareJumpStrike' },
+            },
+            tags: ['canDamage'],
+          },
+          prepareJumpStrike: {
+            entry: 'playPrepareJumpStrike',
+            exit: 'exitPrepareJumpStrike',
+            on: {
+              finish: { target: 'jumpStrike' },
+            },
+          },
+          jumpStrike: {
+            entry: 'playJumpStrike',
+            exit: 'exitJumpStrike',
+            on: {
+              // finish: { target: 'jump' },
+              finish: { target: 'idle' },
+            },
+            tags: ['canDamage'],
           },
           doubleJump: {
             entry: ['playJump', 'jump'],
@@ -697,6 +742,51 @@ class Maria {
             // this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 20
             // this.body.velocity.z = this.tmpVec3.z
+          },
+          playJumpAttack: () => {
+            this.oaction['punch'].timeScale = this.attackSpeed
+            this.fadeToAction('punch', 0)
+
+            this.body.mass = 0
+            this.body.velocity.set(0, 0, 0)
+            // this.body.velocity.y = -this.body.position.y * 5
+          },
+          exitJumpAttack: () => {
+            this.body.mass = this.mass
+          },
+          playPrepareJumpFist: () => {
+            this.body.mass = 0
+            this.body.velocity.set(0, 0, 0)
+          },
+          exitPrepareJumpFist: () => {
+            this.body.mass = this.mass
+          },
+          playJumpFist: () => {
+            this.oaction['fist'].timeScale = this.attackSpeed
+            this.fadeToAction('fist', 0)
+
+            this.body.mass = 0
+            this.body.velocity.set(0, 0, 0)
+          },
+          exitJumpFist: () => {
+            this.body.mass = this.mass
+          },
+          playPrepareJumpStrike: () => {
+            this.body.mass = 0
+            this.body.velocity.set(0, 0, 0)
+          },
+          exitPrepareJumpStrike: () => {
+            this.body.mass = this.mass
+          },
+          playJumpStrike: () => {
+            this.oaction['strike'].timeScale = this.attackSpeed
+            this.fadeToAction('strike', 0)
+
+            this.body.mass = 0
+            this.body.velocity.set(0, 0, 0)
+          },
+          exitJumpStrike: () => {
+            this.body.mass = this.mass
           },
           playJumpBashAttack: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed * 4

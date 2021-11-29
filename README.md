@@ -55,6 +55,10 @@ K = Jump
 
 K + K = Double Jump
 
+K + J = Jump Attack
+
+K + J hold = Earthquake
+
 L hold = Block
 
 L hold + S + D + J = Hadouken

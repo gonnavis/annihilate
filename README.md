@@ -55,9 +55,9 @@ K = Jump
 
 K + K = Double Jump
 
-K + J = Jump Attack
+K + U = Jump Bash Attack
 
-K + J hold = Earthquake
+K + U hold = Earthquake
 
 L hold = Block
 

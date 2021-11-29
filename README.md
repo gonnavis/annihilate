@@ -39,6 +39,38 @@ Now open-sourced and:
 
 [Video](https://twitter.com/gonnavis/status/1434951076365561859) [Video2](https://twitter.com/gonnavis/status/1461371351197880325) [Video3](https://twitter.com/gonnavis/status/1463220288468905987)
 
+### Key Map:
+
+J = Attack
+
+J + J + J = Combo
+
+J hold charge1 + J + J = Fast Combo
+
+J hold charge2 + J + J = Sword Blaster
+
+J & K & L = Pop
+
+K = Jump
+
+K + K = Double Jump
+
+L hold = Block
+
+L hold + S + D + J = Hadouken
+
+L hold + D + S + D + J = Shoryuken.
+
+L hold + S + A + K = Tatsumaki Senpukyaku.
+
+U hold = Whirlwind
+
+I = Dash
+
+I + J = Dash Attack
+
+O = Launch
+
 ### Ref and Goal:
     
 Action: **DMC**, **Guilty Gear**, **Prince of Persia** ...

@@ -29,6 +29,9 @@ class GreatSword {
         if (this.owner.service.state.hasTag('knockDown')) {
           e.body.belongTo.knockDown()
         } else {
+          if (this.owner.service.state.matches('launch')) {
+            e.body.velocity.y += 25
+          }
           e.body.belongTo.hit()
         }
       }

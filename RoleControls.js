@@ -122,6 +122,10 @@ class RoleControls {
         case 'Numpad6':
           this.role.service.send('block')
           break
+        case 'KeyO':
+        case 'Numpad9':
+          this.role.service.send('launch')
+          break
       }
     }
 

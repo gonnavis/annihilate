@@ -73,6 +73,7 @@ class Maria {
               run: { target: 'run' },
               attack: { target: 'attackStartWithCharge' },
               bash: { target: 'bashStart' },
+              launch: { target: 'launch' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
@@ -122,6 +123,7 @@ class Maria {
               stop: { target: 'idle' },
               attack: { target: 'attackStartWithCharge' },
               bash: { target: 'bashStart' },
+              launch: { target: 'launch' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
@@ -280,6 +282,15 @@ class Maria {
               dash: { target: 'dash' },
 
               // whirlwind: { target: 'whirlwind' },
+            },
+            tags: ['canDamage'],
+          },
+          launch: {
+            entry: 'playLaunch',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
             tags: ['canDamage'],
           },
@@ -545,6 +556,10 @@ class Maria {
           playAttack: () => {
             this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0)
+          },
+          playLaunch: () => {
+            this.oaction['strike'].timeScale = this.attackSpeed
+            this.fadeToAction('strike', 0)
           },
           playCharged1: () => {
             this.chargedLevel = 1

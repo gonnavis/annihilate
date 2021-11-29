@@ -86,6 +86,7 @@ class Maria {
             on: {
               keyLUp: { target: 'idle' },
               hadouken: { target: 'hadouken' },
+              shoryuken: { target: 'shoryuken' },
               ajejebloken: { target: 'ajejebloken' },
               // Caution: Synchronize the state of roleControls' keyLUp/Down, if add more transitions/states below.
               // run: { target: 'run' },
@@ -103,6 +104,16 @@ class Maria {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
+            tags: ['canDamage'],
+          },
+          shoryuken: {
+            entry: 'playShoryuken',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+            tags: ['canDamage', 'canLaunch'],
           },
           ajejebloken: {
             entry: 'playAjejebloken',
@@ -292,7 +303,7 @@ class Maria {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
-            tags: ['canDamage'],
+            tags: ['canDamage', 'canLaunch'],
           },
           prepareFist: {
             on: {
@@ -586,6 +597,14 @@ class Maria {
             this.fadeToAction('punch', 0)
 
             let swordBlaster = new SwordBlaster(this, 3)
+          },
+          playShoryuken: () => {
+            this.oaction['strike'].timeScale = this.attackSpeed
+            this.fadeToAction('strike', 0)
+
+            setTimeout(() => {
+              this.body.velocity.y += 25
+            }, 150)
           },
           playDashAttack: () => {
             this.oaction['dashAttack'].timeScale = this.attackSpeed

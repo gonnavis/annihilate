@@ -367,7 +367,7 @@ class Mutant {
               this.body.mass = 0
               this.body.velocity.set(0, 0, 0)
             }
-            console.log('playHit', this.body.mass, this.isAir)
+            // console.log('playHit', this.body.mass, this.isAir)
           },
           exitHit: () => {
             this.body.mass = this.mass

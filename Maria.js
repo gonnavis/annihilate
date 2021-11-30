@@ -26,6 +26,7 @@ class Maria {
     this.facing = vec2(0, 1) // facing always not zero length.
     this.mass = 80
     this.chargedLevel = 0 // 0: normal/slow combo | 1: fast combo | 2: fast combo & swordBlaster
+    this.isAir = false
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -81,19 +82,19 @@ class Maria {
               // blocked: { target: 'blocked' },
             },
           },
-          jumpIdle: {
-            entry: 'playJumpIdle',
-            on: {
-              land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
-              bash: { target: 'jumpBashAttackStartWithCharge' },
-              hit: { target: 'hit' },
-              // dash: { target: 'dash' },
-              // block: { target: 'block' },
-              // blocked: { target: 'blocked' },
-            },
-            tags: ['canMove'],
-          },
+          // jumpIdle: {
+          //   entry: 'playJumpIdle',
+          //   on: {
+          //     land: { target: 'idle' },
+          //     attack: { target: 'jumpAttack' },
+          //     bash: { target: 'jumpBashAttackStartWithCharge' },
+          //     hit: { target: 'hit' },
+          //     // dash: { target: 'dash' },
+          //     // block: { target: 'block' },
+          //     // blocked: { target: 'blocked' },
+          //   },
+          //   tags: ['canMove'],
+          // },
           block: {
             entry: 'playBlock',
             on: {
@@ -435,7 +436,8 @@ class Maria {
             entry: ['playJump', 'jump'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
+              // attack: { target: 'jumpAttack' },
+              attack: { target: 'attack' },
               bash: { target: 'jumpBashAttackStartWithCharge' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
@@ -443,56 +445,57 @@ class Maria {
             },
             tags: ['canMove'],
           },
-          jumpAttack: {
-            entry: 'playJumpAttack',
-            exit: 'exitJumpAttack',
-            on: {
-              // finish: { target: 'jump' },
-              // finish: { target: 'idle' }, // todo: jumpIdle/airIdle or drop.
-              finish: { target: 'jumpIdle' },
-              // todo: hit jumpDash/airDash
-              attack: { target: 'prepareJumpFist' },
-            },
-            tags: ['canDamage'],
-          },
-          prepareJumpFist: {
-            entry: 'playPrepareJumpFist',
-            exit: 'exitPrepareJumpFist',
-            on: {
-              finish: { target: 'jumpFist' },
-            },
-          },
-          jumpFist: {
-            entry: 'playJumpFist',
-            exit: 'exitJumpFist',
-            on: {
-              // finish: { target: 'jump' },
-              finish: { target: 'jumpIdle' },
-              attack: { target: 'prepareJumpStrike' },
-            },
-            tags: ['canDamage'],
-          },
-          prepareJumpStrike: {
-            entry: 'playPrepareJumpStrike',
-            exit: 'exitPrepareJumpStrike',
-            on: {
-              finish: { target: 'jumpStrike' },
-            },
-          },
-          jumpStrike: {
-            entry: 'playJumpStrike',
-            exit: 'exitJumpStrike',
-            on: {
-              // finish: { target: 'jump' },
-              finish: { target: 'jumpIdle' },
-            },
-            tags: ['canDamage'],
-          },
+          // jumpAttack: {
+          //   entry: 'playJumpAttack',
+          //   exit: 'exitJumpAttack',
+          //   on: {
+          //     // finish: { target: 'jump' },
+          //     finish: { target: 'idle' }, // todo: jumpIdle/airIdle or drop.
+          //     // finish: { target: 'jumpIdle' },
+          //     // todo: hit jumpDash/airDash
+          //     attack: { target: 'prepareJumpFist' },
+          //   },
+          //   tags: ['canDamage'],
+          // },
+          // prepareJumpFist: {
+          //   entry: 'playPrepareJumpFist',
+          //   exit: 'exitPrepareJumpFist',
+          //   on: {
+          //     finish: { target: 'jumpFist' },
+          //   },
+          // },
+          // jumpFist: {
+          //   entry: 'playJumpFist',
+          //   exit: 'exitJumpFist',
+          //   on: {
+          //     // finish: { target: 'jump' },
+          //     finish: { target: 'jumpIdle' },
+          //     attack: { target: 'prepareJumpStrike' },
+          //   },
+          //   tags: ['canDamage'],
+          // },
+          // prepareJumpStrike: {
+          //   entry: 'playPrepareJumpStrike',
+          //   exit: 'exitPrepareJumpStrike',
+          //   on: {
+          //     finish: { target: 'jumpStrike' },
+          //   },
+          // },
+          // jumpStrike: {
+          //   entry: 'playJumpStrike',
+          //   exit: 'exitJumpStrike',
+          //   on: {
+          //     // finish: { target: 'jump' },
+          //     finish: { target: 'jumpIdle' },
+          //   },
+          //   tags: ['canDamage'],
+          // },
           doubleJump: {
             entry: ['playJump', 'jump'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
+              // attack: { target: 'jumpAttack' },
+              attack: { target: 'attack' },
               bash: { target: 'jumpBashAttackStartWithCharge' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
@@ -534,7 +537,8 @@ class Maria {
             exit: 'exitJumpDash',
             on: {
               land: { target: 'idle' },
-              finish: { target: 'jumpIdle' },
+              // finish: { target: 'jumpIdle' },
+              finish: { target: 'idle' },
             },
             exit: 'exitJumpDash',
           },
@@ -847,6 +851,8 @@ class Maria {
           },
           playJump: () => {
             this.fadeToAction('jump')
+
+            this.isAir = true
           },
           playHit: () => {
             this.oaction['hit'].timeScale = 3
@@ -967,15 +973,19 @@ class Maria {
     this.body.addEventListener('beginContact', (event) => {
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
-      if (event.body !== window.greatSword.body && !event.body.isTrigger) {
+      // if (event.body !== window.greatSword.body && !event.body.isTrigger) {
+      if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
         ///todo: Is cannon.js has collision mask?
         // todo: refactor: window.ground
         this.service.send('land')
+        this.isAir = false
+        this.body.mass = this.mass
       }
     })
   }
 
   update(dt) {
+    console.log(this.isAir)
     if (this.service.state.matches('loading')) return
 
     this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyHeight / 2, this.body.position.z)

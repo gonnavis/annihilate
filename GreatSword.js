@@ -4,7 +4,7 @@ import * as THREE from './lib/three.js/build/three.module.js'
 class GreatSword {
   constructor() {
     this.isWeapon = true
-    
+
     updates.push(this)
 
     this.owner = null
@@ -37,7 +37,7 @@ class GreatSword {
           if (this.owner.service.state.hasTag('canLaunch') && !e.body.belongTo.isAir) {
             e.body.velocity.y += 25
             e.body.belongTo.isAir = true // todo: refactor.
-            console.log('set isAir true')
+            // console.log('set isAir true')
           }
         }
       }

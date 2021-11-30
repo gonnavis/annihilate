@@ -30,8 +30,9 @@ class GreatSword {
           e.body.belongTo.knockDown()
         } else {
           e.body.belongTo.hit()
+
           // if (this.owner.service.state.matches('launch')) {
-          if (this.owner.service.state.hasTag('canLaunch')) {
+          if (this.owner.service.state.hasTag('canLaunch') && !e.body.belongTo.isAir) {
             e.body.velocity.y += 25
             e.body.belongTo.isAir = true // todo: refactor.
             console.log('set isAir true')

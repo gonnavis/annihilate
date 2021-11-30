@@ -182,7 +182,7 @@ function init() {
   window.greatSword = new GreatSword()
   greatSword.owner = maria
 
-  window.paladin = new Paladin(5, 5, 0)
+  window.paladin = new Paladin(5, 5, -15)
   // window.paladin = new Paladin(0, 5, 0)
   paladin.load(() => {
     // paladin.mesh.rotation.set(0, Math.PI, 0)
@@ -198,7 +198,8 @@ function init() {
   let mutantsCount = parseInt(g.getQueryStringByName('mutants'))
   if (Number.isNaN(mutantsCount)) mutantsCount = 3
   for (let i = 0; i < mutantsCount; i++) {
-    let mutant = new Mutant((Math.random() - 0.5) * 50, 5, (Math.random() - 0.5) * 50)
+    // let mutant = new Mutant((Math.random() - 0.5) * 50, 5, (Math.random() - 0.5) * 50)
+    let mutant = new Mutant(5, 5, 0)
     let handKnife = new HandKnife()
     handKnife.owner = mutant
     mutant.load()

@@ -714,6 +714,7 @@ class Maria {
 
             setTimeout(() => {
               this.body.velocity.y += 25
+              this.setAir(true)
             }, 150)
           },
           playDashAttack: () => {

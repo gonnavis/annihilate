@@ -531,8 +531,10 @@ class Maria {
           },
           jumpDash: {
             entry: 'playJumpDash',
+            exit: 'exitJumpDash',
             on: {
               land: { target: 'idle' },
+              finish: { target: 'jumpIdle' },
             },
             exit: 'exitJumpDash',
           },
@@ -607,14 +609,21 @@ class Maria {
             // })
           },
           playJumpDash: () => {
-            this.fadeToAction('dash', 0)
+            this.fadeToAction('jumpIdle', 0)
 
             // change facing
             this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
             // move
+            this.body.mass = 0
             this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(30)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.z = this.tmpVec3.z
+            setTimeout(() => {
+              this.service.send('finish')
+            }, 500)
+          },
+          exitJumpDash: () => {
+            this.body.mass = this.mass
           },
           playIdle: () => {
             this.fadeToAction('idle')

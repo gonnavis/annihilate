@@ -714,7 +714,7 @@ class Maria {
 
             setTimeout(() => {
               this.body.velocity.y += 25
-              this.setAir(true)
+              // this.setAir(true)
             }, 150)
           },
           playDashAttack: () => {
@@ -877,7 +877,7 @@ class Maria {
           playJump: () => {
             this.fadeToAction('jump')
 
-            this.setAir(true)
+            // this.setAir(true)
           },
           playHit: () => {
             this.oaction['hit'].timeScale = 3
@@ -954,7 +954,7 @@ class Maria {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('maria: state:', state.value)
+      // if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -996,21 +996,34 @@ class Maria {
     world.addBody(this.body)
     // this.body.addEventListener('collide', (event) => {
     this.body.addEventListener('beginContact', (event) => {
+      // console.log('beginContact', event.body.belongTo)
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
       // if (event.body !== window.greatSword.body && !event.body.isTrigger) {
-      if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
+      // if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
+      if (event.body.belongTo?.isGround) {
         ///todo: Is cannon.js has collision mask?
         // todo: refactor: window.ground
         this.service.send('land')
         this.setAir(false)
         this.body.mass = this.mass
       }
+      // if (event.body === window.ground.body) console.log(111)
+    })
+    this.body.addEventListener('endContact', (event) => {
+      // console.log('endContact', event.body.belongTo)
+      // if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
+      if (event.body.belongTo?.isGround) {
+        this.setAir(true) // todo: Use raycaster to check height, judge if really air. Then don't need use beginContact/endContact to check if air?
+      }
+      // if (event.body === window.ground.body) console.log(222)
     })
   }
 
   update(dt) {
-    // console.log(this.isAir)
+    // console.log('tick')
+    if (this.isAir) console.log(true)
+    else console.log('-')
     if (this.service.state.matches('loading')) return
 
     this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyHeight / 2, this.body.position.z)

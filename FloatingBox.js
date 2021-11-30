@@ -3,6 +3,8 @@ import { g } from './global.js'
 import * as THREE from './lib/three.js/build/three.module.js'
 class FloatingBox {
   constructor(width = 1, height = 1, depth = 1) {
+    this.isGround = true
+
     updates.push(this)
 
     this.timeBias = 0
@@ -21,6 +23,7 @@ class FloatingBox {
       mass: 0,
       type: CANNON.Body.KINEMATIC,
     })
+    this.body.belongTo = this
     this.body.addShape(shape)
     this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     world.addBody(this.body)

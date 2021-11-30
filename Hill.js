@@ -5,6 +5,8 @@ import { Geometry } from './lib/three.js/examples/jsm/deprecated/Geometry.js'
 // import { mergeVertices } from './lib/three.js/examples/jsm/utils/BufferGeometryUtils.js'
 class Hill {
   constructor() {
+    this.isGround = true
+
     // let pos = new THREE.Vector3(-0, 0, -0)
     let pos = new THREE.Vector3(-80, 0, -100)
 
@@ -52,6 +54,7 @@ class Hill {
     this.body = new CANNON.Body({
       mass: 0,
     })
+    this.body.belongTo = this
     this.body.addShape(shape)
     world.addBody(this.body)
 

@@ -3,6 +3,8 @@ import { g } from './global.js'
 import * as THREE from './lib/three.js/build/three.module.js'
 class Box {
   constructor(width = 1, height = 1, depth = 1) {
+    this.isGround = true
+    
     const pos = new THREE.Vector3()
     const quat = new THREE.Quaternion()
 
@@ -17,6 +19,7 @@ class Box {
     this.body = new CANNON.Body({
       mass: 0,
     })
+    this.body.belongTo = this
     this.body.addShape(shape)
     // this.body.position.set(0,0,0)
     this.body.position.copy(pos)

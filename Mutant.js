@@ -387,7 +387,7 @@ class Mutant {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('mutant: state:', state.value)
+      if (state.changed) console.log('mutant: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -466,7 +466,7 @@ class Mutant {
 
   knockDown() {
     // console.log('knockDown()')
-    this.health -= 20 // todo: Merge with hit().
+    // this.health -= 20 // todo: Merge with hit().
     // console.log(this.health)
     this.service.send('knockDown')
     if (this.health <= 0) {

@@ -18,8 +18,10 @@ class Maria {
     this.mixer
     // this.speed = 0.15
     this.speed = 0.3
+    this.landAttackSpeed = 1.4
+    this.airAttackSpeed = 2.5
     // this.attackSpeed = 1.2
-    this.attackSpeed = 1.4
+    this.attackSpeed = this.landAttackSpeed
     this.chargeAttackCoe = 2
     this.tmpVec3 = new THREE.Vector3()
     this.direction = vec2() // direction may be zero length.
@@ -283,6 +285,8 @@ class Maria {
           },
 
           attackStart: {
+            entry: ['setAirMassZero'],
+            exit: ['restoreMass'],
             on: {
               // finish: { target: 'whirlwind' },
               finish: { target: 'attack' },
@@ -299,7 +303,8 @@ class Maria {
             },
           },
           attack: {
-            entry: 'playAttack',
+            entry: ['playAttack', 'setAirMassZero'],
+            exit: ['restoreMass'],
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -330,6 +335,8 @@ class Maria {
             tags: ['canDamage', 'canLaunch'],
           },
           prepareFist: {
+            entry: ['setAirMassZero'],
+            exit: ['restoreMass'],
             on: {
               finish: { target: 'fistStart' },
               hit: { target: 'hit' },
@@ -338,7 +345,8 @@ class Maria {
             tags: ['canDamage'],
           },
           fistStart: {
-            entry: 'playFistStart',
+            entry: ['playFistStart', 'setAirMassZero'],
+            exit: ['restoreMass'],
             on: {
               finish: { target: 'fist' },
               hit: { target: 'hit' },
@@ -346,7 +354,8 @@ class Maria {
             },
           },
           fist: {
-            entry: 'playFist',
+            entry: ['playFist', 'setAirMassZero'],
+            exit: ['restoreMass'],
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -356,6 +365,8 @@ class Maria {
             tags: ['canDamage'],
           },
           prepareStrike: {
+            entry: ['setAirMassZero'],
+            exit: ['restoreMass'],
             on: {
               finish: { target: 'strikeStart' },
               hit: { target: 'hit' },
@@ -364,7 +375,8 @@ class Maria {
             tags: ['canDamage'],
           },
           strikeStart: {
-            entry: 'playStrikeStart',
+            entry: ['playStrikeStart', 'setAirMassZero'],
+            exit: ['restoreMass'],
             on: {
               finish: { target: 'strike' },
               hit: { target: 'hit' },
@@ -372,7 +384,8 @@ class Maria {
             },
           },
           strike: {
-            entry: 'playStrike',
+            entry: ['playStrike', 'setAirMassZero'],
+            exit: ['restoreMass'],
             on: {
               finish: { target: 'strikeEnd' },
               hit: { target: 'hit' },
@@ -381,7 +394,8 @@ class Maria {
             tags: ['canDamage', 'knockDown'],
           },
           strikeEnd: {
-            entry: 'playStrikeEnd',
+            entry: ['playStrikeEnd', 'setAirMassZero'],
+            exit: ['restoreMass'],
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -437,7 +451,8 @@ class Maria {
             on: {
               land: { target: 'idle' },
               // attack: { target: 'jumpAttack' },
-              attack: { target: 'attack' },
+              attack: { target: 'attackStartWithCharge' },
+              // attack: { target: 'attack' },
               bash: { target: 'jumpBashAttackStartWithCharge' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
@@ -650,6 +665,15 @@ class Maria {
             this.oaction['punchStart'].timeScale = this.attackSpeed
             this.fadeToAction('punchStart')
           },
+          setAirMassZero: () => {
+            if (this.isAir) {
+              this.body.mass = 0
+              this.body.velocity.set(0, 0, 0)
+            }
+          },
+          restoreMass: () => {
+            this.body.mass = this.mass
+          },
           playAttack: () => {
             this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0)
@@ -852,7 +876,7 @@ class Maria {
           playJump: () => {
             this.fadeToAction('jump')
 
-            this.isAir = true
+            this.setAir(true)
           },
           playHit: () => {
             this.oaction['hit'].timeScale = 3
@@ -929,7 +953,7 @@ class Maria {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -978,14 +1002,14 @@ class Maria {
         ///todo: Is cannon.js has collision mask?
         // todo: refactor: window.ground
         this.service.send('land')
-        this.isAir = false
+        this.setAir(false)
         this.body.mass = this.mass
       }
     })
   }
 
   update(dt) {
-    console.log(this.isAir)
+    // console.log(this.isAir)
     if (this.service.state.matches('loading')) return
 
     this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyHeight / 2, this.body.position.z)
@@ -1144,6 +1168,16 @@ class Maria {
     this.facing.set(x, z)
     this.mesh.rotation.set(0, -this.facing.angle() + Math.PI / 2, 0)
     // todo: add function: this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2.
+  }
+
+  setAir(bool) {
+    if (bool) {
+      this.isAir = true
+      this.attackSpeed = this.airAttackSpeed
+    } else {
+      this.isAir = false
+      this.attackSpeed = this.landAttackSpeed
+    }
   }
 }
 

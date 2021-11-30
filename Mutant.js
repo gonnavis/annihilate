@@ -18,6 +18,7 @@ class Mutant {
     this.tmpVec3 = new THREE.Vector3()
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.
+    this.isAir = false
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -215,7 +216,7 @@ class Mutant {
           },
           hit: {
             entry: ['playHit'],
-            // exit: ['exitHit'],
+            exit: ['exitHit'],
             on: {
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' }, // todo: knockDown only when hit.
@@ -362,10 +363,14 @@ class Mutant {
           },
           playHit: () => {
             this.fadeToAction('hit', 0.2)
-            // this.body.mass = 0
+            if (this.isAir) {
+              this.body.mass = 0
+              this.body.velocity.set(0, 0, 0)
+            }
+            console.log('playHit', this.body.mass, this.isAir)
           },
           exitHit: () => {
-            // this.body.mass = this.mass
+            this.body.mass = this.mass
           },
           playKnockDown: () => {
             // this.oaction['knockDown'].timeScale = 2
@@ -387,7 +392,7 @@ class Mutant {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('mutant: state:', state.value)
+      // if (state.changed) console.log('mutant: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -435,8 +440,12 @@ class Mutant {
       // if (event.body !== window.axes.body) {
       ///todo: Is cannon.js has collision mask?
       // todo: refactor: window.ground
-      if (!event.body.isTrigger) {
+
+      // if (!event.body.isTrigger) {
+      if (!event.body === window.ground.body) {
         this.service.send('land')
+        this.isAir = false
+        this.body.mass = this.mass
       }
       // }
     })
@@ -444,6 +453,7 @@ class Mutant {
 
   update(dt) {
     if (this.service.state.matches('loading')) return
+    // console.log(this.isAir, this.body.mass)
 
     this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyHeight / 2, this.body.position.z)
     // this.shadow.position.x = this.body.position.x

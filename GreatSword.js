@@ -29,11 +29,13 @@ class GreatSword {
         if (this.owner.service.state.hasTag('knockDown')) {
           e.body.belongTo.knockDown()
         } else {
+          e.body.belongTo.hit()
           // if (this.owner.service.state.matches('launch')) {
           if (this.owner.service.state.hasTag('canLaunch')) {
             e.body.velocity.y += 25
+            e.body.belongTo.isAir = true // todo: refactor.
+            console.log('set isAir true')
           }
-          e.body.belongTo.hit()
         }
       }
       // }

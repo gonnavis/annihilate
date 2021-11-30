@@ -4,6 +4,7 @@ import * as THREE from './lib/three.js/build/three.module.js'
 //new Attacker(scene, updates, enemy.mesh.position, mesh.position)
 class Attacker {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
+    this.isWeapon = true
     let s = this
     let speed = 1.5
     let movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed)

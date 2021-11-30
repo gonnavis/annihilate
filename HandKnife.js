@@ -3,6 +3,7 @@ import { g } from './global.js'
 import * as THREE from './lib/three.js/build/three.module.js'
 class HandKnife {
   constructor() {
+    this.isWeapon = true
     updates.push(this)
 
     this.owner = null

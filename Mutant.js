@@ -442,7 +442,8 @@ class Mutant {
       // todo: refactor: window.ground
 
       // if (!event.body.isTrigger) {
-      if (event.body === window.ground.body) {
+      // if (event.body === window.ground.body) {
+      if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
         this.service.send('land')
         this.isAir = false
         this.body.mass = this.mass

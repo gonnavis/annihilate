@@ -81,6 +81,19 @@ class Maria {
               // blocked: { target: 'blocked' },
             },
           },
+          jumpIdle: {
+            entry: 'playJumpIdle',
+            on: {
+              land: { target: 'idle' },
+              attack: { target: 'jumpAttack' },
+              bash: { target: 'jumpBashAttackStartWithCharge' },
+              hit: { target: 'hit' },
+              // dash: { target: 'dash' },
+              // block: { target: 'block' },
+              // blocked: { target: 'blocked' },
+            },
+            tags: ['canMove'],
+          },
           block: {
             entry: 'playBlock',
             on: {
@@ -435,7 +448,8 @@ class Maria {
             exit: 'exitJumpAttack',
             on: {
               // finish: { target: 'jump' },
-              finish: { target: 'idle' }, // todo: jumpIdle/airIdle or drop.
+              // finish: { target: 'idle' }, // todo: jumpIdle/airIdle or drop.
+              finish: { target: 'jumpIdle' },
               // todo: hit jumpDash/airDash
               attack: { target: 'prepareJumpFist' },
             },
@@ -453,7 +467,7 @@ class Maria {
             exit: 'exitJumpFist',
             on: {
               // finish: { target: 'jump' },
-              finish: { target: 'idle' },
+              finish: { target: 'jumpIdle' },
               attack: { target: 'prepareJumpStrike' },
             },
             tags: ['canDamage'],
@@ -470,7 +484,7 @@ class Maria {
             exit: 'exitJumpStrike',
             on: {
               // finish: { target: 'jump' },
-              finish: { target: 'idle' },
+              finish: { target: 'jumpIdle' },
             },
             tags: ['canDamage'],
           },
@@ -608,6 +622,9 @@ class Maria {
             this.chargedLevel = 0
             this.sword.material.emissive.setScalar(0)
             this.sword.material.color.setRGB(1, 1, 1)
+          },
+          playJumpIdle: () => {
+            this.fadeToAction('jumpIdle', 0.3)
           },
           playRun: () => {
             this.fadeToAction('running')

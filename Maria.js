@@ -318,7 +318,8 @@ class Maria {
           launchWithJump: {
             entry: 'playLaunchWithJump',
             on: {
-              finish: { target: 'jump' },
+              // finish: { target: 'jump' },
+              finish: { target: 'idle' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
               keyOUp: { target: 'launch' },
@@ -326,7 +327,7 @@ class Maria {
             tags: ['canDamage', 'canLaunch'],
           },
           launch: {
-            // entry: 'playLaunch',
+            entry: 'playLaunch',
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -681,6 +682,13 @@ class Maria {
           playLaunchWithJump: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0)
+
+            this.timeoutLaunchWithJump = setTimeout(() => {
+              this.body.velocity.y = 20
+            }, 150)
+          },
+          playLaunch: () => {
+            clearTimeout(this.timeoutLaunchWithJump)
           },
           playCharged1: () => {
             this.chargedLevel = 1

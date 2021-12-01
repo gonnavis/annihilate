@@ -154,6 +154,7 @@ class Maria {
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
+              air: { target: 'drop' },
               block: { target: 'block' },
               // blocked: { target: 'blocked' }, // Note: Can block when running or in other states? No, more by intended operation, less by luck.
             },
@@ -450,12 +451,37 @@ class Maria {
           jump: {
             entry: ['playJump', 'jump'],
             on: {
+              finish: { target: 'drop' },
               land: { target: 'idle' },
               // attack: { target: 'jumpAttack' },
               attack: { target: 'attackStartWithCharge' },
               // attack: { target: 'attack' },
               bash: { target: 'jumpBashStartWithCharge' },
               jump: { target: 'doubleJump' },
+              hit: { target: 'hit' },
+              dash: { target: 'jumpDash' },
+            },
+            tags: ['canMove'],
+          },
+          drop: {
+            entry: ['playDrop'],
+            on: {
+              land: { target: 'idle' },
+              attack: { target: 'attackStartWithCharge' },
+              bash: { target: 'jumpBashStartWithCharge' },
+              jump: { target: 'doubleJump' },
+              hit: { target: 'hit' },
+              dash: { target: 'jumpDash' },
+            },
+            tags: ['canMove'],
+          },
+          doubleDrop: {
+            entry: ['playDrop'],
+            on: {
+              land: { target: 'idle' },
+              attack: { target: 'attackStartWithCharge' },
+              bash: { target: 'jumpBashStartWithCharge' },
+              // jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
             },
@@ -509,6 +535,7 @@ class Maria {
           doubleJump: {
             entry: ['playJump', 'jump'],
             on: {
+              finish: { target: 'doubleDrop' },
               land: { target: 'idle' },
               // attack: { target: 'jumpAttack' },
               attack: { target: 'attackStartWithCharge' },
@@ -653,6 +680,9 @@ class Maria {
             this.sword.material.color.setRGB(1, 1, 1)
           },
           playJumpIdle: () => {
+            this.fadeToAction('jumpIdle', 0.3)
+          },
+          playDrop: () => {
             this.fadeToAction('jumpIdle', 0.3)
           },
           playRun: () => {
@@ -1044,6 +1074,7 @@ class Maria {
     }
     if (altitude > 1) {
       this.setAir(true)
+      this.service.send('air')
     } else {
       if (this.isAir) this.service.send('land')
       this.setAir(false)

@@ -677,11 +677,12 @@ class Maria {
             this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
             // move
             // this.body.mass = 0
-            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(25)
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(30)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 0
             this.body.velocity.z = this.tmpVec3.z
             setTimeout(() => {
+              this.body.velocity.set(0, 0, 0)
               this.service.send('finish')
             }, 500)
           },

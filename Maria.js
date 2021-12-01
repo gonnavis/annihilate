@@ -1024,9 +1024,15 @@ class Maria {
     // console.log('tick')
 
     // console.log(Math.round(this.getAltitude()))
-    let result = this.getAltitude()
-    console.log((this.body.position.y - result.hitPointWorld.y).toFixed(1), result.body.belongTo?.constructor.name)
-    // console.log(Math.round(this.body.position.y - result.hitPointWorld.y), result.body.belongTo)
+    let result = this.getAltitude(100)
+    let altitude
+    if (result.body) {
+      altitude = this.body.position.y - result.hitPointWorld.y
+      // console.log(Math.round(this.body.position.y - result.hitPointWorld.y), result.body.belongTo)
+    } else {
+      altitude = Infinity
+    }
+    console.log(altitude.toFixed(1), result.body?.belongTo?.constructor.name)
 
     // if (this.isAir) console.log(true)
     // else console.log('-')
@@ -1201,7 +1207,7 @@ class Maria {
     }
   }
 
-  getAltitude() {
+  getAltitude(maxDistance) {
     // getHiehgt()
     // todo: doing.
     let result = new CANNON.RaycastResult()
@@ -1211,14 +1217,14 @@ class Maria {
       // collisionFilterGroup: g.GROUP_ROLE,
       collisionFilterMask: g.GROUP_SCENE,
     }
-    let isHit = world.raycastClosest(this.body.position, new CANNON.Vec3(this.body.position.x, this.body.position.y - 1000, this.body.position.z), option, result)
-    if (isHit) {
-      // console.log(result)
-      // let altitude = this.body.position.y - result.hitPointWorld.y
-      // return altitude
-      return result
-    }
-    return false
+    let isHit = world.raycastClosest(this.body.position, new CANNON.Vec3(this.body.position.x, this.body.position.y - maxDistance, this.body.position.z), option, result)
+    // if (isHit) {
+    // console.log(result)
+    // let altitude = this.body.position.y - result.hitPointWorld.y
+    // return altitude
+    return result
+    // }
+    // return false
   }
 }
 

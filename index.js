@@ -173,7 +173,8 @@ function init() {
   }
 
   // window.maria = new Maria(0, 5, -15)
-  window.maria = new Maria(-35, 5, 0)
+  // window.maria = new Maria(-35, 5, 0)
+  window.maria = new Maria(-5, 5, 0)
   // window.maria = new Maria(0, 0, 0)
   maria.load(() => {
     // maria.mesh.rotation.set(0, Math.PI, 0)
@@ -198,8 +199,8 @@ function init() {
   let mutantsCount = parseInt(g.getQueryStringByName('mutants'))
   if (Number.isNaN(mutantsCount)) mutantsCount = 3
   for (let i = 0; i < mutantsCount; i++) {
-    // let mutant = new Mutant((Math.random() - 0.5) * 50, 5, (Math.random() - 0.5) * 50)
-    let mutant = new Mutant(-25, 5, 0)
+    let mutant = new Mutant((Math.random() - 0.5) * 50, 5, (Math.random() - 0.5) * 50)
+    // let mutant = new Mutant(-25, 5, 0)
     let handKnife = new HandKnife()
     handKnife.owner = mutant
     mutant.load()

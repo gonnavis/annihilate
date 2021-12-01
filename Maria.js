@@ -996,7 +996,7 @@ class Maria {
     world.addBody(this.body)
     // this.body.addEventListener('collide', (event) => {
     this.body.addEventListener('beginContact', (event) => {
-      // console.log('beginContact', event.body.belongTo)
+      // console.log('beginContact', event.body.belongTo?.constructor.name)
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
       // if (event.body !== window.greatSword.body && !event.body.isTrigger) {
@@ -1011,7 +1011,7 @@ class Maria {
       // if (event.body === window.ground.body) console.log(111)
     })
     this.body.addEventListener('endContact', (event) => {
-      // console.log('endContact', event.body.belongTo)
+      // console.log('endContact', event.body.belongTo?.constructor.name)
       // if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
       if (event.body.belongTo?.isGround) {
         this.setAir(true) // todo: Use raycaster to check height, judge if really air. Then don't need use beginContact/endContact to check if air?
@@ -1034,7 +1034,7 @@ class Maria {
     }
     console.log(altitude.toFixed(1), result.body?.belongTo?.constructor.name)
 
-    // if (this.isAir) console.log(true)
+    // if (this.isAir) console.log('isAir')
     // else console.log('-')
 
     if (this.service.state.matches('loading')) return

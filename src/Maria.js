@@ -1124,11 +1124,15 @@ class Maria {
       this.setAir(true)
       this.service.send('air')
     } else {
-      if (this.isAir) this.service.send('land')
+      // NOTE: Check isAir to prevent immediate idle after jump.
+      // NOTE: Check altitude < 0.01 too prevent sometimes not land bug.
+      if (this.isAir || altitude < 0.01) this.service.send('land')
+      // this.service.send('land')
       this.setAir(false)
       this.body.mass = this.mass
     }
     // console.log(this.isAir, altitude.toFixed(1), result.body?.belongTo?.constructor.name)
+    // console.log(this.isAir, altitude, result.body?.belongTo?.constructor.name)
 
     // if (this.isAir) console.log('isAir')
     // else console.log('-')

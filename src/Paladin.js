@@ -379,6 +379,7 @@ class Paladin {
 
     this.bodyRadius = 1
     this.bodyHeight = 4.6
+    this.bodyHeightHalf = this.bodyHeight / 2
     // this.bodyHeight = 10
     this.bodyCylinderHeight = this.bodyHeight - this.bodyRadius * 2
     let sphereShape = new CANNON.Sphere(this.bodyRadius)
@@ -407,7 +408,7 @@ class Paladin {
   update(dt) {
     if (this.service.state.matches('loading')) return
 
-    this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyCylinderHeight, this.body.position.z) // todo: Why not this.bodyCylinderHeight / 2 ?
+    this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyHeightHalf, this.body.position.z) // todo: Why not this.bodyCylinderHeight / 2 ?
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
     this.mixer.update(dt)

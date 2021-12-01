@@ -125,7 +125,7 @@ class Maria {
           shoryuken: {
             entry: 'playShoryuken',
             on: {
-              finish: { target: 'idle' },
+              finish: { target: 'drop' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
@@ -320,7 +320,7 @@ class Maria {
             entry: 'playLaunchWithJump',
             on: {
               // finish: { target: 'jump' },
-              finish: { target: 'idle' },
+              finish: { target: 'drop' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
               keyOUp: { target: 'launch' },
@@ -453,8 +453,8 @@ class Maria {
             on: {
               finish: { target: 'drop' },
               land: { target: 'idle' },
-              // attack: { target: 'jumpAttack' },
-              attack: { target: 'attackStartWithCharge' },
+              attack: { target: 'jumpAttack' },
+              // attack: { target: 'attackStartWithCharge' },
               // attack: { target: 'attack' },
               bash: { target: 'jumpBashStartWithCharge' },
               jump: { target: 'doubleJump' },
@@ -476,7 +476,7 @@ class Maria {
             entry: ['playDrop'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'attackStartWithCharge' },
+              attack: { target: 'jumpAttack' },
               bash: { target: 'jumpBashStartWithCharge' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
@@ -488,7 +488,7 @@ class Maria {
             entry: ['playDrop'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'attackStartWithCharge' },
+              attack: { target: 'jumpAttack' },
               bash: { target: 'jumpBashStartWithCharge' },
               // jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
@@ -496,58 +496,58 @@ class Maria {
             },
             tags: ['canMove'],
           },
-          // jumpAttack: {
-          //   entry: 'playJumpAttack',
-          //   exit: 'exitJumpAttack',
-          //   on: {
-          //     // finish: { target: 'jump' },
-          //     finish: { target: 'idle' }, // todo: jumpIdle/airIdle or drop.
-          //     // finish: { target: 'jumpIdle' },
-          //     // todo: hit jumpDash/airDash
-          //     attack: { target: 'prepareJumpFist' },
-          //   },
-          //   tags: ['canDamage'],
-          // },
-          // prepareJumpFist: {
-          //   entry: 'playPrepareJumpFist',
-          //   exit: 'exitPrepareJumpFist',
-          //   on: {
-          //     finish: { target: 'jumpFist' },
-          //   },
-          // },
-          // jumpFist: {
-          //   entry: 'playJumpFist',
-          //   exit: 'exitJumpFist',
-          //   on: {
-          //     // finish: { target: 'jump' },
-          //     finish: { target: 'jumpIdle' },
-          //     attack: { target: 'prepareJumpStrike' },
-          //   },
-          //   tags: ['canDamage'],
-          // },
-          // prepareJumpStrike: {
-          //   entry: 'playPrepareJumpStrike',
-          //   exit: 'exitPrepareJumpStrike',
-          //   on: {
-          //     finish: { target: 'jumpStrike' },
-          //   },
-          // },
-          // jumpStrike: {
-          //   entry: 'playJumpStrike',
-          //   exit: 'exitJumpStrike',
-          //   on: {
-          //     // finish: { target: 'jump' },
-          //     finish: { target: 'jumpIdle' },
-          //   },
-          //   tags: ['canDamage'],
-          // },
+          jumpAttack: {
+            entry: 'playJumpAttack',
+            exit: 'exitJumpAttack',
+            on: {
+              // finish: { target: 'jump' },
+              finish: { target: 'idle' }, // todo: jumpIdle/airIdle or drop.
+              // finish: { target: 'jumpIdle' },
+              // todo: hit jumpDash/airDash
+              attack: { target: 'prepareJumpFist' },
+            },
+            tags: ['canDamage'],
+          },
+          prepareJumpFist: {
+            entry: 'playPrepareJumpFist',
+            exit: 'exitPrepareJumpFist',
+            on: {
+              finish: { target: 'jumpFist' },
+            },
+          },
+          jumpFist: {
+            entry: 'playJumpFist',
+            exit: 'exitJumpFist',
+            on: {
+              // finish: { target: 'jump' },
+              finish: { target: 'drop' },
+              attack: { target: 'prepareJumpStrike' },
+            },
+            tags: ['canDamage'],
+          },
+          prepareJumpStrike: {
+            entry: 'playPrepareJumpStrike',
+            exit: 'exitPrepareJumpStrike',
+            on: {
+              finish: { target: 'jumpStrike' },
+            },
+          },
+          jumpStrike: {
+            entry: 'playJumpStrike',
+            exit: 'exitJumpStrike',
+            on: {
+              // finish: { target: 'jump' },
+              finish: { target: 'drop' },
+            },
+            tags: ['canDamage'],
+          },
           doubleJump: {
             entry: ['playJump', 'jump'],
             on: {
               finish: { target: 'doubleDrop' },
               land: { target: 'idle' },
-              // attack: { target: 'jumpAttack' },
-              attack: { target: 'attackStartWithCharge' },
+              attack: { target: 'jumpAttack' },
+              // attack: { target: 'attackStartWithCharge' },
               bash: { target: 'jumpBashStartWithCharge' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
@@ -1261,10 +1261,10 @@ class Maria {
   setAir(bool) {
     if (bool) {
       this.isAir = true
-      this.attackSpeed = this.airAttackSpeed
+      // this.attackSpeed = this.airAttackSpeed
     } else {
       this.isAir = false
-      this.attackSpeed = this.landAttackSpeed
+      // this.attackSpeed = this.landAttackSpeed
     }
   }
 

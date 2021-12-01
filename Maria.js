@@ -507,9 +507,7 @@ class Maria {
             entry: 'playJumpAttack',
             exit: 'exitJumpAttack',
             on: {
-              // finish: { target: 'jump' },
-              finish: { target: 'idle' }, // todo: jumpIdle/airIdle or drop.
-              // finish: { target: 'jumpIdle' },
+              finish: { target: 'drop' },
               // todo: hit jumpDash/airDash
               attack: { target: 'prepareJumpFist' },
             },
@@ -526,7 +524,6 @@ class Maria {
             entry: 'playJumpFist',
             exit: 'exitJumpFist',
             on: {
-              // finish: { target: 'jump' },
               finish: { target: 'drop' },
               attack: { target: 'prepareJumpStrike' },
             },
@@ -543,7 +540,6 @@ class Maria {
             entry: 'playJumpStrike',
             exit: 'exitJumpStrike',
             on: {
-              // finish: { target: 'jump' },
               finish: { target: 'drop' },
             },
             tags: ['canDamage'],

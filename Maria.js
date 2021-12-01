@@ -1022,8 +1022,10 @@ class Maria {
 
   update(dt) {
     // console.log('tick')
-    if (this.isAir) console.log(true)
-    else console.log('-')
+
+    // if (this.isAir) console.log(true)
+    // else console.log('-')
+
     if (this.service.state.matches('loading')) return
 
     this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyHeight / 2, this.body.position.z)
@@ -1192,6 +1194,14 @@ class Maria {
       this.isAir = false
       this.attackSpeed = this.landAttackSpeed
     }
+  }
+
+  getAltitude() {
+    // getHiehgt()
+    // todo: doing.
+    let result = new CANNON.RaycastResult()
+    let isHit = world.raycastClosest(this.body.position, new CANNON.Vec3(0, -1, 0), { skipBackfaces: true }, result)
+    if (isHit) console.log(result.belongTo)
   }
 }
 

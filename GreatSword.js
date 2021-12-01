@@ -35,7 +35,7 @@ class GreatSword {
 
           // if (this.owner.service.state.matches('launch')) {
           if (this.owner.service.state.hasTag('canLaunch') && !e.body.belongTo.isAir) {
-            e.body.velocity.y += 25
+            e.body.velocity.y += 30
             e.body.belongTo.isAir = true // todo: refactor.
             // console.log('set isAir true')
           }

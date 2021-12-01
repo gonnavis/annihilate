@@ -76,7 +76,7 @@ class Maria {
               run: { target: 'run' },
               attack: { target: 'attackStartWithCharge' },
               bash: { target: 'bashStart' },
-              launch: { target: 'launchWithJump' },
+              launch: { target: 'launchStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
@@ -150,7 +150,7 @@ class Maria {
               stop: { target: 'idle' },
               attack: { target: 'attackStartWithCharge' },
               bash: { target: 'bashStart' },
-              launch: { target: 'launchWithJump' },
+              launch: { target: 'launchStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
@@ -316,14 +316,21 @@ class Maria {
             },
             tags: ['canDamage'],
           },
-          launchWithJump: {
-            entry: 'playLaunchWithJump',
+          launchStart: {
+            entry: 'playLauncStart',
             on: {
-              // finish: { target: 'jump' },
-              finish: { target: 'drop' },
+              finish: { target: 'launchWithJump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
               keyOUp: { target: 'launch' },
+            },
+            tags: ['canDamage', 'canLaunch'],
+          },
+          launchWithJump: {
+            on: {
+              finish: { target: 'drop' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
             },
             tags: ['canDamage', 'canLaunch'],
           },
@@ -722,15 +729,19 @@ class Maria {
             this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0)
           },
-          playLaunchWithJump: () => {
+          playLauncStart: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0)
 
+            // console.log('- setTimeout')
             this.timeoutLaunchWithJump = setTimeout(() => {
-              this.body.velocity.y = 20
+              // console.log('- do timeout')
+              this.body.velocity.y = 30
+              this.service.send('finish')
             }, 150)
           },
           playLaunch: () => {
+            // console.log('- clearTimeout')
             clearTimeout(this.timeoutLaunchWithJump)
           },
           playCharged1: () => {
@@ -764,7 +775,7 @@ class Maria {
             this.fadeToAction('strike', 0)
 
             setTimeout(() => {
-              this.body.velocity.y += 25
+              this.body.velocity.y += 30
               // this.setAir(true)
             }, 150)
           },
@@ -1075,6 +1086,8 @@ class Maria {
 
   update(dt) {
     // console.log('tick')
+
+    // console.log(this.body.position.y.toFixed(1))
 
     // console.log(Math.round(this.getAltitude()))
     let result = this.getAltitude(100)

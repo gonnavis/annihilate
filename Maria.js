@@ -1030,6 +1030,7 @@ class Maria {
       friction: 0,
     })
     this.body = new CANNON.Body({
+      // material: physicsMaterial,
       mass: this.mass,
       // material: physicsMaterial,
       collisionFilterGroup: g.GROUP_ROLE,

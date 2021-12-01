@@ -18,10 +18,11 @@ class Maria {
     this.mixer
     // this.speed = 0.15
     this.speed = 0.3
-    this.landAttackSpeed = 1.4
-    this.airAttackSpeed = 2.5
-    // this.attackSpeed = 1.2
-    this.attackSpeed = this.landAttackSpeed
+    // this.landAttackSpeed = 1.4
+    // this.airAttackSpeed = 2.5
+    this.attackSpeed = 1.4
+    this.jumpBashSpeed = this.attackSpeed * 5
+    // this.attackSpeed = this.landAttackSpeed
     this.chargeAttackCoe = 2
     this.tmpVec3 = new THREE.Vector3()
     this.direction = vec2() // direction may be zero length.
@@ -884,7 +885,7 @@ class Maria {
             this.body.velocity.set(0, 0, 0)
           },
           playJumpBashStart: (context, event, o) => {
-            this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 4
+            this.oaction['jumpAttackStart'].timeScale = this.jumpBashSpeed
             // this.fadeToAction('jumpAttackStart')
 
             this.body.mass = this.mass
@@ -940,20 +941,20 @@ class Maria {
             this.body.mass = this.mass
           },
           playJumpBash: (context, event, o) => {
-            this.oaction['jumpAttack'].timeScale = this.attackSpeed * 4
+            this.oaction['jumpAttack'].timeScale = this.jumpBashSpeed
             this.fadeToAction('jumpAttack')
 
             this.body.velocity.y = -this.body.position.y * 5
           },
           playJumpChargeBash: (context, event, o) => {
-            this.oaction['jumpAttack'].timeScale = this.attackSpeed * 4
+            this.oaction['jumpAttack'].timeScale = this.jumpBashSpeed
             this.fadeToAction('jumpAttack')
 
             this.body.mass = this.mass
             this.body.velocity.y = -this.body.position.y * 5
           },
           playJumpBashEnd: (context, event, o) => {
-            this.oaction['jumpAttackEnd'].timeScale = this.attackSpeed * 4
+            this.oaction['jumpAttackEnd'].timeScale = this.jumpBashSpeed
             this.fadeToAction('jumpAttackEnd')
           },
           jump: () => {

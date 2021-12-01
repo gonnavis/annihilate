@@ -445,7 +445,7 @@ class Maria {
               hit: { target: 'hit' },
               // // dash: { target: 'dash' },
             },
-            tags: ['canDamage'],
+            tags: ['canDamage', 'knockDown'],
           },
           jumpBashEnd: {
             entry: ['playJumpBashEnd'],
@@ -1062,7 +1062,7 @@ class Maria {
     })
     this.body.belongTo = this
 
-    this.bodyRadius = 1
+    this.bodyRadius = 0.9
     this.bodyHeight = 4.5
     this.bodyHeightHalf = this.bodyHeight / 2
     // this.bodyHeight = 10

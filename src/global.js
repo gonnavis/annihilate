@@ -15,5 +15,8 @@ g.getQueryStringByName = function (name) {
   return result[1]
 }
 
+g.isAttack = g.getQueryStringByName('attack') === 'false' ? false : true
+g.isDamage = g.getQueryStringByName('damage') === 'false' ? false : true
+
 window.g = g
 export { g }

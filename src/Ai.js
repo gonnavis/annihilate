@@ -34,7 +34,11 @@ class Ai {
       this.facing.copy(this.direction)
     } else {
       if (this.isAttack) {
-        this.role.service.send('attack')
+        if (g.isAttack) {
+          this.role.service.send('attack')
+        } else {
+          this.role.service.send('stop')
+        }
       } else {
         this.role.service.send('stop')
       }

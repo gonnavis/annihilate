@@ -114,6 +114,7 @@ class RoleControls {
         case 'KeyK':
         case 'Numpad5':
           this.role.service.send('jump')
+          // this.role.jump()
           break
         case 'KeyI':
         case 'Numpad8':

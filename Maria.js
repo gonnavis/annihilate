@@ -954,7 +954,7 @@ class Maria {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -1037,11 +1037,11 @@ class Maria {
     if (altitude > 1) {
       this.setAir(true)
     } else {
-      this.service.send('land')
+      if (this.isAir) this.service.send('land')
       this.setAir(false)
       this.body.mass = this.mass
     }
-    console.log(this.isAir, altitude.toFixed(1), result.body?.belongTo?.constructor.name)
+    // console.log(this.isAir, altitude.toFixed(1), result.body?.belongTo?.constructor.name)
 
     // if (this.isAir) console.log('isAir')
     // else console.log('-')
@@ -1235,6 +1235,11 @@ class Maria {
     // }
     // return false
   }
+
+  // jump() {
+  //   this.fadeToAction('jump')
+  //   this.body.velocity.y = 20
+  // }
 }
 
 export { Maria }

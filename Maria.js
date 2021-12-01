@@ -620,7 +620,8 @@ class Maria {
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.z = this.tmpVec3.z
 
-            // // move use initial pos + absolute bias, can't use, will cause big problem.
+            // // Move use initial pos + absolute bias, can't use, will cause big problem ( bounce back and up a lot).
+            // // Force set to no collide position when onComplete to solve this problem?
             // // Related to world.defaultContactMaterial.contactEquationRelaxation.
             // let to = { t: 0 }
             // let _posX = this.body.position.x
@@ -641,6 +642,7 @@ class Maria {
 
             // // move use per frame delta. Same problem as initial pos + absolute bias, why?
             // let to = { t: 0 }
+            // let initialY = this.body.position.y
             // this.tweenDash = gsap.to(to, {
             //   duration: 0.3,
             //   t: 1,
@@ -648,6 +650,7 @@ class Maria {
             //   onUpdate: () => {
             //     // console.log(to.t)
             //     this.body.position.x += this.facing.x * 3
+            //     // this.body.position.y = initialY
             //     this.body.position.z += this.facing.y * 3
             //   },
             //   // onComplete: () => {

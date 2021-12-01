@@ -33,11 +33,11 @@ class Ai {
       this.role.service.send('run')
       this.facing.copy(this.direction)
     } else {
-      // if (this.isAttack) {
-      // this.role.service.send('attack')
-      // } else {
-      this.role.service.send('stop')
-      // }
+      if (this.isAttack) {
+        this.role.service.send('attack')
+      } else {
+        this.role.service.send('stop')
+      }
     }
 
     if (this.role.service.state.hasTag('canMove')) {

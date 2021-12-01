@@ -183,7 +183,7 @@ function init() {
   window.greatSword = new GreatSword()
   greatSword.owner = maria
 
-  window.paladin = new Paladin(5, 5, -15)
+  window.paladin = new Paladin(5, 5, 0)
   // window.paladin = new Paladin(0, 5, 0)
   paladin.load(() => {
     // paladin.mesh.rotation.set(0, Math.PI, 0)

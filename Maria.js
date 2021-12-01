@@ -981,6 +981,7 @@ class Maria {
 
     this.bodyRadius = 1
     this.bodyHeight = 4.5
+    this.bodyHeightHalf = this.bodyHeight / 2
     // this.bodyHeight = 10
     this.bodyCylinderHeight = this.bodyHeight - this.bodyRadius * 2
     let sphereShape = new CANNON.Sphere(this.bodyRadius)
@@ -1001,21 +1002,22 @@ class Maria {
       // if (event.body === window.ground.body) {
       // if (event.body !== window.greatSword.body && !event.body.isTrigger) {
       // if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
-      if (event.body.belongTo?.isGround) {
-        ///todo: Is cannon.js has collision mask?
-        // todo: refactor: window.ground
-        this.service.send('land')
-        this.setAir(false)
-        this.body.mass = this.mass
-      }
+      // if (event.body.belongTo?.isGround) {
+      //   ///todo: Is cannon.js has collision mask?
+      //   // todo: refactor: window.ground
+      //   this.service.send('land')
+      //   this.setAir(false)
+      //   this.body.mass = this.mass
+      // }
       // if (event.body === window.ground.body) console.log(111)
     })
     this.body.addEventListener('endContact', (event) => {
       // console.log('endContact', event.body.belongTo?.constructor.name)
       // if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
-      if (event.body.belongTo?.isGround) {
-        this.setAir(true) // todo: Use raycaster to check height, judge if really air. Then don't need use beginContact/endContact to check if air?
-      }
+      // if (event.body.belongTo?.isGround) {
+      //   this.setAir(true) // todo(ok): Use raycaster to check height, judge if really air. Then don't need use beginContact/endContact to check if air?
+      // note: Can't only depend on endContact to set isAir = true, because when contact enemy, will often endContact with ground ( lift a little ).
+      // }
       // if (event.body === window.ground.body) console.log(222)
     })
   }
@@ -1027,12 +1029,19 @@ class Maria {
     let result = this.getAltitude(100)
     let altitude
     if (result.body) {
-      altitude = this.body.position.y - result.hitPointWorld.y
+      altitude = this.body.position.y - this.bodyHeightHalf - result.hitPointWorld.y
       // console.log(Math.round(this.body.position.y - result.hitPointWorld.y), result.body.belongTo)
     } else {
       altitude = Infinity
     }
-    console.log(altitude.toFixed(1), result.body?.belongTo?.constructor.name)
+    if (altitude > 1) {
+      this.setAir(true)
+    } else {
+      this.service.send('land')
+      this.setAir(false)
+      this.body.mass = this.mass
+    }
+    console.log(this.isAir, altitude.toFixed(1), result.body?.belongTo?.constructor.name)
 
     // if (this.isAir) console.log('isAir')
     // else console.log('-')

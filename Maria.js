@@ -507,9 +507,7 @@ class Maria {
             entry: 'playJumpAttack',
             exit: 'exitJumpAttack',
             on: {
-              // finish: { target: 'jump' },
-              finish: { target: 'idle' }, // todo: jumpIdle/airIdle or drop.
-              // finish: { target: 'jumpIdle' },
+              finish: { target: 'drop' },
               // todo: hit jumpDash/airDash
               attack: { target: 'prepareJumpFist' },
             },
@@ -526,7 +524,6 @@ class Maria {
             entry: 'playJumpFist',
             exit: 'exitJumpFist',
             on: {
-              // finish: { target: 'jump' },
               finish: { target: 'drop' },
               attack: { target: 'prepareJumpStrike' },
             },
@@ -543,7 +540,6 @@ class Maria {
             entry: 'playJumpStrike',
             exit: 'exitJumpStrike',
             on: {
-              // finish: { target: 'jump' },
               finish: { target: 'drop' },
             },
             tags: ['canDamage'],
@@ -736,7 +732,19 @@ class Maria {
             // console.log('- setTimeout')
             this.timeoutLaunchWithJump = setTimeout(() => {
               // console.log('- do timeout')
-              this.body.velocity.y = 30
+              // this.body.velocity.y = 30
+              gsap.to(this.body.position, {
+                duration: 0.3,
+                y: this.body.position.y + 8, // set 8, lower than launched enemy ( 10 ), to let role can has time to air hit enemy.
+                onComplete: () => {
+                  // let posY = this.body.position.y
+                  // gsap.to(this.body.position, {
+                  //   duration: 3,
+                  //   y: posY,
+                  // })
+                  this.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
+                },
+              })
               this.service.send('finish')
             }, 150)
           },
@@ -775,7 +783,19 @@ class Maria {
             this.fadeToAction('strike', 0)
 
             setTimeout(() => {
-              this.body.velocity.y += 30
+              // this.body.velocity.y += 30
+              gsap.to(this.body.position, {
+                duration: 0.3,
+                y: this.body.position.y + 8, // set 8, lower than launched enemy ( 10 ), to let role can has time to air hit enemy.
+                onComplete: () => {
+                  // let posY = this.body.position.y
+                  // gsap.to(this.body.position, {
+                  //   duration: 3,
+                  //   y: posY,
+                  // })
+                  this.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
+                },
+              })
               // this.setAir(true)
             }, 150)
           },
@@ -1034,6 +1054,7 @@ class Maria {
       friction: 0,
     })
     this.body = new CANNON.Body({
+      // material: physicsMaterial,
       mass: this.mass,
       // material: physicsMaterial,
       collisionFilterGroup: g.GROUP_ROLE,

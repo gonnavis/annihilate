@@ -17,7 +17,11 @@ class Ground {
     scene.add(this.mesh)
 
     let shape = new CANNON.Plane()
+    let physicsMaterial = new CANNON.Material({
+      friction: 0,
+    })
     this.body = new CANNON.Body({
+      // material: physicsMaterial,
       mass: 0,
       collisionFilterGroup: g.GROUP_SCENE,
     })

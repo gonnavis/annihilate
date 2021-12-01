@@ -35,7 +35,20 @@ class GreatSword {
 
           // if (this.owner.service.state.matches('launch')) {
           if (this.owner.service.state.hasTag('canLaunch') && !e.body.belongTo.isAir) {
-            e.body.velocity.y += 30
+            // e.body.velocity.y += 30
+            // NOTE: Direct change position instead of velocity, to prevent friction between enemy herd cause not lift.
+            gsap.to(e.body.position, {
+              duration: 0.3,
+              y: e.body.position.y + 10,
+              onComplete: () => {
+                // let posY = e.body.position.y
+                // gsap.to(e.body.position, {
+                //   duration: 0.3,
+                //   y: posY,
+                // })
+                e.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
+              },
+            })
             e.body.belongTo.isAir = true // todo: refactor.
             // console.log('set isAir true')
           }

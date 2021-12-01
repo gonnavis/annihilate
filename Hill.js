@@ -53,6 +53,7 @@ class Hill {
     let shape = new CANNON.ConvexPolyhedron({ vertices, faces })
     this.body = new CANNON.Body({
       mass: 0,
+      collisionFilterGroup: g.GROUP_SCENE,
     })
     this.body.belongTo = this
     this.body.addShape(shape)

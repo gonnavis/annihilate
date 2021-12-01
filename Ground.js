@@ -4,7 +4,7 @@ import * as THREE from './lib/three.js/build/three.module.js'
 class Ground {
   constructor() {
     this.isGround = true
-    
+
     this.mesh = new THREE.Mesh(
       new THREE.PlaneBufferGeometry(2000, 2000),
       new THREE.MeshPhongMaterial({
@@ -19,6 +19,7 @@ class Ground {
     let shape = new CANNON.Plane()
     this.body = new CANNON.Body({
       mass: 0,
+      collisionFilterGroup: g.GROUP_SCENE,
     })
     this.body.belongTo = this
     this.body.addShape(shape)

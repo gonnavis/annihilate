@@ -1023,6 +1023,11 @@ class Maria {
   update(dt) {
     // console.log('tick')
 
+    // console.log(Math.round(this.getAltitude()))
+    let result = this.getAltitude()
+    console.log((this.body.position.y - result.hitPointWorld.y).toFixed(1), result.body.belongTo?.constructor.name)
+    // console.log(Math.round(this.body.position.y - result.hitPointWorld.y), result.body.belongTo)
+
     // if (this.isAir) console.log(true)
     // else console.log('-')
 
@@ -1200,8 +1205,20 @@ class Maria {
     // getHiehgt()
     // todo: doing.
     let result = new CANNON.RaycastResult()
-    let isHit = world.raycastClosest(this.body.position, new CANNON.Vec3(0, -1, 0), { skipBackfaces: true }, result)
-    if (isHit) console.log(result.belongTo)
+    let option = {
+      // skipBackfaces: true,
+      // skipBackfaces: false,
+      // collisionFilterGroup: g.GROUP_ROLE,
+      collisionFilterMask: g.GROUP_SCENE,
+    }
+    let isHit = world.raycastClosest(this.body.position, new CANNON.Vec3(this.body.position.x, this.body.position.y - 1000, this.body.position.z), option, result)
+    if (isHit) {
+      // console.log(result)
+      // let altitude = this.body.position.y - result.hitPointWorld.y
+      // return altitude
+      return result
+    }
+    return false
   }
 }
 

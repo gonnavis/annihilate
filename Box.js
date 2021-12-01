@@ -4,7 +4,7 @@ import * as THREE from './lib/three.js/build/three.module.js'
 class Box {
   constructor(width = 1, height = 1, depth = 1) {
     this.isGround = true
-    
+
     const pos = new THREE.Vector3()
     const quat = new THREE.Quaternion()
 
@@ -18,6 +18,7 @@ class Box {
     let shape = new CANNON.Box(new CANNON.Vec3(width / 2, depth / 2, height / 2))
     this.body = new CANNON.Body({
       mass: 0,
+      collisionFilterGroup: g.GROUP_SCENE,
     })
     this.body.belongTo = this
     this.body.addShape(shape)

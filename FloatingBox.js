@@ -22,6 +22,7 @@ class FloatingBox {
     this.body = new CANNON.Body({
       mass: 0,
       type: CANNON.Body.KINEMATIC,
+      collisionFilterGroup: g.GROUP_SCENE,
     })
     this.body.belongTo = this
     this.body.addShape(shape)

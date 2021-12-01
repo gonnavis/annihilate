@@ -89,7 +89,7 @@ class Maria {
           //   on: {
           //     land: { target: 'idle' },
           //     attack: { target: 'jumpAttack' },
-          //     bash: { target: 'jumpBashAttackStartWithCharge' },
+          //     bash: { target: 'jumpBashStartWithCharge' },
           //     hit: { target: 'hit' },
           //     // dash: { target: 'dash' },
           //     // block: { target: 'block' },
@@ -402,44 +402,44 @@ class Maria {
               dash: { target: 'dash' },
             },
           },
-          jumpBashAttackStartWithCharge: {
-            entry: ['playJumpBashAttackStartWithCharge'],
+          jumpBashStartWithCharge: {
+            entry: ['playJumpBashStartWithCharge'],
             on: {
-              finish: { target: 'jumpChargeAttack' },
+              finish: { target: 'jumpChargeBash' },
               hit: { target: 'hit' },
               // dash: { target: 'dash' },
 
-              keyUUp: { target: 'jumpBashAttackStart' },
+              keyUUp: { target: 'jumpBashStart' },
             },
           },
-          jumpBashAttackStart: {
-            entry: ['playJumpBashAttackStart'],
+          jumpBashStart: {
+            entry: ['playJumpBashStart'],
             on: {
-              finish: { target: 'jumpBashAttack' },
+              finish: { target: 'jumpBash' },
               hit: { target: 'hit' },
               // dash: { target: 'dash' },
             },
           },
-          jumpChargeAttack: {
-            entry: ['playJumpChargeAttack'],
+          jumpChargeBash: {
+            entry: ['playJumpChargeBash'],
             on: {
-              finish: { target: 'jumpBashAttackEnd' },
+              finish: { target: 'jumpBashEnd' },
               hit: { target: 'hit' },
               // // dash: { target: 'dash' },
             },
             tags: ['canDamage'],
           },
-          jumpBashAttack: {
-            entry: ['playJumpBashAttack'],
+          jumpBash: {
+            entry: ['playJumpBash'],
             on: {
-              finish: { target: 'jumpBashAttackEnd' },
+              finish: { target: 'jumpBashEnd' },
               hit: { target: 'hit' },
               // // dash: { target: 'dash' },
             },
             tags: ['canDamage'],
           },
-          jumpBashAttackEnd: {
-            entry: ['playJumpBashAttackEnd'],
+          jumpBashEnd: {
+            entry: ['playJumpBashEnd'],
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -453,7 +453,7 @@ class Maria {
               // attack: { target: 'jumpAttack' },
               attack: { target: 'attackStartWithCharge' },
               // attack: { target: 'attack' },
-              bash: { target: 'jumpBashAttackStartWithCharge' },
+              bash: { target: 'jumpBashStartWithCharge' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
@@ -511,7 +511,7 @@ class Maria {
               land: { target: 'idle' },
               // attack: { target: 'jumpAttack' },
               attack: { target: 'attack' },
-              bash: { target: 'jumpBashAttackStartWithCharge' },
+              bash: { target: 'jumpBashStartWithCharge' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
             },
@@ -786,7 +786,7 @@ class Maria {
             this.oaction['strikeEnd'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('strikeEnd', 0)
           },
-          playJumpBashAttackStartWithCharge: (context, event, o) => {
+          playJumpBashStartWithCharge: (context, event, o) => {
             this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 0.6
             this.fadeToAction('jumpAttackStart')
 
@@ -798,7 +798,7 @@ class Maria {
             this.body.mass = 0
             this.body.velocity.set(0, 0, 0)
           },
-          playJumpBashAttackStart: (context, event, o) => {
+          playJumpBashStart: (context, event, o) => {
             this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 4
             // this.fadeToAction('jumpAttackStart')
 
@@ -854,20 +854,20 @@ class Maria {
           exitJumpStrike: () => {
             this.body.mass = this.mass
           },
-          playJumpBashAttack: (context, event, o) => {
+          playJumpBash: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed * 4
             this.fadeToAction('jumpAttack')
 
             this.body.velocity.y = -this.body.position.y * 5
           },
-          playJumpChargeAttack: (context, event, o) => {
+          playJumpChargeBash: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed * 4
             this.fadeToAction('jumpAttack')
 
             this.body.mass = this.mass
             this.body.velocity.y = -this.body.position.y * 5
           },
-          playJumpBashAttackEnd: (context, event, o) => {
+          playJumpBashEnd: (context, event, o) => {
             this.oaction['jumpAttackEnd'].timeScale = this.attackSpeed * 4
             this.fadeToAction('jumpAttackEnd')
           },

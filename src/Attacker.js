@@ -1,6 +1,6 @@
 import { g } from './global.js'
 
-import * as THREE from './lib/three.js/build/three.module.js'
+import * as THREE from '../lib/three.js/build/three.module.js'
 //new Attacker(scene, updates, enemy.mesh.position, mesh.position)
 class Attacker {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {

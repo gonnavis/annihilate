@@ -1,15 +1,15 @@
 import { g } from './global.js'
 
-import * as THREE from './lib/three.js/build/three.module.js'
+import * as THREE from '../lib/three.js/build/three.module.js'
 window.THREE = THREE
-import { OrbitControls } from './lib/three.js/examples/jsm/controls/OrbitControls.js'
+import { OrbitControls } from '../lib/three.js/examples/jsm/controls/OrbitControls.js'
 
-import * as CANNON from './lib/cannon-es_my.js'
+import * as CANNON from '../lib/cannon-es_my.js'
 window.CANNON = CANNON
-import cannonDebugger from './lib/cannon-es-debugger.js'
+import cannonDebugger from '../lib/cannon-es-debugger.js'
 // THREE.cannonDebugger = cannonDebugger
 
-import { GUI } from './lib/lil-gui.module.min.js'
+import { GUI } from '../lib/lil-gui.module.min.js'
 
 import { Ground } from './Ground.js'
 import { Hill } from './Hill.js'

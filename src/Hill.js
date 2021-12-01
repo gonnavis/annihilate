@@ -1,8 +1,8 @@
 import { g } from './global.js'
 
-import * as THREE from './lib/three.js/build/three.module.js'
-import { Geometry } from './lib/three.js/examples/jsm/deprecated/Geometry.js'
-// import { mergeVertices } from './lib/three.js/examples/jsm/utils/BufferGeometryUtils.js'
+import * as THREE from '../lib/three.js/build/three.module.js'
+import { Geometry } from '../lib/three.js/examples/jsm/deprecated/Geometry.js'
+// import { mergeVertices } from '../lib/three.js/examples/jsm/utils/BufferGeometryUtils.js'
 class Hill {
   constructor() {
     this.isGround = true

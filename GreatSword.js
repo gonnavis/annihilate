@@ -30,6 +30,9 @@ class GreatSword {
       if (this.owner.service.state.hasTag('canDamage')) {
         if (this.owner.service.state.hasTag('knockDown')) {
           e.body.belongTo.knockDown()
+          if (this.owner.service.state.matches('jumpBash')) {
+            e.body.velocity.y = -e.body.position.y * 10
+          }
         } else {
           e.body.belongTo.hit()
 
@@ -46,7 +49,8 @@ class GreatSword {
                 //   duration: 0.3,
                 //   y: posY,
                 // })
-                e.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
+                // e.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
+                e.body.velocity.y = 5
               },
             })
             e.body.belongTo.isAir = true // todo: refactor.

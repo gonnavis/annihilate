@@ -377,7 +377,7 @@ class Paladin {
     })
     this.body.belongTo = this
 
-    this.bodyRadius = 1.2
+    this.bodyRadius = 1
     this.bodyHeight = 4.6
     // this.bodyHeight = 10
     this.bodyCylinderHeight = this.bodyHeight - this.bodyRadius * 2

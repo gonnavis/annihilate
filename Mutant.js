@@ -418,8 +418,8 @@ class Mutant {
     })
     this.body.belongTo = this
 
-    this.bodyRadius = 1.5
-    this.bodyHeight = 4.3
+    this.bodyRadius = 1.2
+    this.bodyHeight = 4.5
     // this.bodyHeight = 10
     this.bodyCylinderHeight = this.bodyHeight - this.bodyRadius * 2
     let sphereShape = new CANNON.Sphere(this.bodyRadius)

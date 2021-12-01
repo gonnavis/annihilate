@@ -463,6 +463,15 @@ class Maria {
             },
             tags: ['canMove'],
           },
+          jumpDashToDrop: {
+            entry: 'setMassZero',
+            exit: 'restoreMass',
+            on: {
+              finish: { target: 'doubleDrop' },
+              land: { target: 'idle' },
+              hit: { target: 'hit' },
+            },
+          },
           drop: {
             entry: ['playDrop'],
             on: {
@@ -483,7 +492,7 @@ class Maria {
               bash: { target: 'jumpBashStartWithCharge' },
               // jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
-              dash: { target: 'jumpDash' },
+              // dash: { target: 'jumpDash' },
             },
             tags: ['canMove'],
           },
@@ -576,14 +585,14 @@ class Maria {
             tags: ['canDamage'],
           },
           jumpDash: {
-            entry: 'playJumpDash',
-            exit: 'exitJumpDash',
+            entry: ['playJumpDash', 'setMassZero'],
+            exit: 'restoreMass',
             on: {
               land: { target: 'idle' },
+              air: { target: 'jumpDashToDrop' },
               // finish: { target: 'jumpIdle' },
               finish: { target: 'idle' },
             },
-            exit: 'exitJumpDash',
           },
           whirlwind: {
             entry: 'playWhirlwind',
@@ -664,16 +673,14 @@ class Maria {
             // change facing
             this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
             // move
-            this.body.mass = 0
-            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(30)
+            // this.body.mass = 0
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(25)
             this.body.velocity.x = this.tmpVec3.x
+            this.body.velocity.y = 0
             this.body.velocity.z = this.tmpVec3.z
             setTimeout(() => {
               this.service.send('finish')
             }, 500)
-          },
-          exitJumpDash: () => {
-            this.body.mass = this.mass
           },
           playIdle: () => {
             this.fadeToAction('idle')
@@ -698,6 +705,9 @@ class Maria {
           playAttackStart: () => {
             this.oaction['punchStart'].timeScale = this.attackSpeed
             this.fadeToAction('punchStart')
+          },
+          setMassZero: () => {
+            this.body.mass = 0
           },
           setAirMassZero: () => {
             if (this.isAir) {

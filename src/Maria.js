@@ -29,6 +29,7 @@ class Maria {
     this.mass = 80
     this.chargedLevel = 0 // 0: normal/slow combo | 1: fast combo | 2: fast combo & swordBlaster
     this.isAir = false
+    this.liftDistance = 10
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -736,7 +737,8 @@ class Maria {
               // this.body.velocity.y = 30
               gsap.to(this.body.position, {
                 duration: 0.3,
-                y: this.body.position.y + 8, // set 8, lower than launched enemy ( 10 ), to let role can has time to air hit enemy.
+                // y: this.body.position.y + 8, // set 8, lower than launched enemy ( 10 ), to let role can has time to air hit enemy.
+                y: this.body.position.y + this.liftDistance,
                 onComplete: () => {
                   // let posY = this.body.position.y
                   // gsap.to(this.body.position, {
@@ -787,7 +789,7 @@ class Maria {
               // this.body.velocity.y += 30
               gsap.to(this.body.position, {
                 duration: 0.3,
-                y: this.body.position.y + 8, // set 8, lower than launched enemy ( 10 ), to let role can has time to air hit enemy.
+                y: this.body.position.y + this.liftDistance,
                 onComplete: () => {
                   // let posY = this.body.position.y
                   // gsap.to(this.body.position, {

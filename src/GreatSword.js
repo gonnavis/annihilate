@@ -50,7 +50,7 @@ class GreatSword {
                 //   y: posY,
                 // })
                 // e.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
-                e.body.velocity.y = 5
+                e.body.velocity.y = 10
               },
             })
             e.body.belongTo.isAir = true // todo: refactor.

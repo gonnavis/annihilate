@@ -60,12 +60,11 @@ let fsm
 window.service = null
 
 let cameraPosX = 0
-let cameraPosY = 30
-// let cameraPosY = 0
-let cameraPosZ = 30
-// let cameraPosZ = 0
+let cameraPosY = g.getQueryStringByName('view') === 'front' ? 0 : 30
+let cameraPosZ = g.getQueryStringByName('view') === 'top' ? 0 : 30
 
-const gui = new GUI({ width: 310 })
+// const gui = new GUI({ width: 310 })
+const gui = new GUI()
 
 init_xstate()
 init_three()
@@ -210,6 +209,15 @@ function init() {
     // ai.isAttack = false
   }
 
+  window.enemys = []
+  window.enemy = new Enemy(15, 5, -15)
+  enemys.push(enemy)
+  enemy.load()
+
+  // window.enemy2 = new Enemy(15, 5, 15)
+  // enemys.push(enemy2)
+  // enemy2.load()
+
   domMaria.addEventListener('click', (e) => {
     window.service.send('maria')
   })
@@ -260,15 +268,6 @@ function init() {
   // gui.add(teleporter.mesh.position, 'z', -50, 50, 1)
 
   ///todo: fix bug after ```roleControls.role = paladin```.
-
-  // window.enemys = []
-  // window.enemy = new Enemy(15, 5, -15)
-  // enemys.push(enemy)
-  // enemy.load()
-
-  // window.enemy2 = new Enemy(15, 5, 15)
-  // enemys.push(enemy2)
-  // enemy2.load()
 }
 
 function init_three() {

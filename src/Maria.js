@@ -220,21 +220,36 @@ class Maria {
           chargeAttack: {
             entry: 'playChargeAttack',
             on: {
-              finish: { target: 'idle' },
+              // finish: { target: 'idle' },
               hit: { target: 'hit' },
-              attack: { target: 'prepareChargeFist' },
+              // attack: { target: 'prepareChargeFist' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
-          },
-          prepareChargeFist: {
-            on: {
-              finish: { target: 'chargeFistStart' },
-              hit: { target: 'hit' },
-              dash: { target: 'dash' },
+
+            initial: 'main',
+            states: {
+              main: {
+                on: {
+                  finish: { target: '#maria.idle' },
+                  attack: { target: 'prepareNext' },
+                },
+              },
+              prepareNext: {
+                on: {
+                  finish: { target: '#maria.chargeFistStart' },
+                },
+              },
             },
-            tags: ['canDamage'],
           },
+          // prepareChargeFist: {
+          //   on: {
+          //     finish: { target: 'chargeFistStart' },
+          //     hit: { target: 'hit' },
+          //     dash: { target: 'dash' },
+          //   },
+          //   tags: ['canDamage'],
+          // },
           chargeFistStart: {
             entry: 'playChargeFistStart',
             on: {
@@ -246,21 +261,36 @@ class Maria {
           chargeFist: {
             entry: 'playChargeFist',
             on: {
-              finish: { target: 'idle' },
+              // finish: { target: 'idle' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
-              attack: { target: 'prepareChargeStrike' },
+              // attack: { target: 'prepareChargeStrike' },
             },
             tags: ['canDamage'],
-          },
-          prepareChargeStrike: {
-            on: {
-              finish: { target: 'chargeStrikeStart' },
-              hit: { target: 'hit' },
-              dash: { target: 'dash' },
+
+            initial: 'main',
+            states: {
+              main: {
+                on: {
+                  finish: { target: '#maria.idle' },
+                  attack: { target: 'prepareNext' },
+                },
+              },
+              prepareNext: {
+                on: {
+                  finish: { target: '#maria.chargeStrikeStart' },
+                },
+              },
             },
-            tags: ['canDamage'],
           },
+          // prepareChargeStrike: {
+          //   on: {
+          //     finish: { target: 'chargeStrikeStart' },
+          //     hit: { target: 'hit' },
+          //     dash: { target: 'dash' },
+          //   },
+          //   tags: ['canDamage'],
+          // },
           chargeStrikeStart: {
             entry: 'playChargeStrikeStart',
             on: {
@@ -384,23 +414,38 @@ class Maria {
             entry: ['playFist', 'setAirMassZero'],
             exit: ['restoreMass'],
             on: {
-              finish: { target: 'idle' },
+              // finish: { target: 'idle' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
-              attack: { target: 'prepareStrike' },
+              // attack: { target: 'prepareStrike' },
             },
             tags: ['canDamage'],
-          },
-          prepareStrike: {
-            entry: ['setAirMassZero'],
-            exit: ['restoreMass'],
-            on: {
-              finish: { target: 'strikeStart' },
-              hit: { target: 'hit' },
-              dash: { target: 'dash' },
+
+            initial: 'main',
+            states: {
+              main: {
+                on: {
+                  finish: { target: '#maria.idle' },
+                  attack: { target: 'prepareNext' },
+                },
+              },
+              prepareNext: {
+                on: {
+                  finish: { target: '#maria.strikeStart' },
+                },
+              },
             },
-            tags: ['canDamage'],
           },
+          // prepareStrike: {
+          //   entry: ['setAirMassZero'],
+          //   exit: ['restoreMass'],
+          //   on: {
+          //     finish: { target: 'strikeStart' },
+          //     hit: { target: 'hit' },
+          //     dash: { target: 'dash' },
+          //   },
+          //   tags: ['canDamage'],
+          // },
           strikeStart: {
             entry: ['playStrikeStart', 'setAirMassZero'],
             exit: ['restoreMass'],

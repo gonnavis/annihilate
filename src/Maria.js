@@ -309,14 +309,30 @@ class Maria {
             entry: ['playAttack', 'setAirMassZero'],
             exit: ['restoreMass'],
             on: {
-              finish: { target: 'idle' },
+              // finish: { target: 'idle' },
               hit: { target: 'hit' },
-              attack: { target: 'prepareFist' },
+              // attack: { target: 'prepareFist' },
               dash: { target: 'dash' },
 
               // whirlwind: { target: 'whirlwind' },
             },
             tags: ['canDamage'],
+
+            initial: 'main',
+            states: {
+              main: {
+                on: {
+                  // NOTE: https://github.com/statelyai/xstate/issues/52
+                  finish: { target: '#maria.idle' },
+                  attack: { target: 'prepareNext' },
+                },
+              },
+              prepareNext: {
+                on: {
+                  finish: { target: '#maria.fistStart' },
+                },
+              },
+            },
           },
           launchStart: {
             entry: 'playLauncStart',
@@ -345,16 +361,16 @@ class Maria {
             },
             tags: ['canDamage', 'canLaunch'],
           },
-          prepareFist: {
-            entry: ['setAirMassZero'],
-            exit: ['restoreMass'],
-            on: {
-              finish: { target: 'fistStart' },
-              hit: { target: 'hit' },
-              dash: { target: 'dash' },
-            },
-            tags: ['canDamage'],
-          },
+          // prepareFist: {
+          //   entry: ['setAirMassZero'],
+          //   exit: ['restoreMass'],
+          //   on: {
+          //     finish: { target: 'fistStart' },
+          //     hit: { target: 'hit' },
+          //     dash: { target: 'dash' },
+          //   },
+          //   tags: ['canDamage'],
+          // },
           fistStart: {
             entry: ['playFistStart', 'setAirMassZero'],
             exit: ['restoreMass'],

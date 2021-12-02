@@ -570,35 +570,65 @@ class Maria {
             entry: 'playJumpAttack',
             exit: 'restoreMass',
             on: {
-              finish: { target: 'drop' },
+              // finish: { target: 'drop' },
               // todo: hit jumpDash/airDash
-              attack: { target: 'prepareJumpFist' },
+              // attack: { target: 'prepareJumpFist' },
             },
             tags: ['canDamage'],
-          },
-          prepareJumpFist: {
-            entry: 'playPrepareJumpFist',
-            exit: 'restoreMass',
-            on: {
-              finish: { target: 'jumpFist' },
+
+            initial: 'main',
+            states: {
+              main: {
+                on: {
+                  finish: { target: '#maria.drop' },
+                  attack: { target: 'prepareNext' },
+                },
+              },
+              prepareNext: {
+                on: {
+                  finish: { target: '#maria.jumpFist' },
+                },
+              },
             },
           },
+          // prepareJumpFist: {
+          //   entry: 'playPrepareJumpFist',
+          //   exit: 'restoreMass',
+          //   on: {
+          //     finish: { target: 'jumpFist' },
+          //   },
+          // },
           jumpFist: {
             entry: 'playJumpFist',
             exit: 'restoreMass',
             on: {
-              finish: { target: 'drop' },
-              attack: { target: 'prepareJumpStrike' },
+              // finish: { target: 'drop' },
+              // attack: { target: 'prepareJumpStrike' },
             },
             tags: ['canDamage'],
-          },
-          prepareJumpStrike: {
-            entry: 'playPrepareJumpStrike',
-            exit: 'restoreMass',
-            on: {
-              finish: { target: 'jumpStrike' },
+
+            initial: 'main',
+            states: {
+              main: {
+                on: {
+                  finish: { target: '#maria.drop' },
+                  attack: { target: 'prepareNext' },
+                },
+              },
+              prepareNext: {
+                on: {
+                  finish: { target: '#maria.jumpStrike' },
+                },
+              },
             },
           },
+          // prepareJumpStrike: {
+          //   entry: 'playPrepareJumpStrike',
+          //   exit: 'restoreMass',
+          //   on: {
+          //     finish: { target: 'jumpStrike' },
+          //   },
+          // },
           jumpStrike: {
             entry: 'playJumpStrike',
             exit: 'restoreMass',
@@ -756,9 +786,9 @@ class Maria {
             this.sword.material.emissive.setScalar(0)
             this.sword.material.color.setRGB(1, 1, 1)
           },
-          playJumpIdle: () => {
-            this.fadeToAction('jumpIdle', 0.3)
-          },
+          // playJumpIdle: () => {
+          //   this.fadeToAction('jumpIdle', 0.3)
+          // },
           playDrop: () => {
             this.fadeToAction('jumpIdle', 0.3)
           },
@@ -964,10 +994,10 @@ class Maria {
             this.body.velocity.set(0, 0, 0)
             // this.body.velocity.y = -this.body.position.y * 5
           },
-          playPrepareJumpFist: () => {
-            this.body.mass = 0
-            this.body.velocity.set(0, 0, 0)
-          },
+          // playPrepareJumpFist: () => {
+          //   this.body.mass = 0
+          //   this.body.velocity.set(0, 0, 0)
+          // },
           playJumpFist: () => {
             this.oaction['fist'].timeScale = this.attackSpeed
             this.fadeToAction('fist', 0)
@@ -975,10 +1005,10 @@ class Maria {
             this.body.mass = 0
             this.body.velocity.set(0, 0, 0)
           },
-          playPrepareJumpStrike: () => {
-            this.body.mass = 0
-            this.body.velocity.set(0, 0, 0)
-          },
+          // playPrepareJumpStrike: () => {
+          //   this.body.mass = 0
+          //   this.body.velocity.set(0, 0, 0)
+          // },
           playJumpStrike: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0)

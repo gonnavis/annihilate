@@ -17,7 +17,10 @@ class Teleporter {
     let shape = new CANNON.Box(new CANNON.Vec3(width / 2, depth / 2, height / 2))
     this.body = new CANNON.Body({
       mass: 0,
-      isTrigger: true,
+      // isTrigger: true,
+      collisionFilterGroup: g.GROUP_SCENE,
+      collisionFilterMask: g.GROUP_ROLE | g.GROUP_ENEMY,
+      collisionResponse: false,
     })
     this.body.addShape(shape)
     this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)

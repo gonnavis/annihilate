@@ -78,6 +78,7 @@ class Attacker {
 
   dispose() {
     world.removeBody(this.body)
+    scene.remove(this.mesh) // TODO: dispose geometry material.
     updates.splice(updates.indexOf(this), 1)
     window.attackers.splice(window.attackers.indexOf(this), 1)
 

@@ -127,7 +127,7 @@ class Maria {
           shoryuken: {
             entry: 'playShoryuken',
             on: {
-              finish: { target: 'drop' },
+              finish: { target: 'fall' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
@@ -156,7 +156,7 @@ class Maria {
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
-              air: { target: 'drop' },
+              air: { target: 'fall' },
               block: { target: 'block' },
               // blocked: { target: 'blocked' }, // Note: Can block when running or in other states? No, more by intended operation, less by luck.
             },
@@ -376,7 +376,7 @@ class Maria {
           },
           launchWithJump: {
             on: {
-              finish: { target: 'drop' },
+              finish: { target: 'fall' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
             },
@@ -521,7 +521,7 @@ class Maria {
           jump: {
             entry: ['playJump', 'jump'],
             on: {
-              finish: { target: 'drop' },
+              finish: { target: 'fall' },
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
               // attack: { target: 'attackStartWithCharge' },
@@ -533,17 +533,17 @@ class Maria {
             },
             tags: ['canMove'],
           },
-          jumpDashToDrop: {
+          jumpDashToFall: {
             entry: 'setMassZero',
             exit: 'restoreMass',
             on: {
-              finish: { target: 'doubleDrop' },
+              finish: { target: 'doubleFall' },
               land: { target: 'idle' },
               hit: { target: 'hit' },
             },
           },
-          drop: {
-            entry: ['playDrop'],
+          fall: {
+            entry: ['playFall'],
             on: {
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
@@ -554,8 +554,8 @@ class Maria {
             },
             tags: ['canMove'],
           },
-          doubleDrop: {
-            entry: ['playDrop'],
+          doubleFall: {
+            entry: ['playFall'],
             on: {
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
@@ -570,7 +570,7 @@ class Maria {
             entry: 'playJumpAttack',
             exit: 'restoreMass',
             on: {
-              // finish: { target: 'drop' },
+              // finish: { target: 'fall' },
               // todo: hit jumpDash/airDash
               // attack: { target: 'prepareJumpFist' },
             },
@@ -580,7 +580,7 @@ class Maria {
             states: {
               main: {
                 on: {
-                  finish: { target: '#maria.drop' },
+                  finish: { target: '#maria.fall' },
                   attack: { target: 'prepareNext' },
                 },
               },
@@ -602,7 +602,7 @@ class Maria {
             entry: 'playJumpFist',
             exit: 'restoreMass',
             on: {
-              // finish: { target: 'drop' },
+              // finish: { target: 'fall' },
               // attack: { target: 'prepareJumpStrike' },
             },
             tags: ['canDamage'],
@@ -611,7 +611,7 @@ class Maria {
             states: {
               main: {
                 on: {
-                  finish: { target: '#maria.drop' },
+                  finish: { target: '#maria.fall' },
                   attack: { target: 'prepareNext' },
                 },
               },
@@ -633,14 +633,14 @@ class Maria {
             entry: 'playJumpStrike',
             exit: 'restoreMass',
             on: {
-              finish: { target: 'drop' },
+              finish: { target: 'fall' },
             },
             tags: ['canDamage'],
           },
           doubleJump: {
             entry: ['playJump', 'jump'],
             on: {
-              finish: { target: 'doubleDrop' },
+              finish: { target: 'doubleFall' },
               land: { target: 'idle' },
               attack: { target: 'jumpAttack' },
               // attack: { target: 'attackStartWithCharge' },
@@ -685,7 +685,7 @@ class Maria {
             exit: 'restoreMass',
             on: {
               land: { target: 'idle' },
-              air: { target: 'jumpDashToDrop' },
+              air: { target: 'jumpDashToFall' },
               // finish: { target: 'jumpIdle' },
               finish: { target: 'idle' },
             },
@@ -789,8 +789,8 @@ class Maria {
           // playJumpIdle: () => {
           //   this.fadeToAction('jumpIdle', 0.3)
           // },
-          playDrop: () => {
-            this.fadeToAction('jumpIdle', 0.3)
+          playFall: () => {
+            this.fadeToAction('fall', 0.3)
           },
           playRun: () => {
             this.fadeToAction('running')
@@ -837,7 +837,7 @@ class Maria {
                   //   duration: 3,
                   //   y: posY,
                   // })
-                  this.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
+                  this.body.velocity.y = 0 // Prevent too fast fall. Because cannonjs will accumulate fall velocity when direct change position.
                 },
               })
               this.service.send('finish')
@@ -888,7 +888,7 @@ class Maria {
                   //   duration: 3,
                   //   y: posY,
                   // })
-                  this.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
+                  this.body.velocity.y = 0 // Prevent too fast fall. Because cannonjs will accumulate fall velocity when direct change position.
                 },
               })
               // this.setAir(true)

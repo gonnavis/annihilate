@@ -568,7 +568,7 @@ class Maria {
           },
           jumpAttack: {
             entry: 'playJumpAttack',
-            exit: 'exitJumpAttack',
+            exit: 'restoreMass',
             on: {
               finish: { target: 'drop' },
               // todo: hit jumpDash/airDash
@@ -578,14 +578,14 @@ class Maria {
           },
           prepareJumpFist: {
             entry: 'playPrepareJumpFist',
-            exit: 'exitPrepareJumpFist',
+            exit: 'restoreMass',
             on: {
               finish: { target: 'jumpFist' },
             },
           },
           jumpFist: {
             entry: 'playJumpFist',
-            exit: 'exitJumpFist',
+            exit: 'restoreMass',
             on: {
               finish: { target: 'drop' },
               attack: { target: 'prepareJumpStrike' },
@@ -594,14 +594,14 @@ class Maria {
           },
           prepareJumpStrike: {
             entry: 'playPrepareJumpStrike',
-            exit: 'exitPrepareJumpStrike',
+            exit: 'restoreMass',
             on: {
               finish: { target: 'jumpStrike' },
             },
           },
           jumpStrike: {
             entry: 'playJumpStrike',
-            exit: 'exitJumpStrike',
+            exit: 'restoreMass',
             on: {
               finish: { target: 'drop' },
             },
@@ -964,15 +964,9 @@ class Maria {
             this.body.velocity.set(0, 0, 0)
             // this.body.velocity.y = -this.body.position.y * 5
           },
-          exitJumpAttack: () => {
-            this.body.mass = this.mass
-          },
           playPrepareJumpFist: () => {
             this.body.mass = 0
             this.body.velocity.set(0, 0, 0)
-          },
-          exitPrepareJumpFist: () => {
-            this.body.mass = this.mass
           },
           playJumpFist: () => {
             this.oaction['fist'].timeScale = this.attackSpeed
@@ -981,15 +975,9 @@ class Maria {
             this.body.mass = 0
             this.body.velocity.set(0, 0, 0)
           },
-          exitJumpFist: () => {
-            this.body.mass = this.mass
-          },
           playPrepareJumpStrike: () => {
             this.body.mass = 0
             this.body.velocity.set(0, 0, 0)
-          },
-          exitPrepareJumpStrike: () => {
-            this.body.mass = this.mass
           },
           playJumpStrike: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
@@ -997,9 +985,6 @@ class Maria {
 
             this.body.mass = 0
             this.body.velocity.set(0, 0, 0)
-          },
-          exitJumpStrike: () => {
-            this.body.mass = this.mass
           },
           playJumpBash: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.jumpBashSpeed

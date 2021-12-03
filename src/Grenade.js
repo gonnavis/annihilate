@@ -10,6 +10,7 @@ class Grenade {
     this.owner = owner
     let speed = 0.3
     this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed) // TODO: parabola.
+    this.stopTime = 0
 
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -29,7 +30,7 @@ class Grenade {
           stop: {
             entry: 'entryStop',
             after: {
-              1000: { target: 'explode' },
+              1500: { target: 'explode' },
             },
           },
           explode: {
@@ -44,11 +45,14 @@ class Grenade {
         actions: {
           entryStop: () => {
             // TODO: Raycast ground and repos to prevent sink.
+            this.stopTime = performance.now()
           },
           entryDispose: () => {
             this.dispose()
           },
           entryExplode: () => {
+            this.mesh.material.emissive.setScalar(0)
+            // window.maria.sword.material.emissive.setScalar(0)
             this.dispose()
             this.explode()
           },
@@ -107,6 +111,14 @@ class Grenade {
       this.body.position.y += this.movement.y
       this.body.position.z += this.movement.z
       this.mesh.position.copy(this.body.position)
+    } else if (this.service.state.matches('stop')) {
+      let freq = performance.now() - this.stopTime
+      freq = freq ** 1.6
+      freq *= 0.00057
+      let intensity = Math.sin(freq)
+      intensity = Math.max(0, intensity)
+      this.mesh.material.emissive.setScalar(intensity)
+      // window.maria.sword.material.emissive.setScalar(intensity)
     }
   }
 

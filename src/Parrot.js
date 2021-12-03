@@ -127,7 +127,7 @@ class Parrot {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('parrot: state:', state.value)
+      // if (state.changed) console.log('parrot: state:', state.value)
       // if (state.changed) console.log(state.value,state)
       // this.currentState = state.value
       ///currentState === this.service.state.value

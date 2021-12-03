@@ -2,6 +2,7 @@ import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { Bullet } from './Bullet.js'
+import { Grenade } from './Grenade.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 class Parrot {
   constructor(x, y, z) {
@@ -37,11 +38,19 @@ class Parrot {
             entry: 'playIdle',
             on: {
               attack: { target: 'attack' },
+              grenade: { target: 'grenade' },
               hit: { target: 'hit' },
             },
           },
           attack: {
             entry: 'playAttack',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+            },
+          },
+          grenade: {
+            entry: 'playGrenade',
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -71,6 +80,10 @@ class Parrot {
           playAttack: () => {
             // this.fadeToAction('dance', 0.2)
             if (window.role.gltf && this.gltf) new Bullet(scene, updates, this, new THREE.Vector3(window.role.mesh.position.x, window.role.mesh.position.y + window.role.bodyHeightHalf, window.role.mesh.position.z))
+            this.service.send('finish')
+          },
+          playGrenade: () => {
+            if (window.role.gltf && this.gltf) new Grenade(scene, updates, this, new THREE.Vector3(window.role.mesh.position.x, window.role.mesh.position.y, window.role.mesh.position.z))
             this.service.send('finish')
           },
           playHit: () => {
@@ -143,9 +156,8 @@ class Parrot {
     this.body.position.set(x, y, z)
     world.addBody(this.body)
 
-    setInterval(() => {
-      this.service.send('attack')
-    }, 3000)
+    this.attack()
+    setInterval(this.attack.bind(this), 6000)
   }
 
   update(dt) {
@@ -165,6 +177,14 @@ class Parrot {
         this.mesh.rotation.y = -angle + Math.PI / 2
       }
     }
+  }
+
+  attack() {
+    // console.log('attack')
+    this.service.send('attack')
+    setTimeout(() => {
+      this.service.send('grenade')
+    }, 3000)
   }
 
   hit() {

@@ -57,6 +57,7 @@ window.face = null
 window.updates = []
 window.attackers = []
 window.bullets = []
+window.grenades = []
 
 let fsm
 window.service = null

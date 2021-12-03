@@ -9,11 +9,59 @@ class Attacker {
     updates.push(this)
 
     this.owner = owner
-    let speed = 1
+    let speed = 0.5
     // this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed)
     // NOTE: Use Vector2 to prevent too slow when role on top of enemy.
     this.movement = new THREE.Vector2(target.x - owner.body.position.x, target.z - owner.body.position.z).normalize().multiplyScalar(speed)
-    this.isDisposed = false
+
+    // fsm
+
+    const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
+
+    this.fsm = createMachine(
+      {
+        id: 'attacker',
+        initial: 'move',
+        states: {
+          move: {
+            on: {
+              rebound: { target: 'rebound' },
+            },
+            after: {
+              2000: { target: 'dispose' },
+            },
+          },
+          rebound: {
+            entry: 'entryRebound',
+            after: {
+              2000: { target: 'dispose' },
+            },
+          },
+          dispose: {
+            entry: 'entryDispose',
+          },
+        },
+      },
+      {
+        actions: {
+          entryDispose: () => {
+            this.dispose()
+          },
+          entryRebound: () => {
+            this.movement.multiplyScalar(-1)
+            this.body.collisionFilterGroup = g.GROUP_ROLE_WEAPON
+            this.body.collisionFilterMask = g.GROUP_ENEMY
+          },
+        },
+      }
+    )
+    this.service = interpret(this.fsm).onTransition((state) => {
+      if (state.changed) console.log('attacker: state:', state.value)
+    })
+
+    this.service.start()
+
+    // body
 
     this.radius = 2
     this.height = 0.3
@@ -21,7 +69,7 @@ class Attacker {
       mass: 0,
       type: CANNON.Body.KINEMATIC,
       collisionFilterGroup: g.GROUP_ENEMY_WEAPON,
-      collisionFilterMask: g.GROUP_ROLE,
+      collisionFilterMask: g.GROUP_ROLE | g.GROUP_ROLE_WEAPON,
     })
     this.body.belongTo = this
     this.body.collisionResponse = false
@@ -30,12 +78,21 @@ class Attacker {
     // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2) ///Why cannon-es not need this rotate?
     this.body.addShape(shape)
     this.body.position.copy(owner.body.position)
+    // this.body.position.y += 1
     // this.body.position.y += 0.5
     world.addBody(this.body)
 
     this.body.addEventListener('beginContact', (e) => {
+      console.log(e.body.belongTo.constructor.name)
+      if (e.body.belongTo.isRole) {
+        e.body.belongTo.hit()
+      } else if (e.body.belongTo.isWeapon && e.body.belongTo.owner.service.state.hasTag('canDamage')) {
+        this.service.send('rebound')
+      } else if (e.body.belongTo.isEnemy) {
+        e.body.belongTo.hit()
+      }
       // if (this.owner.service.state.hasTag('canDamage')) {
-      e.body.belongTo.hit()
+      // e.body.belongTo.hit()
       // }
       // if (e.body === role.body) {
       //   role.hit()
@@ -65,10 +122,6 @@ class Attacker {
 
     //
 
-    setTimeout(() => {
-      if (!this.isDisposed) this.dispose()
-    }, 2000)
-
     window.attackers.push(this)
   }
 
@@ -83,8 +136,6 @@ class Attacker {
     scene.remove(this.mesh) // TODO: dispose geometry material.
     updates.splice(updates.indexOf(this), 1)
     window.attackers.splice(window.attackers.indexOf(this), 1)
-
-    this.isDisposed = true
   }
 }
 

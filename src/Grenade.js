@@ -12,6 +12,8 @@ class Grenade {
     this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed) // TODO: parabola.
     this.stopTime = 0
 
+    // fsm
+
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
     this.fsm = createMachine(
@@ -72,12 +74,12 @@ class Grenade {
       }
     )
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('grenade: state:', state.value)
+      // if (state.changed) console.log('grenade: state:', state.value)
     })
 
     this.service.start()
 
-    //
+    // body
 
     this.radius = 0.5
     this.body = new CANNON.Body({
@@ -94,7 +96,7 @@ class Grenade {
     world.addBody(this.body)
 
     this.body.addEventListener('beginContact', (e) => {
-      console.log(e.body)
+      // console.log(e.body)
       // e.body.belongTo.hit()
       if (e.body.belongTo.isGround) {
         this.service.send('collide')

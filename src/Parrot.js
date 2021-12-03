@@ -95,7 +95,9 @@ class Parrot {
                 gsap.to(this.body.position, {
                   duration: 0.15,
                   y: this.y,
-                  onComplete: () => {},
+                  onComplete: () => {
+                    this.service.send('finish')
+                  },
                 })
               },
             })

@@ -10,7 +10,9 @@ class Attacker {
 
     this.owner = owner
     let speed = 1
-    this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed)
+    // this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed)
+    // NOTE: Use Vector2 to prevent too slow when role on top of enemy.
+    this.movement = new THREE.Vector2(target.x - owner.body.position.x, target.z - owner.body.position.z).normalize().multiplyScalar(speed)
     this.isDisposed = false
 
     this.radius = 2
@@ -72,7 +74,7 @@ class Attacker {
 
   update(dt) {
     this.body.position.x += this.movement.x
-    this.body.position.z += this.movement.z
+    this.body.position.z += this.movement.y
     this.mesh.position.copy(this.body.position)
   }
 

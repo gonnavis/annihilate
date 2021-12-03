@@ -237,7 +237,7 @@ class Parrot {
             this.service.send('finish')
           })
 
-          this.body.mass = 0
+          this.body.mass = 0 // TODO: Fix hit by jumpBash ( velocity changed ) bug.
           this.body.position.set(this.x, this.y, this.z)
           this.body.velocity.set(0, 0, 0)
 

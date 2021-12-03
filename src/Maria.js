@@ -807,6 +807,7 @@ class Maria {
             this.body.mass = 0
           },
           setAirMassZero: () => {
+            // TODO: Add velocity.y instead of set mass 0.
             if (this.isAir) {
               this.body.mass = 0
               this.body.velocity.set(0, 0, 0)

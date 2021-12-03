@@ -10,14 +10,63 @@ class Bullet {
     this.owner = owner
     let speed = 0.5
     this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed)
-    this.isDisposed = false
+
+    // fsm
+
+    const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
+
+    this.fsm = createMachine(
+      {
+        id: 'attacker',
+        initial: 'move',
+        states: {
+          move: {
+            on: {
+              rebound: { target: 'rebound' },
+            },
+            after: {
+              2000: { target: 'dispose' },
+            },
+          },
+          rebound: {
+            entry: 'entryRebound',
+            after: {
+              2000: { target: 'dispose' },
+            },
+          },
+          dispose: {
+            entry: 'entryDispose',
+          },
+        },
+      },
+      {
+        actions: {
+          entryDispose: () => {
+            this.dispose()
+          },
+          entryRebound: () => {
+            this.movement.multiplyScalar(-1)
+            this.body.collisionFilterGroup = g.GROUP_ROLE_WEAPON
+            this.body.collisionFilterMask = g.GROUP_ENEMY
+          },
+        },
+      }
+    )
+    this.service = interpret(this.fsm).onTransition((state) => {
+      if (state.changed) console.log('bullet: state:', state.value)
+    })
+
+    this.service.start()
+
+    // body
 
     this.radius = 0.3
+    // this.radius = 3
     this.body = new CANNON.Body({
       mass: 0,
       type: CANNON.Body.KINEMATIC,
       collisionFilterGroup: g.GROUP_ENEMY_WEAPON,
-      collisionFilterMask: g.GROUP_ROLE,
+      collisionFilterMask: g.GROUP_ROLE | g.GROUP_ROLE_WEAPON,
     })
     this.body.belongTo = this
     this.body.collisionResponse = false
@@ -27,7 +76,13 @@ class Bullet {
     world.addBody(this.body)
 
     this.body.addEventListener('beginContact', (e) => {
-      e.body.belongTo.hit()
+      if (e.body.belongTo.isRole) {
+        e.body.belongTo.hit()
+      } else if (e.body.belongTo.isWeapon && e.body.belongTo.owner.service.state.hasTag('canDamage')) {
+        this.service.send('rebound')
+      } else if (e.body.belongTo.isEnemy) {
+        e.body.belongTo.hit()
+      }
     })
 
     // mesh
@@ -48,10 +103,6 @@ class Bullet {
 
     //
 
-    setTimeout(() => {
-      if (!this.isDisposed) this.dispose()
-    }, 2000)
-
     window.bullets.push(this)
   }
 
@@ -67,8 +118,6 @@ class Bullet {
     scene.remove(this.mesh) // TODO: dispose geometry material.
     updates.splice(updates.indexOf(this), 1)
     window.bullets.splice(window.bullets.indexOf(this), 1)
-
-    this.isDisposed = true
   }
 }
 

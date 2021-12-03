@@ -56,7 +56,7 @@ class Attacker {
       }
     )
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('attacker: state:', state.value)
+      // if (state.changed) console.log('attacker: state:', state.value)
     })
 
     this.service.start()
@@ -84,7 +84,7 @@ class Attacker {
     world.addBody(this.body)
 
     this.body.addEventListener('beginContact', (e) => {
-      console.log(e.body.belongTo.constructor.name)
+      // console.log(e.body.belongTo.constructor.name)
       if (e.body.belongTo.isRole) {
         e.body.belongTo.hit()
       } else if (e.body.belongTo.isWeapon && e.body.belongTo.owner.service.state.hasTag('canDamage')) {

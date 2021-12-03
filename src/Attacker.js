@@ -64,7 +64,8 @@ class Attacker {
     // body
 
     this.radius = 2
-    this.height = 0.3
+    // this.height = 0.3
+    this.height = 1 // Increase attacker height for more easily rebound.
     this.body = new CANNON.Body({
       mass: 0,
       type: CANNON.Body.KINEMATIC,

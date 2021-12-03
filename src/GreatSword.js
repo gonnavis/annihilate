@@ -14,11 +14,12 @@ class GreatSword {
       mass: 0,
       type: CANNON.Body.KINEMATIC,
       collisionFilterGroup: g.GROUP_ROLE_WEAPON,
-      collisionFilterMask: g.GROUP_ENEMY,
+      collisionFilterMask: g.GROUP_ENEMY | g.GROUP_ENEMY_WEAPON,
     })
     this.body.belongTo = this
     this.body.collisionResponse = false
     let shape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 2))
+    // let shape = new CANNON.Box(new CANNON.Vec3(0.5 * 3, 0.5 * 3, 2 * 3))
     this.body.addShape(shape)
     world.addBody(this.body)
 
@@ -28,33 +29,35 @@ class GreatSword {
       // if (e.body.belongTo?.isEnemy === true && e.body.belongTo !== this.owner) {
       // console.log(1111111111)
       if (this.owner.service.state.hasTag('canDamage')) {
-        if (this.owner.service.state.hasTag('knockDown')) {
-          e.body.belongTo.knockDown()
-          if (this.owner.service.state.matches('jumpBash')) {
-            e.body.velocity.y = -e.body.position.y * 10
-          }
-        } else {
-          e.body.belongTo.hit()
+        if (e.body.belongTo.isEnemy) {
+          if (this.owner.service.state.hasTag('knockDown')) {
+            e.body.belongTo.knockDown()
+            if (this.owner.service.state.matches('jumpBash')) {
+              e.body.velocity.y = -e.body.position.y * 10
+            }
+          } else {
+            e.body.belongTo.hit()
 
-          // if (this.owner.service.state.matches('launch')) {
-          if (this.owner.service.state.hasTag('canLaunch') && !e.body.belongTo.isAir) {
-            // e.body.velocity.y += 30
-            // NOTE: Direct change position instead of velocity, to prevent friction between enemy herd cause not lift.
-            gsap.to(e.body.position, {
-              duration: 0.3,
-              y: e.body.position.y + 10,
-              onComplete: () => {
-                // let posY = e.body.position.y
-                // gsap.to(e.body.position, {
-                //   duration: 0.3,
-                //   y: posY,
-                // })
-                // e.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
-                e.body.velocity.y = 10
-              },
-            })
-            e.body.belongTo.isAir = true // todo: refactor.
-            // console.log('set isAir true')
+            // if (this.owner.service.state.matches('launch')) {
+            if (this.owner.service.state.hasTag('canLaunch') && !e.body.belongTo.isAir) {
+              // e.body.velocity.y += 30
+              // NOTE: Direct change position instead of velocity, to prevent friction between enemy herd cause not lift.
+              gsap.to(e.body.position, {
+                duration: 0.3,
+                y: e.body.position.y + 10,
+                onComplete: () => {
+                  // let posY = e.body.position.y
+                  // gsap.to(e.body.position, {
+                  //   duration: 0.3,
+                  //   y: posY,
+                  // })
+                  // e.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
+                  e.body.velocity.y = 10
+                },
+              })
+              e.body.belongTo.isAir = true // todo: refactor.
+              // console.log('set isAir true')
+            }
           }
         }
       }

@@ -22,6 +22,7 @@ class Grenade {
           move: {
             on: {
               collide: { target: 'stop' },
+              rebound: { target: 'rebound' },
             },
             after: {
               5000: { target: 'dispose' },
@@ -35,6 +36,12 @@ class Grenade {
           },
           explode: {
             entry: 'entryExplode',
+          },
+          rebound: {
+            entry: 'entryRebound',
+            after: {
+              5000: { target: 'dispose' },
+            },
           },
           dispose: {
             entry: 'entryDispose',
@@ -56,10 +63,17 @@ class Grenade {
             this.dispose()
             this.explode()
           },
+          entryRebound: () => {
+            this.movement.multiplyScalar(-1)
+            this.body.collisionFilterGroup = g.GROUP_ROLE_WEAPON
+            this.body.collisionFilterMask = g.GROUP_ENEMY
+          },
         },
       }
     )
-    this.service = interpret(this.fsm).onTransition((state) => {})
+    this.service = interpret(this.fsm).onTransition((state) => {
+      if (state.changed) console.log('grenade: state:', state.value)
+    })
 
     this.service.start()
 
@@ -70,7 +84,7 @@ class Grenade {
       mass: 0,
       type: CANNON.Body.KINEMATIC,
       collisionFilterGroup: g.GROUP_ENEMY_WEAPON,
-      collisionFilterMask: g.GROUP_SCENE,
+      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE_WEAPON,
     })
     this.body.belongTo = this
     this.body.collisionResponse = false
@@ -80,8 +94,15 @@ class Grenade {
     world.addBody(this.body)
 
     this.body.addEventListener('beginContact', (e) => {
+      console.log(e.body)
       // e.body.belongTo.hit()
-      this.service.send('collide')
+      if (e.body.belongTo.isGround) {
+        this.service.send('collide')
+      } else if (e.body.belongTo.isWeapon && e.body.belongTo.owner.service.state.hasTag('canDamage')) {
+        this.service.send('rebound')
+      } else if (e.body.belongTo.isEnemy) {
+        e.body.belongTo.hit()
+      }
     })
 
     // mesh
@@ -106,7 +127,7 @@ class Grenade {
   }
 
   update(dt) {
-    if (this.service.state.matches('move')) {
+    if (this.service.state.matches('move') || this.service.state.matches('rebound')) {
       this.body.position.x += this.movement.x
       this.body.position.y += this.movement.y
       this.body.position.z += this.movement.z

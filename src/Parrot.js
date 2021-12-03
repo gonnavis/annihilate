@@ -1,7 +1,7 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-import { Attacker } from './Attacker.js'
+import { Bullet } from './Bullet.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 class Parrot {
   constructor(x, y, z) {
@@ -13,6 +13,9 @@ class Parrot {
     // this.health = 100
     this.oaction = {}
     this.mixer
+    this.x = x
+    this.y = y
+    this.z = z
 
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -40,22 +43,20 @@ class Parrot {
           attack: {
             entry: 'playAttack',
             on: {
-              idle: {
-                target: 'idle',
-                actions: 'throwAttacker',
-              },
+              finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
           },
           hit: {
             entry: ['decreaseHealth', 'playHit'],
-            always: [{ target: 'dead', actions: 'dead', cond: 'isDead' }],
+            always: [{ target: 'dead', cond: 'isDead' }],
             on: {
-              idle: { target: 'idle' },
+              finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
           },
           dead: {
+            entry: 'playDead',
             type: 'final',
           },
         },
@@ -69,34 +70,36 @@ class Parrot {
           },
           playAttack: () => {
             // this.fadeToAction('dance', 0.2)
+            if (window.role.gltf && this.gltf) new Bullet(scene, updates, this, new THREE.Vector3(window.role.mesh.position.x, window.role.mesh.position.y + window.role.bodyHeightHalf, window.role.mesh.position.z))
+            this.service.send('finish')
           },
           playHit: () => {
             // this.fadeToAction('jump', 0.2)
+            gsap.to(this.body.position, {
+              duration: 0.15,
+              y: this.y + 1,
+              onComplete: () => {
+                gsap.to(this.body.position, {
+                  duration: 0.15,
+                  y: this.y,
+                  onComplete: () => {},
+                })
+              },
+            })
           },
-          throwAttacker: () => {
-            if (g.isAttack && window.role.gltf && this.gltf) new Attacker(scene, updates, this, window.role.mesh.position)
-          },
-          dead: () => {
+          playDead: () => {
             // this.fadeToAction('death', 0.2)
-            this.body.collisionFilterMask = g.GROUP_SCENE
-            setTimeout(() => {
-              this.body.velocity.set(0, 0, 0)
-            }, 0)
+            this.action_act.stop()
+            gsap.to(this.mesh.rotation, {
+              duration: 0.5,
+              x: Math.PI,
+            })
 
-            // let interval
+            this.body.mass = 20
+            this.body.collisionFilterMask = g.GROUP_SCENE
             // setTimeout(() => {
-            //   interval = setInterval(() => {
-            //     // this.mesh.position.y-=.001
-            //     this.body.velocity.set(0, 0, 0) // continuously clear velocity, otherwise may not cleared.
-            //     this.body.collisionResponse = false
-            //     this.body.position.y -= 0.0005
-            //     // console.log('interval')
-            //     setTimeout(() => {
-            //       clearInterval(interval)
-            //       // },5000)
-            //     }, 2000)
-            //   })
-            // }, 2000)
+            //   this.body.velocity.set(0, 0, 0)
+            // }, 0)
           },
         },
         guards: {
@@ -109,7 +112,7 @@ class Parrot {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('parrot: state:', state.value)
+      if (state.changed) console.log('parrot: state:', state.value)
       // if (state.changed) console.log(state.value,state)
       // this.currentState = state.value
       ///currentState === this.service.state.value
@@ -122,12 +125,13 @@ class Parrot {
     // this.service.send( 'idle' )
     // => 'resolved'
 
-    this.mass = 0
+    this.mass = 20
     this.bodySize = 1.6
     this.body = new CANNON.Body({
       mass: this.mass,
       collisionFilterGroup: g.GROUP_ENEMY,
-      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ROLE_WEAPON,
+      // collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ROLE_WEAPON,
+      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE_WEAPON, // TODO: air ground?
     })
     this.body.belongTo = this
     let shape = new CANNON.Sphere(this.bodySize)
@@ -147,7 +151,7 @@ class Parrot {
   update(dt) {
     if (this.service.state.value === 'loading') return
     this.mixer.update(dt)
-    this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodySize, this.body.position.z)
+    this.mesh.position.set(this.body.position.x, this.body.position.y - 1, this.body.position.z)
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
 
@@ -210,9 +214,13 @@ class Parrot {
           this.action_act = this.oaction['parrot_A_']
           this.action_act.play()
           this.mixer.addEventListener('finished', (e) => {
-            // console.log('finished')
-            this.service.send('idle')
+            this.service.send('finish')
           })
+
+          this.body.mass = 0
+          this.body.position.set(this.x, this.y, this.z)
+          this.body.velocity.set(0, 0, 0)
+
           this.service.send('loaded')
           resolve()
         },

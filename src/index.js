@@ -56,6 +56,7 @@ window.model = null
 window.face = null
 window.updates = []
 window.attackers = []
+window.bullets = []
 
 let fsm
 window.service = null

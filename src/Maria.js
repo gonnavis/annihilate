@@ -1139,7 +1139,7 @@ class Maria {
       mass: this.mass,
       // material: physicsMaterial,
       collisionFilterGroup: g.GROUP_ROLE, // NOTE: What's my group.
-      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ENEMY_WEAPON, // NOTE: I want to collide with which group(s).
+      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ENEMY_WEAPON, // NOTE: I want to collide with which group(s), though they may not want to collide with me.
     })
     this.body.belongTo = this
 

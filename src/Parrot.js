@@ -3,7 +3,7 @@ import { g } from './global.js'
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { Attacker } from './Attacker.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
-class Enemy {
+class Parrot {
   constructor(x, y, z) {
     this.isCharacter = true
     this.isEnemy = true
@@ -18,7 +18,7 @@ class Enemy {
 
     this.fsm = createMachine(
       {
-        id: 'enemy',
+        id: 'parrot',
         context: {
           health: 100,
           // health: Infinity,
@@ -65,19 +65,19 @@ class Enemy {
           decreaseHealth: assign({ health: (context, event) => context.health - 35 }),
 
           playIdle: () => {
-            this.fadeToAction('idle', 0.2)
+            this.fadeToAction('parrot_A_', 0.2)
           },
           playAttack: () => {
-            this.fadeToAction('dance', 0.2)
+            // this.fadeToAction('dance', 0.2)
           },
           playHit: () => {
-            this.fadeToAction('jump', 0.2)
+            // this.fadeToAction('jump', 0.2)
           },
           throwAttacker: () => {
             if (g.isAttack && window.role.gltf && this.gltf) new Attacker(scene, updates, this, window.role.mesh.position)
           },
           dead: () => {
-            this.fadeToAction('death', 0.2)
+            // this.fadeToAction('death', 0.2)
             this.body.collisionFilterMask = g.GROUP_SCENE
             setTimeout(() => {
               this.body.velocity.set(0, 0, 0)
@@ -109,7 +109,7 @@ class Enemy {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('enemy: state:', state.value)
+      // if (state.changed) console.log('parrot: state:', state.value)
       // if (state.changed) console.log(state.value,state)
       // this.currentState = state.value
       ///currentState === this.service.state.value
@@ -122,7 +122,7 @@ class Enemy {
     // this.service.send( 'idle' )
     // => 'resolved'
 
-    this.mass = 50
+    this.mass = 0
     this.bodySize = 1.6
     this.body = new CANNON.Body({
       mass: this.mass,
@@ -176,9 +176,9 @@ class Enemy {
     return new Promise((resolve, reject) => {
       var loader = new GLTFLoader()
       loader.load(
-        './model/RobotExpressive/RobotExpressive.glb',
+        './model/Parrot/Parrot.glb',
         (gltf) => {
-          // console.log('enemy loaded')
+          // console.log('parrot loaded')
           // console.log(gltf)
           this.gltf = gltf
           this.mesh = this.gltf.scene
@@ -191,23 +191,23 @@ class Enemy {
           })
 
           window.scene.add(this.mesh)
-          this.mesh.scale.set(0.7, 0.7, 0.7)
+          this.mesh.scale.setScalar(0.06)
           // mesh.position.set(x,y,z)
           this.mixer = new THREE.AnimationMixer(this.mesh)
           gltf.animations.forEach((animation) => {
-            let name = animation.name.toLowerCase()
+            let name = animation.name
             let action = this.mixer.clipAction(animation)
             this.oaction[name] = action
-            if (['jump', 'punch', 'dance'].includes(name)) {
-              action.loop = THREE.LoopOnce
-            }
-            if (['death'].includes(name)) {
-              action.loop = THREE.LoopOnce
-              action.clampWhenFinished = true
-            }
-            this.oaction.dance.timeScale = 3
+            // if (['jump', 'punch', 'dance'].includes(name)) {
+            //   action.loop = THREE.LoopOnce
+            // }
+            // if (['death'].includes(name)) {
+            //   action.loop = THREE.LoopOnce
+            //   action.clampWhenFinished = true
+            // }
+            // this.oaction.dance.timeScale = 3
           })
-          this.action_act = this.oaction.idle
+          this.action_act = this.oaction['parrot_A_']
           this.action_act.play()
           this.mixer.addEventListener('finished', (e) => {
             // console.log('finished')
@@ -247,4 +247,4 @@ class Enemy {
   }
 }
 
-export { Enemy }
+export { Parrot }

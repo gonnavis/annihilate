@@ -27,6 +27,7 @@ import { RoleControls } from './RoleControls.js'
 import { Ai } from './Ai.js'
 import { HandKnife } from './HandKnife.js'
 import { Teleporter } from './Teleporter.js'
+import { Parrot } from './Parrot.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -210,13 +211,16 @@ function init() {
   }
 
   window.enemys = []
-  window.enemy = new Enemy(15, 5, -15)
+  window.enemy = new Enemy(15, 5, -10)
   enemys.push(enemy)
   enemy.load()
 
   // window.enemy2 = new Enemy(15, 5, 15)
   // enemys.push(enemy2)
   // enemy2.load()
+
+  window.parrot = new Parrot(0, 10, -15)
+  parrot.load()
 
   domMaria.addEventListener('click', (e) => {
     window.service.send('maria')

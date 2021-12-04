@@ -6,12 +6,11 @@ class Catapult {
     this.isGround = true
 
     this.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(width, height, depth), new THREE.MeshPhongMaterial({ color: 0x555555 /*depthWrite: false*/ }))
-    this.mesh.geometry.rotateX(Math.PI / 2)
     this.mesh.castShadow = true
     this.mesh.receiveShadow = true
     scene.add(this.mesh)
 
-    let shape = new CANNON.Box(new CANNON.Vec3(width / 2, depth / 2, height / 2))
+    let shape = new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, depth / 2))
     this.body = new CANNON.Body({
       // mass: 0,
       type: CANNON.Body.KINEMATIC,
@@ -19,13 +18,24 @@ class Catapult {
     })
     this.body.belongTo = this
     this.body.addShape(shape)
-    this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     // this.body.addEventListener("collide", (event) => {
     //   console.log('collide floor')
     // })
     world.addBody(this.body)
 
     //
+
+    this.mesh.position.set(30, 0, 10)
+    this.body.position.copy(this.mesh.position)
+
+    // this.mesh.geometry.rotateX(Math.PI / 2)
+    // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
+
+    this.mesh.rotation.y = Math.PI / 4
+    this.body.quaternion.copy(this.mesh.quaternion)
+
+    this._quaternion = new THREE.Quaternion().copy(this.mesh.quaternion)
+    this.tmpQuat = new THREE.Quaternion()
 
     window.updates.push(this)
 
@@ -39,17 +49,24 @@ class Catapult {
   }
 
   launch() {
-    this.body.angularVelocity.set(-15, 0, 0)
+    let intensity = 12
+    this.body.angularVelocity.set(-intensity, 0, intensity)
     setTimeout(() => {
       this.body.angularVelocity.set(0, 0, 0)
-      gsap.to(this.body.quaternion, {
-        duration: 1,
-        x: -0.7071067811865475,
-        y: 0,
-        z: 0,
-        w: 0.7071067811865476,
-      })
-    }, 300)
+      // this.body.quaternion.set(0, 0.3826834323650898, 0, 0.9238795325112867)
+      {
+        let to = { t: 0 }
+        this.tmpQuat.copy(this.body.quaternion)
+        gsap.to(to, {
+          duration: 1,
+          t: 1,
+          onUpdate: () => {
+            this.mesh.quaternion.slerpQuaternions(this.tmpQuat, this._quaternion, to.t)
+            this.body.quaternion.copy(this.mesh.quaternion)
+          },
+        })
+      }
+    }, 100)
   }
 }
 

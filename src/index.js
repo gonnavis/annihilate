@@ -142,10 +142,9 @@ function init() {
   groundBox.body.position.copy(groundBox.mesh.position)
 
   // catapult
-  window.catapult = new Catapult(3, 0.5, 11)
-  catapult.mesh.position.set(-55, 0, 0)
-  catapult.body.position.copy(catapult.mesh.position)
+  window.catapult = new Catapult(8, 0.5, 11)
 
+  // teleporter
   window.teleporter = new Teleporter(2, 2, 2)
   teleporter.body.position.set(-35, 10, -35)
   teleporter.mesh.position.copy(teleporter.body.position)

@@ -8,7 +8,7 @@ class Grenade {
     updates.push(this)
 
     this.owner = owner
-    let speed = 0.3
+    let speed = 0.11
     this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed) // TODO: parabola.
     this.stopTime = 0
 
@@ -81,7 +81,7 @@ class Grenade {
 
     // body
 
-    this.radius = 0.5
+    this.radius = 0.18
     this.body = new CANNON.Body({
       mass: 0,
       type: CANNON.Body.KINEMATIC,
@@ -147,8 +147,8 @@ class Grenade {
 
   explode() {
     // body
-    this.explodeRadius = 8
-    this.explodeHeight = 0.3
+    this.explodeRadius = 3
+    this.explodeHeight = 0.1
     this.explodeBody = new CANNON.Body({
       mass: 0,
       type: CANNON.Body.KINEMATIC,

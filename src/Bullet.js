@@ -8,7 +8,7 @@ class Bullet {
     updates.push(this)
 
     this.owner = owner
-    let speed = 0.5
+    let speed = 0.18
     this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed)
 
     // fsm
@@ -60,8 +60,7 @@ class Bullet {
 
     // body
 
-    this.radius = 0.3
-    // this.radius = 3
+    this.radius = 0.11
     this.body = new CANNON.Body({
       mass: 0,
       type: CANNON.Body.KINEMATIC,

@@ -9,9 +9,9 @@ class SwordBlaster {
 
     // updates.push(this)
 
-    this.width = 0.5
-    this.height = 8 * 2
-    this.depth = 5 * 2
+    this.width = 0.185
+    this.height = 2.96 * 2
+    this.depth = 1.85 * 2
 
     if (this.type === 1) {
       this.angle = -Math.PI / 5
@@ -21,7 +21,7 @@ class SwordBlaster {
       this.angle = 0
     }
 
-    this.target = new THREE.Vector3(this.owner.facing.x, 0, this.owner.facing.y).normalize().multiplyScalar(50).add(this.owner.body.position) // vec3
+    this.target = new THREE.Vector3(this.owner.facing.x, 0, this.owner.facing.y).normalize().multiplyScalar(18.5).add(this.owner.body.position) // vec3
 
     this.body = new CANNON.Body({
       mass: 0,

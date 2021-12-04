@@ -13,7 +13,7 @@ class Paladin {
     this.oaction = {}
     this.mixer
     // this.speed = 0.15
-    this.speed = 0.3
+    this.speed = 0.11
     this.attackSpeed = 1.6
     this.tmpVec3 = new THREE.Vector3()
     this.direction = vec2() // direction may be zero length.
@@ -246,7 +246,7 @@ class Paladin {
             // change facing
             this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
             // move
-            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(60)
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(15)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.z = this.tmpVec3.z
           },
@@ -256,7 +256,7 @@ class Paladin {
             // change facing
             this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
             // move
-            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(30)
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(11)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.z = this.tmpVec3.z
           },
@@ -299,7 +299,7 @@ class Paladin {
           playStrike: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0.2)
-            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(50)
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(18.5)
             // console.log(this.tmpVec3)
 
             // setTimeout(() => {
@@ -318,19 +318,19 @@ class Paladin {
           playJumpAttack: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.attackSpeed
             this.fadeToAction('jumpAttack', 0.2)
-            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(15)
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(5.5)
             // console.log(this.tmpVec3)
             this.body.velocity.x = this.tmpVec3.x
-            this.body.velocity.y = 20
+            this.body.velocity.y = 7.41
             this.body.velocity.z = this.tmpVec3.z
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             setTimeout(() => {
               // this.body.velocity.y -= downVelocity
-              this.body.velocity.y = -this.body.position.y * 5
+              this.body.velocity.y = -this.body.position.y * 1.85
             }, 200)
           },
           jump: () => {
-            this.body.velocity.y = 20
+            this.body.velocity.y = 4
           },
           playJump: () => {
             this.fadeToAction('jump', 0.2)
@@ -377,8 +377,8 @@ class Paladin {
     })
     this.body.belongTo = this
 
-    this.bodyRadius = 1
-    this.bodyHeight = 4.6
+    this.bodyRadius = 0.27
+    this.bodyHeight = 1.7
     this.bodyHeightHalf = this.bodyHeight / 2
     // this.bodyHeight = 10
     this.bodyCylinderHeight = this.bodyHeight - this.bodyRadius * 2
@@ -462,7 +462,8 @@ class Paladin {
             }
           })
           scene.add(this.mesh)
-          this.mesh.scale.setScalar(2.9)
+          this.mesh.scale.setScalar(1)
+          // this.mesh.scale.setScalar(2.9)
           // this.mesh.scale.set(.7,.7,.7)
           // this.mesh.position.set(x,y,z)
           this.mixer = new THREE.AnimationMixer(this.mesh)

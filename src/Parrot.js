@@ -90,7 +90,7 @@ class Parrot {
             // this.fadeToAction('jump', 0.2)
             gsap.to(this.body.position, {
               duration: 0.15,
-              y: this.y + 1,
+              y: this.y + 0.37,
               onComplete: () => {
                 gsap.to(this.body.position, {
                   duration: 0.15,
@@ -110,7 +110,7 @@ class Parrot {
               x: Math.PI,
             })
 
-            this.body.mass = 20
+            this.body.mass = this.mass
             this.body.collisionFilterMask = g.GROUP_SCENE
             // setTimeout(() => {
             //   this.body.velocity.set(0, 0, 0)
@@ -141,7 +141,7 @@ class Parrot {
     // => 'resolved'
 
     this.mass = 20
-    this.bodySize = 1.6
+    this.bodySize = 0.59
     this.body = new CANNON.Body({
       mass: this.mass,
       collisionFilterGroup: g.GROUP_ENEMY,
@@ -165,7 +165,7 @@ class Parrot {
   update(dt) {
     if (this.service.state.value === 'loading') return
     this.mixer.update(dt)
-    this.mesh.position.set(this.body.position.x, this.body.position.y - 1, this.body.position.z)
+    this.mesh.position.set(this.body.position.x, this.body.position.y - 0.37, this.body.position.z)
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
 
@@ -217,7 +217,7 @@ class Parrot {
           })
 
           window.scene.add(this.mesh)
-          this.mesh.scale.setScalar(0.06)
+          this.mesh.scale.setScalar(0.022)
           // mesh.position.set(x,y,z)
           this.mixer = new THREE.AnimationMixer(this.mesh)
           gltf.animations.forEach((animation) => {

@@ -7,7 +7,7 @@ class Pop {
     this.owner = owner
 
     this.tmpVec3 = new THREE.Vector3()
-    this.radius = 10
+    this.radius = 3.7
 
     this.body = new CANNON.Body({
       mass: 0,
@@ -27,7 +27,7 @@ class Pop {
       this.tmpVec3.x = e.body.position.x - this.owner.body.position.x
       this.tmpVec3.y = 0
       this.tmpVec3.z = e.body.position.z - this.owner.body.position.z
-      this.tmpVec3.normalize().multiplyScalar(40)
+      this.tmpVec3.normalize().multiplyScalar(12)
       e.body.velocity.x += this.tmpVec3.x
       e.body.velocity.z += this.tmpVec3.z
 

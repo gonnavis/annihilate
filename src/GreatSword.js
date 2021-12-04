@@ -18,7 +18,7 @@ class GreatSword {
     })
     this.body.belongTo = this
     this.body.collisionResponse = false
-    let shape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 2))
+    let shape = new CANNON.Box(new CANNON.Vec3(0.19, 0.19, 0.74))
     // let shape = new CANNON.Box(new CANNON.Vec3(0.5 * 3, 0.5 * 3, 2 * 3))
     this.body.addShape(shape)
     world.addBody(this.body)
@@ -46,7 +46,7 @@ class GreatSword {
               // NOTE: Direct change position instead of velocity, to prevent friction between enemy herd cause not lift.
               gsap.to(e.body.position, {
                 duration: 0.3,
-                y: e.body.position.y + 10,
+                y: e.body.position.y + 3.7,
                 onComplete: () => {
                   // let posY = e.body.position.y
                   // gsap.to(e.body.position, {
@@ -54,7 +54,8 @@ class GreatSword {
                   //   y: posY,
                   // })
                   // e.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
-                  e.body.velocity.y = 10
+                  // e.body.velocity.y = 3.7
+                  e.body.velocity.y = 0
                 },
               })
               e.body.belongTo.isAir = true // todo: refactor.

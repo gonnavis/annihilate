@@ -8,7 +8,7 @@ class FloatingBox {
     updates.push(this)
 
     this.timeBias = 0
-    this.speed = 10
+    this.speed = 3.7
 
     // box
 
@@ -32,9 +32,9 @@ class FloatingBox {
     // floating box
 
     // this.body.velocity.set(this.speed, 0, 0)
-    this.initialPosX = 10
+    this.initialPosX = 4
     this.body.position.x = this.initialPosX
-    this.body.velocity.x = 20
+    this.body.velocity.x = 7.4
   }
 
   update(dt, time) {

@@ -13,13 +13,13 @@ class Mutant {
     this.oaction = {}
     this.mixer
     // this.speed = 0.15
-    this.speed = 0.1
+    this.speed = 0.04
     this.attackSpeed = 0.5
     this.tmpVec3 = new THREE.Vector3()
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.
     this.isAir = false
-    this.airLiftVelocity = 7
+    this.airLiftVelocity = 1.5
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -269,14 +269,14 @@ class Mutant {
         actions: {
           entryDash: () => {
             this.fadeToAction('dash', 0.2)
-            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(60)
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(15)
             this.body.velocity.x = this.tmpVec3.x
             // this.body.velocity.y = 0
             this.body.velocity.z = this.tmpVec3.z
           },
           entryJumpDash: () => {
             this.fadeToAction('dash', 0.2)
-            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(30)
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(11)
             this.body.velocity.x = this.tmpVec3.x
             // this.body.velocity.y = 0
             this.body.velocity.z = this.tmpVec3.z
@@ -338,7 +338,7 @@ class Mutant {
             this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 4
             this.fadeToAction('jumpAttackStart')
 
-            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(15)
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(5.5)
             // console.log(this.tmpVec3)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 20
@@ -349,14 +349,14 @@ class Mutant {
 
             // let downVelocity=o.state.history.value === 'jump' ? 20 : o.state.history.value === 'doubleJump' ? 50 : 0
             // this.body.velocity.y -= downVelocity
-            this.body.velocity.y = -this.body.position.y * 5
+            this.body.velocity.y = -this.body.position.y * 1.85
           },
           playJumpAttackEnd: (context, event, o) => {
             this.oaction['jumpAttackEnd'].timeScale = this.attackSpeed * 4
             this.fadeToAction('jumpAttackEnd')
           },
           jump: () => {
-            this.body.velocity.y = 20
+            this.body.velocity.y = 7.41
           },
           playJump: () => {
             this.fadeToAction('jump', 0.2)
@@ -413,8 +413,8 @@ class Mutant {
     })
     this.body.belongTo = this
 
-    this.bodyRadius = 1.2
-    this.bodyHeight = 4.5
+    this.bodyRadius = 0.4
+    this.bodyHeight = 1.65
     // this.bodyHeight = 10
     this.bodyCylinderHeight = this.bodyHeight - this.bodyRadius * 2
     let sphereShape = new CANNON.Sphere(this.bodyRadius)
@@ -508,7 +508,8 @@ class Mutant {
             }
           })
           scene.add(this.mesh)
-          this.mesh.scale.setScalar(2.7)
+          this.mesh.scale.setScalar(1)
+          // this.mesh.scale.setScalar(2.7)
           // this.mesh.scale.set(.7,.7,.7)
           // this.mesh.position.set(x,y,z)
           this.mixer = new THREE.AnimationMixer(this.mesh)

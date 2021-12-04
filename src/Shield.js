@@ -13,7 +13,7 @@ class Shield {
     })
     this.body.belongTo = this
     this.body.collisionResponse = false
-    let shape = new CANNON.Box(new CANNON.Vec3(0.7, 0.3, 1))
+    let shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.11, 0.37))
     this.body.addShape(shape)
     world.addBody(this.body)
 

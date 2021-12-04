@@ -64,8 +64,8 @@ let fsm
 window.service = null
 
 let cameraPosX = 0
-let cameraPosY = g.getQueryStringByName('view') === 'front' ? 0 : 30
-let cameraPosZ = g.getQueryStringByName('view') === 'top' ? 0 : 30
+let cameraPosY = g.getQueryStringByName('view') === 'front' ? 0 : 11
+let cameraPosZ = g.getQueryStringByName('view') === 'top' ? 0 : 11
 
 // const gui = new GUI({ width: 310 })
 const gui = new GUI()
@@ -137,42 +137,42 @@ function init() {
   // level.load()
 
   // ground box
-  window.groundBox = new Box(20, 4, 80)
-  groundBox.mesh.position.set(-30, 1, 0)
+  window.groundBox = new Box(8, 1.3, 30)
+  groundBox.mesh.position.set(-11, 0.65, 0)
   groundBox.body.position.copy(groundBox.mesh.position)
 
   // catapult
-  window.catapult = new Catapult(8, 0.5, 11)
+  window.catapult = new Catapult(3, 0.2, 4)
 
   // teleporter
-  window.teleporter = new Teleporter(2, 2, 2)
-  teleporter.body.position.set(-35, 10, -35)
+  window.teleporter = new Teleporter(0.7, 0.7, 0.7)
+  teleporter.body.position.set(-13, 3.7, -12)
   teleporter.mesh.position.copy(teleporter.body.position)
-  teleporter.dest.set(-50, 60, -50)
+  teleporter.dest.set(-18, 22, -18)
 
-  window.teleporter2 = new Teleporter(2, 2, 2)
-  teleporter2.body.position.set(-30, 10, -35)
+  window.teleporter2 = new Teleporter(0.7, 0.7, 0.7)
+  teleporter2.body.position.set(-11, 3.7, -12)
   teleporter2.mesh.position.copy(teleporter2.body.position)
-  teleporter2.dest.set(-50, 600, -50)
+  teleporter2.dest.set(-18, 220, -18)
 
-  window.teleporter3 = new Teleporter(2, 2, 2)
-  teleporter3.body.position.set(-25, 10, -35)
+  window.teleporter3 = new Teleporter(0.7, 0.7, 0.7)
+  teleporter3.body.position.set(-9, 3.7, -12)
   teleporter3.mesh.position.copy(teleporter3.body.position)
-  teleporter3.dest.set(-25, 60, -35)
+  teleporter3.dest.set(-9, 22, -12)
 
   window.hill = new Hill()
 
   // air box
-  window.airBox = new Box(40, 4, 80)
-  airBox.mesh.position.set(-55, 35, -90)
+  window.airBox = new Box(15, 1.5, 30)
+  airBox.mesh.position.set(-20, 12, -33)
   airBox.body.position.copy(airBox.mesh.position)
 
   window.floatingBoxes = []
   for (let i = 0; i < 7; i++) {
-    let floatingBox = new FloatingBox(10, 1, 10)
+    let floatingBox = new FloatingBox(3.7, 0.37, 3.7)
     // floatingBox.body.position.x = i * 20
-    floatingBox.body.position.y = 6 * (i + 1)
-    floatingBox.body.position.z = -35 - i * 7
+    floatingBox.body.position.y = 2.2 * (i + 1)
+    floatingBox.body.position.z = -12.96 - i * 2.6
     // floatingBox.body.position.z = -35 - (i % 2) * 5
     // floatingBox.timeBias = i * 2
 
@@ -181,7 +181,7 @@ function init() {
 
   // window.maria = new Maria(0, 5, -15)
   // window.maria = new Maria(-35, 5, 0)
-  window.maria = new Maria(-5, 5, 0)
+  window.maria = new Maria(-2, 2, 0)
   // window.maria = new Maria(0, 0, 0)
   maria.load(() => {
     // maria.mesh.rotation.set(0, Math.PI, 0)
@@ -206,19 +206,19 @@ function init() {
   let mutantsCount = parseInt(g.getQueryStringByName('mutants'))
   if (Number.isNaN(mutantsCount)) mutantsCount = 3
   for (let i = 0; i < mutantsCount; i++) {
-    let mutant = new Mutant((Math.random() - 0.5) * 50, 5, (Math.random() - 0.5) * 50)
+    let mutant = new Mutant((Math.random() - 0.5) * 18, 2, (Math.random() - 0.5) * 18)
     // let mutant = new Mutant(-25, 5, 0)
     let handKnife = new HandKnife()
     handKnife.owner = mutant
     mutant.load()
     mutants.push(mutant)
 
-    let ai = new Ai(mutant, maria, 4)
+    let ai = new Ai(mutant, maria, 1.5)
     // ai.isAttack = false
   }
 
   window.enemys = []
-  window.enemy = new Enemy(15, 5, -10)
+  window.enemy = new Enemy(6, 2, -4)
   enemys.push(enemy)
   enemy.load()
 
@@ -226,7 +226,7 @@ function init() {
   // enemys.push(enemy2)
   // enemy2.load()
 
-  window.parrot = new Parrot(0, 10, -15)
+  window.parrot = new Parrot(0, 4, -5)
   parrot.load()
 
   domMaria.addEventListener('click', (e) => {
@@ -287,7 +287,7 @@ function init_three() {
   container = document.createElement('div')
   document.body.appendChild(container)
 
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 370)
   camera.position.set(cameraPosX, cameraPosY, cameraPosZ)
   camera.lookAt(0, 0, 0)
 
@@ -300,28 +300,28 @@ function init_three() {
   // lights
 
   let light = new THREE.HemisphereLight(0x888888, 0x333333)
-  light.position.set(0, 20, 0)
+  light.position.set(0, 7.41, 0)
   scene.add(light)
 
   window.shadowLight = new THREE.DirectionalLight(0x888888)
-  shadowLight.position.set(0, 100, 0)
+  shadowLight.position.set(0, 37, 0)
   shadowLight.castShadow = true
   shadowLight.shadow.mapSize.width = 2048
   shadowLight.shadow.mapSize.height = 2048
   shadowLight.shadow.camera.near = 1
-  shadowLight.shadow.camera.far = 500
-  shadowLight.shadow.camera.right = 100
-  shadowLight.shadow.camera.left = -100
-  shadowLight.shadow.camera.top = 100
-  shadowLight.shadow.camera.bottom = -100
+  shadowLight.shadow.camera.far = 185
+  shadowLight.shadow.camera.right = 37
+  shadowLight.shadow.camera.left = -37
+  shadowLight.shadow.camera.top = 37
+  shadowLight.shadow.camera.bottom = -37
   // shadowLight.shadow.radius = 2;
   shadowLight.shadow.radius = 0
   // shadowLight.shadow.bias = - 0.00006;
   scene.add(shadowLight)
   scene.add(shadowLight.target)
 
-  var grid = new THREE.GridHelper(200, 40, 0x000000, 0x000000)
-  grid.position.y = 0.1
+  var grid = new THREE.GridHelper(100, 100, 0x000000, 0x000000)
+  grid.position.y = 0.037
   grid.material.opacity = 0.2
   grid.material.transparent = true
   scene.add(grid)
@@ -355,7 +355,7 @@ function init_cannon() {
   world.defaultMaterial.restitution = 0 ///todo: Why no effect, still bounce?
   world.defaultContactMaterial.friction = 0.05
   // world.defaultContactMaterial.friction = 0
-  world.gravity.set(0, -50, 0)
+  world.gravity.set(0, -10, 0)
   world.broadphase = new CANNON.NaiveBroadphase()
 
   // world.defaultContactMaterial.contactEquationRelaxation = 10

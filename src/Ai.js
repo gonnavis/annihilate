@@ -2,7 +2,7 @@ import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
 class Ai {
-  constructor(role, target, distance = 3) {
+  constructor(role, target, distance = 1) {
     this.role = role
     this.target = target
     this.distance = distance

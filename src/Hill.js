@@ -8,9 +8,9 @@ class Hill {
     this.isGround = true
 
     // let pos = new THREE.Vector3(-0, 0, -0)
-    let pos = new THREE.Vector3(-80, 0, -100)
+    let pos = new THREE.Vector3(-30, 0, -37)
 
-    const bufferGeometry = new THREE.ConeGeometry(120, 80, 8)
+    const bufferGeometry = new THREE.ConeGeometry(45, 30, 8)
     // let bufferGeometry = new THREE.BoxGeometry(6, 6, 6)
     // bufferGeometry = mergeVertices(bufferGeometry, 2)
     // bufferGeometry.computeVertexNormals()

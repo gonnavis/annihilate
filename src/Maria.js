@@ -17,7 +17,7 @@ class Maria {
     this.oaction = {}
     this.mixer
     // this.speed = 0.15
-    this.speed = 0.3
+    this.speed = 0.11
     // this.landAttackSpeed = 1.4
     // this.airAttackSpeed = 2.5
     this.attackSpeed = 1.4
@@ -30,8 +30,8 @@ class Maria {
     this.mass = 80
     this.chargedLevel = 0 // 0: normal/slow combo | 1: fast combo | 2: fast combo & swordBlaster
     this.isAir = false
-    this.liftDistance = 10
-    this.airLiftVelocity = 7
+    this.liftDistance = 3.7
+    this.airLiftVelocity = 1.5
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -625,7 +625,7 @@ class Maria {
             // move
 
             // move use velocity, will affected by restitution, so ground or air different.
-            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(60)
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(15)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.z = this.tmpVec3.z
 
@@ -673,7 +673,7 @@ class Maria {
             // change facing
             this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
             // move
-            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(30)
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(11)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 0
             this.body.velocity.z = this.tmpVec3.z
@@ -905,24 +905,24 @@ class Maria {
             this.oaction['jumpAttack'].timeScale = this.jumpBashSpeed
             this.fadeToAction('jumpAttack')
 
-            this.body.velocity.y = -this.body.position.y * 5
+            this.body.velocity.y = -this.body.position.y * 1.85
           },
           playJumpChargeBash: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.jumpBashSpeed
             this.fadeToAction('jumpAttack')
 
             this.body.mass = this.mass
-            this.body.velocity.y = -this.body.position.y * 5
+            this.body.velocity.y = -this.body.position.y * 1.85
           },
           playJumpBashEnd: (context, event, o) => {
             this.oaction['jumpAttackEnd'].timeScale = this.jumpBashSpeed
             this.fadeToAction('jumpAttackEnd')
           },
           jump: () => {
-            this.body.velocity.y = 20
+            this.body.velocity.y = 5.2
           },
           playJump: () => {
-            this.fadeToAction('jump')
+            this.fadeToAction('jump') // TODO: Mesh pos y do not move.
 
             // this.setAir(true)
           },
@@ -962,7 +962,7 @@ class Maria {
           playAjejebloken: () => {
             this.fadeToAction('whirlwind', 0)
 
-            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(0.2)
+            this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(0.0741)
             gsap.to(
               {},
               {
@@ -1027,8 +1027,8 @@ class Maria {
     })
     this.body.belongTo = this
 
-    this.bodyRadius = 0.9
-    this.bodyHeight = 4.5
+    this.bodyRadius = 0.25
+    this.bodyHeight = 1.65
     this.bodyHeightHalf = this.bodyHeight / 2
     // this.bodyHeight = 10
     this.bodyCylinderHeight = this.bodyHeight - this.bodyRadius * 2
@@ -1084,13 +1084,13 @@ class Maria {
     } else {
       altitude = Infinity
     }
-    if (altitude > 1) {
+    if (altitude > 0.37) {
       this.setAir(true)
       this.service.send('air')
     } else {
       // NOTE: Check isAir to prevent immediate idle after jump.
-      // NOTE: Check altitude < 0.01 too prevent sometimes not land bug.
-      if (this.isAir || altitude < 0.01) this.service.send('land')
+      // NOTE: Check altitude < 0.0037 too prevent sometimes not land bug.
+      if (this.isAir || altitude < 0.0037) this.service.send('land')
       // this.service.send('land')
       this.setAir(false)
       this.body.mass = this.mass
@@ -1143,7 +1143,8 @@ class Maria {
           })
 
           scene.add(this.mesh)
-          this.mesh.scale.setScalar(2.7)
+          // this.mesh.scale.setScalar(1)
+          // this.mesh.scale.setScalar(2.7)
           // this.mesh.scale.set(.7,.7,.7)
           // this.mesh.position.set(x,y,z)
           this.mixer = new THREE.AnimationMixer(this.mesh)

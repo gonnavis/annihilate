@@ -124,7 +124,7 @@ class Enemy {
     // => 'resolved'
 
     this.mass = 50
-    this.bodySize = 1.6
+    this.bodySize = 0.6
     this.body = new CANNON.Body({
       mass: this.mass,
       collisionFilterGroup: g.GROUP_ENEMY,
@@ -200,7 +200,7 @@ class Enemy {
           })
 
           window.scene.add(this.mesh)
-          this.mesh.scale.set(0.7, 0.7, 0.7)
+          this.mesh.scale.set(0.26, 0.26, 0.26)
           // mesh.position.set(x,y,z)
           this.mixer = new THREE.AnimationMixer(this.mesh)
           gltf.animations.forEach((animation) => {

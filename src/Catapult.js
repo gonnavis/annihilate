@@ -25,7 +25,7 @@ class Catapult {
 
     //
 
-    this.mesh.position.set(30, 0, 10)
+    this.mesh.position.set(11, 0, 4)
     this.body.position.copy(this.mesh.position)
 
     // this.mesh.geometry.rotateX(Math.PI / 2)
@@ -64,7 +64,7 @@ class Catapult {
   }
 
   launch() {
-    let intensity = 12
+    let intensity = 10
     this.body.angularVelocity.set(-intensity, 0, intensity)
     setTimeout(() => {
       this.body.angularVelocity.set(0, 0, 0)

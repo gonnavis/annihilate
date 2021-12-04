@@ -28,6 +28,7 @@ import { Ai } from './Ai.js'
 import { HandKnife } from './HandKnife.js'
 import { Teleporter } from './Teleporter.js'
 import { Parrot } from './Parrot.js'
+import { Catapult } from './Catapult.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -139,6 +140,11 @@ function init() {
   window.groundBox = new Box(20, 4, 80)
   groundBox.mesh.position.set(-30, 1, 0)
   groundBox.body.position.copy(groundBox.mesh.position)
+
+  // catapult
+  window.catapult = new Catapult(3, 0.5, 11)
+  catapult.mesh.position.set(-55, 0, 0)
+  catapult.body.position.copy(catapult.mesh.position)
 
   window.teleporter = new Teleporter(2, 2, 2)
   teleporter.body.position.set(-35, 10, -35)
@@ -272,6 +278,8 @@ function init() {
   // gui.add(teleporter.mesh.position, 'x', -50, 50, 1)
   // gui.add(teleporter.mesh.position, 'y', -50, 50, 1)
   // gui.add(teleporter.mesh.position, 'z', -50, 50, 1)
+
+  if (g.getQueryStringByName('gui') === 'false') gui.close()
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 }

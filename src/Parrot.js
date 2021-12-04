@@ -79,11 +79,11 @@ class Parrot {
           },
           playAttack: () => {
             // this.fadeToAction('dance', 0.2)
-            if (window.role.gltf && this.gltf) new Bullet(scene, updates, this, new THREE.Vector3(window.role.mesh.position.x, window.role.mesh.position.y + window.role.bodyHeightHalf, window.role.mesh.position.z))
+            if (g.isAttack && window.role.gltf && this.gltf) new Bullet(scene, updates, this, new THREE.Vector3(window.role.mesh.position.x, window.role.mesh.position.y + window.role.bodyHeightHalf, window.role.mesh.position.z))
             this.service.send('finish')
           },
           playGrenade: () => {
-            if (window.role.gltf && this.gltf) new Grenade(scene, updates, this, new THREE.Vector3(window.role.mesh.position.x, window.role.mesh.position.y, window.role.mesh.position.z))
+            if (g.isAttack && window.role.gltf && this.gltf) new Grenade(scene, updates, this, new THREE.Vector3(window.role.mesh.position.x, window.role.mesh.position.y, window.role.mesh.position.z))
             this.service.send('finish')
           },
           playHit: () => {

@@ -413,7 +413,7 @@ class Mutant {
     })
     this.body.belongTo = this
 
-    this.bodyRadius = 0.4
+    this.bodyRadius = 0.5 // Cover the shoulders.
     this.bodyHeight = 1.65
     // this.bodyHeight = 10
     this.bodyCylinderHeight = this.bodyHeight - this.bodyRadius * 2

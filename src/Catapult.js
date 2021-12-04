@@ -37,6 +37,8 @@ class Catapult {
     this._quaternion = new THREE.Quaternion().copy(this.mesh.quaternion)
     this.tmpQuat = new THREE.Quaternion()
 
+    this.startTime = 0
+
     window.updates.push(this)
 
     setInterval(() => {
@@ -46,6 +48,19 @@ class Catapult {
 
   update() {
     this.mesh.quaternion.copy(this.body.quaternion)
+
+    // // launch hint
+    // let freq = performance.now() - this.startTime
+    // freq = freq ** 2
+    // freq *= 0.00001
+    // let intensity = Math.sin(freq)
+    // intensity = Math.max(0, intensity)
+    // this.mesh.material.emissive.setScalar(intensity * 0.1)
+    let intensity = performance.now() - this.startTime
+    intensity /= 4000
+    intensity = intensity ** 5
+    intensity *= 0.5
+    this.mesh.material.emissive.setScalar(intensity)
   }
 
   launch() {
@@ -63,6 +78,7 @@ class Catapult {
           onUpdate: () => {
             this.mesh.quaternion.slerpQuaternions(this.tmpQuat, this._quaternion, to.t)
             this.body.quaternion.copy(this.mesh.quaternion)
+            this.startTime = performance.now()
           },
         })
       }

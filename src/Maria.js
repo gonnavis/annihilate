@@ -87,19 +87,6 @@ class Maria {
               // blocked: { target: 'blocked' },
             },
           },
-          // jumpIdle: {
-          //   entry: 'playJumpIdle',
-          //   on: {
-          //     land: { target: 'idle' },
-          //     attack: { target: 'jumpAttack' },
-          //     bash: { target: 'jumpBashStartWithCharge' },
-          //     hit: { target: 'hit' },
-          //     // dash: { target: 'dash' },
-          //     // block: { target: 'block' },
-          //     // blocked: { target: 'blocked' },
-          //   },
-          //   tags: ['canMove'],
-          // },
           block: {
             entry: 'playBlock',
             on: {
@@ -221,9 +208,7 @@ class Maria {
           chargeAttack: {
             entry: 'playChargeAttack',
             on: {
-              // finish: { target: 'idle' },
               hit: { target: 'hit' },
-              // attack: { target: 'prepareChargeFist' },
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
@@ -243,14 +228,6 @@ class Maria {
               },
             },
           },
-          // prepareChargeFist: {
-          //   on: {
-          //     finish: { target: 'chargeFistStart' },
-          //     hit: { target: 'hit' },
-          //     dash: { target: 'dash' },
-          //   },
-          //   tags: ['canDamage'],
-          // },
           chargeFistStart: {
             entry: 'playChargeFistStart',
             on: {
@@ -262,10 +239,8 @@ class Maria {
           chargeFist: {
             entry: 'playChargeFist',
             on: {
-              // finish: { target: 'idle' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
-              // attack: { target: 'prepareChargeStrike' },
             },
             tags: ['canDamage'],
 
@@ -284,14 +259,6 @@ class Maria {
               },
             },
           },
-          // prepareChargeStrike: {
-          //   on: {
-          //     finish: { target: 'chargeStrikeStart' },
-          //     hit: { target: 'hit' },
-          //     dash: { target: 'dash' },
-          //   },
-          //   tags: ['canDamage'],
-          // },
           chargeStrikeStart: {
             entry: 'playChargeStrikeStart',
             on: {
@@ -320,15 +287,6 @@ class Maria {
 
           attackStart: {
             on: {
-              // finish: { target: 'whirlwind' },
-              finish: { target: 'attack' },
-              hit: { target: 'hit' },
-              dash: { target: 'dash' },
-              // keyJUp: { target: 'attackStartNotWhirlwind' },
-            },
-          },
-          attackStartNotWhirlwind: {
-            on: {
               finish: { target: 'attack' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
@@ -337,12 +295,8 @@ class Maria {
           attack: {
             entry: ['playAttack'],
             on: {
-              // finish: { target: 'idle' },
               hit: { target: 'hit' },
-              // attack: { target: 'prepareFist' },
               dash: { target: 'dash' },
-
-              // whirlwind: { target: 'whirlwind' },
             },
             tags: ['canDamage'],
 
@@ -389,16 +343,6 @@ class Maria {
             },
             tags: ['canDamage', 'canLaunch'],
           },
-          // prepareFist: {
-          //   entry: ['setAirMassZero'],
-          //   exit: ['restoreMass'],
-          //   on: {
-          //     finish: { target: 'fistStart' },
-          //     hit: { target: 'hit' },
-          //     dash: { target: 'dash' },
-          //   },
-          //   tags: ['canDamage'],
-          // },
           fistStart: {
             entry: ['playFistStart'],
             on: {
@@ -410,10 +354,8 @@ class Maria {
           fist: {
             entry: ['playFist'],
             on: {
-              // finish: { target: 'idle' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
-              // attack: { target: 'prepareStrike' },
             },
             tags: ['canDamage'],
 
@@ -432,16 +374,6 @@ class Maria {
               },
             },
           },
-          // prepareStrike: {
-          //   entry: ['setAirMassZero'],
-          //   exit: ['restoreMass'],
-          //   on: {
-          //     finish: { target: 'strikeStart' },
-          //     hit: { target: 'hit' },
-          //     dash: { target: 'dash' },
-          //   },
-          //   tags: ['canDamage'],
-          // },
           strikeStart: {
             entry: ['playStrikeStart'],
             on: {
@@ -563,9 +495,7 @@ class Maria {
             entry: 'playJumpAttack',
             exit: 'restoreMass',
             on: {
-              // finish: { target: 'fall' },
               // todo: hit jumpDash/airDash
-              // attack: { target: 'prepareJumpFist' },
             },
             tags: ['canDamage'],
 
@@ -584,19 +514,9 @@ class Maria {
               },
             },
           },
-          // prepareJumpFist: {
-          //   entry: 'playPrepareJumpFist',
-          //   exit: 'restoreMass',
-          //   on: {
-          //     finish: { target: 'jumpFist' },
-          //   },
-          // },
           jumpFist: {
             entry: 'playJumpFist',
-            on: {
-              // finish: { target: 'fall' },
-              // attack: { target: 'prepareJumpStrike' },
-            },
+            on: {},
             tags: ['canDamage'],
 
             initial: 'main',
@@ -614,13 +534,6 @@ class Maria {
               },
             },
           },
-          // prepareJumpStrike: {
-          //   entry: 'playPrepareJumpStrike',
-          //   exit: 'restoreMass',
-          //   on: {
-          //     finish: { target: 'jumpStrike' },
-          //   },
-          // },
           jumpStrike: {
             entry: 'playJumpStrike',
             on: {
@@ -976,20 +889,12 @@ class Maria {
 
             this.body.velocity.y = this.airAttackLiftVelocity
           },
-          // playPrepareJumpFist: () => {
-          //   this.body.mass = 0
-          //   this.body.velocity.set(0, 0, 0)
-          // },
           playJumpFist: () => {
             this.oaction['fist'].timeScale = this.attackSpeed
             this.fadeToAction('fist', 0)
 
             this.body.velocity.y = this.airAttackLiftVelocity
           },
-          // playPrepareJumpStrike: () => {
-          //   this.body.mass = 0
-          //   this.body.velocity.set(0, 0, 0)
-          // },
           playJumpStrike: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0)

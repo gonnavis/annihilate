@@ -19,6 +19,7 @@ class Mutant {
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.
     this.isAir = false
+    this.airLiftVelocity = 7
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -216,7 +217,6 @@ class Mutant {
           },
           hit: {
             entry: ['playHit'],
-            exit: ['exitHit'],
             on: {
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' }, // todo: knockDown only when hit.
@@ -364,20 +364,15 @@ class Mutant {
           playHit: () => {
             this.fadeToAction('hit', 0.2)
             if (this.isAir) {
-              this.body.mass = 0
-              this.body.velocity.set(0, 0, 0)
+              this.body.velocity.y = this.airLiftVelocity
             }
             // console.log('playHit', this.body.mass, this.isAir)
-          },
-          exitHit: () => {
-            this.body.mass = this.mass
           },
           playKnockDown: () => {
             // this.oaction['knockDown'].timeScale = 2
             this.fadeToAction('knockDown', 0.2)
           },
           playDead: () => {
-            // this.body.mass = 0
             // this.body.collisionResponse = false
             this.body.collisionFilterMask = g.GROUP_SCENE
             setTimeout(() => {
@@ -446,7 +441,6 @@ class Mutant {
       if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
         this.service.send('land')
         this.isAir = false
-        this.body.mass = this.mass
       }
       // }
     })

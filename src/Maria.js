@@ -31,7 +31,7 @@ class Maria {
     this.chargedLevel = 0 // 0: normal/slow combo | 1: fast combo | 2: fast combo & swordBlaster
     this.isAir = false
     this.liftDistance = 10
-    this.airAttackLiftVelocity = 7
+    this.airLiftVelocity = 7
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -887,19 +887,19 @@ class Maria {
             this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0)
 
-            this.body.velocity.y = this.airAttackLiftVelocity
+            this.body.velocity.y = this.airLiftVelocity
           },
           playJumpFist: () => {
             this.oaction['fist'].timeScale = this.attackSpeed
             this.fadeToAction('fist', 0)
 
-            this.body.velocity.y = this.airAttackLiftVelocity
+            this.body.velocity.y = this.airLiftVelocity
           },
           playJumpStrike: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0)
 
-            this.body.velocity.y = this.airAttackLiftVelocity
+            this.body.velocity.y = this.airLiftVelocity
           },
           playJumpBash: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.jumpBashSpeed

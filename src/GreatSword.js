@@ -29,6 +29,7 @@ class GreatSword {
       // if (e.body.belongTo?.isEnemy === true && e.body.belongTo !== this.owner) {
       // console.log(1111111111)
       if (this.owner.service.state.hasTag('canDamage')) {
+        // debugger
         if (e.body.belongTo.isEnemy) {
           if (this.owner.service.state.hasTag('knockDown')) {
             e.body.belongTo.knockDown()
@@ -40,6 +41,7 @@ class GreatSword {
 
             // if (this.owner.service.state.matches('launch')) {
             if (this.owner.service.state.hasTag('canLaunch') && !e.body.belongTo.isAir) {
+              // console.log(111)
               // e.body.velocity.y += 30
               // NOTE: Direct change position instead of velocity, to prevent friction between enemy herd cause not lift.
               gsap.to(e.body.position, {

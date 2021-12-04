@@ -13,6 +13,7 @@ class Enemy {
     // this.health = 100
     this.oaction = {}
     this.mixer
+    this.isAir = false
 
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -62,7 +63,7 @@ class Enemy {
       },
       {
         actions: {
-          decreaseHealth: assign({ health: (context, event) => context.health - 35 }),
+          decreaseHealth: assign({ health: (context, event) => context.health - (g.isDamage ? 35 : 0) }),
 
           playIdle: () => {
             this.fadeToAction('idle', 0.2)
@@ -138,6 +139,14 @@ class Enemy {
     this.body.addShape(shape)
     this.body.position.set(x, y, z)
     world.addBody(this.body)
+
+    this.body.addEventListener('beginContact', (event) => {
+      if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
+        this.service.send('land')
+        this.isAir = false
+        // this.body.mass = this.mass
+      }
+    })
 
     setInterval(() => {
       this.service.send('attack')

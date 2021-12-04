@@ -31,6 +31,7 @@ class Maria {
     this.chargedLevel = 0 // 0: normal/slow combo | 1: fast combo | 2: fast combo & swordBlaster
     this.isAir = false
     this.liftDistance = 10
+    this.airAttackLiftVelocity = 7
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -318,8 +319,6 @@ class Maria {
           },
 
           attackStart: {
-            entry: ['setAirMassZero'],
-            exit: ['restoreMass'],
             on: {
               // finish: { target: 'whirlwind' },
               finish: { target: 'attack' },
@@ -336,8 +335,7 @@ class Maria {
             },
           },
           attack: {
-            entry: ['playAttack', 'setAirMassZero'],
-            exit: ['restoreMass'],
+            entry: ['playAttack'],
             on: {
               // finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -402,8 +400,7 @@ class Maria {
           //   tags: ['canDamage'],
           // },
           fistStart: {
-            entry: ['playFistStart', 'setAirMassZero'],
-            exit: ['restoreMass'],
+            entry: ['playFistStart'],
             on: {
               finish: { target: 'fist' },
               hit: { target: 'hit' },
@@ -411,8 +408,7 @@ class Maria {
             },
           },
           fist: {
-            entry: ['playFist', 'setAirMassZero'],
-            exit: ['restoreMass'],
+            entry: ['playFist'],
             on: {
               // finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -447,8 +443,7 @@ class Maria {
           //   tags: ['canDamage'],
           // },
           strikeStart: {
-            entry: ['playStrikeStart', 'setAirMassZero'],
-            exit: ['restoreMass'],
+            entry: ['playStrikeStart'],
             on: {
               finish: { target: 'strike' },
               hit: { target: 'hit' },
@@ -456,8 +451,7 @@ class Maria {
             },
           },
           strike: {
-            entry: ['playStrike', 'setAirMassZero'],
-            exit: ['restoreMass'],
+            entry: ['playStrike'],
             on: {
               finish: { target: 'strikeEnd' },
               hit: { target: 'hit' },
@@ -466,8 +460,7 @@ class Maria {
             tags: ['canDamage', 'knockDown'],
           },
           strikeEnd: {
-            entry: ['playStrikeEnd', 'setAirMassZero'],
-            exit: ['restoreMass'],
+            entry: ['playStrikeEnd'],
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -600,7 +593,6 @@ class Maria {
           // },
           jumpFist: {
             entry: 'playJumpFist',
-            exit: 'restoreMass',
             on: {
               // finish: { target: 'fall' },
               // attack: { target: 'prepareJumpStrike' },
@@ -631,7 +623,6 @@ class Maria {
           // },
           jumpStrike: {
             entry: 'playJumpStrike',
-            exit: 'restoreMass',
             on: {
               finish: { target: 'fall' },
             },
@@ -769,7 +760,6 @@ class Maria {
             // change facing
             this.mesh.rotation.y = -this.facing.angle() + Math.PI / 2
             // move
-            // this.body.mass = 0
             this.tmpVec3.setX(this.facing.x).setZ(this.facing.y).normalize().multiplyScalar(30)
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 0
@@ -805,13 +795,6 @@ class Maria {
           },
           setMassZero: () => {
             this.body.mass = 0
-          },
-          setAirMassZero: () => {
-            // TODO: Add velocity.y instead of set mass 0.
-            if (this.isAir) {
-              this.body.mass = 0
-              this.body.velocity.set(0, 0, 0)
-            }
           },
           restoreMass: () => {
             this.body.mass = this.mass
@@ -991,9 +974,7 @@ class Maria {
             this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0)
 
-            this.body.mass = 0
-            this.body.velocity.set(0, 0, 0)
-            // this.body.velocity.y = -this.body.position.y * 5
+            this.body.velocity.y = this.airAttackLiftVelocity
           },
           // playPrepareJumpFist: () => {
           //   this.body.mass = 0
@@ -1003,8 +984,7 @@ class Maria {
             this.oaction['fist'].timeScale = this.attackSpeed
             this.fadeToAction('fist', 0)
 
-            this.body.mass = 0
-            this.body.velocity.set(0, 0, 0)
+            this.body.velocity.y = this.airAttackLiftVelocity
           },
           // playPrepareJumpStrike: () => {
           //   this.body.mass = 0
@@ -1014,8 +994,7 @@ class Maria {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0)
 
-            this.body.mass = 0
-            this.body.velocity.set(0, 0, 0)
+            this.body.velocity.y = this.airAttackLiftVelocity
           },
           playJumpBash: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.jumpBashSpeed

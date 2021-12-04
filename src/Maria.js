@@ -905,14 +905,14 @@ class Maria {
             this.oaction['jumpAttack'].timeScale = this.jumpBashSpeed
             this.fadeToAction('jumpAttack')
 
-            this.body.velocity.y = -this.body.position.y * 1.85
+            this.body.velocity.y = -this.body.position.y * 3.5 // TODO: Change position instead of velocity? Need, to prevent velocity too high when position too high.
           },
           playJumpChargeBash: (context, event, o) => {
             this.oaction['jumpAttack'].timeScale = this.jumpBashSpeed
             this.fadeToAction('jumpAttack')
 
             this.body.mass = this.mass
-            this.body.velocity.y = -this.body.position.y * 1.85
+            this.body.velocity.y = -this.body.position.y * 3.5 // TODO: Change position instead of velocity? Need, to prevent velocity too high when position too high.
           },
           playJumpBashEnd: (context, event, o) => {
             this.oaction['jumpAttackEnd'].timeScale = this.jumpBashSpeed

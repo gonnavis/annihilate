@@ -29,6 +29,7 @@ import { HandKnife } from './HandKnife.js'
 import { Teleporter } from './Teleporter.js'
 import { Parrot } from './Parrot.js'
 import { Catapult } from './Catapult.js'
+import { Cloud } from './Cloud.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -135,6 +136,10 @@ function init() {
 
   // window.level = new Level()
   // level.load()
+
+  window.cloud = new Cloud()
+  cloud.mesh.position.set(-27, 15, -25)
+  cloud.mesh.scale.setScalar(3)
 
   // ground box
   window.groundBox = new Box(8, 1.3, 30)

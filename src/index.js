@@ -30,6 +30,7 @@ import { Teleporter } from './Teleporter.js'
 import { Parrot } from './Parrot.js'
 import { Catapult } from './Catapult.js'
 import { Cloud } from './Cloud.js'
+import { BirdFlock } from './BirdFlock.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -136,6 +137,8 @@ function init() {
 
   // window.level = new Level()
   // level.load()
+
+  window.birdFlock = new BirdFlock()
 
   // ground box
   window.groundBox = new Box(8, 1.3, 30)

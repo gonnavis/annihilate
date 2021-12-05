@@ -137,10 +137,6 @@ function init() {
   // window.level = new Level()
   // level.load()
 
-  window.cloud = new Cloud()
-  cloud.mesh.position.set(-27, 15, -25)
-  cloud.mesh.scale.setScalar(3)
-
   // ground box
   window.groundBox = new Box(8, 1.3, 30)
   groundBox.mesh.position.set(-11, 0.65, 0)
@@ -278,6 +274,21 @@ function init() {
 
   gui.add(setting, 'show debugRenderer')
   gui.add(setting, 'kill all mutants (0)')
+  gui.add({ 'show cloud': false }, 'show cloud').onChange((bool) => {
+    if (bool) {
+      if (window.cloud) {
+        window.cloud.mesh.visible = true
+      } else {
+        window.cloud = new Cloud()
+        cloud.mesh.position.set(-27, 15, -25)
+        cloud.mesh.scale.setScalar(3)
+
+        window.role.body.position.set(-24, 16, -25)
+      }
+    } else {
+      window.cloud.mesh.visible = false
+    }
+  })
 
   // gui.add(teleporter.mesh.position, 'x', -50, 50, 1)
   // gui.add(teleporter.mesh.position, 'y', -50, 50, 1)

@@ -252,7 +252,8 @@ let birdVS = `
     z = newPosition.z;
 
     vColor = vec4( birdColor, 1.0 );
-    gl_Position = projectionMatrix *  viewMatrix  * vec4( newPosition * ${birdFlockScale}, 1.0 );
+    // gl_Position = projectionMatrix *  viewMatrix  * vec4( newPosition * ${birdFlockScale}, 1.0 );
+    gl_Position = projectionMatrix *  modelViewMatrix  * vec4( newPosition * ${birdFlockScale}, 1.0 );
     // gl_Position = projectionMatrix *  modelViewMatrix  * vec4( newPosition, 1.0 );
     // gl_Position = projectionMatrix *  viewMatrix  * vec4( newPosition, 1.0 );
   }
@@ -505,7 +506,7 @@ function initBirds() {
   })
 
   birdMesh = new THREE.Mesh(geometry, material)
-  birdMesh.rotation.y = Math.PI / 2
+  // birdMesh.rotation.y = Math.PI / 2
   // birdMesh.matrixAutoUpdate = false
   // birdMesh.updateMatrix()
 
@@ -593,8 +594,8 @@ function render() {
   birdUniforms['delta'].value = delta
 
   // velocityUniforms['predator'].value.set((0.5 * mouseX) / windowHalfX, (-0.5 * mouseY) / windowHalfY, 0)
-  if (window.role?.mesh) velocityUniforms['predator'].value.copy(window.role.mesh.position).multiplyScalar(0.01)
-  console.log(velocityUniforms['predator'].value)
+  if (window.role?.mesh) velocityUniforms['predator'].value.copy(window.role.mesh.position).sub(birdMesh.position).setY(0).multiplyScalar(0.01)
+  // console.log(velocityUniforms['predator'].value)
 
   // mouseX = 10000
   // mouseY = 10000

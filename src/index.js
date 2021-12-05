@@ -139,8 +139,8 @@ function init() {
   // level.load()
 
   window.birdFlock = new BirdFlock()
-  // birdFlock.mesh.set(-20, 13, -26)
-  birdFlock.mesh.position.set(0, 1, 0)
+  birdFlock.mesh.position.set(-20, 13, -26)
+  // birdFlock.mesh.position.set(0, 1, 0)
 
   // ground box
   window.groundBox = new Box(8, 1.3, 30)

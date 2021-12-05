@@ -558,7 +558,7 @@ class Maria {
             entry: ['playHit'],
             on: {
               hit: { target: 'hit' },
-              finish: { target: 'idle' },
+              finish: [{ target: 'fall', cond: 'isAir' }, { target: 'idle' }],
             },
           },
           // blocked: {
@@ -996,12 +996,15 @@ class Maria {
             this.setFacing(this.facing.x, this.facing.y)
           },
         },
+        guards: {
+          isAir: () => this.isAir,
+        },
       }
     )
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value

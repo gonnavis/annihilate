@@ -53,7 +53,7 @@ class Bullet {
       }
     )
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('bullet: state:', state.value)
+      // if (state.changed) console.log('bullet: state:', state.value)
     })
 
     this.service.start()

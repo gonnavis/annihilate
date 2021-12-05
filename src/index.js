@@ -280,10 +280,11 @@ function init() {
         window.cloud.mesh.visible = true
       } else {
         window.cloud = new Cloud()
-        cloud.mesh.position.set(-27, 15, -25)
+        if (g.isOrbit) cloud.mesh.position.set(0, 2, 0)
+        else cloud.mesh.position.set(-27, 15, -25)
         cloud.mesh.scale.setScalar(3)
 
-        window.role.body.position.set(-24, 16, -25)
+        if (!g.isOrbit) window.role.body.position.set(-24, 16, -25)
       }
     } else {
       window.cloud.mesh.visible = false
@@ -359,7 +360,7 @@ function init_three() {
   stats = new Stats()
   container.appendChild(stats.dom)
 
-  if (g.getQueryStringByName('orbit') === 'true') window.controls = new OrbitControls(camera, renderer.domElement)
+  if (g.isOrbit) window.controls = new OrbitControls(camera, renderer.domElement)
 }
 
 function init_cannon() {

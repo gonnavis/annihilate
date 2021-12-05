@@ -244,7 +244,7 @@ let birdVS = `
     z = newPosition.z;
 
     vColor = vec4( birdColor, 1.0 );
-    gl_Position = projectionMatrix *  viewMatrix  * vec4( newPosition, 1.0 );
+    gl_Position = projectionMatrix *  viewMatrix  * vec4( newPosition * .05, 1.0 );
   }
 `
 
@@ -487,6 +487,8 @@ function initBirds() {
   birdMesh.rotation.y = Math.PI / 2
   birdMesh.matrixAutoUpdate = false
   birdMesh.updateMatrix()
+  // birdMesh.castShadow = true
+  // birdMesh.receiveShadow = true
 
   scene.add(birdMesh)
 }

@@ -138,10 +138,6 @@ function init() {
   // window.level = new Level()
   // level.load()
 
-  window.birdFlock = new BirdFlock()
-  birdFlock.mesh.position.set(-20, 13, -26)
-  // birdFlock.mesh.position.set(0, 1, 0)
-
   // ground box
   window.groundBox = new Box(8, 1.3, 30)
   groundBox.mesh.position.set(-11, 0.65, 0)
@@ -293,6 +289,21 @@ function init() {
       }
     } else {
       window.cloud.mesh.visible = false
+    }
+  })
+  gui.add({ 'show birdFlock': false }, 'show birdFlock').onChange((bool) => {
+    if (bool) {
+      if (window.birdFlock) {
+        window.birdFlock.mesh.visible = true
+      } else {
+        window.birdFlock = new BirdFlock()
+        if (g.isOrbit) birdFlock.mesh.position.set(0, 1, 0)
+        else birdFlock.mesh.position.set(-20, 13, -26)
+
+        if (!g.isOrbit) window.role.body.position.set(-24, 16, -25)
+      }
+    } else {
+      window.birdFlock.mesh.visible = false
     }
   })
 

@@ -280,8 +280,6 @@ const BIRDS = WIDTH * WIDTH
 
 //
 
-// let container, stats
-// let camera, scene, renderer
 let mouseX = 0,
   mouseY = 0
 
@@ -370,39 +368,19 @@ class BirdGeometry extends THREE.BufferGeometry {
 class BirdFlock {
   constructor() {
     init()
-    animate()
 
     this.mesh = birdMesh
+
+    window.updates.push(this)
+  }
+
+  update() {
+    render()
   }
 }
 
 function init() {
-  // container = document.createElement('div')
-  // document.body.appendChild(container)
-
-  // camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000)
-  // camera.position.z = 350
-
-  // scene = new THREE.Scene()
-  // scene.background = new THREE.Color(0xffffff)
-  // scene.fog = new THREE.Fog(0xffffff, 100, 1000)
-
-  // renderer = new THREE.WebGLRenderer()
-  // renderer.setPixelRatio(window.devicePixelRatio)
-  // renderer.setSize(window.innerWidth, window.innerHeight)
-  // container.appendChild(renderer.domElement)
-
   initComputeRenderer()
-
-  // stats = new Stats()
-  // container.appendChild(stats.dom)
-
-  // container.style.touchAction = 'none'
-  window.addEventListener('pointermove', onPointerMove)
-
-  //
-
-  window.addEventListener('resize', onWindowResize)
 
   // const gui = new GUI()
 
@@ -436,7 +414,7 @@ function init() {
 }
 
 function initComputeRenderer() {
-  gpuCompute = new GPUComputationRenderer(WIDTH, WIDTH, renderer)
+  gpuCompute = new GPUComputationRenderer(WIDTH, WIDTH, window.renderer)
 
   if (isSafari()) {
     gpuCompute.setDataType(THREE.HalfFloatType)
@@ -553,31 +531,7 @@ function fillVelocityTexture(texture) {
   }
 }
 
-function onWindowResize() {
-  windowHalfX = window.innerWidth / 2
-  windowHalfY = window.innerHeight / 2
-
-  // camera.aspect = window.innerWidth / window.innerHeight
-  // camera.updateProjectionMatrix()
-
-  // renderer.setSize(window.innerWidth, window.innerHeight)
-}
-
-function onPointerMove(event) {
-  if (event.isPrimary === false) return
-
-  mouseX = event.clientX - windowHalfX
-  mouseY = event.clientY - windowHalfY
-}
-
 //
-
-function animate() {
-  requestAnimationFrame(animate) // TODO: use updates.
-
-  render()
-  // stats.update()
-}
 
 function render() {
   const now = performance.now()
@@ -604,8 +558,6 @@ function render() {
 
   birdUniforms['texturePosition'].value = gpuCompute.getCurrentRenderTarget(positionVariable).texture
   birdUniforms['textureVelocity'].value = gpuCompute.getCurrentRenderTarget(velocityVariable).texture
-
-  // renderer.render(scene, camera)
 }
 
 export { BirdFlock }

@@ -5,6 +5,7 @@ import { GPUComputationRenderer } from '../lib/three.js/examples/jsm/misc/GPUCom
 
 let birdMesh = null
 let birdFlockScale = '.05' // TODO: Use uniform.
+// let birdFlockScale = '1.' // TODO: Use uniform.
 
 let fragmentShaderPosition = `
   uniform float time;
@@ -54,7 +55,7 @@ let fragmentShaderVelocity = `
   const float UPPER_BOUNDS = BOUNDS;
   const float LOWER_BOUNDS = -UPPER_BOUNDS;
 
-  const float SPEED_LIMIT = 9.0;
+  const float SPEED_LIMIT = 9.0 * ${birdFlockScale};
 
   float rand( vec2 co ){
     return fract( sin( dot( co.xy, vec2(12.9898,78.233) ) ) * 43758.5453 );
@@ -88,22 +89,23 @@ let fragmentShaderVelocity = `
 
     float limit = SPEED_LIMIT;
 
-    dir = predator * UPPER_BOUNDS - selfPosition;
+    // dir = predator * UPPER_BOUNDS - selfPosition;
+    dir = predator - selfPosition;
     dir.z = 0.;
     // dir.z *= 0.6;
     dist = length( dir );
     distSquared = dist * dist;
 
-    float preyRadius = 150.0;
+    float preyRadius = 150.0 * ${birdFlockScale};
     float preyRadiusSq = preyRadius * preyRadius;
 
 
     // move birds away from predator
     if ( dist < preyRadius ) {
 
-      f = ( distSquared / preyRadiusSq - 1.0 ) * delta * 100.;
+      f = ( distSquared / preyRadiusSq - 1.0 ) * delta * 100. * ${birdFlockScale};
       velocity += normalize( dir ) * f;
-      limit += 5.0;
+      limit += 5.0 * ${birdFlockScale};
     }
 
 
@@ -116,8 +118,8 @@ let fragmentShaderVelocity = `
     dir = selfPosition - central;
     dist = length( dir );
 
-    dir.y *= 2.5;
-    velocity -= normalize( dir ) * delta * 5.;
+    dir.y *= 2.5 * ${birdFlockScale};
+    velocity -= normalize( dir ) * delta * 5. * ${birdFlockScale};
 
     for ( float y = 0.0; y < height; y++ ) {
       for ( float x = 0.0; x < width; x++ ) {
@@ -181,6 +183,8 @@ let fragmentShaderVelocity = `
       velocity = normalize( velocity ) * limit;
     }
 
+    velocity.y = 0.;
+
     gl_FragColor = vec4( velocity, 1.0 );
 
   }
@@ -211,7 +215,7 @@ let birdVS = `
 
     if ( birdVertex == 4.0 || birdVertex == 7.0 ) {
       // flap wings
-      newPosition.y = sin( tmpPos.w ) * 5.;
+      newPosition.y = sin( tmpPos.w ) * 5. * ${birdFlockScale};
     }
 
     newPosition = mat3( modelMatrix ) * newPosition;
@@ -247,7 +251,8 @@ let birdVS = `
     z = newPosition.z;
 
     vColor = vec4( birdColor, 1.0 );
-    gl_Position = projectionMatrix *  viewMatrix  * vec4( newPosition * ${birdFlockScale}, 1.0 );
+    // gl_Position = projectionMatrix *  viewMatrix  * vec4( newPosition * ${birdFlockScale}, 1.0 );
+    gl_Position = projectionMatrix *  modelViewMatrix  * vec4( newPosition, 1.0 );
   }
 `
 
@@ -280,7 +285,8 @@ let mouseX = 0,
 let windowHalfX = window.innerWidth / 2
 let windowHalfY = window.innerHeight / 2
 
-const BOUNDS = 800,
+// const BOUNDS = 800,
+const BOUNDS = 10,
   BOUNDS_HALF = BOUNDS / 2
 
 let last = performance.now()
@@ -341,7 +347,8 @@ class BirdGeometry extends THREE.BufferGeometry {
       const x = (birdIndex % WIDTH) / WIDTH
       const y = ~~(birdIndex / WIDTH) / WIDTH
 
-      const c = new THREE.Color(0x444444 + (~~(v / 9) / BIRDS) * 0x666666)
+      // const c = new THREE.Color(0x444444 + (~~(v / 9) / BIRDS) * 0x666666)
+      const c = new THREE.Color(0.7, 0.7, 0.7)
 
       birdColors.array[v * 3 + 0] = c.r
       birdColors.array[v * 3 + 1] = c.g
@@ -353,7 +360,7 @@ class BirdGeometry extends THREE.BufferGeometry {
       birdVertex.array[v] = v % 9
     }
 
-    this.scale(0.2, 0.2, 0.2)
+    this.scale(0.2 * birdFlockScale, 0.2 * birdFlockScale, 0.2 * birdFlockScale)
   }
 }
 class BirdFlock {
@@ -395,21 +402,26 @@ function init() {
 
   // const gui = new GUI()
 
-  // const effectController = {
-  //   separation: 20.0,
-  //   alignment: 20.0,
-  //   cohesion: 20.0,
-  //   freedom: 0.75,
-  // }
+  const effectController = {
+    separation: 20.0,
+    alignment: 20.0,
+    cohesion: 20.0,
 
-  // const valuesChanger = function () {
-  //   velocityUniforms['separationDistance'].value = effectController.separation
-  //   velocityUniforms['alignmentDistance'].value = effectController.alignment
-  //   velocityUniforms['cohesionDistance'].value = effectController.cohesion
-  //   velocityUniforms['freedomFactor'].value = effectController.freedom
-  // }
+    // separation: 0,
+    // alignment: 100,
+    // cohesion: 100,
 
-  // valuesChanger()
+    freedom: 0.75,
+  }
+
+  const valuesChanger = function () {
+    velocityUniforms['separationDistance'].value = effectController.separation
+    velocityUniforms['alignmentDistance'].value = effectController.alignment
+    velocityUniforms['cohesionDistance'].value = effectController.cohesion
+    velocityUniforms['freedomFactor'].value = effectController.freedom
+  }
+
+  valuesChanger()
 
   // gui.add(effectController, 'separation', 0.0, 100.0, 1.0).onChange(valuesChanger)
   // gui.add(effectController, 'alignment', 0.0, 100, 0.001).onChange(valuesChanger)
@@ -449,7 +461,8 @@ function initComputeRenderer() {
   velocityUniforms['alignmentDistance'] = { value: 1.0 }
   velocityUniforms['cohesionDistance'] = { value: 1.0 }
   velocityUniforms['freedomFactor'] = { value: 1.0 }
-  velocityUniforms['predator'] = { value: new THREE.Vector3() }
+  // velocityUniforms['predator'] = { value: new THREE.Vector3() }
+  velocityUniforms['predator'] = { value: new THREE.Vector3(10000, 10000, 10000) }
   velocityVariable.material.defines.BOUNDS = BOUNDS.toFixed(2)
 
   velocityVariable.wrapS = THREE.RepeatWrapping
@@ -490,10 +503,13 @@ function initBirds() {
 
   birdMesh = new THREE.Mesh(geometry, material)
   birdMesh.rotation.y = Math.PI / 2
-  birdMesh.matrixAutoUpdate = false
-  birdMesh.updateMatrix()
+  // birdMesh.matrixAutoUpdate = false
+  // birdMesh.updateMatrix()
+
   // birdMesh.castShadow = true // TODO: Support shadow.
   // birdMesh.receiveShadow = true
+
+  birdMesh.frustumCulled = false // TODO: Set bdouding geometry.
 
   scene.add(birdMesh)
 }
@@ -503,7 +519,8 @@ function fillPositionTexture(texture) {
 
   for (let k = 0, kl = theArray.length; k < kl; k += 4) {
     const x = Math.random() * BOUNDS - BOUNDS_HALF
-    const y = Math.random() * BOUNDS - BOUNDS_HALF
+    // const y = Math.random() * BOUNDS - BOUNDS_HALF
+    const y = 0
     const z = Math.random() * BOUNDS - BOUNDS_HALF
 
     theArray[k + 0] = x
@@ -518,12 +535,13 @@ function fillVelocityTexture(texture) {
 
   for (let k = 0, kl = theArray.length; k < kl; k += 4) {
     const x = Math.random() - 0.5
-    const y = Math.random() - 0.5
+    // const y = Math.random() - 0.5
+    const y = 0
     const z = Math.random() - 0.5
 
-    theArray[k + 0] = x * 10
-    theArray[k + 1] = y * 10
-    theArray[k + 2] = z * 10
+    theArray[k + 0] = x * 10 * birdFlockScale
+    theArray[k + 1] = y * 10 * birdFlockScale
+    theArray[k + 2] = z * 10 * birdFlockScale
     theArray[k + 3] = 1
   }
 }
@@ -568,7 +586,8 @@ function render() {
   birdUniforms['time'].value = now
   birdUniforms['delta'].value = delta
 
-  velocityUniforms['predator'].value.set((0.5 * mouseX) / windowHalfX, (-0.5 * mouseY) / windowHalfY, 0)
+  // velocityUniforms['predator'].value.set((0.5 * mouseX) / windowHalfX, (-0.5 * mouseY) / windowHalfY, 0)
+  // if (window.role?.mesh) velocityUniforms['predator'].value.copy(window.role.mesh.position).multiplyScalar(1 / 0.05)
 
   mouseX = 10000
   mouseY = 10000

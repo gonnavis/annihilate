@@ -85,6 +85,7 @@ class Maria {
               dash: { target: 'dash' },
               block: { target: 'block' },
               // blocked: { target: 'blocked' },
+              air: { target: 'fall' },
             },
           },
           block: {

@@ -3,6 +3,9 @@ import { g } from './global.js'
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { GPUComputationRenderer } from '../lib/three.js/examples/jsm/misc/GPUComputationRenderer.js'
 
+let birdMesh = null
+let birdFlockScale = '.05' // TODO: Use uniform.
+
 let fragmentShaderPosition = `
   uniform float time;
   uniform float delta;
@@ -244,7 +247,7 @@ let birdVS = `
     z = newPosition.z;
 
     vColor = vec4( birdColor, 1.0 );
-    gl_Position = projectionMatrix *  viewMatrix  * vec4( newPosition * .05, 1.0 );
+    gl_Position = projectionMatrix *  viewMatrix  * vec4( newPosition * ${birdFlockScale}, 1.0 );
   }
 `
 
@@ -357,6 +360,8 @@ class BirdFlock {
   constructor() {
     init()
     animate()
+
+    this.mesh = birdMesh
   }
 }
 
@@ -483,11 +488,11 @@ function initBirds() {
     side: THREE.DoubleSide,
   })
 
-  const birdMesh = new THREE.Mesh(geometry, material)
+  birdMesh = new THREE.Mesh(geometry, material)
   birdMesh.rotation.y = Math.PI / 2
   birdMesh.matrixAutoUpdate = false
   birdMesh.updateMatrix()
-  // birdMesh.castShadow = true
+  // birdMesh.castShadow = true // TODO: Support shadow.
   // birdMesh.receiveShadow = true
 
   scene.add(birdMesh)

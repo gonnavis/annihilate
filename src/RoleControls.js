@@ -90,14 +90,16 @@ class RoleControls {
           this.role.service.send('keyOUp')
           this.seqKey.length = 0
           break
-        case 'KeyA':
-        case 'ArrowLeft':
-          console.log('keyAUp')
-          break
-        case 'KeyD':
-        case 'ArrowRight':
-          console.log('keyDUp')
-          break
+        // case 'KeyA':
+        // case 'ArrowLeft':
+        //   console.log('keyAUp')
+        //   // this.role.body.velocity.set(0, 0, 0)
+        //   break
+        // case 'KeyD':
+        // case 'ArrowRight':
+        //   console.log('keyDUp')
+        //   // this.role.body.velocity.set(0, 0, 0)
+        //   break
       }
       // this.actkey = ''
     })
@@ -152,13 +154,6 @@ class RoleControls {
     // console.log(this.role.direction)
     let directionLengthSq = this.role.direction.lengthSq()
 
-    if (directionLengthSq > 0) {
-      this.role.service.send('run')
-    } else {
-      // console.log('111111111111111')
-      this.role.service.send('stop')
-    }
-
     if (this.role.service.state.hasTag('canMove')) {
       if (directionLengthSq > 0) {
         // change facing
@@ -180,12 +175,21 @@ class RoleControls {
       let velocityScale = 70
       this.role.body.velocity.x = this.role.direction.x * velocityScale
       this.role.body.velocity.z = this.role.direction.y * velocityScale
+      // console.log(this.role.direction)
 
       // move 3: apply force
       // let forceScale = 10000 * 3
       // let force = new CANNON.Vec3(this.role.direction.x * forceScale, 0, this.role.direction.y * forceScale)
       // this.role.body.applyForce(force)
       // } // end if here to not set velocity 0 when stop.
+    }
+
+    // state change must after ```if (this.role.service.state.hasTag('canMove')){ ... real move codes ... }```, for move by velocity stop problem reason.
+    if (directionLengthSq > 0) {
+      this.role.service.send('run')
+    } else {
+      // console.log('111111111111111')
+      this.role.service.send('stop')
     }
 
     // if (this.holdKey.KeyJ) {

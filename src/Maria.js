@@ -461,6 +461,22 @@ class Maria {
             },
             tags: ['canMove'],
           },
+          climbJump: {
+            // Same as jump but can't move.
+            entry: ['playClimbJump', 'jump'],
+            on: {
+              finish: { target: 'fall' },
+              land: { target: 'idle' },
+              attack: { target: 'jumpAttack' },
+              // attack: { target: 'attackStartWithCharge' },
+              // attack: { target: 'attack' },
+              bash: { target: 'jumpBashStartWithCharge' },
+              jump: { target: 'doubleJump' },
+              hit: { target: 'hit' },
+              dash: { target: 'jumpDash' },
+              climb: { target: 'climb' },
+            },
+          },
           jumpDashToFall: {
             entry: 'setMassZero',
             exit: 'restoreMass',
@@ -501,7 +517,7 @@ class Maria {
             // entry: ['playClimb', 'setMassZero', 'setVelocityZero'],
             entry: ['playClimb'],
             on: {
-              jump: { target: 'jump', actions: 'climbToJump' },
+              jump: { target: 'climbJump' },
             },
           },
           jumpAttack: {
@@ -683,14 +699,16 @@ class Maria {
             //   }, 0)
             // }, 0)
           },
-          climbToJump: () => {
-            console.log('climbToJump')
+          playClimbJump: () => {
+            this.fadeToAction('jump') // TODO: Mesh pos y do not move.
+
+            // console.log('climbToJump')
             this.body.mass = this.mass
             this.body.type = CANNON.BODY_TYPES.DYNAMIC
             // this.body.updateMassProperties()
             // let sign = this.climbContact.rj.x
             // console.log(sign)
-            this.body.velocity.set(5 * this.climbContactSign, 0, 0) // velocity.y will set at jump action.
+            this.body.velocity.set(10 * this.climbContactSign, 0, 0) // velocity.y will set at jump action.
           },
           playDash: () => {
             this.oaction['dash'].timeScale = 2
@@ -1085,7 +1103,7 @@ class Maria {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -1173,7 +1191,7 @@ class Maria {
 
   update(dt) {
     // console.log('tick')
-    console.log(this.body.velocity.x.toFixed(1))
+    // console.log(this.body.velocity.x.toFixed(1), this.body.linearFactor.x, this.body.force.x, this.body.invMass)
 
     // if (this.service.state.matches('climb')) {
     //   console.log(this.body.mass, this.body.velocity.x, this.body.velocity.y, this.body.velocity.z)

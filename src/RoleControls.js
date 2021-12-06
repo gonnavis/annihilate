@@ -90,6 +90,14 @@ class RoleControls {
           this.role.service.send('keyOUp')
           this.seqKey.length = 0
           break
+        case 'KeyA':
+        case 'ArrowLeft':
+          console.log('keyAUp')
+          break
+        case 'KeyD':
+        case 'ArrowRight':
+          console.log('keyDUp')
+          break
       }
       // this.actkey = ''
     })
@@ -152,14 +160,32 @@ class RoleControls {
     }
 
     if (this.role.service.state.hasTag('canMove')) {
-      // change facing
       if (directionLengthSq > 0) {
+        // change facing
         this.role.facing.copy(this.role.direction)
-      }
+      } // end if here to set velocity 0 when stop, but because linearDamping not 1, will no obvious effect.
       this.role.mesh.rotation.y = -this.role.facing.angle() + Math.PI / 2
+
       // move
-      this.role.body.position.x += this.role.direction.x
-      this.role.body.position.z += this.role.direction.y
+      // console.log(this.role.direction)
+
+      // move 1: change position
+      // this.role.body.position.x += this.role.direction.x
+      // this.role.body.position.z += this.role.direction.y
+
+      // move 2: change velocity
+      // let velocityScale = 5
+      // this.role.body.velocity.x += this.role.direction.x * velocityScale
+      // this.role.body.velocity.z += this.role.direction.y * velocityScale
+      let velocityScale = 70
+      this.role.body.velocity.x = this.role.direction.x * velocityScale
+      this.role.body.velocity.z = this.role.direction.y * velocityScale
+
+      // move 3: apply force
+      // let forceScale = 10000 * 3
+      // let force = new CANNON.Vec3(this.role.direction.x * forceScale, 0, this.role.direction.y * forceScale)
+      // this.role.body.applyForce(force)
+      // } // end if here to not set velocity 0 when stop.
     }
 
     // if (this.holdKey.KeyJ) {

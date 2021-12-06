@@ -1085,7 +1085,7 @@ class Maria {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('maria: state:', state.value)
+      // if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -1173,7 +1173,7 @@ class Maria {
 
   update(dt) {
     // console.log('tick')
-    // console.log(this.body.velocity.y.toFixed(1))
+    console.log(this.body.velocity.x.toFixed(1))
 
     // if (this.service.state.matches('climb')) {
     //   console.log(this.body.mass, this.body.velocity.x, this.body.velocity.y, this.body.velocity.z)

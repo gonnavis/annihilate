@@ -194,9 +194,10 @@ function init() {
     floatingBoxes.push(floatingBox)
   }
 
+  // window.maria = new Maria(-2, 2, 0)
+  window.maria = new Maria(-2, 2, 30)
   // window.maria = new Maria(0, 5, -15)
   // window.maria = new Maria(-35, 5, 0)
-  window.maria = new Maria(-2, 2, 0)
   // window.maria = new Maria(0, 0, 0)
   maria.load(() => {
     // maria.mesh.rotation.set(0, Math.PI, 0)

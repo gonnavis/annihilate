@@ -144,16 +144,16 @@ function init() {
   groundBox.body.position.copy(groundBox.mesh.position)
 
   // wall box
-  window.wallBoxL = new Box(2, 10, 6)
+  window.wallBoxL = new Box(2, 12, 6)
   wallBoxL.isScene = true
-  // wallBoxL.mesh.position.set(-15, 5, -16.5)
-  wallBoxL.mesh.position.set(-5, 5, 0)
+  wallBoxL.mesh.position.set(-24, 6, -12)
+  // wallBoxL.mesh.position.set(-5, 5, 0)
   wallBoxL.body.position.copy(wallBoxL.mesh.position)
 
-  window.wallBoxR = new Box(2, 10, 6)
+  window.wallBoxR = new Box(2, 12, 6)
   wallBoxR.isScene = true
-  // wallBoxR.mesh.position.set(-15, 5, -16.5)
-  wallBoxR.mesh.position.set(1, 5, 0)
+  wallBoxR.mesh.position.set(-18, 6, -12)
+  // wallBoxR.mesh.position.set(1, 5, 0)
   wallBoxR.body.position.copy(wallBoxR.mesh.position)
 
   // catapult
@@ -163,7 +163,7 @@ function init() {
   window.teleporter = new Teleporter(0.7, 0.7, 0.7)
   teleporter.body.position.set(-13, 3.7, -12)
   teleporter.mesh.position.copy(teleporter.body.position)
-  teleporter.dest.set(-18, 22, -18)
+  teleporter.dest.set(-21, 22, -18)
 
   window.teleporter2 = new Teleporter(0.7, 0.7, 0.7)
   teleporter2.body.position.set(-11, 3.7, -12)
@@ -194,8 +194,8 @@ function init() {
     floatingBoxes.push(floatingBox)
   }
 
-  // window.maria = new Maria(-2, 2, 0)
-  window.maria = new Maria(-2, 2, 8)
+  window.maria = new Maria(-2, 2, 0)
+  // window.maria = new Maria(-2, 2, 8)
   // window.maria = new Maria(0, 5, -15)
   // window.maria = new Maria(-35, 5, 0)
   // window.maria = new Maria(0, 0, 0)

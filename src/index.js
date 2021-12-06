@@ -145,11 +145,13 @@ function init() {
 
   // wall box
   window.wallBoxL = new Box(2, 10, 6)
+  wallBoxL.isScene = true
   // wallBoxL.mesh.position.set(-15, 5, -16.5)
   wallBoxL.mesh.position.set(-5, 5, 0)
   wallBoxL.body.position.copy(wallBoxL.mesh.position)
-  
+
   window.wallBoxR = new Box(2, 10, 6)
+  wallBoxR.isScene = true
   // wallBoxR.mesh.position.set(-15, 5, -16.5)
   wallBoxR.mesh.position.set(1, 5, 0)
   wallBoxR.body.position.copy(wallBoxR.mesh.position)

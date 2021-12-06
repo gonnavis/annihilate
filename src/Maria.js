@@ -32,6 +32,7 @@ class Maria {
     this.isAir = false
     this.liftDistance = 3.7
     this.airLiftVelocity = 1.5
+    this.climbContactSign = null
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -456,6 +457,7 @@ class Maria {
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
+              climb: { target: 'climb' },
             },
             tags: ['canMove'],
           },
@@ -466,6 +468,7 @@ class Maria {
               finish: { target: 'doubleFall' },
               land: { target: 'idle' },
               hit: { target: 'hit' },
+              climb: { target: 'climb' },
             },
           },
           fall: {
@@ -477,6 +480,7 @@ class Maria {
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
+              climb: { target: 'climb' },
             },
             tags: ['canMove'],
           },
@@ -488,9 +492,17 @@ class Maria {
               bash: { target: 'jumpBashStartWithCharge' },
               // jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
-              // dash: { target: 'jumpDash' },
+              dash: { target: 'jumpDash' },
+              climb: { target: 'climb' },
             },
             tags: ['canMove'],
+          },
+          climb: {
+            // entry: ['playClimb', 'setMassZero', 'setVelocityZero'],
+            entry: ['playClimb'],
+            on: {
+              jump: { target: 'jump', actions: 'climbToJump' },
+            },
           },
           jumpAttack: {
             entry: 'playJumpAttack',
@@ -552,6 +564,7 @@ class Maria {
               bash: { target: 'jumpBashStartWithCharge' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
+              climb: { target: 'climb' },
             },
             tags: ['canMove'],
           },
@@ -593,6 +606,7 @@ class Maria {
               air: { target: 'jumpDashToFall' },
               // finish: { target: 'jumpIdle' },
               finish: { target: 'idle' },
+              climb: { target: 'climb' },
             },
           },
           whirlwind: {
@@ -612,6 +626,72 @@ class Maria {
       },
       {
         actions: {
+          // setVelocityZero: () => {
+          //   // this.body.linearDamping = 1 // NOTE: Set linearDamping 1 to immediately set velocity 0.
+          //   // this.body.velocity.set(0, 0, 0)
+
+          //   // this.body.initVelocity.set(0, 0, 0)
+
+          //   this.body.type = CANNON.BODY_TYPES.STATIC
+          // },
+          playClimb: (context, event, o) => {
+            // debugger
+            this.body.mass = 0
+            this.body.type = CANNON.BODY_TYPES.STATIC
+
+            let contact = event.contact
+            // let sign = contact.rj.x
+            // console.log(sign)
+            // let sign = Math.sign(contact.rj.x)
+            // if (sign === 0) sign = 1
+            // console.log(sign)
+            this.body.position.x = contact.sj.body.position.x + contact.rj.x + (this.bodyRadius + 0.01) * -this.climbContactSign
+            // let body not sink to wall, to prevent jump then immediate to climb again.
+
+            // this.body.initVelocity.set(0, 0, 0)
+            // this.body.updateMassProperties()
+
+            // this.body.initVelocity.set(0, 0, 0)
+            // this.body.linearDamping = 1 // NOTE: Set linearDamping 1 to immediately set velocity 0.
+            // this.body.velocity.set(0, 0, 0)
+            // setTimeout(() => {
+            //   this.body.linearDamping = 0.01
+            // }, 0)
+
+            // // this.body.velocity.set(0, 0, 0)
+            // setTimeout(() => {
+            //   // console.log(this.body.velocity)
+            //   // this.body.velocity.set(0, 0, 0)
+            //   setTimeout(() => {
+            //     console.log(this.body.velocity)
+            //     this.body.velocity.set(0, 0, 0)
+
+            //     // setTimeout(() => {
+            //     //   console.log(this.body.velocity)
+            //     //   this.body.velocity.set(0, 0, 0)
+
+            //     //   setTimeout(() => {
+            //     //     console.log(this.body.velocity)
+            //     //     this.body.velocity.set(0, 0, 0)
+
+            //     //     setTimeout(() => {
+            //     //       console.log(this.body.velocity)
+            //     //       this.body.velocity.set(0, 0, 0)
+            //     //     }, 0)
+            //     //   }, 0)
+            //     // }, 0)
+            //   }, 0)
+            // }, 0)
+          },
+          climbToJump: () => {
+            console.log('climbToJump')
+            this.body.mass = this.mass
+            this.body.type = CANNON.BODY_TYPES.DYNAMIC
+            // this.body.updateMassProperties()
+            // let sign = this.climbContact.rj.x
+            // console.log(sign)
+            this.body.velocity.set(5 * this.climbContactSign, 0, 0) // velocity.y will set at jump action.
+          },
           playDash: () => {
             this.oaction['dash'].timeScale = 2
             this.fadeToAction('dash')
@@ -1005,7 +1085,7 @@ class Maria {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -1039,7 +1119,9 @@ class Maria {
     let sphereShape = new CANNON.Sphere(this.bodyRadius)
     let cylinderShape = new CANNON.Cylinder(this.bodyRadius, this.bodyRadius, this.bodyCylinderHeight, 8)
     // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
-    this.body.angularDamping = 1
+    // this.body.linearDamping = 1
+    // this.body.angularDamping = 1
+    this.body.fixedRotation = true
     this.body.addShape(sphereShape, new CANNON.Vec3(0, this.bodyCylinderHeight / 2, 0))
     this.body.addShape(sphereShape, new CANNON.Vec3(0, -this.bodyCylinderHeight / 2, 0))
     this.body.addShape(cylinderShape)
@@ -1047,8 +1129,23 @@ class Maria {
     this.body.position.set(x, y, z) ///formal
     // this.body.position.set(10.135119435295582, -0.000010295802922222208, -14.125613840025014)///test
     world.addBody(this.body)
-    // this.body.addEventListener('collide', (event) => {
+    this.body.addEventListener('collide', (event) => {
+      // console.log(event.contact.rj.x)
+      // console.log(event.contact)
+      // console.log(event.contact.ni.x, event.contact.ni.y, event.contact.ni.z)
+      // debugger
+      if (event.body.belongTo.isScene) {
+        // if (event.contact.ni.x === 1 && event.contact.ni.y === 0 && event.contact.ni.z === 0) {
+        if (Math.abs(event.contact.ni.x) === 1 && event.contact.ni.y === 0 && event.contact.ni.z === 0) {
+          // this.climbContactSign = event.contact.rj.x
+          this.climbContactSign = event.contact.ni.x
+          // this.service.send('climb')
+          this.service.send('climb', { contact: event.contact })
+        }
+      }
+    })
     this.body.addEventListener('beginContact', (event) => {
+      // console.log(event)
       // console.log('beginContact', event.body.belongTo?.constructor.name)
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
@@ -1076,6 +1173,14 @@ class Maria {
 
   update(dt) {
     // console.log('tick')
+    // console.log(this.body.velocity.y.toFixed(1))
+
+    // if (this.service.state.matches('climb')) {
+    //   console.log(this.body.mass, this.body.velocity.x, this.body.velocity.y, this.body.velocity.z)
+    //   // this.body.inertia.set(0, 0, 0)
+    //   this.body.linearDamping = 1
+    //   this.body.velocity.set(0, 0, 0)
+    // }
 
     // console.log(this.body.position.y.toFixed(1))
 

@@ -22,6 +22,7 @@ class Teleporter {
       collisionFilterMask: g.GROUP_ROLE | g.GROUP_ENEMY,
       collisionResponse: false,
     })
+    this.body.belongTo = this
     this.body.addShape(shape)
     this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     this.body.addEventListener('beginContact', (event) => {

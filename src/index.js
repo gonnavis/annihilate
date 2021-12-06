@@ -143,6 +143,17 @@ function init() {
   groundBox.mesh.position.set(-11, 0.65, 0)
   groundBox.body.position.copy(groundBox.mesh.position)
 
+  // wall box
+  window.wallBoxL = new Box(2, 10, 6)
+  // wallBoxL.mesh.position.set(-15, 5, -16.5)
+  wallBoxL.mesh.position.set(-5, 5, 0)
+  wallBoxL.body.position.copy(wallBoxL.mesh.position)
+  
+  window.wallBoxR = new Box(2, 10, 6)
+  // wallBoxR.mesh.position.set(-15, 5, -16.5)
+  wallBoxR.mesh.position.set(1, 5, 0)
+  wallBoxR.body.position.copy(wallBoxR.mesh.position)
+
   // catapult
   window.catapult = new Catapult(3, 0.2, 4)
 
@@ -352,6 +363,10 @@ function init_three() {
   // shadowLight.shadow.bias = - 0.00006;
   scene.add(shadowLight)
   scene.add(shadowLight.target)
+
+  window.supLight = new THREE.DirectionalLight(0x888888)
+  supLight.position.set(1, 1, 3)
+  scene.add(supLight)
 
   var grid = new THREE.GridHelper(100, 100, 0x000000, 0x000000)
   grid.position.y = 0.037

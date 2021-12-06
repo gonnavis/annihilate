@@ -367,7 +367,8 @@ function init_three() {
   scene.add(shadowLight)
   scene.add(shadowLight.target)
 
-  window.supLight = new THREE.DirectionalLight(0x888888)
+  // window.supLight = new THREE.DirectionalLight(0x888888)
+  window.supLight = new THREE.DirectionalLight(0x333333)
   supLight.position.set(1, 1, 3)
   scene.add(supLight)
 

@@ -182,6 +182,16 @@ function init() {
   airBox.mesh.position.set(-20, 12, -33)
   airBox.body.position.copy(airBox.mesh.position)
 
+  window.airBox2 = new Box(6, 1.5, 30)
+  // airBox2.mesh.position.set(-20, 12, -68)
+  airBox2.mesh.position.set(-25, 12, -75)
+  airBox2.body.position.copy(airBox2.mesh.position)
+
+  window.airBox3 = new Box(6, 1.5, 30)
+  // airBox3.mesh.position.set(-20, 12, -68)
+  airBox3.mesh.position.set(-15, 12, -90)
+  airBox3.body.position.copy(airBox3.mesh.position)
+
   window.floatingBoxes = []
   for (let i = 0; i < 7; i++) {
     let floatingBox = new FloatingBox(3.7, 0.37, 3.7)
@@ -194,11 +204,15 @@ function init() {
     floatingBoxes.push(floatingBox)
   }
 
-  window.maria = new Maria(-2, 2, 0)
-  // window.maria = new Maria(-2, 2, 8)
-  // window.maria = new Maria(0, 5, -15)
-  // window.maria = new Maria(-35, 5, 0)
-  // window.maria = new Maria(0, 0, 0)
+  if (g.getQueryStringByName('roleAirBox') === 'true') {
+    window.maria = new Maria(-20, 15, -45)
+  } else {
+    window.maria = new Maria(-2, 2, 0)
+    // window.maria = new Maria(-2, 2, 8)
+    // window.maria = new Maria(0, 5, -15)
+    // window.maria = new Maria(-35, 5, 0)
+    // window.maria = new Maria(0, 0, 0)
+  }
   maria.load(() => {
     // maria.mesh.rotation.set(0, Math.PI, 0)
     maria.setFacing(0, -1)

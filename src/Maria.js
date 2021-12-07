@@ -569,7 +569,7 @@ class Maria {
             states: {
               main: {
                 on: {
-                  finish: { target: '#maria.fall' },
+                  finish: { target: '#maria.doubleFall' },
                   attack: { target: 'prepareNext' },
                 },
               },
@@ -589,7 +589,7 @@ class Maria {
             states: {
               main: {
                 on: {
-                  finish: { target: '#maria.fall' },
+                  finish: { target: '#maria.doubleFall' },
                   attack: { target: 'prepareNext' },
                 },
               },
@@ -603,7 +603,7 @@ class Maria {
           jumpStrike: {
             entry: 'playJumpStrike',
             on: {
-              finish: { target: 'fall' },
+              finish: { target: 'doubleFall' },
             },
             tags: ['canDamage'],
           },

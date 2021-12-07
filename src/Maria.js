@@ -481,7 +481,7 @@ class Maria {
             entry: 'setMassZero',
             exit: 'restoreMass',
             on: {
-              finish: { target: 'doubleFall' },
+              finish: { target: 'dashFall' },
               land: { target: 'idle' },
               hit: { target: 'hit' },
               climb: { target: 'climb' },
@@ -501,6 +501,7 @@ class Maria {
             tags: ['canMove'],
           },
           doubleFall: {
+            // same as fall, but can't doubleJump.
             entry: ['playFall'],
             on: {
               land: { target: 'idle' },
@@ -509,6 +510,21 @@ class Maria {
               // jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
+              climb: { target: 'climb' },
+            },
+            tags: ['canMove'],
+          },
+          dashFall: {
+            // same as doubleFall, but can't jumpDash.
+            // and can't attack & bash, to prevent transition to fall/doubleFall then dash again.
+            entry: ['playFall'],
+            on: {
+              land: { target: 'idle' },
+              // attack: { target: 'jumpAttack' },
+              // bash: { target: 'jumpBashStartWithCharge' },
+              // jump: { target: 'doubleJump' },
+              hit: { target: 'hit' },
+              // dash: { target: 'jumpDash' },
               climb: { target: 'climb' },
             },
             tags: ['canMove'],

@@ -372,11 +372,11 @@ function init_three() {
   supLight.position.set(1, 1, 3)
   scene.add(supLight)
 
-  var grid = new THREE.GridHelper(100, 100, 0x000000, 0x000000)
-  grid.position.y = 0.037
-  grid.material.opacity = 0.2
-  grid.material.transparent = true
-  scene.add(grid)
+  window.gridHelper = new THREE.GridHelper(100, 100, 0x000000, 0x000000)
+  gridHelper.position.y = 0.037
+  gridHelper.material.opacity = 0.2
+  gridHelper.material.transparent = true
+  scene.add(gridHelper)
 
   renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setPixelRatio(window.devicePixelRatio)
@@ -490,6 +490,8 @@ function animate(time) {
     }
     shadowLight.position.x = shadowLight.target.position.x = window.role.body.position.x
     shadowLight.position.z = shadowLight.target.position.z = window.role.body.position.z
+    gridHelper.position.x = Math.round(window.role.body.position.x)
+    gridHelper.position.z = Math.round(window.role.body.position.z)
   }
 
   if (window.cannonDebugRenderer) cannonDebugRenderer.update()

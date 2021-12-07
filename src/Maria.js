@@ -478,17 +478,6 @@ class Maria {
               climb: { target: 'climb' },
             },
           },
-          jumpDashToFall: {
-            entry: 'setMassZero',
-            exit: 'restoreMass',
-            on: {
-              finish: { target: 'dashFall' },
-              land: { target: 'idle' },
-              hit: { target: 'hit' },
-              climb: { target: 'climb' },
-              jumpPoint: { target: 'air' },
-            },
-          },
           air: {
             entry: ['playAir'],
             on: {
@@ -654,14 +643,14 @@ class Maria {
           },
           jumpDash: {
             entry: ['playJumpDash', 'setMassZero'],
-            exit: 'restoreMass',
+            exit: ['exitJumpDash', 'restoreMass'],
             on: {
+              finish: { target: 'dashFall' },
               land: { target: 'idle' },
-              air: { target: 'jumpDashToFall' },
-              // finish: { target: 'jumpIdle' },
-              finish: { target: 'idle' },
+              hit: { target: 'hit' },
               climb: { target: 'climb' },
               jumpPoint: { target: 'air' },
+              bash: { target: 'jumpBashStartWithCharge' },
             },
           },
           whirlwind: {
@@ -817,10 +806,13 @@ class Maria {
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 0
             this.body.velocity.z = this.tmpVec3.z
-            setTimeout(() => {
-              this.body.velocity.set(0, 0, 0)
+            this.timeoutJumpDash = setTimeout(() => {
               this.service.send('finish')
             }, 500)
+          },
+          exitJumpDash: () => {
+            clearTimeout(this.timeoutJumpDash)
+            this.body.velocity.set(0, 0, 0)
           },
           playIdle: () => {
             this.fadeToAction('idle')

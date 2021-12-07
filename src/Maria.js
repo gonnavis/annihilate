@@ -1023,6 +1023,8 @@ class Maria {
           playJump: () => {
             this.fadeToAction('jump') // TODO: Mesh pos y do not move.
 
+            this.body.velocity.set(0, 0, 0) // For climb jump -> double jump clear velocity, thus can jump back to start wall, when roleControls move by change position.
+
             // this.setAir(true)
           },
           playHit: () => {

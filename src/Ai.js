@@ -54,6 +54,9 @@ class Ai {
     if (this.role.service.state.hasTag('canMove')) {
       this.role.body.position.x += this.direction.x
       this.role.body.position.z += this.direction.y
+      // let velocityScale = 70
+      // this.role.body.velocity.x = this.direction.x * velocityScale
+      // this.role.body.velocity.z = this.direction.y * velocityScale
     }
   }
   setRole(role) {

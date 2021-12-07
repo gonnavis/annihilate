@@ -165,22 +165,32 @@ class RoleControls {
       // console.log(this.role.direction)
 
       // move 1: change position
-      // this.role.body.position.x += this.role.direction.x
-      // this.role.body.position.z += this.role.direction.y
+      // Has sink into wall & after stop bounce off wall problem. TODO: Stop & reset position if collide.
+      // Has can't adjust velocity problem. For example: Jump to one direction, in the air use roleControls change position to reverse direction, if stop control, role will continue move by initial velocity to initial direction.
+      this.role.body.position.x += this.role.direction.x
+      this.role.body.position.z += this.role.direction.y
 
-      // move 2: change velocity
+      // // move 2.1: change velocity delta
+      // // Has start very slow, then very fast problem.
       // let velocityScale = 5
       // this.role.body.velocity.x += this.role.direction.x * velocityScale
       // this.role.body.velocity.z += this.role.direction.y * velocityScale
-      let velocityScale = 70
-      this.role.body.velocity.x = this.role.direction.x * velocityScale
-      this.role.body.velocity.z = this.role.direction.y * velocityScale
+
+      // // move 2.1: change velocity absolute
+      // // Has climb hill not slow down problem.
+      // // Has break ordinary velocity problem.
+      // let velocityScale = 70
+      // this.role.body.velocity.x = this.role.direction.x * velocityScale
+      // this.role.body.velocity.z = this.role.direction.y * velocityScale
+
       // console.log(this.role.direction)
 
-      // move 3: apply force
+      // // move 3: apply force
+      // // Has start very slow, then very fast problem.
       // let forceScale = 10000 * 3
       // let force = new CANNON.Vec3(this.role.direction.x * forceScale, 0, this.role.direction.y * forceScale)
       // this.role.body.applyForce(force)
+
       // } // end if here to not set velocity 0 when stop.
     }
 

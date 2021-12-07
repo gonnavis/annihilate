@@ -516,8 +516,10 @@ class Maria {
           climb: {
             // entry: ['playClimb', 'setMassZero', 'setVelocityZero'],
             entry: ['playClimb'],
+            exit: ['exitClimb'],
             on: {
               jump: { target: 'climbJump' },
+              land: { target: 'idle' },
             },
           },
           jumpAttack: {
@@ -699,13 +701,15 @@ class Maria {
             //   }, 0)
             // }, 0)
           },
+          exitClimb: () => {
+            this.body.mass = this.mass
+            this.body.type = CANNON.BODY_TYPES.DYNAMIC
+            // this.body.updateMassProperties()
+          },
           playClimbJump: () => {
             this.fadeToAction('jump') // TODO: Mesh pos y do not move.
 
             // console.log('climbToJump')
-            this.body.mass = this.mass
-            this.body.type = CANNON.BODY_TYPES.DYNAMIC
-            // this.body.updateMassProperties()
             // let sign = this.climbContact.rj.x
             // console.log(sign)
             this.body.velocity.set(10 * this.climbContactSign, 0, 0) // velocity.y will set at jump action.
@@ -1195,12 +1199,14 @@ class Maria {
     // console.log('tick')
     // console.log(this.body.velocity.x.toFixed(1), this.body.linearFactor.x, this.body.force.x, this.body.invMass)
 
-    // if (this.service.state.matches('climb')) {
-    //   console.log(this.body.mass, this.body.velocity.x, this.body.velocity.y, this.body.velocity.z)
-    //   // this.body.inertia.set(0, 0, 0)
-    //   this.body.linearDamping = 1
-    //   this.body.velocity.set(0, 0, 0)
-    // }
+    if (this.service.state.matches('climb')) {
+      // console.log(this.body.mass, this.body.velocity.x, this.body.velocity.y, this.body.velocity.z)
+      // // this.body.inertia.set(0, 0, 0)
+      // this.body.linearDamping = 1
+      // this.body.velocity.set(0, 0, 0)
+
+      this.body.position.y -= dt
+    }
 
     // console.log(this.body.position.y.toFixed(1))
 

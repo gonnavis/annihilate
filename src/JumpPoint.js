@@ -24,7 +24,7 @@ class JumpPoint {
 
     this.body.addEventListener('beginContact', (e) => {
       // if (e.body.belongTo.isRole) {
-      e.body.belongTo.service.send('resetJump')
+      e.body.belongTo.service.send('jumpPoint')
       // e.body.belongTo.body.mass = 0
       // e.body.belongTo.body.velocity.set(0, 0, 0)
       // }

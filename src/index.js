@@ -183,7 +183,7 @@ function init() {
 
   // jumpPoint
   window.jumpPoint = new JumpPoint(0.7)
-  jumpPoint.body.position.set(-16, 12, -60)
+  jumpPoint.body.position.set(-16, 14, -60)
   // jumpPoint.body.position.set(-16, 12, -55)
   jumpPoint.mesh.position.copy(jumpPoint.body.position)
 

@@ -86,7 +86,7 @@ class Maria {
               dash: { target: 'dash' },
               block: { target: 'block' },
               // blocked: { target: 'blocked' },
-              air: { target: 'fall' },
+              air: { target: 'air' },
             },
           },
           block: {
@@ -146,7 +146,7 @@ class Maria {
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
-              air: { target: 'fall' },
+              air: { target: 'air' },
               block: { target: 'block' },
               // blocked: { target: 'blocked' }, // Note: Can block when running or in other states? No, more by intended operation, less by luck.
             },
@@ -458,7 +458,7 @@ class Maria {
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
               climb: { target: 'climb' },
-              resetJump: { target: 'jump' },
+              jumpPoint: { target: 'air' },
             },
             tags: ['canMove'],
           },
@@ -486,8 +486,22 @@ class Maria {
               land: { target: 'idle' },
               hit: { target: 'hit' },
               climb: { target: 'climb' },
-              resetJump: { target: 'jump' },
+              jumpPoint: { target: 'air' },
             },
+          },
+          air: {
+            entry: ['playAir'],
+            on: {
+              land: { target: 'idle' },
+              attack: { target: 'jumpAttack' },
+              bash: { target: 'jumpBashStartWithCharge' },
+              jump: { target: 'jump' },
+              hit: { target: 'hit' },
+              dash: { target: 'jumpDash' },
+              climb: { target: 'climb' },
+              jumpPoint: { target: 'air' },
+            },
+            tags: ['canMove'],
           },
           fall: {
             entry: ['playFall'],
@@ -499,7 +513,7 @@ class Maria {
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
               climb: { target: 'climb' },
-              resetJump: { target: 'jump' },
+              jumpPoint: { target: 'air' },
             },
             tags: ['canMove'],
           },
@@ -514,7 +528,7 @@ class Maria {
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
               climb: { target: 'climb' },
-              resetJump: { target: 'jump' },
+              jumpPoint: { target: 'air' },
             },
             tags: ['canMove'],
           },
@@ -530,7 +544,7 @@ class Maria {
               hit: { target: 'hit' },
               // dash: { target: 'jumpDash' },
               climb: { target: 'climb' },
-              resetJump: { target: 'jump' },
+              jumpPoint: { target: 'air' },
             },
             tags: ['canMove'],
           },
@@ -604,7 +618,7 @@ class Maria {
               hit: { target: 'hit' },
               dash: { target: 'jumpDash' },
               climb: { target: 'climb' },
-              resetJump: { target: 'jump' },
+              jumpPoint: { target: 'air' },
             },
             tags: ['canMove'],
           },
@@ -647,7 +661,7 @@ class Maria {
               // finish: { target: 'jumpIdle' },
               finish: { target: 'idle' },
               climb: { target: 'climb' },
-              resetJump: { target: 'jump' },
+              jumpPoint: { target: 'air' },
             },
           },
           whirlwind: {
@@ -818,6 +832,9 @@ class Maria {
           // playJumpIdle: () => {
           //   this.fadeToAction('jumpIdle', 0.3)
           // },
+          playAir: () => {
+            this.fadeToAction('fall', 0.3)
+          },
           playFall: () => {
             this.fadeToAction('fall', 0.3)
           },

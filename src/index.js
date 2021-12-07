@@ -31,6 +31,7 @@ import { Parrot } from './Parrot.js'
 import { Catapult } from './Catapult.js'
 import { Cloud } from './Cloud.js'
 import { BirdFlock } from './BirdFlock.js'
+import { JumpPoint } from './JumpPoint.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -174,6 +175,17 @@ function init() {
   teleporter3.body.position.set(-9, 3.7, -12)
   teleporter3.mesh.position.copy(teleporter3.body.position)
   teleporter3.dest.set(-9, 22, -12)
+
+  window.teleporter4 = new Teleporter(0.7, 0.7, 0.7)
+  teleporter4.body.position.set(-19, 3, -60)
+  teleporter4.mesh.position.copy(teleporter4.body.position)
+  teleporter4.dest.set(-20, 15, -45)
+
+  // jumpPoint
+  window.jumpPoint = new JumpPoint(0.7)
+  jumpPoint.body.position.set(-16, 12, -60)
+  // jumpPoint.body.position.set(-16, 12, -55)
+  jumpPoint.mesh.position.copy(jumpPoint.body.position)
 
   window.hill = new Hill()
 

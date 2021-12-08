@@ -21,7 +21,7 @@ class Maria {
     // this.landAttackSpeed = 1.4
     // this.airAttackSpeed = 2.5
     this.attackSpeed = 1.4
-    this.jumpBashSpeed = this.attackSpeed * 5
+    this.airBashSpeed = this.attackSpeed * 5
     // this.attackSpeed = this.landAttackSpeed
     this.chargeAttackCoe = 2
     this.tmpVec3 = new THREE.Vector3()
@@ -401,44 +401,44 @@ class Maria {
               dash: { target: 'dash' },
             },
           },
-          jumpBashStartWithCharge: {
-            entry: ['playJumpBashStartWithCharge'],
+          airBashStartWithCharge: {
+            entry: ['playAirBashStartWithCharge'],
             on: {
-              finish: { target: 'jumpChargeBash' },
+              finish: { target: 'airChargeBash' },
               hit: { target: 'hit' },
               // dash: { target: 'dash' },
 
-              keyUUp: { target: 'jumpBashStart' },
+              keyUUp: { target: 'airBashStart' },
             },
           },
-          jumpBashStart: {
-            entry: ['playJumpBashStart'],
+          airBashStart: {
+            entry: ['playAirBashStart'],
             on: {
-              finish: { target: 'jumpBash' },
+              finish: { target: 'airBash' },
               hit: { target: 'hit' },
               // dash: { target: 'dash' },
             },
           },
-          jumpChargeBash: {
-            entry: ['playJumpChargeBash'],
+          airChargeBash: {
+            entry: ['playAirChargeBash'],
             on: {
-              finish: { target: 'jumpBashEnd' },
+              finish: { target: 'airBashEnd' },
               hit: { target: 'hit' },
               // // dash: { target: 'dash' },
             },
             tags: ['canDamage'],
           },
-          jumpBash: {
-            entry: ['playJumpBash'],
+          airBash: {
+            entry: ['playAirBash'],
             on: {
-              finish: { target: 'jumpBashEnd' },
+              finish: { target: 'airBashEnd' },
               hit: { target: 'hit' },
               // // dash: { target: 'dash' },
             },
             tags: ['canDamage', 'knockDown'],
           },
-          jumpBashEnd: {
-            entry: ['playJumpBashEnd'],
+          airBashEnd: {
+            entry: ['playAirBashEnd'],
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -450,13 +450,13 @@ class Maria {
             on: {
               finish: { target: 'fall' },
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
+              attack: { target: 'airAttack' },
               // attack: { target: 'attackStartWithCharge' },
               // attack: { target: 'attack' },
-              bash: { target: 'jumpBashStartWithCharge' },
+              bash: { target: 'airBashStartWithCharge' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
-              dash: { target: 'jumpDash' },
+              dash: { target: 'airDash' },
               climb: { target: 'climb' },
               jumpPoint: { target: 'airIdle' },
             },
@@ -468,13 +468,13 @@ class Maria {
             on: {
               finish: { target: 'fall' },
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
+              attack: { target: 'airAttack' },
               // attack: { target: 'attackStartWithCharge' },
               // attack: { target: 'attack' },
-              bash: { target: 'jumpBashStartWithCharge' },
+              bash: { target: 'airBashStartWithCharge' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
-              dash: { target: 'jumpDash' },
+              dash: { target: 'airDash' },
               climb: { target: 'climb' },
             },
           },
@@ -482,11 +482,11 @@ class Maria {
             entry: ['playAirIdle'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
-              bash: { target: 'jumpBashStartWithCharge' },
+              attack: { target: 'airAttack' },
+              bash: { target: 'airBashStartWithCharge' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
-              dash: { target: 'jumpDash' },
+              dash: { target: 'airDash' },
               climb: { target: 'climb' },
               jumpPoint: { target: 'airIdle' },
             },
@@ -496,11 +496,11 @@ class Maria {
             entry: ['playFall'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
-              bash: { target: 'jumpBashStartWithCharge' },
+              attack: { target: 'airAttack' },
+              bash: { target: 'airBashStartWithCharge' },
               jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
-              dash: { target: 'jumpDash' },
+              dash: { target: 'airDash' },
               climb: { target: 'climb' },
               jumpPoint: { target: 'airIdle' },
             },
@@ -511,27 +511,27 @@ class Maria {
             entry: ['playFall'],
             on: {
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
-              bash: { target: 'jumpBashStartWithCharge' },
+              attack: { target: 'airAttack' },
+              bash: { target: 'airBashStartWithCharge' },
               // jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
-              dash: { target: 'jumpDash' },
+              dash: { target: 'airDash' },
               climb: { target: 'climb' },
               jumpPoint: { target: 'airIdle' },
             },
             tags: ['canMove'],
           },
           dashFall: {
-            // same as doubleFall, but can't jumpDash.
+            // same as doubleFall, but can't airDash.
             // and can't attack & bash, to prevent transition to fall/doubleFall then dash again.
             entry: ['playFall'],
             on: {
               land: { target: 'idle' },
-              // attack: { target: 'jumpAttack' },
-              // bash: { target: 'jumpBashStartWithCharge' },
+              // attack: { target: 'airAttack' },
+              // bash: { target: 'airBashStartWithCharge' },
               // jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
-              // dash: { target: 'jumpDash' },
+              // dash: { target: 'airDash' },
               climb: { target: 'climb' },
               jumpPoint: { target: 'airIdle' },
             },
@@ -546,11 +546,11 @@ class Maria {
               land: { target: 'idle' },
             },
           },
-          jumpAttack: {
-            entry: 'playJumpAttack',
+          airAttack: {
+            entry: 'playAirAttack',
             exit: 'restoreMass',
             on: {
-              // todo: hit jumpDash/airDash
+              // todo: hit airDash
             },
             tags: ['canDamage'],
 
@@ -564,13 +564,13 @@ class Maria {
               },
               prepareNext: {
                 on: {
-                  finish: { target: '#maria.jumpFist' },
+                  finish: { target: '#maria.airFist' },
                 },
               },
             },
           },
-          jumpFist: {
-            entry: 'playJumpFist',
+          airFist: {
+            entry: 'playAirFist',
             on: {},
             tags: ['canDamage'],
 
@@ -584,13 +584,13 @@ class Maria {
               },
               prepareNext: {
                 on: {
-                  finish: { target: '#maria.jumpStrike' },
+                  finish: { target: '#maria.airStrike' },
                 },
               },
             },
           },
-          jumpStrike: {
-            entry: 'playJumpStrike',
+          airStrike: {
+            entry: 'playAirStrike',
             on: {
               finish: { target: 'doubleFall' },
             },
@@ -601,11 +601,11 @@ class Maria {
             on: {
               finish: { target: 'doubleFall' },
               land: { target: 'idle' },
-              attack: { target: 'jumpAttack' },
+              attack: { target: 'airAttack' },
               // attack: { target: 'attackStartWithCharge' },
-              bash: { target: 'jumpBashStartWithCharge' },
+              bash: { target: 'airBashStartWithCharge' },
               hit: { target: 'hit' },
-              dash: { target: 'jumpDash' },
+              dash: { target: 'airDash' },
               climb: { target: 'climb' },
               jumpPoint: { target: 'airIdle' },
             },
@@ -641,16 +641,16 @@ class Maria {
             },
             tags: ['canDamage'],
           },
-          jumpDash: {
-            entry: ['playJumpDash', 'setMassZero'],
-            exit: ['exitJumpDash', 'restoreMass'],
+          airDash: {
+            entry: ['playAirDash', 'setMassZero'],
+            exit: ['exitAirDash', 'restoreMass'],
             on: {
               finish: { target: 'dashFall' },
               land: { target: 'idle' },
               hit: { target: 'hit' },
               climb: { target: 'climb' },
               jumpPoint: { target: 'airIdle' },
-              bash: { target: 'jumpBashStartWithCharge' },
+              bash: { target: 'airBashStartWithCharge' },
             },
           },
           whirlwind: {
@@ -796,7 +796,7 @@ class Maria {
             //   // },
             // })
           },
-          playJumpDash: () => {
+          playAirDash: () => {
             this.fadeToAction('jumpIdle', 0)
 
             // change facing
@@ -806,12 +806,12 @@ class Maria {
             this.body.velocity.x = this.tmpVec3.x
             this.body.velocity.y = 0
             this.body.velocity.z = this.tmpVec3.z
-            this.timeoutJumpDash = setTimeout(() => {
+            this.timeoutAirDash = setTimeout(() => {
               this.service.send('finish')
             }, 500)
           },
-          exitJumpDash: () => {
-            clearTimeout(this.timeoutJumpDash)
+          exitAirDash: () => {
+            clearTimeout(this.timeoutAirDash)
             this.body.velocity.set(0, 0, 0)
           },
           playIdle: () => {
@@ -821,9 +821,6 @@ class Maria {
             this.sword.material.emissive.setScalar(0)
             this.sword.material.color.setRGB(1, 1, 1)
           },
-          // playJumpIdle: () => {
-          //   this.fadeToAction('jumpIdle', 0.3)
-          // },
           playAirIdle: () => {
             this.fadeToAction('fall', 0.3)
           },
@@ -995,7 +992,7 @@ class Maria {
             this.oaction['strikeEnd'].timeScale = this.attackSpeed * this.chargeAttackCoe
             this.fadeToAction('strikeEnd', 0)
           },
-          playJumpBashStartWithCharge: (context, event, o) => {
+          playAirBashStartWithCharge: (context, event, o) => {
             this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 0.6
             this.fadeToAction('jumpAttackStart')
 
@@ -1007,9 +1004,9 @@ class Maria {
             this.body.mass = 0
             this.body.velocity.set(0, 0, 0)
           },
-          playJumpBashStart: (context, event, o) => {
-            this.oaction['jumpAttackStart'].timeScale = this.jumpBashSpeed
-            // this.fadeToAction('jumpAttackStart')
+          playAirBashStart: (context, event, o) => {
+            this.oaction['jumpAttackStart'].timeScale = this.airBashSpeed
+            // this.fadeToAction('airAttackStart')
 
             this.body.mass = this.mass
 
@@ -1018,39 +1015,39 @@ class Maria {
             this.body.velocity.y = 20
             // this.body.velocity.z = this.tmpVec3.z
           },
-          playJumpAttack: () => {
+          playAirAttack: () => {
             this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0)
 
             this.body.velocity.y = this.airLiftVelocity
           },
-          playJumpFist: () => {
+          playAirFist: () => {
             this.oaction['fist'].timeScale = this.attackSpeed
             this.fadeToAction('fist', 0)
 
             this.body.velocity.y = this.airLiftVelocity
           },
-          playJumpStrike: () => {
+          playAirStrike: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
             this.fadeToAction('strike', 0)
 
             this.body.velocity.y = this.airLiftVelocity
           },
-          playJumpBash: (context, event, o) => {
-            this.oaction['jumpAttack'].timeScale = this.jumpBashSpeed
+          playAirBash: (context, event, o) => {
+            this.oaction['jumpAttack'].timeScale = this.airBashSpeed
             this.fadeToAction('jumpAttack')
 
             this.body.velocity.y = -this.body.position.y * 3.5 // TODO: Change position instead of velocity? Need, to prevent velocity too high when position too high.
           },
-          playJumpChargeBash: (context, event, o) => {
-            this.oaction['jumpAttack'].timeScale = this.jumpBashSpeed
+          playAirChargeBash: (context, event, o) => {
+            this.oaction['jumpAttack'].timeScale = this.airBashSpeed
             this.fadeToAction('jumpAttack')
 
             this.body.mass = this.mass
             this.body.velocity.y = -this.body.position.y * 3.5 // TODO: Change position instead of velocity? Need, to prevent velocity too high when position too high.
           },
-          playJumpBashEnd: (context, event, o) => {
-            this.oaction['jumpAttackEnd'].timeScale = this.jumpBashSpeed
+          playAirBashEnd: (context, event, o) => {
+            this.oaction['jumpAttackEnd'].timeScale = this.airBashSpeed
             this.fadeToAction('jumpAttackEnd')
           },
           jump: () => {

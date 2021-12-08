@@ -248,14 +248,15 @@ function init() {
   let mutantsCount = parseInt(g.getQueryStringByName('mutants'))
   if (Number.isNaN(mutantsCount)) mutantsCount = 3
   for (let i = 0; i < mutantsCount; i++) {
-    let mutant = new Mutant((Math.random() - 0.5) * 18, 2, (Math.random() - 0.5) * 18)
+    let mutant = new Mutant((Math.random() - 0.5) * 35, 2, (Math.random() - 0.5) * 35)
     // let mutant = new Mutant(-25, 5, 0)
     let handKnife = new HandKnife()
     handKnife.owner = mutant
     mutant.load()
     mutants.push(mutant)
 
-    let ai = new Ai(mutant, maria, 1.5)
+    let ai = new Ai(mutant, 1.5)
+    mutant.ai = ai
     // ai.isAttack = false
   }
 

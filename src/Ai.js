@@ -2,9 +2,9 @@ import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
 class Ai {
-  constructor(role, target, distance = 1) {
-    this.role = role
-    this.target = target
+  constructor(character, distance = 1) {
+    this.character = character
+    this.target = null
     this.distance = distance
 
     this.enabled = true
@@ -15,52 +15,78 @@ class Ai {
 
     this.direction = vec2(0, 0)
     this.facing = vec2(0, 1)
+
+    this.detector = new CANNON.Body({
+      mass: 0,
+      collisionFilterGroup: g.GROUP_TRIGGER,
+      collisionFilterMask: g.GROUP_ROLE,
+    })
+    this.detector.belongTo = this
+    this.detector.collisionResponse = false
+    let shape = new CANNON.Sphere(10)
+    this.detector.addShape(shape)
+    window.world.addBody(this.detector)
+
+    this.detector.addEventListener('beginContact', (event) => {
+      console.log('mutant find ', event.body.belongTo?.constructor.name)
+      this.setTarget(event.body.belongTo)
+    })
+
+    this.detector.addEventListener('endContact', (event) => {
+      this.setTarget(null)
+    })
   }
 
   update(dt) {
     if (!this.enabled) {
-      this.role.service.send('stop')
+      this.character.service.send('stop')
       return
     }
 
-    // if (this.role.service.state.matches('loading')) return
+    if (this.target) {
+      // if (this.character.service.state.matches('loading')) return
 
-    this.direction.x = this.target.body.position.x - this.role.body.position.x
-    this.direction.y = this.target.body.position.z - this.role.body.position.z
-    // console.log(this.direction)
+      this.direction.x = this.target.body.position.x - this.character.body.position.x
+      this.direction.y = this.target.body.position.z - this.character.body.position.z
+      // console.log(this.direction)
 
-    if (this.direction.length() > this.distance) {
-      this.role.service.send('run')
-      this.facing.copy(this.direction)
-    } else {
-      if (this.isAttack) {
-        if (g.isAttack) {
-          this.role.service.send('attack')
-        } else {
-          this.role.service.send('stop')
-        }
+      if (this.direction.length() > this.distance) {
+        this.character.service.send('run')
+        this.facing.copy(this.direction)
       } else {
-        this.role.service.send('stop')
+        if (this.isAttack) {
+          if (g.isAttack) {
+            this.character.service.send('attack')
+          } else {
+            this.character.service.send('stop')
+          }
+        } else {
+          this.character.service.send('stop')
+        }
       }
+
+      if (this.character.service.state.hasTag('canMove')) {
+        // change facing
+        this.character.mesh.rotation.y = -this.facing.angle() + Math.PI / 2 ///formal
+        // this.character.mesh.rotation.y = -this.facing.angle()+Math.PI///test
+      }
+
+      this.direction.normalize().multiplyScalar(this.character.speed)
+      if (this.character.service.state.hasTag('canMove')) {
+        this.character.body.position.x += this.direction.x
+        this.character.body.position.z += this.direction.y
+        // let velocityScale = 70
+        // this.character.body.velocity.x = this.direction.x * velocityScale
+        // this.character.body.velocity.z = this.direction.y * velocityScale
+      }
+    } else {
+      this.character.service.send('stop')
     }
 
-    if (this.role.service.state.hasTag('canMove')) {
-      // change facing
-      this.role.mesh.rotation.y = -this.facing.angle() + Math.PI / 2 ///formal
-      // this.role.mesh.rotation.y = -this.facing.angle()+Math.PI///test
-    }
-
-    this.direction.normalize().multiplyScalar(this.role.speed)
-    if (this.role.service.state.hasTag('canMove')) {
-      this.role.body.position.x += this.direction.x
-      this.role.body.position.z += this.direction.y
-      // let velocityScale = 70
-      // this.role.body.velocity.x = this.direction.x * velocityScale
-      // this.role.body.velocity.z = this.direction.y * velocityScale
-    }
+    this.detector.position.copy(this.character.body.position)
   }
-  setRole(role) {
-    this.role = role
+  setCharacter(character) {
+    this.character = character
   }
   setTarget(target) {
     this.target = target

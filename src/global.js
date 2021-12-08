@@ -8,6 +8,7 @@ g.GROUP_ROLE = 4
 g.GROUP_ENEMY = 8
 g.GROUP_ROLE_WEAPON = 16
 g.GROUP_ENEMY_WEAPON = 32
+g.GROUP_TRIGGER = 64
 // g.GROUP_ENEMY_WEAPON_REBOUNDABLE = 64 // Don't need.
 
 g.getQueryStringByName = function (name) {

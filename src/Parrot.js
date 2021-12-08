@@ -5,7 +5,7 @@ import { Bullet } from './Bullet.js'
 import { Grenade } from './Grenade.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 class Parrot {
-  constructor(x, y, z) {
+  constructor({ position }) {
     this.isCharacter = true
     this.isEnemy = true
 
@@ -14,9 +14,16 @@ class Parrot {
     // this.health = 100
     this.oaction = {}
     this.mixer
-    this.x = x
-    this.y = y
-    this.z = z
+    this.position = position
+    this.initialPosition = this.position.clone()
+
+    // for RoleControls.js
+    this.direction = vec2() // direction may be zero length.
+    this.facing = vec2(0, 1) // facing always not zero length.
+    this.speed = 0.06
+
+    // for Ai.js
+    this.detectorRadius = 12
 
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -37,10 +44,20 @@ class Parrot {
           idle: {
             entry: 'playIdle',
             on: {
+              run: { target: 'run' },
               attack: { target: 'attack' },
               grenade: { target: 'grenade' },
               hit: { target: 'hit' },
             },
+            tags: ['canFacing'],
+          },
+          run: {
+            on: {
+              stop: { target: 'idle' },
+              attack: { target: 'attack' },
+              hit: { target: 'hit' },
+            },
+            tags: ['canMove', 'canFacing'],
           },
           attack: {
             entry: 'playAttack',
@@ -90,11 +107,11 @@ class Parrot {
             // this.fadeToAction('jump', 0.2)
             gsap.to(this.body.position, {
               duration: 0.15,
-              y: this.y + 0.37,
+              y: this.initialPosition.y + 0.37,
               onComplete: () => {
                 gsap.to(this.body.position, {
                   duration: 0.15,
-                  y: this.y,
+                  y: this.initialPosition.y,
                   onComplete: () => {
                     this.service.send('finish')
                   },
@@ -127,7 +144,7 @@ class Parrot {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('parrot: state:', state.value)
+      if (state.changed) console.log('parrot: state:', state.value)
       // if (state.changed) console.log(state.value,state)
       // this.currentState = state.value
       ///currentState === this.service.state.value
@@ -155,11 +172,11 @@ class Parrot {
     // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     this.body.angularDamping = 1
     this.body.addShape(shape)
-    this.body.position.set(x, y, z)
+    this.body.position.copy(this.position)
     world.addBody(this.body)
 
-    this.attack()
-    setInterval(this.attack.bind(this), 6000)
+    // this.attack()
+    // setInterval(this.attack.bind(this), 6000)
   }
 
   update(dt) {
@@ -169,16 +186,16 @@ class Parrot {
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
 
-    if (!window.role?.gltf) return
-    if (this.service.state.value !== 'dead') {
-      {
-        // look at role
-        let vec2_diff = vec2(role.mesh.position.x - this.mesh.position.x, role.mesh.position.z - this.mesh.position.z)
-        let angle = vec2_diff.angle()
-        // console.log(angle)
-        this.mesh.rotation.y = -angle + Math.PI / 2
-      }
-    }
+    // if (!window.role?.gltf) return
+    // if (this.service.state.value !== 'dead') {
+    //   {
+    //     // look at role
+    //     let vec2_diff = vec2(role.mesh.position.x - this.mesh.position.x, role.mesh.position.z - this.mesh.position.z)
+    //     let angle = vec2_diff.angle()
+    //     // console.log(angle)
+    //     this.mesh.rotation.y = -angle + Math.PI / 2
+    //   }
+    // }
   }
 
   attack() {
@@ -240,7 +257,7 @@ class Parrot {
           })
 
           this.body.mass = 0 // TODO: Fix hit by jumpBash ( velocity changed ) bug.
-          this.body.position.set(this.x, this.y, this.z)
+          this.body.position.copy(this.position)
           this.body.velocity.set(0, 0, 0)
 
           this.service.send('loaded')

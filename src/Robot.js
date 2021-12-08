@@ -181,7 +181,7 @@ class Robot {
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
 
-    if (!window.role?.gltf) return
+    // if (!window.role?.gltf) return
     // if (this.service.state.value !== 'dead') {
     //   {
     //     // look at role

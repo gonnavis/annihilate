@@ -2,7 +2,7 @@ import { g } from './global.js'
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { Ai } from './Ai.js'
 
-class RobotAi extends Ai {
+class ParrotAi extends Ai {
   constructor(character, distance = 1) {
     super(character, distance)
 
@@ -21,9 +21,14 @@ class RobotAi extends Ai {
               attack: { target: 'cantAttack', actions: 'attack' },
             },
           },
+          canGrenade: {
+            on: {
+              attack: { target: 'cantAttack', actions: 'grenade' },
+            },
+          },
           cantAttack: {
             after: {
-              4000: { target: 'canAttack' },
+              3000: [{ target: 'canAttack', cond: 'rand2' }, { target: 'canGrenade' }],
             },
           },
         },
@@ -33,12 +38,18 @@ class RobotAi extends Ai {
           attack: () => {
             this.character.service.send('attack')
           },
+          grenade: () => {
+            this.character.service.send('grenade')
+          },
+        },
+        guards: {
+          rand2: () => Math.random() < 0.5,
         },
       }
     )
 
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('robotAi: state:', state.value)
+      // if (state.changed) console.log('parrotAi: state:', state.value)
     })
 
     this.service.start()
@@ -49,4 +60,4 @@ class RobotAi extends Ai {
   }
 }
 
-export { RobotAi }
+export { ParrotAi }

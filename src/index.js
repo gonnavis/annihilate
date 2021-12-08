@@ -26,6 +26,7 @@ import { Robot } from './Robot.js'
 import { RoleControls } from './RoleControls.js'
 import { Ai } from './Ai.js'
 import { RobotAi } from './RobotAi.js'
+import { ParrotAi } from './ParrotAi.js'
 import { HandKnife } from './HandKnife.js'
 import { Teleporter } from './Teleporter.js'
 import { Parrot } from './Parrot.js'
@@ -286,8 +287,11 @@ function init() {
   // robots.push(robot2)
   // robot2.load()
 
-  window.parrot = new Parrot(0, 4, -5)
+  window.parrot = new Parrot({
+    position: new THREE.Vector3(0, 4, -5),
+  })
   parrot.load()
+  parrot.ai = new ParrotAi(parrot, 8)
 
   domMaria.addEventListener('click', (e) => {
     window.service.send('maria')

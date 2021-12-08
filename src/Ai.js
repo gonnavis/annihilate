@@ -53,31 +53,31 @@ class Ai {
       if (this.character.direction.length() > this.distance) {
         this.character.service.send('run')
         this.character.facing.copy(this.character.direction)
+
+        if (this.character.service.state.hasTag('canMove')) {
+          // change facing
+          this.character.mesh.rotation.y = -this.character.facing.angle() + Math.PI / 2 ///formal
+          // this.character.mesh.rotation.y = -this.character.facing.angle()+Math.PI///test
+        }
+
+        this.character.direction.normalize().multiplyScalar(this.character.speed)
+        if (this.character.service.state.hasTag('canMove')) {
+          this.character.body.position.x += this.character.direction.x
+          this.character.body.position.z += this.character.direction.y
+          // let velocityScale = 70
+          // this.character.body.velocity.x = this.character.direction.x * velocityScale
+          // this.character.body.velocity.z = this.character.direction.y * velocityScale
+        }
       } else {
         if (this.isAttack) {
           // if (g.isAttack) {
-          this.character.service.send('attack')
+          this.attack()
           // } else {
           //   this.character.service.send('stop')
           // }
         } else {
           this.character.service.send('stop')
         }
-      }
-
-      if (this.character.service.state.hasTag('canMove')) {
-        // change facing
-        this.character.mesh.rotation.y = -this.character.facing.angle() + Math.PI / 2 ///formal
-        // this.character.mesh.rotation.y = -this.character.facing.angle()+Math.PI///test
-      }
-
-      this.character.direction.normalize().multiplyScalar(this.character.speed)
-      if (this.character.service.state.hasTag('canMove')) {
-        this.character.body.position.x += this.character.direction.x
-        this.character.body.position.z += this.character.direction.y
-        // let velocityScale = 70
-        // this.character.body.velocity.x = this.character.direction.x * velocityScale
-        // this.character.body.velocity.z = this.character.direction.y * velocityScale
       }
     } else {
       this.character.service.send('stop')
@@ -93,6 +93,10 @@ class Ai {
   }
   setDistance(distance) {
     this.distance = distance
+  }
+
+  attack() {
+    this.character.service.send('attack')
   }
 }
 

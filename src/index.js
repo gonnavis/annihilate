@@ -25,6 +25,7 @@ import { Shield } from './Shield.js'
 import { Robot } from './Robot.js'
 import { RoleControls } from './RoleControls.js'
 import { Ai } from './Ai.js'
+import { RobotAi } from './RobotAi.js'
 import { HandKnife } from './HandKnife.js'
 import { Teleporter } from './Teleporter.js'
 import { Parrot } from './Parrot.js'
@@ -273,7 +274,7 @@ function init() {
   window.robot = new Robot(6, 2, -4)
   robots.push(robot)
   robot.load()
-  robot.ai = new Ai(robot, 8)
+  robot.ai = new RobotAi(robot, 8)
   // robot.ai.isAttack = false
 
   // window.robot2 = new Robot(15, 5, 15)

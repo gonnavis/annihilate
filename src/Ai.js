@@ -40,7 +40,8 @@ class Ai {
     // console.log(this.character.facing.x, this.character.facing.y)
     // console.log(this.character.direction.x, this.character.direction.y)
 
-    if (!this.enabled || this.character.service.state.matches('loading')) {
+    // if (!this.enabled || this.character.service.state.matches('loading')) {
+    if (!this.enabled) {
       // this.character.service.send('stop')
       return
     }
@@ -52,13 +53,15 @@ class Ai {
       this.character.direction.y = this.target.body.position.z - this.character.body.position.z
       // console.log(this.character.direction)
 
-      // change facing // TODO: Currently must change facing here, but conflict with "Can't change facing if not 'canMove' state" rule.
-      this.character.facing.copy(this.character.direction)
-      this.character.mesh.rotation.y = -this.character.facing.angle() + Math.PI / 2 ///formal
-      // this.character.mesh.rotation.y = -this.character.facing.angle()+Math.PI///test
-
-      if (this.character.direction.length() > this.distance) {
+      if (this.character.direction.length() > this.distance || Math.abs(this.character.direction.angle() - this.character.facing.angle()) > Math.PI / 180) {
         this.character.service.send('run')
+
+        if (this.character.service.state.hasTag('canMove')) {
+          // change facing
+          this.character.facing.copy(this.character.direction)
+          this.character.mesh.rotation.y = -this.character.facing.angle() + Math.PI / 2 ///formal
+          // this.character.mesh.rotation.y = -this.character.facing.angle()+Math.PI///test
+        }
 
         this.character.direction.normalize().multiplyScalar(this.character.speed)
         if (this.character.service.state.hasTag('canMove')) {

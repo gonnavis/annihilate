@@ -48,6 +48,7 @@ class Robot {
               attack: { target: 'attack' },
               hit: { target: 'hit' },
             },
+            tags: ['canFacing'],
           },
           run: {
             on: {
@@ -55,7 +56,7 @@ class Robot {
               attack: { target: 'attack' },
               hit: { target: 'hit' },
             },
-            tags: ['canMove'],
+            tags: ['canMove', 'canFacing'],
           },
           attack: {
             entry: 'playAttack',
@@ -130,7 +131,7 @@ class Robot {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('robot: state:', state.value)
+      // if (state.changed) console.log('robot: state:', state.value)
       // if (state.changed) console.log(state.value,state)
       // this.currentState = state.value
       ///currentState === this.service.state.value

@@ -75,6 +75,7 @@ class Mutant {
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
+            tags: ['canFacing'],
           },
           run: {
             entry: 'playRun',
@@ -86,7 +87,7 @@ class Mutant {
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
-            tags: ['canMove'],
+            tags: ['canMove', 'canFacing'],
           },
           attackStart: {
             entry: 'playAttackStart',
@@ -209,7 +210,7 @@ class Mutant {
               knockDown: { target: 'knockDown' },
               dash: { target: 'jumpDash' },
             },
-            tags: ['canMove'],
+            tags: ['canMove', 'canFacing'],
           },
           doubleJump: {
             entry: ['playJump', 'jump'],
@@ -220,7 +221,7 @@ class Mutant {
               knockDown: { target: 'knockDown' },
               dash: { target: 'jumpDash' },
             },
-            tags: ['canMove'],
+            tags: ['canMove', 'canFacing'],
           },
           hit: {
             entry: ['playHit'],

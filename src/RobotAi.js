@@ -1,12 +1,12 @@
 import { g } from './global.js'
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { Ai } from './Ai.js'
-const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
 class RobotAi extends Ai {
   constructor(character, distance = 1) {
     super(character, distance)
 
+    const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
     this.fsm = createMachine(
       {
         id: 'robot',
@@ -38,7 +38,7 @@ class RobotAi extends Ai {
     )
 
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('robot: state:', state.value)
+      // if (state.changed) console.log('robotAi: state:', state.value)
     })
 
     this.service.start()

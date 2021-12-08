@@ -8,6 +8,7 @@ class Ai {
     this.distance = distance
     this.initialPositionToleranceSq = 1 ** 2
     this.tmpVec2 = new THREE.Vector2()
+    this.facingTolerance = Math.PI / 180
 
     this.enabled = true
 
@@ -53,15 +54,16 @@ class Ai {
       this.character.direction.y = this.target.body.position.z - this.character.body.position.z
       // console.log(this.character.direction)
 
-      if (this.character.direction.length() > this.distance || Math.abs(this.character.direction.angle() - this.character.facing.angle()) > Math.PI / 180) {
-        this.character.service.send('run')
+      if (this.character.service.state.hasTag('canFacing')) {
+        // change facing
+        this.character.facing.copy(this.character.direction)
+        this.character.mesh.rotation.y = -this.character.facing.angle() + Math.PI / 2 ///formal
+        // this.character.mesh.rotation.y = -this.character.facing.angle()+Math.PI///test
+      }
 
-        if (this.character.service.state.hasTag('canMove')) {
-          // change facing
-          this.character.facing.copy(this.character.direction)
-          this.character.mesh.rotation.y = -this.character.facing.angle() + Math.PI / 2 ///formal
-          // this.character.mesh.rotation.y = -this.character.facing.angle()+Math.PI///test
-        }
+      // if (this.character.direction.length() > this.distance || Math.abs(this.character.direction.angle() - this.character.facing.angle()) > Math.PI / 180) {
+      if (this.character.direction.length() > this.distance) {
+        this.character.service.send('run')
 
         this.character.direction.normalize().multiplyScalar(this.character.speed)
         if (this.character.service.state.hasTag('canMove')) {
@@ -71,6 +73,8 @@ class Ai {
           // this.character.body.velocity.x = this.character.direction.x * velocityScale
           // this.character.body.velocity.z = this.character.direction.y * velocityScale
         }
+      } else if (Math.abs(this.character.direction.angle() - this.character.facing.angle()) > this.facingTolerance) {
+        this.character.service.send('stop')
       } else {
         if (this.isAttack) {
           // if (g.isAttack) {

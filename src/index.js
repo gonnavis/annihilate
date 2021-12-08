@@ -368,8 +368,8 @@ function init() {
       } else {
         window.cloud = new Cloud()
         if (g.isOrbit) cloud.mesh.position.set(0, 2, 0)
-        else cloud.mesh.position.set(-27, 15, -25)
-        cloud.mesh.scale.setScalar(3)
+        else cloud.mesh.position.set(-27, 16.5, -25)
+        cloud.mesh.scale.set(12, 6, 12)
 
         if (!g.isOrbit) window.role.body.position.set(-24, 16, -25)
       }

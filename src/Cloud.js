@@ -24,7 +24,8 @@ class Cloud {
               .subScalar(size / 2)
               .divideScalar(size)
               .length()
-          data[i] = (128 + 128 * perlin.noise((x * scale) / 1.5, y * scale, (z * scale) / 1.5)) * d * d
+          // data[i] = (128 + 128 * perlin.noise((x * scale) / 1.5, y * scale, (z * scale) / 1.5)) * d * d
+          data[i] = (128 + 128 * perlin.noise(((x * scale) / 1.5) * 2, y * scale, ((z * scale) / 1.5) * 2)) * d * d
           i++
         }
       }

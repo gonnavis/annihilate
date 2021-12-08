@@ -13,9 +13,6 @@ class Ai {
 
     updates.push(this)
 
-    this.direction = vec2(0, 0)
-    this.facing = vec2(0, 1)
-
     this.detector = new CANNON.Body({
       mass: 0,
       collisionFilterGroup: g.GROUP_TRIGGER,
@@ -28,7 +25,7 @@ class Ai {
     window.world.addBody(this.detector)
 
     this.detector.addEventListener('beginContact', (event) => {
-      console.log('mutant find ', event.body.belongTo?.constructor.name)
+      // console.log('enemy find ', event.body.belongTo?.constructor.name)
       this.setTarget(event.body.belongTo)
     })
 
@@ -38,28 +35,31 @@ class Ai {
   }
 
   update(dt) {
+    // console.log(this.character.facing.x, this.character.facing.y)
+    // console.log(this.character.direction.x, this.character.direction.y)
+
     if (!this.enabled) {
-      this.character.service.send('stop')
+      // this.character.service.send('stop')
       return
     }
 
     if (this.target) {
       // if (this.character.service.state.matches('loading')) return
 
-      this.direction.x = this.target.body.position.x - this.character.body.position.x
-      this.direction.y = this.target.body.position.z - this.character.body.position.z
-      // console.log(this.direction)
+      this.character.direction.x = this.target.body.position.x - this.character.body.position.x
+      this.character.direction.y = this.target.body.position.z - this.character.body.position.z
+      // console.log(this.character.direction)
 
-      if (this.direction.length() > this.distance) {
+      if (this.character.direction.length() > this.distance) {
         this.character.service.send('run')
-        this.facing.copy(this.direction)
+        this.character.facing.copy(this.character.direction)
       } else {
         if (this.isAttack) {
-          if (g.isAttack) {
-            this.character.service.send('attack')
-          } else {
-            this.character.service.send('stop')
-          }
+          // if (g.isAttack) {
+          this.character.service.send('attack')
+          // } else {
+          //   this.character.service.send('stop')
+          // }
         } else {
           this.character.service.send('stop')
         }
@@ -67,17 +67,17 @@ class Ai {
 
       if (this.character.service.state.hasTag('canMove')) {
         // change facing
-        this.character.mesh.rotation.y = -this.facing.angle() + Math.PI / 2 ///formal
-        // this.character.mesh.rotation.y = -this.facing.angle()+Math.PI///test
+        this.character.mesh.rotation.y = -this.character.facing.angle() + Math.PI / 2 ///formal
+        // this.character.mesh.rotation.y = -this.character.facing.angle()+Math.PI///test
       }
 
-      this.direction.normalize().multiplyScalar(this.character.speed)
+      this.character.direction.normalize().multiplyScalar(this.character.speed)
       if (this.character.service.state.hasTag('canMove')) {
-        this.character.body.position.x += this.direction.x
-        this.character.body.position.z += this.direction.y
+        this.character.body.position.x += this.character.direction.x
+        this.character.body.position.z += this.character.direction.y
         // let velocityScale = 70
-        // this.character.body.velocity.x = this.direction.x * velocityScale
-        // this.character.body.velocity.z = this.direction.y * velocityScale
+        // this.character.body.velocity.x = this.character.direction.x * velocityScale
+        // this.character.body.velocity.z = this.character.direction.y * velocityScale
       }
     } else {
       this.character.service.send('stop')

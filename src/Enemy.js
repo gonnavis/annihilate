@@ -15,6 +15,10 @@ class Enemy {
     this.mixer
     this.isAir = false
 
+    this.direction = vec2() // direction may be zero length.
+    this.facing = vec2(0, 1) // facing always not zero length.
+    this.speed = 0.11
+
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
     this.fsm = createMachine(
@@ -34,9 +38,18 @@ class Enemy {
           idle: {
             entry: 'playIdle',
             on: {
+              run: { target: 'run' },
               attack: { target: 'attack' },
               hit: { target: 'hit' },
             },
+          },
+          run: {
+            on: {
+              stop: { target: 'idle' },
+              attack: { target: 'attack' },
+              hit: { target: 'hit' },
+            },
+            tags: ['canMove'],
           },
           attack: {
             entry: 'playAttack',
@@ -75,7 +88,8 @@ class Enemy {
             this.fadeToAction('jump', 0.2)
           },
           throwAttacker: () => {
-            if (g.isAttack && window.role.gltf && this.gltf) new Attacker(scene, updates, this, window.role.mesh.position)
+            // if (g.isAttack && window.role.gltf && this.gltf) new Attacker(scene, updates, this, window.role.mesh.position)
+            new Attacker(scene, updates, this, window.role.mesh.position)
           },
           dead: () => {
             this.fadeToAction('death', 0.2)
@@ -110,7 +124,7 @@ class Enemy {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('enemy: state:', state.value)
+      if (state.changed) console.log('enemy: state:', state.value)
       // if (state.changed) console.log(state.value,state)
       // this.currentState = state.value
       ///currentState === this.service.state.value
@@ -148,9 +162,9 @@ class Enemy {
       }
     })
 
-    setInterval(() => {
-      this.service.send('attack')
-    }, 3000)
+    // setInterval(() => {
+    //   this.service.send('attack')
+    // }, 3000)
   }
 
   update(dt) {
@@ -160,16 +174,16 @@ class Enemy {
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
 
-    if (!role.gltf) return
-    if (this.service.state.value !== 'dead') {
-      {
-        // look at role
-        let vec2_diff = vec2(role.mesh.position.x - this.mesh.position.x, role.mesh.position.z - this.mesh.position.z)
-        let angle = vec2_diff.angle()
-        // console.log(angle)
-        this.mesh.rotation.y = -angle + Math.PI / 2
-      }
-    }
+    if (!window.role?.gltf) return
+    // if (this.service.state.value !== 'dead') {
+    //   {
+    //     // look at role
+    //     let vec2_diff = vec2(role.mesh.position.x - this.mesh.position.x, role.mesh.position.z - this.mesh.position.z)
+    //     let angle = vec2_diff.angle()
+    //     // console.log(angle)
+    //     this.mesh.rotation.y = -angle + Math.PI / 2
+    //   }
+    // }
   }
 
   hit() {

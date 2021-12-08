@@ -2,6 +2,7 @@ import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
 class RoleControls {
+  // TODO: RoleControls should update before role, otherwise role.mesh.position will delay one frame after role.body.position.
   constructor(role) {
     this.role = role
     window.role = role ///todo
@@ -167,6 +168,7 @@ class RoleControls {
       // move 1: change position
       // Has sink into wall & after stop bounce off wall problem. TODO: Stop & reset position if collide.
       // Has can't adjust velocity problem. For example: Jump to one direction, in the air use roleControls change position to reverse direction, if stop control, role will continue move by initial velocity to initial direction.
+      // if (window.role === enemy) debugger
       this.role.body.position.x += this.role.direction.x
       this.role.body.position.z += this.role.direction.y
 

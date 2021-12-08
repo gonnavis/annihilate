@@ -12,7 +12,8 @@ class Attacker {
     let speed = 0.18
     // this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed)
     // NOTE: Use Vector2 to prevent too slow when role on top of enemy.
-    this.movement = new THREE.Vector2(target.x - owner.body.position.x, target.z - owner.body.position.z).normalize().multiplyScalar(speed)
+    // this.movement = new THREE.Vector2(target.x - owner.body.position.x, target.z - owner.body.position.z).normalize().multiplyScalar(speed)
+    this.movement = new THREE.Vector2().copy(this.owner.facing).normalize().multiplyScalar(speed)
 
     // fsm
 

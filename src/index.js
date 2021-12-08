@@ -86,23 +86,15 @@ function init_xstate() {
       id: 'index',
       initial: 'initial',
       states: {
-        initial: {
-          // todo: Why can't init/send first of this list?
-          on: { paladin: { target: 'paladin' } },
-          on: { maria: { target: 'maria' } },
-        },
-        maria: {
-          entry: 'entryMaria',
-          on: {
-            paladin: { target: 'paladin' },
-          },
-        },
-        paladin: {
-          entry: 'entryPaladin',
-          on: {
-            maria: { target: 'maria' },
-          },
-        },
+        initial: {},
+        maria: { entry: 'entryMaria' },
+        paladin: { entry: 'entryPaladin' },
+        enemy: { entry: 'entryEnemy' },
+      },
+      on: {
+        maria: { target: '.maria' },
+        paladin: { target: '.paladin' },
+        enemy: { target: '.enemy' },
       },
     },
     {
@@ -113,8 +105,10 @@ function init_xstate() {
 
           // ai.setTarget(maria)
 
+          Array.prototype.forEach.call(domRoles.children, (domRole) => {
+            domRole.disabled = false
+          })
           domMaria.disabled = true
-          domPaladin.disabled = false
         },
         entryPaladin: () => {
           if (!window.roleControls) window.roleControls = new RoleControls(paladin) ///todo: Use ECS?
@@ -122,8 +116,23 @@ function init_xstate() {
 
           // ai.setTarget(paladin)
 
+          Array.prototype.forEach.call(domRoles.children, (domRole) => {
+            domRole.disabled = false
+          })
           domPaladin.disabled = true
-          domMaria.disabled = false
+        },
+        entryEnemy: () => {
+          if (!window.roleControls) window.roleControls = new RoleControls(enemy) ///todo: Use ECS?
+          roleControls.setRole(enemy)
+
+          // ai.setTarget(enemy)
+
+          Array.prototype.forEach.call(domRoles.children, (domRole) => {
+            domRole.disabled = false
+          })
+          domEnemy.disabled = true
+
+          if (enemy.ai) enemy.ai.enabled = false
         },
       },
     }
@@ -264,6 +273,8 @@ function init() {
   window.enemy = new Enemy(6, 2, -4)
   enemys.push(enemy)
   enemy.load()
+  enemy.ai = new Ai(enemy, 5)
+  // enemy.ai.isAttack = false
 
   // window.enemy2 = new Enemy(15, 5, 15)
   // enemys.push(enemy2)
@@ -289,6 +300,9 @@ function init() {
         break
       case 'Digit2':
         window.service.send('paladin')
+        break
+      case 'Digit3':
+        window.service.send('enemy')
         break
     }
   })

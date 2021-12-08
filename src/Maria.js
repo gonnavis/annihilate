@@ -18,6 +18,7 @@ class Maria {
     this.mixer
     // this.speed = 0.15
     this.speed = 0.11
+    // this.speed = 1
     // this.landAttackSpeed = 1.4
     // this.airAttackSpeed = 2.5
     this.attackSpeed = 1.4

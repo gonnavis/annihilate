@@ -90,7 +90,7 @@ function init_xstate() {
         initial: {},
         maria: { entry: 'entryMaria' },
         paladin: { entry: 'entryPaladin' },
-        robot: { entry: 'entryRobot' },
+        robot: { entry: 'entryRobot', exit: 'exitRobot' },
       },
       on: {
         maria: { target: '.maria' },
@@ -134,6 +134,9 @@ function init_xstate() {
           domRobot.disabled = true
 
           if (robot.ai) robot.ai.enabled = false
+        },
+        exitRobot: () => {
+          if (robot.ai) robot.ai.enabled = true
         },
       },
     }

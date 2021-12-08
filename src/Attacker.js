@@ -1,7 +1,7 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-//new Attacker(scene, updates, enemy.mesh.position, mesh.position)
+//new Attacker(scene, updates, robot.mesh.position, mesh.position)
 class Attacker {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
     this.isWeapon = true
@@ -11,7 +11,7 @@ class Attacker {
     this.owner = owner
     let speed = 0.18
     // this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed)
-    // NOTE: Use Vector2 to prevent too slow when role on top of enemy.
+    // NOTE: Use Vector2 to prevent too slow when role on top of robot.
     // this.movement = new THREE.Vector2(target.x - owner.body.position.x, target.z - owner.body.position.z).normalize().multiplyScalar(speed)
     this.movement = new THREE.Vector2().copy(this.owner.facing).normalize().multiplyScalar(speed)
 
@@ -99,9 +99,9 @@ class Attacker {
       // if (e.body === role.body) {
       //   role.hit()
       // }
-      // window.enemys.forEach((enemy) => {
-      //   if (e.body === enemy.body && e.body !== owner.body) {
-      //     enemy.hit()
+      // window.robots.forEach((robot) => {
+      //   if (e.body === robot.body && e.body !== owner.body) {
+      //     robot.hit()
       //   }
       // })
     })

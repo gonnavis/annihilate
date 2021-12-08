@@ -19,9 +19,9 @@ class Shield {
 
     // this.body.addEventListener('collide', (e) => {
     //   if (['attack', 'fist', 'strike', 'jumpAttack', 'dashAttack'].some(paladin.service.state.matches)) {
-    //     window.enemys.forEach((enemy) => {
-    //       if (e.body === enemy.body) {
-    //         enemy.hit() // todo: refactor: do not check paladin's state at here.
+    //     window.robots.forEach((robot) => {
+    //       if (e.body === robot.body) {
+    //         robot.hit() // todo: refactor: do not check paladin's state at here.
     //       }
     //     })
     //   }

@@ -22,7 +22,7 @@ import { Mutant } from './Mutant.js'
 import { GreatSword } from './GreatSword.js'
 import { Sword } from './Sword.js'
 import { Shield } from './Shield.js'
-import { Enemy } from './Robot.js'
+import { Robot } from './Robot.js'
 import { RoleControls } from './RoleControls.js'
 import { Ai } from './Ai.js'
 import { HandKnife } from './HandKnife.js'
@@ -89,12 +89,12 @@ function init_xstate() {
         initial: {},
         maria: { entry: 'entryMaria' },
         paladin: { entry: 'entryPaladin' },
-        enemy: { entry: 'entryEnemy' },
+        robot: { entry: 'entryRobot' },
       },
       on: {
         maria: { target: '.maria' },
         paladin: { target: '.paladin' },
-        enemy: { target: '.enemy' },
+        robot: { target: '.robot' },
       },
     },
     {
@@ -121,18 +121,18 @@ function init_xstate() {
           })
           domPaladin.disabled = true
         },
-        entryEnemy: () => {
-          if (!window.roleControls) window.roleControls = new RoleControls(enemy) ///todo: Use ECS?
-          roleControls.setRole(enemy)
+        entryRobot: () => {
+          if (!window.roleControls) window.roleControls = new RoleControls(robot) ///todo: Use ECS?
+          roleControls.setRole(robot)
 
-          // ai.setTarget(enemy)
+          // ai.setTarget(robot)
 
           Array.prototype.forEach.call(domRoles.children, (domRole) => {
             domRole.disabled = false
           })
-          domEnemy.disabled = true
+          domRobot.disabled = true
 
-          if (enemy.ai) enemy.ai.enabled = false
+          if (robot.ai) robot.ai.enabled = false
         },
       },
     }
@@ -269,16 +269,16 @@ function init() {
     // ai.isAttack = false
   }
 
-  window.enemys = []
-  window.enemy = new Enemy(6, 2, -4)
-  enemys.push(enemy)
-  enemy.load()
-  enemy.ai = new Ai(enemy, 5)
-  // enemy.ai.isAttack = false
+  window.robots = []
+  window.robot = new Robot(6, 2, -4)
+  robots.push(robot)
+  robot.load()
+  robot.ai = new Ai(robot, 5)
+  // robot.ai.isAttack = false
 
-  // window.enemy2 = new Enemy(15, 5, 15)
-  // enemys.push(enemy2)
-  // enemy2.load()
+  // window.robot2 = new Robot(15, 5, 15)
+  // robots.push(robot2)
+  // robot2.load()
 
   window.parrot = new Parrot(0, 4, -5)
   parrot.load()
@@ -302,7 +302,7 @@ function init() {
         window.service.send('paladin')
         break
       case 'Digit3':
-        window.service.send('enemy')
+        window.service.send('robot')
         break
     }
   })

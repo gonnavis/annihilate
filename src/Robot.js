@@ -51,6 +51,7 @@ class Robot {
             tags: ['canFacing'],
           },
           run: {
+            entry: 'playRun',
             on: {
               stop: { target: 'idle' },
               attack: { target: 'attack' },
@@ -87,6 +88,10 @@ class Robot {
 
           playIdle: () => {
             this.fadeToAction('idle', 0.2)
+          },
+          playRun: () => {
+            this.fadeToAction('running', 0.2)
+            // this.fadeToAction('walking', 0.2)
           },
           playAttack: () => {
             this.fadeToAction('dance', 0.2)

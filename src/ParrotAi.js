@@ -56,7 +56,11 @@ class ParrotAi extends Ai {
   }
 
   attack() {
-    this.service.send('attack')
+    if (this.service.state.matches('cantAttack')) {
+      this.character.service.send('stop') // prevent keep play running animation when in attack range and not moving.
+    } else {
+      this.service.send('attack')
+    }
   }
 }
 

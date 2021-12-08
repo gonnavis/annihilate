@@ -7,22 +7,27 @@ class Cloud {
     // Texture
 
     const size = 128
-    const data = new Uint8Array(size * size * size)
+    const sizeX = size * 2
+    const sizeY = size
+    const sizeZ = size * 2
+    const data = new Uint8Array(sizeX * sizeY * sizeZ)
+    window.data = data
 
     let i = 0
     const scale = 0.05
     const perlin = new ImprovedNoise()
+    window.perlin = perlin
     const vector = new THREE.Vector3()
 
-    for (let z = 0; z < size; z++) {
-      for (let y = 0; y < size; y++) {
-        for (let x = 0; x < size; x++) {
+    for (let z = 0; z < sizeX; z++) {
+      for (let y = 0; y < sizeY; y++) {
+        for (let x = 0; x < sizeZ; x++) {
           const d =
             1.0 -
             vector
-              .set(x, y, z)
-              .subScalar(size / 2)
-              .divideScalar(size)
+              .set((x - sizeX / 2) / sizeX, (y - sizeY / 2) / sizeY, (z - sizeZ / 2) / sizeZ)
+              // .subScalar(size / 2)
+              // .divideScalar(size)
               .length()
           data[i] = (128 + 128 * perlin.noise((x * scale) / 1.5, y * scale, (z * scale) / 1.5)) * d * d
           i++
@@ -30,7 +35,7 @@ class Cloud {
       }
     }
 
-    const texture = new THREE.DataTexture3D(data, size, size, size)
+    const texture = new THREE.DataTexture3D(data, sizeX, sizeY, sizeZ)
     texture.format = THREE.RedFormat
     texture.minFilter = THREE.LinearFilter
     texture.magFilter = THREE.LinearFilter
@@ -96,8 +101,8 @@ class Cloud {
       }
 
       vec2 hitBox( vec3 orig, vec3 dir ) {
-        const vec3 box_min = vec3( - 0.5 );
-        const vec3 box_max = vec3( 0.5 );
+        const vec3 box_min = vec3( - 0.5*2., - 0.5, - 0.5*2. );
+        const vec3 box_max = vec3( 0.5*2., .5, .5*2. );
         vec3 inv_dir = 1.0 / dir;
         vec3 tmin_tmp = ( box_min - orig ) * inv_dir;
         vec3 tmax_tmp = ( box_max - orig ) * inv_dir;
@@ -118,9 +123,12 @@ class Cloud {
       }
 
       void main(){
+        // color = vec4(1,0,0,1); return;
         vec3 rayDir = normalize( vDirection );
         vec2 bounds = hitBox( vOrigin, rayDir );
-
+        // color = vec4(bounds/10.,0,1); return;
+        
+        // color = vec4(1,0,0,1); return;
         if ( bounds.x > bounds.y ) discard;
 
         bounds.x = max( bounds.x, 0.0 );
@@ -163,12 +171,15 @@ class Cloud {
 
         color = ac;
 
-        if ( color.a == 0.0 ) discard;
+        // if ( color.a == 0.0 ) discard;
+
+        color.r += .3;
+        color.a += .3;
 
       }
     `
 
-    const geometry = new THREE.BoxGeometry(1, 1, 1)
+    const geometry = new THREE.BoxGeometry(sizeX / size, sizeY / size, sizeZ / size)
     const material = new THREE.RawShaderMaterial({
       glslVersion: THREE.GLSL3,
       uniforms: {
@@ -188,6 +199,7 @@ class Cloud {
     })
 
     this.mesh = new THREE.Mesh(geometry, material)
+    // this.mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial())
     scene.add(this.mesh)
 
     //

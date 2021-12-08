@@ -12,14 +12,19 @@ class Mutant {
     this.health = 100
     this.oaction = {}
     this.mixer
-    // this.speed = 0.15
-    this.speed = 0.04
     this.attackSpeed = 0.5
     this.tmpVec3 = new THREE.Vector3()
-    this.direction = vec2() // direction may be zero length.
-    this.facing = vec2(0, 1) // facing always not zero length.
     this.isAir = false
     this.airLiftVelocity = 1.5
+
+    // for RoleControls.js
+    this.direction = vec2() // direction may be zero length.
+    this.facing = vec2(0, 1) // facing always not zero length.
+    // this.speed = 0.15
+    this.speed = 0.04
+
+    // for Ai.js
+    this.detectorRadius = 10
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)

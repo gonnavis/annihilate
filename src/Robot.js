@@ -15,9 +15,13 @@ class Robot {
     this.mixer
     this.isAir = false
 
+    // for RoleControls.js
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.
-    this.speed = 0.11
+    this.speed = 0.04
+
+    // for Ai.js
+    this.detectorRadius = 12
 
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 

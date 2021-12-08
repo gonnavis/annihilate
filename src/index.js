@@ -273,7 +273,7 @@ function init() {
   window.robot = new Robot(6, 2, -4)
   robots.push(robot)
   robot.load()
-  robot.ai = new Ai(robot, 5)
+  robot.ai = new Ai(robot, 8)
   // robot.ai.isAttack = false
 
   // window.robot2 = new Robot(15, 5, 15)

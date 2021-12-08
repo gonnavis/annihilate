@@ -20,7 +20,7 @@ class Ai {
     })
     this.detector.belongTo = this
     this.detector.collisionResponse = false
-    let shape = new CANNON.Sphere(10)
+    let shape = new CANNON.Sphere(this.character.detectorRadius)
     this.detector.addShape(shape)
     window.world.addBody(this.detector)
 

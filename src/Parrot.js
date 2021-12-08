@@ -52,9 +52,11 @@ class Parrot {
             tags: ['canFacing'],
           },
           run: {
+            entry: 'playRun',
             on: {
               stop: { target: 'idle' },
               attack: { target: 'attack' },
+              grenade: { target: 'grenade' },
               hit: { target: 'hit' },
             },
             tags: ['canMove', 'canFacing'],
@@ -93,6 +95,9 @@ class Parrot {
 
           playIdle: () => {
             this.fadeToAction('parrot_A_', 0.2)
+          },
+          playRun: () => {
+            this.body.velocity.set(0, 0, 0)
           },
           playAttack: () => {
             // this.fadeToAction('dance', 0.2)
@@ -198,13 +203,13 @@ class Parrot {
     // }
   }
 
-  attack() {
-    // console.log('attack')
-    this.service.send('attack')
-    setTimeout(() => {
-      this.service.send('grenade')
-    }, 3000)
-  }
+  // attack() {
+  //   // console.log('attack')
+  //   this.service.send('attack')
+  //   setTimeout(() => {
+  //     this.service.send('grenade')
+  //   }, 3000)
+  // }
 
   hit() {
     // console.log('hit function')

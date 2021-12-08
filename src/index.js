@@ -258,7 +258,7 @@ function init() {
   let mutantsCount = parseInt(g.getQueryStringByName('mutants'))
   if (Number.isNaN(mutantsCount)) mutantsCount = 3
   for (let i = 0; i < mutantsCount; i++) {
-    let mutant = new Mutant((Math.random() - 0.5) * 35, 2, (Math.random() - 0.5) * 35)
+    let mutant = new Mutant({ position: new THREE.Vector3((Math.random() - 0.5) * 35, 2, (Math.random() - 0.5) * 35) })
     // let mutant = new Mutant(-25, 5, 0)
     let handKnife = new HandKnife()
     handKnife.owner = mutant
@@ -271,7 +271,9 @@ function init() {
   }
 
   window.robots = []
-  window.robot = new Robot(6, 2, -4)
+  window.robot = new Robot({
+    position: new THREE.Vector3(6, 2, -4),
+  })
   robots.push(robot)
   robot.load()
   robot.ai = new RobotAi(robot, 8)

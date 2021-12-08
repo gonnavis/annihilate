@@ -6,6 +6,8 @@ class Ai {
     this.character = character
     this.target = null
     this.distance = distance
+    this.initialPositionToleranceSq = 1 ** 2
+    this.tmpVec2 = new THREE.Vector2()
 
     this.enabled = true
 
@@ -78,6 +80,27 @@ class Ai {
         } else {
           this.character.service.send('stop')
         }
+      }
+    } else if (this.tmpVec2.set(this.character.body.position.x - this.character.initialPosition.x, this.character.body.position.z - this.character.initialPosition.z).lengthSq() > this.initialPositionToleranceSq) {
+      this.character.direction.x = this.character.initialPosition.x - this.character.body.position.x
+      this.character.direction.y = this.character.initialPosition.z - this.character.body.position.z
+
+      this.character.service.send('run')
+      this.character.facing.copy(this.character.direction)
+
+      if (this.character.service.state.hasTag('canMove')) {
+        // change facing
+        this.character.mesh.rotation.y = -this.character.facing.angle() + Math.PI / 2 ///formal
+        // this.character.mesh.rotation.y = -this.character.facing.angle()+Math.PI///test
+      }
+
+      this.character.direction.normalize().multiplyScalar(this.character.speed)
+      if (this.character.service.state.hasTag('canMove')) {
+        this.character.body.position.x += this.character.direction.x
+        this.character.body.position.z += this.character.direction.y
+        // let velocityScale = 70
+        // this.character.body.velocity.x = this.character.direction.x * velocityScale
+        // this.character.body.velocity.z = this.character.direction.y * velocityScale
       }
     } else {
       this.character.service.send('stop')

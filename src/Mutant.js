@@ -3,7 +3,7 @@ import { g } from './global.js'
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 class Mutant {
-  constructor(x, y, z) {
+  constructor({ position }) {
     this.isCharacter = true
     this.isEnemy = true
 
@@ -16,6 +16,8 @@ class Mutant {
     this.tmpVec3 = new THREE.Vector3()
     this.isAir = false
     this.airLiftVelocity = 1.5
+    this.position = position
+    this.initialPosition = this.position.clone()
 
     // for RoleControls.js
     this.direction = vec2() // direction may be zero length.
@@ -430,7 +432,7 @@ class Mutant {
     this.body.addShape(sphereShape, new CANNON.Vec3(0, -this.bodyCylinderHeight / 2, 0))
     this.body.addShape(cylinderShape)
 
-    this.body.position.set(x, y, z) ///formal
+    this.body.position.copy(this.position) ///formal
     // this.body.position.set(10.135119435295582, -0.000010295802922222208, -14.125613840025014)///test
     world.addBody(this.body)
     // this.body.addEventListener('collide', (event) => {

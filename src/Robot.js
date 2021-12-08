@@ -4,7 +4,7 @@ import * as THREE from '../lib/three.js/build/three.module.js'
 import { Attacker } from './Attacker.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 class Robot {
-  constructor(x, y, z) {
+  constructor({ position }) {
     this.isCharacter = true
     this.isEnemy = true
 
@@ -14,6 +14,8 @@ class Robot {
     this.oaction = {}
     this.mixer
     this.isAir = false
+    this.position = position
+    this.initialPosition = this.position.clone()
 
     // for RoleControls.js
     this.direction = vec2() // direction may be zero length.
@@ -155,7 +157,7 @@ class Robot {
     // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     this.body.angularDamping = 1
     this.body.addShape(shape)
-    this.body.position.set(x, y, z)
+    this.body.position.copy(this.position)
     world.addBody(this.body)
 
     this.body.addEventListener('beginContact', (event) => {

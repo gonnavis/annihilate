@@ -680,6 +680,8 @@ class Maria {
           //   this.body.type = CANNON.BODY_TYPES.STATIC
           // },
           playClimb: (context, event, o) => {
+            this.fadeToAction('climb')
+
             // debugger
             this.body.mass = 0
             this.body.type = CANNON.BODY_TYPES.STATIC
@@ -692,6 +694,8 @@ class Maria {
             // console.log(sign)
             this.body.position.x = contact.sj.body.position.x + contact.rj.x + (this.bodyRadius + 0.01) * -this.climbContactSign
             // let body not sink to wall, to prevent jump then immediate to climb again.
+
+            this.setFacing(this.climbContactSign, 0)
 
             // this.body.initVelocity.set(0, 0, 0)
             // this.body.updateMassProperties()
@@ -735,6 +739,8 @@ class Maria {
           },
           playClimbJump: () => {
             this.fadeToAction('jump') // TODO: Mesh pos y do not move.
+
+            this.setFacing(this.climbContactSign, 0)
 
             // console.log('climbToJump')
             // let sign = this.climbContact.rj.x
@@ -1165,7 +1171,8 @@ class Maria {
     })
     this.body.belongTo = this
 
-    this.bodyRadius = 0.25
+    // this.bodyRadius = 0.25 // formal
+    this.bodyRadius = 0.5 // temporarily increased for climb state animation.
     this.bodyHeight = 1.65
     this.bodyHeightHalf = this.bodyHeight / 2
     // this.bodyHeight = 10

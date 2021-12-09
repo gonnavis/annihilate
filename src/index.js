@@ -335,6 +335,15 @@ function init() {
   domPaladin.addEventListener('click', (e) => {
     window.service.send('paladin')
   })
+  domRobot.addEventListener('click', (e) => {
+    window.service.send('robot')
+  })
+  domParrot.addEventListener('click', (e) => {
+    window.service.send('parrot')
+  })
+  domMutant.addEventListener('click', (e) => {
+    window.service.send('mutant')
+  })
 
   window.addEventListener('keydown', (e) => {
     switch (e.code) {

@@ -545,6 +545,7 @@ class Maria {
             on: {
               jump: { target: 'climbJump' },
               land: { target: 'idle' },
+              attack: { target: 'airIdle' }, // to fall?
             },
           },
           airAttack: {
@@ -685,6 +686,7 @@ class Maria {
             // debugger
             this.body.mass = 0
             this.body.type = CANNON.BODY_TYPES.STATIC
+            this.body.velocity.set(0, 0, 0)
 
             let contact = event.contact
             // let sign = contact.rj.x
@@ -1145,7 +1147,7 @@ class Maria {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value

@@ -1,6 +1,8 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
+import { Splash } from './Splash.js'
+
 //new Attacker(scene, updates, robot.mesh.position, mesh.position)
 class Attacker {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
@@ -69,12 +71,13 @@ class Attacker {
     this.height = 0.4 // Increase attacker height for more easily rebound.
     this.body = new CANNON.Body({
       mass: 0,
-      type: CANNON.Body.KINEMATIC,
+      type: CANNON.Body.DYNAMIC,
+      collisionResponse: false,
+      // NOTE: See GreatSword.js NOTE.
       collisionFilterGroup: g.GROUP_ENEMY_WEAPON,
       collisionFilterMask: g.GROUP_ROLE | g.GROUP_ROLE_WEAPON,
     })
     this.body.belongTo = this
-    this.body.collisionResponse = false
     let shape = new CANNON.Cylinder(this.radius, this.radius, this.height, 8)
     // let shape = new CANNON.Cylinder(this.radius, this.radius, 1.5, 8)
     // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2) ///Why cannon-es not need this rotate?
@@ -84,14 +87,16 @@ class Attacker {
     // this.body.position.y += 0.5
     world.addBody(this.body)
 
-    this.body.addEventListener('beginContact', (e) => {
+    this.body.addEventListener('collide', (e) => {
       // console.log(e.body.belongTo.constructor.name)
       if (e.body.belongTo.isRole) {
         e.body.belongTo.hit()
+        new Splash(e)
       } else if (e.body.belongTo.isWeapon && e.body.belongTo.owner.service.state.hasTag('canDamage')) {
         this.service.send('rebound')
       } else if (e.body.belongTo.isEnemy) {
         e.body.belongTo.hit()
+        new Splash(e)
       }
       // if (this.owner.service.state.hasTag('canDamage')) {
       // e.body.belongTo.hit()

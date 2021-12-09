@@ -2,14 +2,15 @@ import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
 class Splash {
-  constructor() {
+  constructor(event) {
     this.mesh = new THREE.Mesh(
-      new THREE.PlaneBufferGeometry(0.1, 0.1),
+      new THREE.BoxGeometry(0.1, 0.1, 0.1),
       new THREE.MeshStandardMaterial({
+        transparent: true,
         color: 'red',
       })
     )
-    scene.add(this.mesh)
+    window.scene.add(this.mesh)
 
     // let shape = new CANNON.Box(.5,.5,.5)
     // // let physicsMaterial = new CANNON.Material({
@@ -28,6 +29,31 @@ class Splash {
     // //   console.log('collide floor')
     // // })
     // world.addBody(this.body)
+
+    //
+
+    this.mesh.position.addVectors(event.body.position, event.contact.ri)
+
+    {
+      let to = { t: 0, tv: 1 }
+      let startPosY = this.mesh.position.y
+      gsap.to(to, {
+        duration: 0.5,
+        t: 1,
+        tv: 0,
+        onUpdate: () => {
+          this.mesh.position.y = startPosY + 1.5 * to.t
+          this.mesh.material.opacity = to.tv ** 0.5
+        },
+        onComplete: () => {
+          this.dispose()
+        },
+      })
+    }
+  }
+
+  dispose() {
+    window.scene.remove(this.mesh)
   }
 }
 

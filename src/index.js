@@ -35,7 +35,6 @@ import { Catapult } from './Catapult.js'
 import { Cloud } from './Cloud.js'
 import { BirdFlock } from './BirdFlock.js'
 import { JumpPoint } from './JumpPoint.js'
-import { Splash } from './Splash.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -267,8 +266,6 @@ function init() {
 
     floatingBoxes.push(floatingBox)
   }
-
-  window.splash = new Splash()
 
   //
 

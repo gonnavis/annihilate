@@ -1,6 +1,8 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
+import { Splash } from './Splash.js'
+
 class SwordBlaster {
   constructor(owner, type) {
     this.isWeapon = true
@@ -25,20 +27,24 @@ class SwordBlaster {
 
     this.body = new CANNON.Body({
       mass: 0,
+      type: CANNON.Body.DYNAMIC,
+      collisionResponse: false,
+      // NOTE: See GreatSword.js NOTE.
       collisionFilterGroup: g.GROUP_ROLE_WEAPON,
       collisionFilterMask: g.GROUP_ENEMY,
     })
     this.body.belongTo = this
-    this.body.collisionResponse = false
     let shape = new CANNON.Box(new CANNON.Vec3(this.width / 2, this.height / 2, this.depth / 2))
     this.body.addShape(shape)
 
-    this.body.addEventListener('beginContact', (e) => {
+    this.body.addEventListener('collide', (e) => {
       // if (e.body.belongTo?.isEnemy === true && e.body.belongTo !== this.owner) {
       if (this.type === 3) {
         e.body.belongTo.knockDown()
+        new Splash(e)
       } else {
         e.body.belongTo.hit()
+        new Splash(e)
       }
       // }
     })

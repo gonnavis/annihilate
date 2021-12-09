@@ -1,6 +1,8 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
+import { Splash } from './Splash.js'
+
 class Bullet {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
     this.isWeapon = true
@@ -63,24 +65,27 @@ class Bullet {
     this.radius = 0.11
     this.body = new CANNON.Body({
       mass: 0,
-      type: CANNON.Body.KINEMATIC,
+      type: CANNON.Body.DYNAMIC,
+      collisionResponse: false,
+      // NOTE: See GreatSword.js NOTE.
       collisionFilterGroup: g.GROUP_ENEMY_WEAPON,
       collisionFilterMask: g.GROUP_ROLE | g.GROUP_ROLE_WEAPON,
     })
     this.body.belongTo = this
-    this.body.collisionResponse = false
     let shape = new CANNON.Sphere(this.radius)
     this.body.addShape(shape)
     this.body.position.copy(owner.body.position)
     world.addBody(this.body)
 
-    this.body.addEventListener('beginContact', (e) => {
+    this.body.addEventListener('collide', (e) => {
       if (e.body.belongTo.isRole) {
         e.body.belongTo.hit()
+        new Splash(e)
       } else if (e.body.belongTo.isWeapon && e.body.belongTo.owner.service.state.hasTag('canDamage')) {
         this.service.send('rebound')
       } else if (e.body.belongTo.isEnemy) {
         e.body.belongTo.hit()
+        new Splash(e)
       }
     })
 

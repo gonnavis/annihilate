@@ -11,18 +11,18 @@ class Pop {
 
     this.body = new CANNON.Body({
       mass: 0,
+      type: CANNON.Body.DYNAMIC,
+      collisionResponse: false,
+      // NOTE: See GreatSword.js NOTE.
       collisionFilterGroup: g.GROUP_ROLE_WEAPON,
       collisionFilterMask: g.GROUP_ENEMY,
     })
     this.body.belongTo = this
-    this.body.collisionResponse = false
     let shape = new CANNON.Sphere(this.radius)
     this.body.addShape(shape)
     // window.world.addBody(this.body)
 
-    this.body.addEventListener('beginContact', (e) => {
-      // console.log('pop contact')
-
+    this.body.addEventListener('collide', (e) => {
       // push away
       this.tmpVec3.x = e.body.position.x - this.owner.body.position.x
       this.tmpVec3.y = 0
@@ -33,6 +33,7 @@ class Pop {
 
       // damage
       e.body.belongTo.knockDown()
+      new Splash(e)
     })
 
     // // mesh

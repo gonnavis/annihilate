@@ -1,6 +1,8 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
+import { Splash } from './Splash.js'
+
 class Grenade {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
     this.isWeapon = true
@@ -84,18 +86,19 @@ class Grenade {
     this.radius = 0.18
     this.body = new CANNON.Body({
       mass: 0,
-      type: CANNON.Body.KINEMATIC,
+      type: CANNON.Body.DYNAMIC,
+      collisionResponse: false,
+      // NOTE: See GreatSword.js NOTE.
       collisionFilterGroup: g.GROUP_ENEMY_WEAPON,
       collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE_WEAPON,
     })
     this.body.belongTo = this
-    this.body.collisionResponse = false
     let shape = new CANNON.Sphere(this.radius)
     this.body.addShape(shape)
     this.body.position.copy(owner.body.position)
     world.addBody(this.body)
 
-    this.body.addEventListener('beginContact', (e) => {
+    this.body.addEventListener('collide', (e) => {
       // console.log(e.body)
       // e.body.belongTo.hit()
       if (e.body.belongTo.isGround) {
@@ -104,6 +107,7 @@ class Grenade {
         this.service.send('rebound')
       } else if (e.body.belongTo.isEnemy) {
         e.body.belongTo.hit()
+        new Splash(e)
       }
     })
 
@@ -151,19 +155,21 @@ class Grenade {
     this.explodeHeight = 0.1
     this.explodeBody = new CANNON.Body({
       mass: 0,
-      type: CANNON.Body.KINEMATIC,
+      type: CANNON.Body.DYNAMIC,
+      collisionResponse: false,
+      // NOTE: See GreatSword.js NOTE.
       collisionFilterGroup: g.GROUP_ENEMY_WEAPON,
       collisionFilterMask: g.GROUP_ROLE,
     })
     this.explodeBody.belongTo = this
-    this.explodeBody.collisionResponse = false
     let shape = new CANNON.Cylinder(this.explodeRadius, this.explodeRadius, this.explodeHeight, 8)
     this.explodeBody.addShape(shape)
     this.explodeBody.position.copy(this.body.position)
     world.addBody(this.explodeBody)
 
-    this.explodeBody.addEventListener('beginContact', (e) => {
+    this.explodeBody.addEventListener('collide', (e) => {
       e.body.belongTo.hit()
+      new Splash(e)
     })
 
     // mesh

@@ -114,6 +114,7 @@ class Mutant {
           },
           charging: {
             entry: 'playCharging',
+            exit: 'exitCharging',
             on: {
               keyJUp: { target: 'attack' },
               hit: { target: 'hit' },
@@ -320,7 +321,7 @@ class Mutant {
           playCharging: () => {
             // charging hint
             let to = { t: 0 }
-            gsap.to(to, {
+            this.tweenCharging = gsap.to(to, {
               duration: 0.5,
               t: 1,
               onUpdate: () => {
@@ -340,6 +341,9 @@ class Mutant {
                 this.service.send('finish')
               },
             })
+          },
+          exitCharging: () => {
+            this.tweenCharging.kill()
           },
           exitCharged1: () => {
             this.mesh.traverseVisible((child) => {
@@ -477,7 +481,7 @@ class Mutant {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('mutant: state:', state.value)
+      if (state.changed) console.log('mutant: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value

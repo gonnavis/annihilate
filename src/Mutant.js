@@ -113,17 +113,17 @@ class Mutant {
             },
           },
           charging: {
+            entry: 'playCharging',
             on: {
               keyJUp: { target: 'attack' },
               hit: { target: 'hit' },
               dash: { target: 'dash' },
-            },
-            after: {
-              500: { target: 'charged1' },
+              finish: { target: 'charged1' },
             },
           },
           charged1: {
-            entry: 'playCharged1',
+            // entry: 'playCharged1',
+            exit: 'exitCharged1',
             on: {
               keyJUp: { target: 'chargeAttack' },
               hit: { target: 'hit' },
@@ -317,6 +317,37 @@ class Mutant {
       },
       {
         actions: {
+          playCharging: () => {
+            // charging hint
+            let to = { t: 0 }
+            gsap.to(to, {
+              duration: 0.5,
+              t: 1,
+              onUpdate: () => {
+                let chargeHintIntensity = to.t ** 2 * 0.5
+                this.mesh.traverseVisible((child) => {
+                  if (child.material) {
+                    child.material.emissive.setRGB(0, chargeHintIntensity, chargeHintIntensity)
+                  }
+                })
+              },
+              onComplete: () => {
+                this.mesh.traverseVisible((child) => {
+                  if (child.material) {
+                    child.material.emissive.setScalar(0.7)
+                  }
+                })
+                this.service.send('finish')
+              },
+            })
+          },
+          exitCharged1: () => {
+            this.mesh.traverseVisible((child) => {
+              if (child.material) {
+                child.material.emissive.setScalar(0)
+              }
+            })
+          },
           entryDash: () => {
             this.fadeToAction('dash', 0.2)
             this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(15)

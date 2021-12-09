@@ -529,7 +529,7 @@ class Maria {
             on: {
               land: { target: 'idle' },
               // attack: { target: 'airAttack' },
-              // bash: { target: 'airBashStartWithCharge' },
+              bash: { target: 'airBashStartWithCharge' },
               // jump: { target: 'doubleJump' },
               hit: { target: 'hit' },
               // dash: { target: 'airDash' },

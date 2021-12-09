@@ -23,6 +23,8 @@ class GreatSword {
       //
       // Above are all about getting `contact` information which only exist in `collide` event.
       // If not need `contact` information, simply use STATIC or DYNAMIC with `beginContact` event is OK.
+      //
+      // TODO: collide trigger more times than beginContact? How to check if first collide?
       collisionFilterGroup: g.GROUP_ROLE_WEAPON,
       collisionFilterMask: g.GROUP_ENEMY | g.GROUP_ENEMY_WEAPON,
     })

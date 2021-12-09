@@ -1242,7 +1242,7 @@ class Maria {
       // this.body.linearDamping = 1
       // this.body.velocity.set(0, 0, 0)
 
-      this.body.position.y -= dt
+      this.body.position.y -= Math.min(dt, g.MAX_DT) // TODO√: Fix switch browser dt too big, go through ground bug.
     }
 
     // console.log(this.body.position.y.toFixed(1))

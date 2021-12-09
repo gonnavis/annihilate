@@ -11,6 +11,8 @@ g.GROUP_ENEMY_WEAPON = 32
 g.GROUP_TRIGGER = 64
 // g.GROUP_ENEMY_WEAPON_REBOUNDABLE = 64 // Don't need.
 
+g.MAX_DT = 1 / 60 // Max delta time.
+
 g.getQueryStringByName = function (name) {
   var result = location.search.match(new RegExp('[?&]' + name + '=([^&]+)', 'i'))
   if (result == null || result.length < 1) {

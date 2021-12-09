@@ -135,7 +135,7 @@ class Mutant {
               dash: { target: 'dash' },
               attack: { target: 'prepareStrike' },
             },
-            tags: ['canDamage'],
+            // tags: ['canDamage'], // TODO: Add fist body.
           },
           prepareStrike: {
             on: {
@@ -144,7 +144,7 @@ class Mutant {
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
-            tags: ['canDamage'],
+            // tags: ['canDamage'], // TODO: Add fist body.
           },
           strikeStart: {
             entry: 'playStrikeStart',

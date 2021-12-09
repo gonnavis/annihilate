@@ -101,50 +101,51 @@ class Mutant {
           attack: {
             entry: 'playAttack',
             on: {
-              finish: { target: 'idle' },
-              hit: { target: 'hit' },
-              knockDown: { target: 'knockDown' },
-              attack: { target: 'prepareFist' },
-              dash: { target: 'dash' },
-            },
-            tags: ['canDamage'],
-          },
-          // attackEnd: { // todo:
-          //   entry: 'playAttackEnd',
-          //   on: {
-          //     finish: { target: 'attack' },
-          //     hit: { target: 'hit' },
-          //     dash: { target: 'dash' },
-          //   },
-          // },
-          prepareFist: {
-            on: {
-              finish: { target: 'fist' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
+              // keyJUp: { target: 'attackNoCharge' },
             },
             tags: ['canDamage'],
+
+            initial: 'main',
+            states: {
+              main: {
+                on: {
+                  finish: { target: '#mutant.idle' },
+                  attack: { target: 'prepareNext' },
+                },
+              },
+              prepareNext: {
+                on: {
+                  finish: { target: '#mutant.fist' },
+                },
+              },
+            },
           },
           fist: {
             entry: 'playFist',
             on: {
-              finish: { target: 'idle' },
-              hit: { target: 'hit' },
-              knockDown: { target: 'knockDown' },
-              dash: { target: 'dash' },
-              attack: { target: 'prepareStrike' },
-            },
-            // tags: ['canDamage'], // TODO: Add fist body.
-          },
-          prepareStrike: {
-            on: {
-              finish: { target: 'strikeStart' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
             // tags: ['canDamage'], // TODO: Add fist body.
+
+            initial: 'main',
+            states: {
+              main: {
+                on: {
+                  finish: { target: '#mutant.idle' },
+                  attack: { target: 'prepareNext' },
+                },
+              },
+              prepareNext: {
+                on: {
+                  finish: { target: '#mutant.strikeStart' },
+                },
+              },
+            },
           },
           strikeStart: {
             entry: 'playStrikeStart',

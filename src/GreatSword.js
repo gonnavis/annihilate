@@ -23,8 +23,8 @@ class GreatSword {
     this.body.addShape(shape)
     world.addBody(this.body)
 
-    // this.body.addEventListener('collide', (e) => {
-    this.body.addEventListener('beginContact', (e) => {
+    this.body.addEventListener('collide', (e) => {
+      // this.body.addEventListener('beginContact', (e) => {
       // console.log('greatSword collide', e.body.belongTo)
       // if (e.body.belongTo?.isEnemy === true && e.body.belongTo !== this.owner) {
       // console.log(1111111111)
@@ -38,6 +38,13 @@ class GreatSword {
             }
           } else {
             e.body.belongTo.hit()
+
+            console.log(e.contact)
+            window.splash.mesh.position.addVectors(e.body.position, e.contact.ri)
+            // window.renderer.render(scene,camera)
+            // setTimeout(() => {
+            // debugger
+            // }, 0)
 
             // if (this.owner.service.state.matches('launch')) {
             if (this.owner.service.state.hasTag('canLaunch') && !e.body.belongTo.isAir) {

@@ -93,12 +93,14 @@ function init_xstate() {
         paladin: { entry: 'entryPaladin' },
         robot: { entry: 'entryRobot', exit: 'exitRobot' },
         parrot: { entry: 'entryParrot', exit: 'exitParrot' },
+        mutant: { entry: 'entryMutant', exit: 'exitMutant' },
       },
       on: {
         maria: { target: '.maria' },
         paladin: { target: '.paladin' },
         robot: { target: '.robot' },
         parrot: { target: '.parrot' },
+        mutant: { target: '.mutant' },
       },
     },
     {
@@ -156,6 +158,22 @@ function init_xstate() {
         },
         exitParrot: () => {
           if (parrot.ai) parrot.ai.enabled = true
+        },
+        entryMutant: () => {
+          if (!window.roleControls) window.roleControls = new RoleControls(mutants[0]) ///todo: Use ECS?
+          roleControls.setRole(mutants[0])
+
+          // ai.setTarget(mutants[0])
+
+          Array.prototype.forEach.call(domRoles.children, (domRole) => {
+            domRole.disabled = false
+          })
+          domMutant.disabled = true
+
+          if (mutants[0].ai) mutants[0].ai.enabled = false
+        },
+        exitMutant: () => {
+          if (mutants[0].ai) mutants[0].ai.enabled = true
         },
       },
     }
@@ -334,6 +352,9 @@ function init() {
         break
       case 'Digit4':
         window.service.send('parrot')
+        break
+      case 'Digit5':
+        window.service.send('mutant')
         break
     }
   })

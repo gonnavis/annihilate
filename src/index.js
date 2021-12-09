@@ -25,6 +25,7 @@ import { Shield } from './Shield.js'
 import { Robot } from './Robot.js'
 import { RoleControls } from './RoleControls.js'
 import { Ai } from './Ai.js'
+import { MutantAi } from './MutantAi.js'
 import { RobotAi } from './RobotAi.js'
 import { ParrotAi } from './ParrotAi.js'
 import { HandKnife } from './HandKnife.js'
@@ -305,7 +306,7 @@ function init() {
     mutant.load()
     mutants.push(mutant)
 
-    let ai = new Ai(mutant, 1.5)
+    let ai = new MutantAi(mutant, 4)
     mutant.ai = ai
     // ai.isAttack = false
   }

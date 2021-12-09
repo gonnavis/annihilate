@@ -69,7 +69,7 @@ class Mutant {
             entry: 'playIdle',
             on: {
               run: { target: 'run' },
-              attack: { target: 'attackStart' },
+              attack: { target: 'attackStartWithCharge' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
@@ -81,7 +81,7 @@ class Mutant {
             entry: 'playRun',
             on: {
               stop: { target: 'idle' },
-              attack: { target: 'attackStart' },
+              attack: { target: 'attackStartWithCharge' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
@@ -89,14 +89,56 @@ class Mutant {
             },
             tags: ['canMove', 'canFacing'],
           },
-          attackStart: {
+          attackStartWithCharge: {
             entry: 'playAttackStart',
             on: {
-              finish: { target: 'attack' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
             },
+
+            initial: 'withCharge',
+            states: {
+              withCharge: {
+                on: {
+                  finish: { target: '#mutant.charging' },
+                  keyJUp: { target: 'noCharge' },
+                },
+              },
+              noCharge: {
+                on: {
+                  finish: { target: '#mutant.attack' },
+                },
+              },
+            },
+          },
+          charging: {
+            on: {
+              keyJUp: { target: 'attack' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+            after: {
+              500: { target: 'charged1' },
+            },
+          },
+          charged1: {
+            entry: 'playCharged1',
+            on: {
+              keyJUp: { target: 'chargeAttack' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+          },
+          chargeAttack: {
+            entry: 'playChargeAttack',
+            on: {
+              hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
+              dash: { target: 'dash' },
+              finish: { target: 'idle' },
+            },
+            tags: ['canDamage'],
           },
           attack: {
             entry: 'playAttack',
@@ -104,7 +146,6 @@ class Mutant {
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
               dash: { target: 'dash' },
-              // keyJUp: { target: 'attackNoCharge' },
             },
             tags: ['canDamage'],
 
@@ -304,6 +345,15 @@ class Mutant {
             this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0.2)
           },
+          playChargeAttack: () => {
+            this.oaction['punch'].timeScale = this.attackSpeed
+            this.fadeToAction('punch', 0.2)
+
+            this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(20)
+            this.body.velocity.x = this.tmpVec3.x
+            // this.body.velocity.y = 0
+            this.body.velocity.z = this.tmpVec3.z
+          },
           playDashAttack: () => {
             this.fadeToAction('punch', 0.2)
             let to = { t: 0 }
@@ -396,7 +446,7 @@ class Mutant {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('mutant: state:', state.value)
+      if (state.changed) console.log('mutant: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value

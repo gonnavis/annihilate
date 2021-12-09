@@ -123,7 +123,7 @@ class Mutant {
             },
           },
           charged1: {
-            // entry: 'playCharged1',
+            entry: 'playCharged1',
             exit: 'exitCharged1',
             on: {
               keyJUp: { target: 'chargeAttack' },
@@ -333,17 +333,24 @@ class Mutant {
                 })
               },
               onComplete: () => {
-                this.mesh.traverseVisible((child) => {
-                  if (child.material) {
-                    child.material.emissive.setScalar(0.7)
-                  }
-                })
                 this.service.send('finish')
               },
             })
           },
           exitCharging: () => {
             this.tweenCharging.kill()
+            this.mesh.traverseVisible((child) => {
+              if (child.material) {
+                child.material.emissive.setScalar(0)
+              }
+            })
+          },
+          playCharged1: () => {
+            this.mesh.traverseVisible((child) => {
+              if (child.material) {
+                child.material.emissive.setScalar(0.7)
+              }
+            })
           },
           exitCharged1: () => {
             this.mesh.traverseVisible((child) => {
@@ -481,7 +488,7 @@ class Mutant {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('mutant: state:', state.value)
+      // if (state.changed) console.log('mutant: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value

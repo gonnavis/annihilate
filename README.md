@@ -87,6 +87,10 @@ O = Launch
 
 O hold = Launch with Jump
 
+touch wall = climb ( currently only support +-X axis wall, todo: +-Z axis )
+
+when climb J = fall
+
 ### Ref and Goal:
     
 Action: **DMC**, **Guilty Gear** ...

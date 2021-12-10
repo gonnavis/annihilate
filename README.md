@@ -99,7 +99,7 @@ Code: [three-pathfinding](https://github.com/donmccurdy/three-pathfinding), [Ske
 
 ### Todo: 
 
-Challenge levels/modes where only rebound attacks can deal damage.
+Challenge levels/modes where only rebound attacks can deal damage to enemies.
 
 chargeAttack✔️, dashAttack✔️, chargeDash, kick, jumpKick, air attacks✔️, walk, aoe✔️, skill✔️, vfx ...
 

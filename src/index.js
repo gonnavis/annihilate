@@ -62,7 +62,7 @@ window.renderer = null
 window.model = null
 window.face = null
 window.updates = []
-window.attackers = []
+window.hadoukens = []
 window.bullets = []
 window.grenades = []
 

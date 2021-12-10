@@ -1,7 +1,7 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-import { Attacker } from './Attacker.js'
+import { Hadouken } from './Hadouken.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 class Robot {
   constructor({ position }) {
@@ -64,7 +64,7 @@ class Robot {
             on: {
               idle: {
                 target: 'idle',
-                actions: 'throwAttacker',
+                actions: 'throwHadouken',
               },
               hit: { target: 'hit' },
             },
@@ -99,9 +99,9 @@ class Robot {
           playHit: () => {
             this.fadeToAction('jump', 0.2)
           },
-          throwAttacker: () => {
-            // if (g.isAttack && window.role.gltf && this.gltf) new Attacker(scene, updates, this, window.role.mesh.position)
-            new Attacker(scene, updates, this, window.role.mesh.position)
+          throwHadouken: () => {
+            // if (g.isAttack && window.role.gltf && this.gltf) new Hadouken(scene, updates, this, window.role.mesh.position)
+            new Hadouken(scene, updates, this, window.role.mesh.position)
           },
           dead: () => {
             this.fadeToAction('death', 0.2)

@@ -3,8 +3,8 @@ import { g } from './global.js'
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { Splash } from './Splash.js'
 
-//new Attacker(scene, updates, robot.mesh.position, mesh.position)
-class Attacker {
+//new Hadouken(scene, updates, robot.mesh.position, mesh.position)
+class Hadouken {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
     this.isWeapon = true
 
@@ -23,7 +23,7 @@ class Attacker {
 
     this.fsm = createMachine(
       {
-        id: 'attacker',
+        id: 'hadouken',
         initial: 'move',
         states: {
           move: {
@@ -59,7 +59,7 @@ class Attacker {
       }
     )
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('attacker: state:', state.value)
+      // if (state.changed) console.log('hadouken: state:', state.value)
     })
 
     this.service.start()
@@ -68,7 +68,7 @@ class Attacker {
 
     this.radius = 0.8
     // this.height = 0.11
-    this.height = 0.4 // Increase attacker height for more easily rebound.
+    this.height = 0.4 // Increase hadouken height for more easily rebound.
     this.body = new CANNON.Body({
       mass: 0,
       type: CANNON.Body.DYNAMIC,
@@ -129,7 +129,7 @@ class Attacker {
 
     //
 
-    window.attackers.push(this)
+    window.hadoukens.push(this)
   }
 
   update(dt) {
@@ -142,8 +142,8 @@ class Attacker {
     world.removeBody(this.body)
     scene.remove(this.mesh) // TODO: dispose geometry material.
     updates.splice(updates.indexOf(this), 1)
-    window.attackers.splice(window.attackers.indexOf(this), 1)
+    window.hadoukens.splice(window.hadoukens.indexOf(this), 1)
   }
 }
 
-export { Attacker }
+export { Hadouken }

@@ -39,7 +39,15 @@ Now open-sourced and:
 ![image](https://user-images.githubusercontent.com/10785634/145292224-41be4668-acc8-45aa-b284-f14819a3529e.png)
 
 
-[Video](https://twitter.com/gonnavis/status/1434951076365561859) [Video2](https://twitter.com/gonnavis/status/1461371351197880325) [Video3](https://twitter.com/gonnavis/status/1463220288468905987)
+Videos: 
+[Mutant](https://twitter.com/gonnavis/status/1434951076365561859),
+[Paladin Shiled](https://twitter.com/gonnavis/status/1461371351197880325),
+[Maria](https://twitter.com/gonnavis/status/1462649045298532356/video/1),
+[Whirlwind](https://twitter.com/gonnavis/status/1462820086054412291/video/1),
+[SwordBlaster](https://twitter.com/gonnavis/status/1463220288468905987),
+[MoveList, Hadouken Shoryuken](https://twitter.com/gonnavis/status/1465219502199562243/video/1),
+[Rebound](https://twitter.com/gonnavis/status/1466799541764517888/video/1),
+[Cloud & BirdFlock](https://twitter.com/gonnavis/status/1468695103640260609/video/1).
 
 ### Key Map:
 

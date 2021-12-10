@@ -1,42 +1,28 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-class Pop {
+import { Splash } from './Splash.js'
+import { Attacker } from './Attacker.js'
+
+class Pop extends Attacker {
   constructor(owner) {
-    this.isAttacker = true
+    super()
+
     this.owner = owner
 
     this.tmpVec3 = new THREE.Vector3()
-    this.radius = 3.7
 
-    this.body = new CANNON.Body({
-      mass: 0,
-      type: CANNON.Body.DYNAMIC,
-      collisionResponse: false,
-      // NOTE: See GreatSword.js NOTE.
-      collisionFilterGroup: g.GROUP_ROLE_WEAPON,
-      collisionFilterMask: g.GROUP_ENEMY,
-    })
-    this.body.belongTo = this
+    // body
+
+    this.body.collisionFilterGroup = g.GROUP_ROLE_WEAPON
+    this.body.collisionFilterMask = g.GROUP_ENEMY
+
+    this.radius = 3.7
     let shape = new CANNON.Sphere(this.radius)
     this.body.addShape(shape)
     // window.world.addBody(this.body)
 
-    this.body.addEventListener('collide', (event) => {
-      // push away
-      this.tmpVec3.x = event.body.position.x - this.owner.body.position.x
-      this.tmpVec3.y = 0
-      this.tmpVec3.z = event.body.position.z - this.owner.body.position.z
-      this.tmpVec3.normalize().multiplyScalar(12)
-      event.body.velocity.x += this.tmpVec3.x
-      event.body.velocity.z += this.tmpVec3.z
-
-      // damage
-      event.body.belongTo.knockDown()
-      new Splash(event)
-    })
-
-    // // mesh
+    // mesh
 
     let geometry = new THREE.SphereGeometry(this.radius)
     let material = new THREE.MeshBasicMaterial({
@@ -62,13 +48,27 @@ class Pop {
 
     // // this.target.set(this.body.position.x, this.owner.body.position.y + this.height / 2, this.body.position.z - 50)
     // this.launch()
-
-    window.updates.push(this)
   }
 
   update() {
     this.body.position.copy(this.owner.body.position)
     this.mesh.position.copy(this.owner.body.position)
+  }
+
+  collide(event, isBeginCollide) {
+    if (!isBeginCollide) return
+
+    // push away
+    this.tmpVec3.x = event.body.position.x - this.owner.body.position.x
+    this.tmpVec3.y = 0
+    this.tmpVec3.z = event.body.position.z - this.owner.body.position.z
+    this.tmpVec3.normalize().multiplyScalar(12)
+    event.body.velocity.x += this.tmpVec3.x // TODO: Mass more big, distance more long? Use gsap position instead?
+    event.body.velocity.z += this.tmpVec3.z
+
+    // damage
+    event.body.belongTo.knockDown()
+    new Splash(event)
   }
 
   dispose() {
@@ -81,6 +81,7 @@ class Pop {
     window.world.addBody(this.body)
     setTimeout(() => {
       window.world.removeBody(this.body)
+      this.collidings.length = 0
     }, 0)
 
     let to = { t: 0, tv: 1 }

@@ -105,7 +105,7 @@ class GreatSword {
   }
 
   update() {
-    console.log(this.collidings.length)
+    // console.log(this.collidings.length)
     if (this.owner.gltf) {
       let tempVec3 = vec3() ///todo: performance
       let tempQuat = new THREE.Quaternion() ///todo: performance

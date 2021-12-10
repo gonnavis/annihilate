@@ -99,6 +99,8 @@ Code: [three-pathfinding](https://github.com/donmccurdy/three-pathfinding), [Ske
 
 ### Todo: 
 
+Combat puzzle mode.
+
 Tower Defence mode.
 
 Parkour and combat mode.

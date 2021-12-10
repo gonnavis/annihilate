@@ -2,13 +2,12 @@ import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { Splash } from './Splash.js'
+import { Attacker } from './Attacker.js'
 
 //new Hadouken(scene, updates, robot.mesh.position, mesh.position)
-class Hadouken {
+class Hadouken extends Attacker {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
-    this.isAttacker = true
-
-    updates.push(this)
+    super()
 
     this.owner = owner
     let speed = 0.18
@@ -66,18 +65,12 @@ class Hadouken {
 
     // body
 
+    this.body.collisionFilterGroup = g.GROUP_ENEMY_WEAPON
+    this.body.collisionFilterMask = g.GROUP_ROLE | g.GROUP_ROLE_WEAPON
+
     this.radius = 0.8
     // this.height = 0.11
     this.height = 0.4 // Increase hadouken height for more easily rebound.
-    this.body = new CANNON.Body({
-      mass: 0,
-      type: CANNON.Body.DYNAMIC,
-      collisionResponse: false,
-      // NOTE: See GreatSword.js NOTE.
-      collisionFilterGroup: g.GROUP_ENEMY_WEAPON,
-      collisionFilterMask: g.GROUP_ROLE | g.GROUP_ROLE_WEAPON,
-    })
-    this.body.belongTo = this
     let shape = new CANNON.Cylinder(this.radius, this.radius, this.height, 8)
     // let shape = new CANNON.Cylinder(this.radius, this.radius, 1.5, 8)
     // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2) ///Why cannon-es not need this rotate?
@@ -86,30 +79,6 @@ class Hadouken {
     // this.body.position.y += 1
     // this.body.position.y += 0.5
     world.addBody(this.body)
-
-    this.body.addEventListener('collide', (event) => {
-      // console.log(event.body.belongTo.constructor.name)
-      if (event.body.belongTo.isRole) {
-        event.body.belongTo.hit()
-        new Splash(event)
-      } else if (event.body.belongTo.isAttacker && event.body.belongTo.owner.service.state.hasTag('canDamage')) {
-        this.service.send('rebound')
-      } else if (event.body.belongTo.isEnemy) {
-        event.body.belongTo.hit()
-        new Splash(event)
-      }
-      // if (this.owner.service.state.hasTag('canDamage')) {
-      // event.body.belongTo.hit()
-      // }
-      // if (event.body === role.body) {
-      //   role.hit()
-      // }
-      // window.robots.forEach((robot) => {
-      //   if (event.body === robot.body && event.body !== owner.body) {
-      //     robot.hit()
-      //   }
-      // })
-    })
 
     // mesh
 
@@ -136,6 +105,32 @@ class Hadouken {
     this.body.position.x += this.movement.x
     this.body.position.z += this.movement.y
     this.mesh.position.copy(this.body.position)
+  }
+
+  collide(event, isBeginCollide) {
+    if (!isBeginCollide) return
+
+    // console.log(event.body.belongTo.constructor.name)
+    if (event.body.belongTo.isRole) {
+      event.body.belongTo.hit()
+      new Splash(event)
+    } else if (event.body.belongTo.isAttacker && event.body.belongTo.owner.service.state.hasTag('canDamage')) {
+      this.service.send('rebound')
+    } else if (event.body.belongTo.isEnemy) {
+      event.body.belongTo.hit() // TODO: Why robot still hit twice after check isBeginCollide?
+      new Splash(event)
+    }
+    // if (this.owner.service.state.hasTag('canDamage')) {
+    // event.body.belongTo.hit()
+    // }
+    // if (event.body === role.body) {
+    //   role.hit()
+    // }
+    // window.robots.forEach((robot) => {
+    //   if (event.body === robot.body && event.body !== owner.body) {
+    //     robot.hit()
+    //   }
+    // })
   }
 
   dispose() {

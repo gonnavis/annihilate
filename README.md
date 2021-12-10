@@ -101,6 +101,8 @@ Code: [three-pathfinding](https://github.com/donmccurdy/three-pathfinding), [Ske
 
 Challenge levels/modes where only rebound attacks can deal damage to enemies.
 
+Drive sheepFlock/birdFlock into the fold, as fast as possible. And prevent enemies from killing the flock, as little as possible.
+
 chargeAttack✔️, dashAttack✔️, chargeDash, kick, jumpKick, air attacks✔️, walk, aoe✔️, skill✔️, vfx ...
 
 Fix: Do not inflict damage at the start and end of an attack.✔️

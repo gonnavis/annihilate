@@ -10,8 +10,8 @@ class Sword extends Attacker {
 
     // body
 
-    this.body.collisionFilterGroup = g.GROUP_ROLE_ATTACKER
-    this.body.collisionFilterMask = g.GROUP_ENEMY
+    this.body.collisionFilterGroup = g.GROUP_ENEMY_ATTACKER
+    this.body.collisionFilterMask = g.GROUP_ROLE
 
     let shape = new CANNON.Box(new CANNON.Vec3(0.11, 0.11, 0.45))
     this.body.addShape(shape)

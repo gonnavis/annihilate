@@ -3,8 +3,9 @@ import { g } from './global.js'
 import * as THREE from '../lib/three.js/build/three.module.js'
 class Shield {
   constructor() {
-    this.isAttacker = true
+    this.isShield = true
     updates.push(this)
+    this.owner = null
 
     this.is_hit = false
 
@@ -15,23 +16,28 @@ class Shield {
       type: CANNON.Body.DYNAMIC,
       collisionResponse: false,
       //
-      collisionFilterGroup: g.GROUP_ENEMY_ATTACKER,
+      collisionFilterGroup: g.GROUP_ENEMY_SHIELD,
       collisionFilterMask: g.GROUP_ROLE_ATTACKER,
     })
     this.body.belongTo = this
 
-    let shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.11, 0.37))
+    // let shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.11, 0.37))
+    let shape = new CANNON.Box(new CANNON.Vec3(0.5, 0.2, 0.9))
     this.body.addShape(shape)
     world.addBody(this.body)
 
     // this.body.addEventListener('collide', (event) => {
-    //   if (['attack', 'fist', 'strike', 'jumpAttack', 'dashAttack'].some(paladin.service.state.matches)) {
-    //     window.robots.forEach((robot) => {
-    //       if (event.body === robot.body) {
-    //         robot.hit() // todo: refactor: do not check paladin's state at here.
-    //       }
-    //     })
+    //   if (event.body.belongTo?.owner?.service.state.hasTag('canDamage')) {
+    //     console.log('blocked')
+    //     this.owner.service.send('blocked')
     //   }
+    //     if (['attack', 'fist', 'strike', 'jumpAttack', 'dashAttack'].some(paladin.service.state.matches)) {
+    //       window.robots.forEach((robot) => {
+    //         if (event.body === robot.body) {
+    //           robot.hit() // todo: refactor: do not check paladin's state at here.
+    //         }
+    //       })
+    //     }
     // })
   }
 

@@ -29,7 +29,7 @@ class Attacker {
       //
       // TODO: collide trigger more times than beginContact? How to check if first collide? Yes, so need to filter collide events. Or use beginContact for real hit, collide for splash.
       collisionFilterGroup: g.GROUP_ROLE_ATTACKER, // !!! replace in subClass
-      collisionFilterMask: g.GROUP_ENEMY | g.GROUP_ENEMY_ATTACKER, // !!! replace in subClass
+      collisionFilterMask: g.GROUP_ENEMY | g.GROUP_ENEMY_ATTACKER | g.GROUP_ENEMY_SHIELD, // !!! replace in subClass
     })
     this.body.belongTo = this
 

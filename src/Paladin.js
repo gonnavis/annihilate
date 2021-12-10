@@ -205,6 +205,8 @@ class Paladin {
             },
           },
           blocked: {
+            // Enter this state after hit shield, so `blocked`.
+            // `block` ( see Maria.js ) state is blocking, has not hit ( by my convention, all `doing` state omit `ing` letters ).
             entry: ['playBlocked'],
             on: {
               finish: { target: 'idle' },
@@ -344,7 +346,7 @@ class Paladin {
             this.fadeToAction('knockDown', 0.2)
           },
           playBlocked: () => {
-            this.fadeToAction('impact', 0.2)
+            this.fadeToAction('impactBlock', 0.2)
           },
         },
       }
@@ -478,7 +480,7 @@ class Paladin {
             //   action.loop = THREE.LoopOnce
             // }
 
-            if (['punch', 'punchStart', 'fist', 'jumpAttack', 'strike', 'strikeStart', 'strikeEnd', 'hit', 'knockDown', 'impact', 'jump'].includes(name)) {
+            if (['punch', 'punchStart', 'fist', 'jumpAttack', 'strike', 'strikeStart', 'strikeEnd', 'hit', 'knockDown', 'impactBlock', 'jump'].includes(name)) {
               action.loop = THREE.LoopOnce
               action.clampWhenFinished = true
             }
@@ -524,7 +526,7 @@ class Paladin {
 
     let nextAction = this.oaction[name]
 
-    if (1) {
+    if (duration > 0) {
       // fade
       nextAction.reset()
       // nextAction.stop()
@@ -533,11 +535,7 @@ class Paladin {
       // nextAction.setEffectiveTimeScale(1)
       // nextAction.setEffectiveWeight(1)
       // nextAction.time = 0
-      if (this.action_act === this.oaction.knockDown && nextAction === this.oaction.idle) {
-        this.action_act.crossFadeTo(nextAction, 0.2)
-      } else {
-        this.action_act.crossFadeTo(nextAction, duration)
-      }
+      this.action_act.crossFadeTo(nextAction, duration)
       // Note: If action_act loopOnce, need crossFade before finished. Or clampWhenFinished.
       this.action_act = nextAction
     } else {

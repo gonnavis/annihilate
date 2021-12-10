@@ -2,14 +2,14 @@ import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { Splash } from './Splash.js'
+import { Attacker } from './Attacker.js'
 
-class SwordBlaster {
+class SwordBlaster extends Attacker {
   constructor(owner, type) {
-    this.isAttacker = true
+    super()
+
     this.owner = owner
     this.type = type
-
-    // updates.push(this)
 
     this.width = 0.185
     this.height = 2.96 * 2
@@ -25,29 +25,13 @@ class SwordBlaster {
 
     this.target = new THREE.Vector3(this.owner.facing.x, 0, this.owner.facing.y).normalize().multiplyScalar(18.5).add(this.owner.body.position) // vec3
 
-    this.body = new CANNON.Body({
-      mass: 0,
-      type: CANNON.Body.DYNAMIC,
-      collisionResponse: false,
-      // NOTE: See GreatSword.js NOTE.
-      collisionFilterGroup: g.GROUP_ROLE_WEAPON,
-      collisionFilterMask: g.GROUP_ENEMY,
-    })
-    this.body.belongTo = this
+    // body
+
+    this.body.collisionFilterGroup = g.GROUP_ROLE_WEAPON
+    this.body.collisionFilterMask = g.GROUP_ENEMY
+
     let shape = new CANNON.Box(new CANNON.Vec3(this.width / 2, this.height / 2, this.depth / 2))
     this.body.addShape(shape)
-
-    this.body.addEventListener('collide', (event) => {
-      // if (event.body.belongTo?.isEnemy === true && event.body.belongTo !== this.owner) {
-      if (this.type === 3) {
-        event.body.belongTo.knockDown()
-        new Splash(event)
-      } else {
-        event.body.belongTo.hit()
-        new Splash(event)
-      }
-      // }
-    })
 
     // mesh
 
@@ -73,6 +57,20 @@ class SwordBlaster {
 
     // this.target.set(this.body.position.x, this.owner.body.position.y + this.height / 2, this.body.position.z - 50)
     this.launch()
+  }
+
+  collide(event, isBeginCollide) {
+    if (!isBeginCollide) return
+
+    // if (event.body.belongTo?.isEnemy === true && event.body.belongTo !== this.owner) {
+    if (this.type === 3) {
+      event.body.belongTo.knockDown()
+      new Splash(event)
+    } else {
+      event.body.belongTo.hit()
+      new Splash(event)
+    }
+    // }
   }
 
   launch() {
@@ -103,8 +101,6 @@ class SwordBlaster {
     scene.remove(this.mesh)
     // this.isDisposed = true
   }
-
-  // update() {}
 }
 
 export { SwordBlaster }

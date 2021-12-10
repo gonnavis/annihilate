@@ -35,6 +35,7 @@ import { Catapult } from './Catapult.js'
 import { Cloud } from './Cloud.js'
 import { BirdFlock } from './BirdFlock.js'
 import { JumpPoint } from './JumpPoint.js'
+import { RobotBoss } from './RobotBoss.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -70,8 +71,8 @@ let fsm
 window.service = null
 
 let cameraPosX = 0
-let cameraPosY = g.getQueryStringByName('view') === 'front' ? 0 : 11
-let cameraPosZ = g.getQueryStringByName('view') === 'top' ? 0 : 11
+let cameraPosY = g.getQueryStringByName('view') === 'front' ? 0 : 15
+let cameraPosZ = g.getQueryStringByName('view') === 'top' ? 0 : 15
 
 // const gui = new GUI({ width: 310 })
 const gui = new GUI()
@@ -271,6 +272,8 @@ function init() {
 
   if (g.getQueryStringByName('roleAirBox') === 'true') {
     window.maria = new Maria(-20, 15, -45)
+  } else if (g.getQueryStringByName('boss') === 'true') {
+    window.maria = new Maria(-40, 5, 18)
   } else {
     window.maria = new Maria(-2, 2, 0)
     // window.maria = new Maria(-2, 2, 8)
@@ -301,7 +304,7 @@ function init() {
   let mutantsCount = parseInt(g.getQueryStringByName('mutants'))
   if (Number.isNaN(mutantsCount)) mutantsCount = 3
   for (let i = 0; i < mutantsCount; i++) {
-    let mutant = new Mutant({ position: new THREE.Vector3((Math.random() - 0.5) * 35, 2, (Math.random() - 0.5) * 35) })
+    let mutant = new Mutant({ position: new THREE.Vector3((Math.random() - 0.5) * 28, 2, (Math.random() - 0.5) * 28) })
     // let mutant = new Mutant(-25, 5, 0)
     let handKnife = new HandKnife()
     handKnife.owner = mutant
@@ -331,6 +334,11 @@ function init() {
   })
   parrot.load()
   parrot.ai = new ParrotAi(parrot, 8)
+
+  window.robotBoss = new RobotBoss({
+    position: new THREE.Vector3(-40, 5, 10),
+  })
+  robotBoss.load()
 
   domMaria.addEventListener('click', (event) => {
     window.service.send('maria')

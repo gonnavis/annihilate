@@ -11,7 +11,9 @@ class GreatSword {
 
     this.owner = null
 
-    this.is_hit = false
+    // this.is_hit = false
+    this.collidings = []
+
     this.body = new CANNON.Body({
       mass: 0,
       type: CANNON.Body.DYNAMIC,
@@ -24,7 +26,7 @@ class GreatSword {
       // Above are all about getting `contact` information which only exist in `collide` event.
       // If not need `contact` information, simply use STATIC or DYNAMIC with `beginContact` event is OK.
       //
-      // TODO: collide trigger more times than beginContact? How to check if first collide?
+      // TODO: collide trigger more times than beginContact? How to check if first collide? Yes, so need to filter collide events. Or use beginContact for real hit, collide for splash.
       collisionFilterGroup: g.GROUP_ROLE_WEAPON,
       collisionFilterMask: g.GROUP_ENEMY | g.GROUP_ENEMY_WEAPON,
     })
@@ -35,11 +37,21 @@ class GreatSword {
     world.addBody(this.body)
 
     // this.body.addEventListener('beginContact', (e) => {
+    //   if (this.owner.service.state.hasTag('canDamage')) {
+    //     console.log('beginContact')
+    //   }
+    // })
+
     this.body.addEventListener('collide', (e) => {
+      let isFirstCollide = !this.collidings.includes(e.body)
+      if (isFirstCollide) this.collidings.push(e.body)
+
       // console.log('greatSword collide', e.body.belongTo)
       // if (e.body.belongTo?.isEnemy === true && e.body.belongTo !== this.owner) {
       // console.log(1111111111)
-      if (this.owner.service.state.hasTag('canDamage')) {
+      if (isFirstCollide && this.owner.service.state.hasTag('canDamage')) {
+        // console.log('collide')
+
         // debugger
         if (e.body.belongTo.isEnemy) {
           if (this.owner.service.state.hasTag('knockDown')) {
@@ -80,9 +92,20 @@ class GreatSword {
       }
       // }
     })
+
+    this.body.addEventListener('endContact', (e) => {
+      let index = this.collidings.indexOf(e.body)
+      this.collidings.splice(index, 1)
+
+      // console.log('endContact')
+      // if (this.owner.service.state.hasTag('canDamage')) {
+      //   console.log('endContact')
+      // }
+    })
   }
 
   update() {
+    console.log(this.collidings.length)
     if (this.owner.gltf) {
       let tempVec3 = vec3() ///todo: performance
       let tempQuat = new THREE.Quaternion() ///todo: performance

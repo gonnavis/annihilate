@@ -5,7 +5,7 @@ import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 class Paladin {
   constructor(x, y, z) {
     this.isCharacter = true
-    this.isRole = true
+    this.isEnemy = true
 
     updates.push(this)
 
@@ -372,8 +372,8 @@ class Paladin {
     this.body = new CANNON.Body({
       mass: 100,
       // material: physicsMaterial,
-      collisionFilterGroup: g.GROUP_ROLE,
-      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ENEMY_WEAPON,
+      collisionFilterGroup: g.GROUP_ENEMY,
+      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ROLE_WEAPON,
     })
     this.body.belongTo = this
 

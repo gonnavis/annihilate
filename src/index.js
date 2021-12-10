@@ -70,9 +70,11 @@ window.grenades = []
 let fsm
 window.service = null
 
+let cameraDist = 11
+// let cameraDist=15
 let cameraPosX = 0
-let cameraPosY = g.getQueryStringByName('view') === 'front' ? 0 : 15
-let cameraPosZ = g.getQueryStringByName('view') === 'top' ? 0 : 15
+let cameraPosY = g.getQueryStringByName('view') === 'front' ? 0 : cameraDist
+let cameraPosZ = g.getQueryStringByName('view') === 'top' ? 0 : cameraDist
 
 // const gui = new GUI({ width: 310 })
 const gui = new GUI()
@@ -292,7 +294,7 @@ function init() {
   // window.paladin = new Paladin(0, 5, 0)
   paladin.load(() => {
     // paladin.mesh.rotation.set(0, Math.PI, 0)
-    paladin.setFacing(0, -1)
+    paladin.setFacing(-1, 0)
   })
   window.sword = new Sword()
   sword.owner = paladin
@@ -316,24 +318,28 @@ function init() {
     // ai.isAttack = false
   }
 
-  window.robots = []
-  window.robot = new Robot({
-    position: new THREE.Vector3(6, 2, -4),
-  })
-  robots.push(robot)
-  robot.load()
-  robot.ai = new RobotAi(robot, 8)
-  // robot.ai.isAttack = false
+  if (!(g.getQueryStringByName('robot') === 'false')) {
+    window.robots = []
+    window.robot = new Robot({
+      position: new THREE.Vector3(6, 2, -4),
+    })
+    robots.push(robot)
+    robot.load()
+    robot.ai = new RobotAi(robot, 8)
+    // robot.ai.isAttack = false
 
-  // window.robot2 = new Robot(15, 5, 15)
-  // robots.push(robot2)
-  // robot2.load()
+    // window.robot2 = new Robot(15, 5, 15)
+    // robots.push(robot2)
+    // robot2.load()
+  }
 
-  window.parrot = new Parrot({
-    position: new THREE.Vector3(0, 4, -5),
-  })
-  parrot.load()
-  parrot.ai = new ParrotAi(parrot, 8)
+  if (!(g.getQueryStringByName('parrot') === 'false')) {
+    window.parrot = new Parrot({
+      position: new THREE.Vector3(0, 4, -5),
+    })
+    parrot.load()
+    parrot.ai = new ParrotAi(parrot, 8)
+  }
 
   window.robotBoss = new RobotBoss({
     position: new THREE.Vector3(-40, 5, 10),

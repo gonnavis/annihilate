@@ -48,6 +48,8 @@ class MutantAi extends Ai {
   }
 
   attack() {
+    if (!g.isAttack) return
+
     if (this.service.state.matches('cantAttack')) {
       this.character.service.send('stop') // prevent keep play running animation when in attack range and not moving.
     } else {

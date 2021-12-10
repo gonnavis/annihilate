@@ -559,7 +559,7 @@ class Mutant {
 
   hit() {
     // console.log('hit()')
-    if (g.isDamage) this.health -= 10
+    if (g.isDamage) this.health -= 17
     // todo: Add hit2 state to prevent multiple hits in one attack?
     //   Or use beginContact instead of collide event?
     //   Both?
@@ -572,7 +572,7 @@ class Mutant {
 
   knockDown() {
     // console.log('knockDown()')
-    if (g.isDamage) this.health -= 10 // todo: Merge with hit().
+    if (g.isDamage) this.health -= 17 // todo: Merge with hit().
     // console.log(this.health)
     this.service.send('knockDown')
     if (this.health <= 0) {

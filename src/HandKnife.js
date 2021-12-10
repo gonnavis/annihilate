@@ -23,11 +23,11 @@ class HandKnife {
     this.body.addShape(shape)
     world.addBody(this.body)
 
-    this.body.addEventListener('collide', (e) => {
-      // if (e.body.belongTo?.isRole === true && e.body.belongTo !== this.owner) {
+    this.body.addEventListener('collide', (event) => {
+      // if (event.body.belongTo?.isRole === true && event.body.belongTo !== this.owner) {
       if (this.owner.service.state.hasTag('canDamage')) {
-        e.body.belongTo.hit()
-        new Splash(e)
+        event.body.belongTo.hit()
+        new Splash(event)
       }
       // }
     })

@@ -22,11 +22,11 @@ class JumpPoint {
     this.body.addShape(shape)
     world.addBody(this.body)
 
-    this.body.addEventListener('beginContact', (e) => {
-      // if (e.body.belongTo.isRole) {
-      e.body.belongTo.service.send('jumpPoint')
-      // e.body.belongTo.body.mass = 0
-      // e.body.belongTo.body.velocity.set(0, 0, 0)
+    this.body.addEventListener('beginContact', (event) => {
+      // if (event.body.belongTo.isRole) {
+      event.body.belongTo.service.send('jumpPoint')
+      // event.body.belongTo.body.mass = 0
+      // event.body.belongTo.body.velocity.set(0, 0, 0)
       // }
     })
 

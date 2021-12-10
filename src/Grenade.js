@@ -98,16 +98,16 @@ class Grenade {
     this.body.position.copy(owner.body.position)
     world.addBody(this.body)
 
-    this.body.addEventListener('collide', (e) => {
-      // console.log(e.body)
-      // e.body.belongTo.hit()
-      if (e.body.belongTo.isGround) {
+    this.body.addEventListener('collide', (event) => {
+      // console.log(event.body)
+      // event.body.belongTo.hit()
+      if (event.body.belongTo.isGround) {
         this.service.send('collide')
-      } else if (e.body.belongTo.isWeapon && e.body.belongTo.owner.service.state.hasTag('canDamage')) {
+      } else if (event.body.belongTo.isWeapon && event.body.belongTo.owner.service.state.hasTag('canDamage')) {
         this.service.send('rebound')
-      } else if (e.body.belongTo.isEnemy) {
-        e.body.belongTo.hit()
-        new Splash(e)
+      } else if (event.body.belongTo.isEnemy) {
+        event.body.belongTo.hit()
+        new Splash(event)
       }
     })
 
@@ -167,9 +167,9 @@ class Grenade {
     this.explodeBody.position.copy(this.body.position)
     world.addBody(this.explodeBody)
 
-    this.explodeBody.addEventListener('collide', (e) => {
-      e.body.belongTo.hit()
-      new Splash(e)
+    this.explodeBody.addEventListener('collide', (event) => {
+      event.body.belongTo.hit()
+      new Splash(event)
     })
 
     // mesh

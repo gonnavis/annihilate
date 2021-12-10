@@ -36,55 +36,55 @@ class GreatSword {
     this.body.addShape(shape)
     world.addBody(this.body)
 
-    // this.body.addEventListener('beginContact', (e) => {
+    // this.body.addEventListener('beginContact', (event) => {
     //   if (this.owner.service.state.hasTag('canDamage')) {
     //     console.log('beginContact')
     //   }
     // })
 
-    this.body.addEventListener('collide', (e) => {
-      let isFirstCollide = !this.collidings.includes(e.body)
-      if (isFirstCollide) this.collidings.push(e.body)
+    this.body.addEventListener('collide', (event) => {
+      let isFirstCollide = !this.collidings.includes(event.body)
+      if (isFirstCollide) this.collidings.push(event.body)
 
-      // console.log('greatSword collide', e.body.belongTo)
-      // if (e.body.belongTo?.isEnemy === true && e.body.belongTo !== this.owner) {
+      // console.log('greatSword collide', event.body.belongTo)
+      // if (event.body.belongTo?.isEnemy === true && event.body.belongTo !== this.owner) {
       // console.log(1111111111)
       if (isFirstCollide && this.owner.service.state.hasTag('canDamage')) {
         // console.log('collide')
 
         // debugger
-        if (e.body.belongTo.isEnemy) {
+        if (event.body.belongTo.isEnemy) {
           if (this.owner.service.state.hasTag('knockDown')) {
-            e.body.belongTo.knockDown()
-            new Splash(e)
+            event.body.belongTo.knockDown()
+            new Splash(event)
             if (this.owner.service.state.matches('jumpBash')) {
-              e.body.velocity.y = -e.body.position.y * 10
+              event.body.velocity.y = -event.body.position.y * 10
             }
           } else {
-            e.body.belongTo.hit()
-            new Splash(e)
-            // console.log(e.contact)
+            event.body.belongTo.hit()
+            new Splash(event)
+            // console.log(event.contact)
 
             // if (this.owner.service.state.matches('launch')) {
-            if (this.owner.service.state.hasTag('canLaunch') && !e.body.belongTo.isAir) {
+            if (this.owner.service.state.hasTag('canLaunch') && !event.body.belongTo.isAir) {
               // console.log(111)
-              // e.body.velocity.y += 30
+              // event.body.velocity.y += 30
               // NOTE: Direct change position instead of velocity, to prevent friction between enemy herd cause not lift.
-              gsap.to(e.body.position, {
+              gsap.to(event.body.position, {
                 duration: 0.3,
-                y: e.body.position.y + 3.7,
+                y: event.body.position.y + 3.7,
                 onComplete: () => {
-                  // let posY = e.body.position.y
-                  // gsap.to(e.body.position, {
+                  // let posY = event.body.position.y
+                  // gsap.to(event.body.position, {
                   //   duration: 0.3,
                   //   y: posY,
                   // })
-                  // e.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
-                  // e.body.velocity.y = 3.7
-                  e.body.velocity.y = 0
+                  // event.body.velocity.y = 0 // Prevent too fast drop. Because cannonjs will accumulate drop velocity when direct change position.
+                  // event.body.velocity.y = 3.7
+                  event.body.velocity.y = 0
                 },
               })
-              e.body.belongTo.isAir = true // todo: refactor.
+              event.body.belongTo.isAir = true // todo: refactor.
               // console.log('set isAir true')
             }
           }
@@ -93,8 +93,8 @@ class GreatSword {
       // }
     })
 
-    this.body.addEventListener('endContact', (e) => {
-      let index = this.collidings.indexOf(e.body)
+    this.body.addEventListener('endContact', (event) => {
+      let index = this.collidings.indexOf(event.body)
       this.collidings.splice(index, 1)
 
       // console.log('endContact')

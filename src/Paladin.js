@@ -486,7 +486,7 @@ class Paladin {
           this.action_act = this.oaction.idle
           this.action_act.play()
           this.mixer.addEventListener('finished', (event) => {
-            // console.log('finish e: ', e)
+            // console.log('finish event: ', event)
             if (event.action === this.oaction.knockDown) {
               setTimeout(() => {
                 this.service.send('finish')
@@ -501,8 +501,8 @@ class Paladin {
           if (callback) callback()
         },
         undefined,
-        (e) => {
-          console.error(e)
+        (event) => {
+          console.error(event)
           reject()
         }
       )

@@ -1340,7 +1340,7 @@ class Maria {
           })
           this.action_act = this.oaction.idle
           this.action_act.play()
-          this.mixer.addEventListener('finished', (e) => {
+          this.mixer.addEventListener('finished', (event) => {
             // console.log('finished ------------------------------------------------')
             // if (this.action_act === this.oaction.punchStart) {
             //   this.service.send('whirlwind')
@@ -1386,8 +1386,8 @@ class Maria {
           if (callback) callback()
         },
         undefined,
-        (e) => {
-          console.error(e)
+        (event) => {
+          console.error(event)
           reject()
         }
       )

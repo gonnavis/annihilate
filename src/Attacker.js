@@ -87,25 +87,25 @@ class Attacker {
     // this.body.position.y += 0.5
     world.addBody(this.body)
 
-    this.body.addEventListener('collide', (e) => {
-      // console.log(e.body.belongTo.constructor.name)
-      if (e.body.belongTo.isRole) {
-        e.body.belongTo.hit()
-        new Splash(e)
-      } else if (e.body.belongTo.isWeapon && e.body.belongTo.owner.service.state.hasTag('canDamage')) {
+    this.body.addEventListener('collide', (event) => {
+      // console.log(event.body.belongTo.constructor.name)
+      if (event.body.belongTo.isRole) {
+        event.body.belongTo.hit()
+        new Splash(event)
+      } else if (event.body.belongTo.isWeapon && event.body.belongTo.owner.service.state.hasTag('canDamage')) {
         this.service.send('rebound')
-      } else if (e.body.belongTo.isEnemy) {
-        e.body.belongTo.hit()
-        new Splash(e)
+      } else if (event.body.belongTo.isEnemy) {
+        event.body.belongTo.hit()
+        new Splash(event)
       }
       // if (this.owner.service.state.hasTag('canDamage')) {
-      // e.body.belongTo.hit()
+      // event.body.belongTo.hit()
       // }
-      // if (e.body === role.body) {
+      // if (event.body === role.body) {
       //   role.hit()
       // }
       // window.robots.forEach((robot) => {
-      //   if (e.body === robot.body && e.body !== owner.body) {
+      //   if (event.body === robot.body && event.body !== owner.body) {
       //     robot.hit()
       //   }
       // })

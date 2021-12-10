@@ -629,7 +629,7 @@ class Mutant {
           })
           this.action_act = this.oaction.idle
           this.action_act.play()
-          this.mixer.addEventListener('finished', (e) => {
+          this.mixer.addEventListener('finished', (event) => {
             this.service.send('finish')
           })
           this.service.send('loaded')
@@ -638,8 +638,8 @@ class Mutant {
           if (callback) callback()
         },
         undefined,
-        (e) => {
-          console.error(e)
+        (event) => {
+          console.error(event)
           reject()
         }
       )

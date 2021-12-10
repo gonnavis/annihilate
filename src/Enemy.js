@@ -232,7 +232,7 @@ class Robot {
           })
           this.action_act = this.oaction.idle
           this.action_act.play()
-          this.mixer.addEventListener('finished', (e) => {
+          this.mixer.addEventListener('finished', (event) => {
             // console.log('finished')
             this.service.send('idle')
           })
@@ -240,8 +240,8 @@ class Robot {
           resolve()
         },
         undefined,
-        (e) => {
-          console.error(e)
+        (event) => {
+          console.error(event)
           reject()
         }
       )

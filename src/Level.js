@@ -60,8 +60,8 @@ class Level {
           resolve()
         },
         undefined,
-        (e) => {
-          console.error(e)
+        (event) => {
+          console.error(event)
           reject()
         }
       )

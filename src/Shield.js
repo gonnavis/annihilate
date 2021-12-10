@@ -17,10 +17,10 @@ class Shield {
     this.body.addShape(shape)
     world.addBody(this.body)
 
-    // this.body.addEventListener('collide', (e) => {
+    // this.body.addEventListener('collide', (event) => {
     //   if (['attack', 'fist', 'strike', 'jumpAttack', 'dashAttack'].some(paladin.service.state.matches)) {
     //     window.robots.forEach((robot) => {
-    //       if (e.body === robot.body) {
+    //       if (event.body === robot.body) {
     //         robot.hit() // todo: refactor: do not check paladin's state at here.
     //       }
     //     })

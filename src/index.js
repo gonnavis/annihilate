@@ -332,24 +332,24 @@ function init() {
   parrot.load()
   parrot.ai = new ParrotAi(parrot, 8)
 
-  domMaria.addEventListener('click', (e) => {
+  domMaria.addEventListener('click', (event) => {
     window.service.send('maria')
   })
-  domPaladin.addEventListener('click', (e) => {
+  domPaladin.addEventListener('click', (event) => {
     window.service.send('paladin')
   })
-  domRobot.addEventListener('click', (e) => {
+  domRobot.addEventListener('click', (event) => {
     window.service.send('robot')
   })
-  domParrot.addEventListener('click', (e) => {
+  domParrot.addEventListener('click', (event) => {
     window.service.send('parrot')
   })
-  domMutant.addEventListener('click', (e) => {
+  domMutant.addEventListener('click', (event) => {
     window.service.send('mutant')
   })
 
-  window.addEventListener('keydown', (e) => {
-    switch (e.code) {
+  window.addEventListener('keydown', (event) => {
+    switch (event.code) {
       case 'Digit0':
         window.setting['kill all mutants (0)']()
         break

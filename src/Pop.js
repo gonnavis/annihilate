@@ -22,18 +22,18 @@ class Pop {
     this.body.addShape(shape)
     // window.world.addBody(this.body)
 
-    this.body.addEventListener('collide', (e) => {
+    this.body.addEventListener('collide', (event) => {
       // push away
-      this.tmpVec3.x = e.body.position.x - this.owner.body.position.x
+      this.tmpVec3.x = event.body.position.x - this.owner.body.position.x
       this.tmpVec3.y = 0
-      this.tmpVec3.z = e.body.position.z - this.owner.body.position.z
+      this.tmpVec3.z = event.body.position.z - this.owner.body.position.z
       this.tmpVec3.normalize().multiplyScalar(12)
-      e.body.velocity.x += this.tmpVec3.x
-      e.body.velocity.z += this.tmpVec3.z
+      event.body.velocity.x += this.tmpVec3.x
+      event.body.velocity.z += this.tmpVec3.z
 
       // damage
-      e.body.belongTo.knockDown()
-      new Splash(e)
+      event.body.belongTo.knockDown()
+      new Splash(event)
     })
 
     // // mesh

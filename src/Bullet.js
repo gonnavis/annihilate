@@ -77,15 +77,15 @@ class Bullet {
     this.body.position.copy(owner.body.position)
     world.addBody(this.body)
 
-    this.body.addEventListener('collide', (e) => {
-      if (e.body.belongTo.isRole) {
-        e.body.belongTo.hit()
-        new Splash(e)
-      } else if (e.body.belongTo.isWeapon && e.body.belongTo.owner.service.state.hasTag('canDamage')) {
+    this.body.addEventListener('collide', (event) => {
+      if (event.body.belongTo.isRole) {
+        event.body.belongTo.hit()
+        new Splash(event)
+      } else if (event.body.belongTo.isWeapon && event.body.belongTo.owner.service.state.hasTag('canDamage')) {
         this.service.send('rebound')
-      } else if (e.body.belongTo.isEnemy) {
-        e.body.belongTo.hit()
-        new Splash(e)
+      } else if (event.body.belongTo.isEnemy) {
+        event.body.belongTo.hit()
+        new Splash(event)
       }
     })
 

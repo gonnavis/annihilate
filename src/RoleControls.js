@@ -16,24 +16,24 @@ class RoleControls {
     // this.actkey = ''
     this.prevTime = 0
 
-    window.addEventListener('keydown', (e) => {
-      // console.log('repeat', e.repeat, e.code)
+    window.addEventListener('keydown', (event) => {
+      // console.log('repeat', event.repeat, event.code)
 
-      // if (e.repeat) return
-      // console.log(e.key, e.code, e.keyCode)
+      // if (event.repeat) return
+      // console.log(event.key, event.code, event.keyCode)
 
-      if (this.holdKey[e.code]) return // Prevent: keyD -> keyJ long press -> keyD up, cause double attack bug.
-      // e.prepeat & if (e.code === this.actkey) return, both not work.
+      if (this.holdKey[event.code]) return // Prevent: keyD -> keyJ long press -> keyD up, cause double attack bug.
+      // event.prepeat & if (event.code === this.actkey) return, both not work.
 
-      this.holdKey[e.code] = true
-      this.tickKey[e.code] = true
+      this.holdKey[event.code] = true
+      this.tickKey[event.code] = true
 
       clearTimeout(this.timeoutSeqKey)
       if (this.role.service.state.matches('block')) {
         let now = performance.now()
         // console.log(now - this.prevTime)
         this.prevTime = now
-        if (e.code === 'KeyJ' || e.code === 'Numpad4') {
+        if (event.code === 'KeyJ' || event.code === 'Numpad4') {
           if (this.seqKey.length === 2 && (this.seqKey[0] === 'KeyS' || this.seqKey[0] === 'ArrowDown') && (this.seqKey[1] === 'KeyD' || this.seqKey[1] === 'ArrowRight')) {
             // console.log('-- hadouken')
             this.role.service.send('hadouken')
@@ -42,14 +42,14 @@ class RoleControls {
             this.role.service.send('shoryuken')
           }
           this.seqKey.length = 0
-        } else if (e.code === 'KeyK' || e.code === 'Numpad5') {
+        } else if (event.code === 'KeyK' || event.code === 'Numpad5') {
           if (this.seqKey.length === 2 && (this.seqKey[0] === 'KeyS' || this.seqKey[0] === 'ArrowDown') && (this.seqKey[1] === 'KeyA' || this.seqKey[1] === 'ArrowLeft')) {
             // console.log('-- ajejebloken')
             this.role.service.send('ajejebloken')
           }
           this.seqKey.length = 0
         } else {
-          this.seqKey.push(e.code)
+          this.seqKey.push(event.code)
         }
         this.timeoutSeqKey = setTimeout(() => {
           this.seqKey.length = 0
@@ -58,8 +58,8 @@ class RoleControls {
       }
 
       // if (!this.gltf) return
-      // if (e.code === this.actkey) return
-      // this.actkey = e.code
+      // if (event.code === this.actkey) return
+      // this.actkey = event.code
 
       // console.log(Object.fromEntries(Object.entries(this.holdKey).filter((n) => n[1])))
       // console.log(
@@ -68,11 +68,11 @@ class RoleControls {
       //     .map((n) => n[0])
       // )
     })
-    window.addEventListener('keyup', (e) => {
-      // console.log(e)
-      this.holdKey[e.code] = false
+    window.addEventListener('keyup', (event) => {
+      // console.log(event)
+      this.holdKey[event.code] = false
 
-      switch (e.code) {
+      switch (event.code) {
         case 'KeyJ':
         case 'Numpad4':
           this.role.service.send('keyJUp')

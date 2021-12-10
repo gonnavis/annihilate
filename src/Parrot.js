@@ -257,7 +257,7 @@ class Parrot {
           })
           this.action_act = this.oaction['parrot_A_']
           this.action_act.play()
-          this.mixer.addEventListener('finished', (e) => {
+          this.mixer.addEventListener('finished', (event) => {
             this.service.send('finish')
           })
 
@@ -269,8 +269,8 @@ class Parrot {
           resolve()
         },
         undefined,
-        (e) => {
-          console.error(e)
+        (event) => {
+          console.error(event)
           reject()
         }
       )

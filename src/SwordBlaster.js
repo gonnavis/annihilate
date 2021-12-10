@@ -37,14 +37,14 @@ class SwordBlaster {
     let shape = new CANNON.Box(new CANNON.Vec3(this.width / 2, this.height / 2, this.depth / 2))
     this.body.addShape(shape)
 
-    this.body.addEventListener('collide', (e) => {
-      // if (e.body.belongTo?.isEnemy === true && e.body.belongTo !== this.owner) {
+    this.body.addEventListener('collide', (event) => {
+      // if (event.body.belongTo?.isEnemy === true && event.body.belongTo !== this.owner) {
       if (this.type === 3) {
-        e.body.belongTo.knockDown()
-        new Splash(e)
+        event.body.belongTo.knockDown()
+        new Splash(event)
       } else {
-        e.body.belongTo.hit()
-        new Splash(e)
+        event.body.belongTo.hit()
+        new Splash(event)
       }
       // }
     })

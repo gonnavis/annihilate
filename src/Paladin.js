@@ -1,6 +1,7 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
+import { Hadouken } from './Hadouken.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 import { Splash } from './Splash.js'
 
@@ -68,6 +69,7 @@ class Paladin {
             on: {
               run: { target: 'run' },
               attack: { target: 'attackStart' },
+              bash: { target: 'bashStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
@@ -80,6 +82,7 @@ class Paladin {
             on: {
               stop: { target: 'idle' },
               attack: { target: 'attackStart' },
+              bash: { target: 'bashStart' },
               jump: { target: 'jump' },
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
@@ -106,6 +109,33 @@ class Paladin {
               dash: { target: 'dash' },
             },
             tags: ['canDamage'],
+          },
+          bashStart: {
+            entry: 'playBashStart',
+            on: {
+              finish: { target: 'bash' },
+              hit: { target: 'hit' },
+              dash: { target: 'dash' },
+            },
+          },
+          bash: {
+            entry: 'playBash',
+            on: {
+              finish: { target: 'bashEnd' },
+              hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
+              dash: { target: 'dash' },
+            },
+            tags: ['canDamage'],
+          },
+          bashEnd: {
+            entry: 'playBashEnd',
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              knockDown: { target: 'knockDown' },
+              dash: { target: 'dash' },
+            },
           },
           prepareFist: {
             on: {
@@ -279,6 +309,21 @@ class Paladin {
           playAttack: () => {
             this.oaction['punch'].timeScale = this.attackSpeed
             this.fadeToAction('punch', 0.2)
+          },
+          playBashStart: () => {
+            this.oaction['punchStart'].timeScale = this.attackSpeed * 2
+            this.fadeToAction('punchStart')
+          },
+          playBash: () => {
+            this.oaction['punch'].timeScale = this.attackSpeed * 2
+            this.fadeToAction('punch', 0.2)
+          },
+          playBashEnd: () => {
+            new Hadouken(scene, updates, this, window.role.mesh.position) // TODO: Use seqKey instead of bash to throw hadouken.
+
+            setTimeout(() => {
+              this.service.send('finish')
+            }, 1000)
           },
           playDashAttack: () => {
             this.oaction['strike'].timeScale = this.attackSpeed

@@ -107,15 +107,17 @@ Code: [three-pathfinding](https://github.com/donmccurdy/three-pathfinding), [Ske
 
 ### Todo: 
 
-Combat puzzle mode.
+Boss Fight map.
 
-Tower Defence mode.
+Combat puzzle map.
 
-Parkour and combat mode.
+Tower Defence map.
 
-Challenge mode where only rebound attacks can deal damage to enemies.
+Parkour and combat map.
 
-Drive sheepFlock/birdFlock into the fold, as fast as possible. And prevent enemies from killing the flock, as little as possible.
+Challenge map where only rebound attacks can deal damage to enemies.
+
+Map: Drive sheepFlock/birdFlock into the fold, as fast as possible. And prevent enemies from killing the flock, as little as possible.
 
 chargeAttack✔️, dashAttack✔️, chargeDash, kick, jumpKick, air attacks✔️, walk, aoe✔️, skill✔️, vfx ...
 

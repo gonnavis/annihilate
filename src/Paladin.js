@@ -20,6 +20,8 @@ class Paladin {
     this.tmpVec3 = new THREE.Vector3()
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.
+    this.isAir = false
+    this.airLiftVelocity = 1.5
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -344,6 +346,10 @@ class Paladin {
             this.fadeToAction('hit', 0.2)
 
             new Splash(event.collideEvent)
+
+            if (this.isAir) {
+              this.body.velocity.y = this.airLiftVelocity
+            }
           },
           playKnockDown: (context, event, o) => {
             this.oaction['knockDown'].timeScale = 2
@@ -360,7 +366,7 @@ class Paladin {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('paladin: state:', state.value)
+      if (state.changed) console.log('paladin: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -409,6 +415,7 @@ class Paladin {
         ///todo: Is cannon.js has collision mask?
         // todo: refactor: window.ground
         this.service.send('land')
+        this.isAir = false
       }
     })
   }

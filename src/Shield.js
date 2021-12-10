@@ -21,8 +21,9 @@ class Shield {
     })
     this.body.belongTo = this
 
-    // let shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.11, 0.37))
-    let shape = new CANNON.Box(new CANNON.Vec3(0.5, 0.2, 0.9))
+    let shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.11, 0.37))
+    // let shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.11, 0.9))
+    // let shape = new CANNON.Box(new CANNON.Vec3(0.5, 0.11, 0.9))
     this.body.addShape(shape)
     world.addBody(this.body)
 

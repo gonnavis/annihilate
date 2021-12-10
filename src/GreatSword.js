@@ -57,7 +57,7 @@ class GreatSword extends Attacker {
         // debugger
 
         // if (this.owner.service.state.matches('launch')) {
-        if (this.owner.service.state.hasTag('canLaunch') && !event.body.belongTo.isAir) {
+        if (this.owner.service.state.hasTag('canLaunch') && !event.body.belongTo.isAir) { // TODO: If enemy not real hit, such as paladin blocked, do not launch?
           // console.log(111)
           // event.body.velocity.y += 30
           // NOTE: Direct change position instead of velocity, to prevent friction between enemy herd cause not lift.
@@ -98,11 +98,11 @@ class GreatSword extends Attacker {
 
       // debugger
       if (event.body.belongTo.isShield) {
-        console.log('shield')
+        // console.log('shield')
         this.isCollideShield = true
         this.collideShieldEvent = { ...event }
       } else if (event.body.belongTo.isEnemy) {
-        console.log('body')
+        // console.log('body')
         this.isCollideBody = true
         this.collideBodyEvent = { ...event }
       }

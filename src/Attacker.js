@@ -63,7 +63,9 @@ class Attacker {
     // console.log(this.collidings.length)
   }
 
-  collide(event, isBeginCollide) {}
+  collide(event, isBeginCollide) {
+    if (!isBeginCollide) return
+  }
 
   endContact(event) {}
 }

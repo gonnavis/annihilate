@@ -3,6 +3,8 @@ import { g } from './global.js'
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { Hadouken } from './Hadouken.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
+import { Splash } from './Splash.js'
+
 class RobotBoss {
   constructor({ position }) {
     this.isCharacter = true
@@ -96,8 +98,10 @@ class RobotBoss {
           playAttack: () => {
             this.fadeToAction('dance', 0.2)
           },
-          playHit: () => {
+          playHit: (context, event, o) => {
             this.fadeToAction('jump', 0.2)
+
+            new Splash(event.collideEvent)
           },
           throwHadouken: () => {
             // if (g.isAttack && window.role.gltf && this.gltf) new Hadouken(scene, updates, this, window.role.mesh.position)
@@ -198,13 +202,13 @@ class RobotBoss {
     // }
   }
 
-  hit() {
+  hit(collideEvent) {
     // console.log('hit function')
-    this.service.send('hit')
+    this.service.send('hit', { collideEvent })
   }
 
-  knockDown() {
-    this.hit()
+  knockDown(collideEvent) {
+    this.hit(collideEvent)
   }
 
   load() {

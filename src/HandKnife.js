@@ -1,7 +1,6 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-import { Splash } from './Splash.js'
 import { Attacker } from './Attacker.js'
 
 class HandKnife extends Attacker {
@@ -35,8 +34,7 @@ class HandKnife extends Attacker {
 
     // if (event.body.belongTo?.isRole === true && event.body.belongTo !== this.owner) {
     if (this.owner.service.state.hasTag('canDamage')) {
-      event.body.belongTo.hit() // TODO: Sometimes still hit twice after check isBeginCollide.
-      new Splash(event)
+      event.body.belongTo.hit(event) // TODO: Sometimes still hit twice after check isBeginCollide.
     }
     // }
   }

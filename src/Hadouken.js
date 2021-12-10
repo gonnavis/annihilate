@@ -1,7 +1,6 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-import { Splash } from './Splash.js'
 import { Attacker } from './Attacker.js'
 
 //new Hadouken(scene, updates, robot.mesh.position, mesh.position)
@@ -112,13 +111,11 @@ class Hadouken extends Attacker {
 
     // console.log(event.body.belongTo.constructor.name)
     if (event.body.belongTo.isRole) {
-      event.body.belongTo.hit()
-      new Splash(event)
+      event.body.belongTo.hit(event)
     } else if (event.body.belongTo.isAttacker && event.body.belongTo.owner.service.state.hasTag('canDamage')) {
       this.service.send('rebound')
     } else if (event.body.belongTo.isEnemy) {
-      event.body.belongTo.hit() // TODO: Why robot still hit twice after check isBeginCollide?
-      new Splash(event)
+      event.body.belongTo.hit(event) // TODO: Why robot still hit twice after check isBeginCollide?
     }
     // if (this.owner.service.state.hasTag('canDamage')) {
     // event.body.belongTo.hit()

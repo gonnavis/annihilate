@@ -4,6 +4,8 @@ import * as THREE from '../lib/three.js/build/three.module.js'
 import { Bullet } from './Bullet.js'
 import { Grenade } from './Grenade.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
+import { Splash } from './Splash.js'
+
 class Parrot {
   constructor({ position }) {
     this.isCharacter = true
@@ -108,8 +110,11 @@ class Parrot {
             if (g.isAttack && window.role.gltf && this.gltf) new Grenade(scene, updates, this, new THREE.Vector3(window.role.mesh.position.x, window.role.mesh.position.y, window.role.mesh.position.z))
             this.service.send('finish')
           },
-          playHit: () => {
+          playHit: (context, event, o) => {
             // this.fadeToAction('jump', 0.2)
+
+            new Splash(event.collideEvent)
+
             gsap.to(this.body.position, {
               duration: 0.15,
               y: this.initialPosition.y + 0.37,
@@ -211,13 +216,13 @@ class Parrot {
   //   }, 3000)
   // }
 
-  hit() {
+  hit(collideEvent) {
     // console.log('hit function')
-    this.service.send('hit')
+    this.service.send('hit', { collideEvent })
   }
 
-  knockDown() {
-    this.hit()
+  knockDown(collideEvent) {
+    this.hit(collideEvent)
   }
 
   load() {

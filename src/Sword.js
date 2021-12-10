@@ -1,7 +1,6 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-import { Splash } from './Splash.js'
 import { Attacker } from './Attacker.js'
 
 class Sword extends Attacker {
@@ -35,8 +34,7 @@ class Sword extends Attacker {
 
     // if (event.body.belongTo?.isEnemy === true && event.body.belongTo !== this.owner) {
     if (this.owner.service.state.hasTag('canDamage')) {
-      event.body.belongTo.hit()
-      new Splash(event)
+      event.body.belongTo.hit(event)
     }
     // }
   }

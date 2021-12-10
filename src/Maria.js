@@ -5,6 +5,7 @@ import { SwordBlaster } from './SwordBlaster.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 import { SwordBlink } from './SwordBlink.js'
 import { Pop } from './Pop.js'
+import { Splash } from './Splash.js'
 
 class Maria {
   constructor(x, y, z) {
@@ -1069,9 +1070,11 @@ class Maria {
 
             // this.setAir(true)
           },
-          playHit: () => {
+          playHit: (context, event, o) => {
             this.oaction['hit'].timeScale = 3
             this.fadeToAction('hit')
+
+            new Splash(event.collideEvent)
           },
           playBlock: () => {
             this.fadeToAction('block')
@@ -1283,14 +1286,14 @@ class Maria {
     this.mixer.update(dt)
   }
 
-  hit() {
+  hit(collideEvent) {
     // console.log('hit()')
     // this.health-=50
     // console.log(this.health)
     // if(this.health<=0){
     //   this.service.send('dead')
     // }else{
-    this.service.send('hit')
+    this.service.send('hit', { collideEvent })
     // }
   }
 

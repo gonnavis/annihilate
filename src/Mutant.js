@@ -2,6 +2,8 @@ import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
+import { Splash } from './Splash.js'
+
 class Mutant {
   constructor({ position }) {
     this.isCharacter = true
@@ -462,25 +464,33 @@ class Mutant {
           playJump: () => {
             this.fadeToAction('jump', 0.2)
           },
-          playHit: () => {
+          playHit: (context, event, o) => {
             this.fadeToAction('hit', 0.2)
+
+            new Splash(event.collideEvent)
+
             if (this.isAir) {
               this.body.velocity.y = this.airLiftVelocity
             }
             // console.log('playHit', this.body.mass, this.isAir)
           },
-          playKnockDown: () => {
+          playKnockDown: (context, event, o) => {
             // this.oaction['knockDown'].timeScale = 2
             this.fadeToAction('knockDown', 0.2)
+
+            new Splash(event.collideEvent)
           },
-          playDead: () => {
+          playDead: (context, event, o) => {
+            // this.oaction['knockDown'].timeScale = 2
+            this.fadeToAction('knockDown', 0.2)
+
+            new Splash(event.collideEvent)
+
             // this.body.collisionResponse = false
             this.body.collisionFilterMask = g.GROUP_SCENE
             setTimeout(() => {
               this.body.velocity.set(0, 0, 0)
             }, 0)
-            // this.oaction['knockDown'].timeScale = 2
-            this.fadeToAction('knockDown', 0.2)
           },
         },
       }
@@ -557,26 +567,26 @@ class Mutant {
     this.mixer.update(dt)
   }
 
-  hit() {
+  hit(collideEvent) {
     // console.log('hit()')
     if (g.isDamage) this.health -= 17
     // todo: Add hit2 state to prevent multiple hits in one attack?
     //   Or use beginContact instead of collide event?
     //   Both?
     // console.log(this.health)
-    this.service.send('hit')
+    this.service.send('hit', { collideEvent })
     if (this.health <= 0) {
-      this.service.send('dead')
+      this.service.send('dead', { collideEvent })
     }
   }
 
-  knockDown() {
+  knockDown(collideEvent) {
     // console.log('knockDown()')
     if (g.isDamage) this.health -= 17 // todo: Merge with hit().
     // console.log(this.health)
-    this.service.send('knockDown')
+    this.service.send('knockDown', { collideEvent })
     if (this.health <= 0) {
-      this.service.send('dead')
+      this.service.send('dead', { collideEvent })
     }
   }
 

@@ -1,7 +1,6 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-import { Splash } from './Splash.js'
 import { Attacker } from './Attacker.js'
 
 class Pop extends Attacker {
@@ -69,8 +68,7 @@ class Pop extends Attacker {
     event.body.velocity.z = this.tmpVec3.z
 
     // damage
-    event.body.belongTo.knockDown()
-    new Splash(event)
+    event.body.belongTo.knockDown(event)
   }
 
   dispose() {

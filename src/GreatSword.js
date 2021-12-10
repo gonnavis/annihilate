@@ -1,7 +1,6 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-import { Splash } from './Splash.js'
 import { Attacker } from './Attacker.js'
 
 class GreatSword extends Attacker {
@@ -48,14 +47,12 @@ class GreatSword extends Attacker {
       let event = this.collideBodyEvent
       // console.log('enemy body')
       if (this.owner.service.state.hasTag('knockDown')) {
-        event.body.belongTo.knockDown()
-        new Splash(event)
+        event.body.belongTo.knockDown(event)
         if (this.owner.service.state.matches('jumpBash')) {
           event.body.velocity.y = -event.body.position.y * 10
         }
       } else {
-        event.body.belongTo.hit()
-        new Splash(event)
+        event.body.belongTo.hit(event)
         // console.log(event.contact)
         // debugger
 

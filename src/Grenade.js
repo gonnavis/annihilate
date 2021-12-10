@@ -1,7 +1,6 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-import { Splash } from './Splash.js'
 import { Attacker } from './Attacker.js'
 
 class Grenade extends Attacker {
@@ -139,8 +138,7 @@ class Grenade extends Attacker {
     } else if (event.body.belongTo.isAttacker && event.body.belongTo.owner.service.state.hasTag('canDamage')) {
       this.service.send('rebound')
     } else if (event.body.belongTo.isEnemy) {
-      event.body.belongTo.hit()
-      new Splash(event)
+      event.body.belongTo.hit(event)
     }
   }
 
@@ -163,8 +161,7 @@ class Grenade extends Attacker {
     world.addBody(this.explodeBody)
 
     this.explodeBody.addEventListener('collide', (event) => {
-      event.body.belongTo.hit()
-      new Splash(event)
+      event.body.belongTo.hit(event)
     })
 
     // mesh

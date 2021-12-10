@@ -2,6 +2,8 @@ import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
+import { Splash } from './Splash.js'
+
 class Paladin {
   constructor(x, y, z) {
     this.isCharacter = true
@@ -337,13 +339,17 @@ class Paladin {
           playJump: () => {
             this.fadeToAction('jump', 0.2)
           },
-          playHit: () => {
+          playHit: (context, event, o) => {
             this.oaction['hit'].timeScale = 1.7
             this.fadeToAction('hit', 0.2)
+
+            new Splash(event.collideEvent)
           },
-          playKnockDown: () => {
+          playKnockDown: (context, event, o) => {
             this.oaction['knockDown'].timeScale = 2
             this.fadeToAction('knockDown', 0.2)
+
+            new Splash(event.collideEvent)
           },
           playBlocked: () => {
             this.fadeToAction('impactBlock', 0.2)
@@ -416,19 +422,19 @@ class Paladin {
     this.mixer.update(dt)
   }
 
-  hit() {
+  hit(collideEvent) {
     // console.log('hit()')
     // this.health-=50
     // console.log(this.health)
     // if(this.health<=0){
     //   this.service.send('dead')
     // }else{
-    this.service.send('hit')
+    this.service.send('hit', { collideEvent })
     // }
   }
 
-  knockDown() {
-    this.service.send('knockDown')
+  knockDown(collideEvent) {
+    this.service.send('knockDown', { collideEvent })
   }
 
   load(callback) {

@@ -19,7 +19,7 @@ class Bullet {
 
     this.fsm = createMachine(
       {
-        id: 'attacker',
+        id: 'bullet',
         initial: 'move',
         states: {
           move: {

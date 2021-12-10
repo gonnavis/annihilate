@@ -167,7 +167,7 @@ class Robot {
     world.addBody(this.body)
 
     this.body.addEventListener('beginContact', (event) => {
-      if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
+      if (!event.body.belongTo?.isAttacker && !event.body.belongTo?.isTrigger) {
         this.service.send('land')
         this.isAir = false
         // this.body.mass = this.mass

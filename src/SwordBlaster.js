@@ -5,7 +5,7 @@ import { Splash } from './Splash.js'
 
 class SwordBlaster {
   constructor(owner, type) {
-    this.isWeapon = true
+    this.isAttacker = true
     this.owner = owner
     this.type = type
 

@@ -5,7 +5,7 @@ import { Splash } from './Splash.js'
 
 class Attacker {
   constructor() {
-    this.isWeapon = true
+    this.isAttacker = true
 
     updates.push(this)
 
@@ -28,8 +28,8 @@ class Attacker {
       // If not need `contact` information, simply use STATIC or DYNAMIC with `beginContact` event is OK.
       //
       // TODO: collide trigger more times than beginContact? How to check if first collide? Yes, so need to filter collide events. Or use beginContact for real hit, collide for splash.
-      collisionFilterGroup: g.GROUP_ROLE_WEAPON,
-      collisionFilterMask: g.GROUP_ENEMY | g.GROUP_ENEMY_WEAPON,
+      collisionFilterGroup: g.GROUP_ROLE_WEAPON, // !!! replace in subClass
+      collisionFilterMask: g.GROUP_ENEMY | g.GROUP_ENEMY_WEAPON, // !!! replace in subClass
     })
     this.body.belongTo = this
 
@@ -40,10 +40,10 @@ class Attacker {
     // })
 
     this.body.addEventListener('collide', (event) => {
-      let isFirstCollide = !this.collidings.includes(event.body)
-      if (isFirstCollide) this.collidings.push(event.body)
+      let isBeginCollide = !this.collidings.includes(event.body)
+      if (isBeginCollide) this.collidings.push(event.body)
 
-      this.collide(event, isFirstCollide)
+      this.collide(event, isBeginCollide)
     })
 
     this.body.addEventListener('endContact', (event) => {
@@ -63,7 +63,7 @@ class Attacker {
     // console.log(this.collidings.length)
   }
 
-  collide(event, isFirstCollide) {}
+  collide(event, isBeginCollide) {}
 
   endContact(event) {}
 }

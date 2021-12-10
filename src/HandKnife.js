@@ -5,7 +5,7 @@ import { Splash } from './Splash.js'
 
 class HandKnife {
   constructor() {
-    this.isWeapon = true
+    this.isAttacker = true
     updates.push(this)
 
     this.owner = null

@@ -539,7 +539,7 @@ class Mutant {
 
       // if (!event.body.isTrigger) {
       // if (event.body === window.ground.body) {
-      if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
+      if (!event.body.belongTo?.isAttacker && !event.body.belongTo?.isTrigger) {
         this.service.send('land')
         this.isAir = false
       }

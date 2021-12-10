@@ -15,7 +15,7 @@ class GreatSword extends Attacker {
   }
 
   update() {
-    console.log(this.collidings.length)
+    // console.log(this.collidings.length)
 
     if (this.owner.gltf) {
       let tempVec3 = vec3() ///todo: performance
@@ -28,11 +28,11 @@ class GreatSword extends Attacker {
     }
   }
 
-  collide(event, isFirstCollide) {
+  collide(event, isBeginCollide) {
     // console.log('greatSword collide', event.body.belongTo)
     // if (event.body.belongTo?.isEnemy === true && event.body.belongTo !== this.owner) {
     // console.log(1111111111)
-    if (isFirstCollide && this.owner.service.state.hasTag('canDamage')) {
+    if (isBeginCollide && this.owner.service.state.hasTag('canDamage')) {
       // console.log('collide')
 
       // debugger

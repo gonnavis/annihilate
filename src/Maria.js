@@ -1213,7 +1213,7 @@ class Maria {
       // console.log('collide', event.body.id, event.target.id)
       // if (event.body === window.ground.body) {
       // if (event.body !== window.greatSword.body && !event.body.isTrigger) {
-      // if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
+      // if (!event.body.belongTo?.isAttacker && !event.body.belongTo?.isTrigger) {
       // if (event.body.belongTo?.isGround) {
       //   ///todo: Is cannon.js has collision mask?
       //   // todo: refactor: window.ground
@@ -1225,7 +1225,7 @@ class Maria {
     })
     this.body.addEventListener('endContact', (event) => {
       // console.log('endContact', event.body.belongTo?.constructor.name)
-      // if (!event.body.belongTo?.isWeapon && !event.body.belongTo?.isTrigger) {
+      // if (!event.body.belongTo?.isAttacker && !event.body.belongTo?.isTrigger) {
       // if (event.body.belongTo?.isGround) {
       //   this.setAir(true) // todo(ok): Use raycaster to check height, judge if really air. Then don't need use beginContact/endContact to check if air?
       // note: Can't only depend on endContact to set isAir = true, because when contact enemy, will often endContact with ground ( lift a little ).

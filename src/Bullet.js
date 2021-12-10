@@ -2,12 +2,11 @@ import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { Splash } from './Splash.js'
+import { Attacker } from './Attacker.js'
 
-class Bullet {
+class Bullet extends Attacker {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
-    this.isWeapon = true
-
-    updates.push(this)
+    super()
 
     this.owner = owner
     let speed = 0.18
@@ -62,32 +61,14 @@ class Bullet {
 
     // body
 
+    this.body.collisionFilterGroup = g.GROUP_ENEMY_WEAPON
+    this.body.collisionFilterMask = g.GROUP_ROLE | g.GROUP_ROLE_WEAPON
+
     this.radius = 0.11
-    this.body = new CANNON.Body({
-      mass: 0,
-      type: CANNON.Body.DYNAMIC,
-      collisionResponse: false,
-      // NOTE: See GreatSword.js NOTE.
-      collisionFilterGroup: g.GROUP_ENEMY_WEAPON,
-      collisionFilterMask: g.GROUP_ROLE | g.GROUP_ROLE_WEAPON,
-    })
-    this.body.belongTo = this
     let shape = new CANNON.Sphere(this.radius)
     this.body.addShape(shape)
     this.body.position.copy(owner.body.position)
     world.addBody(this.body)
-
-    this.body.addEventListener('collide', (event) => {
-      if (event.body.belongTo.isRole) {
-        event.body.belongTo.hit()
-        new Splash(event)
-      } else if (event.body.belongTo.isWeapon && event.body.belongTo.owner.service.state.hasTag('canDamage')) {
-        this.service.send('rebound')
-      } else if (event.body.belongTo.isEnemy) {
-        event.body.belongTo.hit()
-        new Splash(event)
-      }
-    })
 
     // mesh
 
@@ -115,6 +96,20 @@ class Bullet {
     this.body.position.y += this.movement.y
     this.body.position.z += this.movement.z
     this.mesh.position.copy(this.body.position)
+  }
+
+  collide(event, isBeginCollide) {
+    if (!isBeginCollide) return
+
+    if (event.body.belongTo.isRole) {
+      event.body.belongTo.hit()
+      new Splash(event)
+    } else if (event.body.belongTo.isAttacker && event.body.belongTo.owner.service.state.hasTag('canDamage')) {
+      this.service.send('rebound')
+    } else if (event.body.belongTo.isEnemy) {
+      event.body.belongTo.hit()
+      new Splash(event)
+    }
   }
 
   dispose() {

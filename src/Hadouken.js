@@ -6,7 +6,7 @@ import { Splash } from './Splash.js'
 //new Hadouken(scene, updates, robot.mesh.position, mesh.position)
 class Hadouken {
   constructor(scene = scene, updates = updates /*arr*/, owner /*vec3*/, target /*vec3*/) {
-    this.isWeapon = true
+    this.isAttacker = true
 
     updates.push(this)
 
@@ -92,7 +92,7 @@ class Hadouken {
       if (event.body.belongTo.isRole) {
         event.body.belongTo.hit()
         new Splash(event)
-      } else if (event.body.belongTo.isWeapon && event.body.belongTo.owner.service.state.hasTag('canDamage')) {
+      } else if (event.body.belongTo.isAttacker && event.body.belongTo.owner.service.state.hasTag('canDamage')) {
         this.service.send('rebound')
       } else if (event.body.belongTo.isEnemy) {
         event.body.belongTo.hit()

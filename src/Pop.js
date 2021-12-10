@@ -3,7 +3,7 @@ import { g } from './global.js'
 import * as THREE from '../lib/three.js/build/three.module.js'
 class Pop {
   constructor(owner) {
-    this.isWeapon = true
+    this.isAttacker = true
     this.owner = owner
 
     this.tmpVec3 = new THREE.Vector3()

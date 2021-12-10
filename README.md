@@ -99,7 +99,11 @@ Code: [three-pathfinding](https://github.com/donmccurdy/three-pathfinding), [Ske
 
 ### Todo: 
 
-Challenge levels/modes where only rebound attacks can deal damage to enemies.
+Tower Defence mode.
+
+Parkour and combat modes.
+
+Challenge mode where only rebound attacks can deal damage to enemies.
 
 Drive sheepFlock/birdFlock into the fold, as fast as possible. And prevent enemies from killing the flock, as little as possible.
 

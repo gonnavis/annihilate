@@ -14,7 +14,7 @@ class Pop extends Attacker {
 
     // body
 
-    this.body.collisionFilterGroup = g.GROUP_ROLE_WEAPON
+    this.body.collisionFilterGroup = g.GROUP_ROLE_ATTACKER
     this.body.collisionFilterMask = g.GROUP_ENEMY
 
     this.radius = 3.7

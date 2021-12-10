@@ -28,8 +28,8 @@ class Attacker {
       // If not need `contact` information, simply use STATIC or DYNAMIC with `beginContact` event is OK.
       //
       // TODO: collide trigger more times than beginContact? How to check if first collide? Yes, so need to filter collide events. Or use beginContact for real hit, collide for splash.
-      collisionFilterGroup: g.GROUP_ROLE_WEAPON, // !!! replace in subClass
-      collisionFilterMask: g.GROUP_ENEMY | g.GROUP_ENEMY_WEAPON, // !!! replace in subClass
+      collisionFilterGroup: g.GROUP_ROLE_ATTACKER, // !!! replace in subClass
+      collisionFilterMask: g.GROUP_ENEMY | g.GROUP_ENEMY_ATTACKER, // !!! replace in subClass
     })
     this.body.belongTo = this
 

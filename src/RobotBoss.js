@@ -154,7 +154,7 @@ class RobotBoss {
     this.body = new CANNON.Body({
       mass: this.mass,
       collisionFilterGroup: g.GROUP_ENEMY,
-      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ROLE_WEAPON,
+      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ROLE_ATTACKER,
     })
     this.body.belongTo = this
     let shape = new CANNON.Sphere(this.bodySize)

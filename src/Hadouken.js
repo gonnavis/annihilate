@@ -51,7 +51,7 @@ class Hadouken extends Attacker {
           },
           entryRebound: () => {
             this.movement.multiplyScalar(-1)
-            this.body.collisionFilterGroup = g.GROUP_ROLE_WEAPON
+            this.body.collisionFilterGroup = g.GROUP_ROLE_ATTACKER
             this.body.collisionFilterMask = g.GROUP_ENEMY
           },
         },
@@ -65,8 +65,8 @@ class Hadouken extends Attacker {
 
     // body
 
-    this.body.collisionFilterGroup = g.GROUP_ENEMY_WEAPON
-    this.body.collisionFilterMask = g.GROUP_ROLE | g.GROUP_ROLE_WEAPON
+    this.body.collisionFilterGroup = g.GROUP_ENEMY_ATTACKER
+    this.body.collisionFilterMask = g.GROUP_ROLE | g.GROUP_ROLE_ATTACKER
 
     this.radius = 0.8
     // this.height = 0.11

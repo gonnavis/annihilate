@@ -7,12 +7,19 @@ class Shield {
     updates.push(this)
 
     this.is_hit = false
+
+    // body
+
     this.body = new CANNON.Body({
-      mass: 1,
-      // type: CANNON.Body.KINEMATIC,
+      mass: 0,
+      type: CANNON.Body.DYNAMIC,
+      collisionResponse: false,
+      //
+      collisionFilterGroup: g.GROUP_ENEMY_ATTACKER,
+      collisionFilterMask: g.GROUP_ROLE_ATTACKER,
     })
     this.body.belongTo = this
-    this.body.collisionResponse = false
+
     let shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.11, 0.37))
     this.body.addShape(shape)
     world.addBody(this.body)

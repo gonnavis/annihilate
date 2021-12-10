@@ -510,7 +510,7 @@ class Mutant {
       mass: this.mass,
       // material: physicsMaterial,
       collisionFilterGroup: g.GROUP_ENEMY,
-      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ROLE_WEAPON,
+      collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ROLE_ATTACKER,
     })
     this.body.belongTo = this
 

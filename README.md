@@ -101,7 +101,7 @@ Code: [three-pathfinding](https://github.com/donmccurdy/three-pathfinding), [Ske
 
 Tower Defence mode.
 
-Parkour and combat modes.
+Parkour and combat mode.
 
 Challenge mode where only rebound attacks can deal damage to enemies.
 

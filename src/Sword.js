@@ -2,36 +2,20 @@ import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { Splash } from './Splash.js'
+import { Attacker } from './Attacker.js'
 
-class Sword {
+class Sword extends Attacker {
   constructor() {
-    this.isAttacker = true
-    updates.push(this)
+    super()
 
-    this.owner = null
+    // body
 
-    this.is_hit = false
-    this.body = new CANNON.Body({
-      mass: 0,
-      type: CANNON.Body.DYNAMIC,
-      collisionResponse: false,
-      // NOTE: See GreatSword.js NOTE.
-      collisionFilterGroup: g.GROUP_ROLE_WEAPON,
-      collisionFilterMask: g.GROUP_ENEMY,
-    })
-    this.body.belongTo = this
+    this.body.collisionFilterGroup = g.GROUP_ROLE_WEAPON
+    this.body.collisionFilterMask = g.GROUP_ENEMY
+
     let shape = new CANNON.Box(new CANNON.Vec3(0.11, 0.11, 0.45))
     this.body.addShape(shape)
     world.addBody(this.body)
-
-    this.body.addEventListener('collide', (event) => {
-      // if (event.body.belongTo?.isEnemy === true && event.body.belongTo !== this.owner) {
-      if (this.owner.service.state.hasTag('canDamage')) {
-        event.body.belongTo.hit()
-        new Splash(event)
-      }
-      // }
-    })
   }
 
   update() {
@@ -44,6 +28,17 @@ class Sword {
       this.body.position.copy(tempVec3)
       this.body.quaternion.copy(tempQuat)
     }
+  }
+
+  collide(event, isBeginCollide) {
+    if (!isBeginCollide) return
+
+    // if (event.body.belongTo?.isEnemy === true && event.body.belongTo !== this.owner) {
+    if (this.owner.service.state.hasTag('canDamage')) {
+      event.body.belongTo.hit()
+      new Splash(event)
+    }
+    // }
   }
 }
 

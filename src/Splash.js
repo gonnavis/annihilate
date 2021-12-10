@@ -34,6 +34,7 @@ class Splash {
 
     this.mesh.position.addVectors(event.body.position, event.contact.ri)
 
+    // all move up
     {
       let to = { t: 0, tv: 1 }
       let startPosY = this.mesh.position.y
@@ -50,6 +51,32 @@ class Splash {
         },
       })
     }
+
+    // // oriented by contact ni
+    // // https://pmndrs.github.io/cannon-es/docs/classes/contactequation.html#ni
+    // {
+    //   let to = { t: 0, tv: 1 }
+    //   let startPosX = this.mesh.position.x
+    //   let startPosY = this.mesh.position.y
+    //   let startPosZ = this.mesh.position.z
+    //   let movePosX = event.contact.ni.x * 1.5
+    //   let movePosY = event.contact.ni.y * 1.5
+    //   let movePosZ = event.contact.ni.x * 1.5
+    //   gsap.to(to, {
+    //     duration: 0.5,
+    //     t: 1,
+    //     tv: 0,
+    //     onUpdate: () => {
+    //       this.mesh.position.x = startPosX + movePosX * to.t
+    //       this.mesh.position.y = startPosY + movePosY * to.t
+    //       this.mesh.position.z = startPosZ + movePosZ * to.t
+    //       this.mesh.material.opacity = to.tv ** 0.5
+    //     },
+    //     onComplete: () => {
+    //       this.dispose()
+    //     },
+    //   })
+    // }
   }
 
   dispose() {

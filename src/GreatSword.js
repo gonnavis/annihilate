@@ -47,6 +47,7 @@ class GreatSword extends Attacker {
           event.body.belongTo.hit()
           new Splash(event)
           // console.log(event.contact)
+          // debugger
 
           // if (this.owner.service.state.matches('launch')) {
           if (this.owner.service.state.hasTag('canLaunch') && !event.body.belongTo.isAir) {

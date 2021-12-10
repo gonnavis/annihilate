@@ -392,7 +392,7 @@ class Mutant {
             this.fadeToAction('punch', 0.2)
 
             this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(20)
-            this.body.velocity.x = this.tmpVec3.x
+            this.body.velocity.x = this.tmpVec3.x // TODO: Use gsap position, to prevent combine with pop?
             // this.body.velocity.y = 0
             this.body.velocity.z = this.tmpVec3.z
           },

@@ -63,8 +63,10 @@ class Pop extends Attacker {
     this.tmpVec3.y = 0
     this.tmpVec3.z = event.body.position.z - this.owner.body.position.z
     this.tmpVec3.normalize().multiplyScalar(12)
-    event.body.velocity.x += this.tmpVec3.x // TODO: Mass more big, distance more long? Use gsap position instead?
-    event.body.velocity.z += this.tmpVec3.z
+    // event.body.velocity.x += this.tmpVec3.x // TODO: Mass more big, distance more long? Use gsap position instead? Or, set absolute value?
+    // event.body.velocity.z += this.tmpVec3.z
+    event.body.velocity.x = this.tmpVec3.x
+    event.body.velocity.z = this.tmpVec3.z
 
     // damage
     event.body.belongTo.knockDown()

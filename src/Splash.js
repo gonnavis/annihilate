@@ -3,6 +3,8 @@ import { g } from './global.js'
 import * as THREE from '../lib/three.js/build/three.module.js'
 class Splash {
   constructor(event) {
+    if (!event) return
+
     this.mesh = new THREE.Mesh(
       new THREE.BoxGeometry(0.1, 0.1, 0.1),
       new THREE.MeshStandardMaterial({
@@ -32,7 +34,11 @@ class Splash {
 
     //
 
+    // if (event) {
     this.mesh.position.addVectors(event.body.position, event.contact.ri)
+    // } else {
+    //   this.mesh.position.copy(event.body.position)
+    // }
 
     // all move up
     {

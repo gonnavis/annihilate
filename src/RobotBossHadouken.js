@@ -5,14 +5,13 @@ import { Attacker } from './Attacker.js'
 
 class RobotBossHadouken extends Attacker {
   constructor({ owner }) {
-    super()
+    let num = 2
+    super({ num })
 
     this.owner = owner
 
-    // body
-
-    this.body.collisionFilterGroup = g.GROUP_ENEMY_ATTACKER
-    this.body.collisionFilterMask = g.GROUP_ROLE
+    this.num = num
+    this.meshes = []
 
     this.width = 0.5
     this.height = 2
@@ -21,42 +20,53 @@ class RobotBossHadouken extends Attacker {
     this.translateY = -this.owner.bodyRadius + this.height / 2
     this.translateZ = this.depth / 2
 
-    let shape = new CANNON.Box(new CANNON.Vec3(this.width / 2, this.height / 2, this.depth / 2))
-    this.body.addShape(shape, new CANNON.Vec3(0, this.translateY, this.translateZ))
-    world.addBody(this.body)
-
-    // mesh
-
     let geometry = new THREE.BoxBufferGeometry(this.width, this.height, this.depth) // todo: reuse geometry & material
-
     geometry.translate(0, this.translateY, this.translateZ) // mark
-
     let material = new THREE.MeshStandardMaterial({
       color: 'cyan',
+      transparent: true,
+      opacity: 0.5,
       // side: THREE.DoubleSide,
       // blending: THREE.AdditiveBlending,
     })
-    this.mesh = new THREE.Mesh(geometry, material)
-    this.mesh.castShadow = true
-    this.mesh.receiveShadow = true
-    // setTimeout(() => {
-    // setTimeout 0 to prevent show and blink at world center.
-    window.scene.add(this.mesh)
-    // }, 0)
 
-    //
+    for (let i = 0; i < num; i++) {
+      // body
+
+      this.bodies[i].collisionFilterGroup = g.GROUP_ENEMY_ATTACKER
+      this.bodies[i].collisionFilterMask = g.GROUP_ROLE
+
+      let shape = new CANNON.Box(new CANNON.Vec3(this.width / 2, this.height / 2, this.depth / 2))
+      this.bodies[i].addShape(shape, new CANNON.Vec3(0, this.translateY, this.translateZ))
+      world.addBody(this.bodies[i])
+
+      // mesh
+
+      let mesh = new THREE.Mesh(geometry, material)
+      this.meshes.push(mesh)
+      // this.mesh.castShadow = true
+      // this.mesh.receiveShadow = true
+      // setTimeout(() => {
+      // setTimeout 0 to prevent show and blink at world center.
+      window.scene.add(mesh)
+      // }, 0)
+
+      //
+    }
   }
 
   update(dt, time) {
     if (this.owner.service.state.matches('loading')) return
 
-    this.body.position.copy(this.owner.body.position)
-    // this.body.quaternion.copy(this.owner.mesh.quaternion)
-    // this.body.quaternion.setFromEuler(0, Math.sin(time * 0.001) + this.mesh.rotation.y, 0) // random_effect
-    this.body.quaternion.setFromEuler(0, Math.sin(time * 0.001) + this.owner.mesh.rotation.y, 0) // random_effect
+    for (let i = 0; i < this.num; i++) {
+      this.bodies[i].position.copy(this.owner.body.position)
+      // this.bodies[i].quaternion.copy(this.owner.mesh.quaternion)
+      // this.bodies[i].quaternion.setFromEuler(0, Math.sin(time * 0.001) + this.meshes[i].rotation.y, 0) // random_effect
+      this.bodies[i].quaternion.setFromEuler(0, Math.sin(time * 0.001 + i * Math.PI) * 0.8 + this.owner.mesh.rotation.y, 0) // random_effect
 
-    this.mesh.position.copy(this.body.position)
-    this.mesh.quaternion.copy(this.body.quaternion)
+      this.meshes[i].position.copy(this.bodies[i].position)
+      this.meshes[i].quaternion.copy(this.bodies[i].quaternion)
+    }
   }
 
   collide(event, isBeginCollide) {
@@ -84,7 +94,7 @@ class RobotBossHadouken extends Attacker {
   }
 
   dispose() {
-    world.removeBody(this.body)
+    world.removeBody(this.bodies[i])
     scene.remove(this.mesh) // TODO: dispose geometry material.
   }
 }

@@ -28,6 +28,7 @@ class TranslatedBox {
 
     // cannon
 
+    // const shape = new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, depth / 2))
     const shape = geometryToShape(bufferGeometry)
 
     this.body = new CANNON.Body({
@@ -36,8 +37,11 @@ class TranslatedBox {
       collisionFilterGroup: g.GROUP_SCENE,
     })
     this.body.belongTo = this
+
     this.body.addShape(shape, new CANNON.Vec3(width / 2, 0, 0)) // mark
     // https://stackoverflow.com/questions/42599326/how-to-group-object-bodies-parent-child-in-cannon-js
+    // https://github.com/schteppe/cannon.js/issues/232
+
     world.addBody(this.body)
 
     this.mesh.position.copy(position)

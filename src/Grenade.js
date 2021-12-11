@@ -150,7 +150,7 @@ class Grenade extends Attacker {
       mass: 0,
       type: CANNON.Body.DYNAMIC,
       collisionResponse: false,
-      // NOTE: See GreatSword.js NOTE.
+      // NOTE: See Attacker.js NOTE.
       collisionFilterGroup: g.GROUP_ENEMY_ATTACKER,
       collisionFilterMask: g.GROUP_ROLE,
     })

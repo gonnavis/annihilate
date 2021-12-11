@@ -14,6 +14,9 @@ class GreatSword extends Attacker {
 
     // body
 
+    this.body.collisionFilterGroup = g.GROUP_ROLE_ATTACKER
+    this.body.collisionFilterMask = g.GROUP_ENEMY | g.GROUP_ENEMY_ATTACKER | g.GROUP_ENEMY_SHIELD
+
     let shape = new CANNON.Box(new CANNON.Vec3(0.19, 0.19, 0.74))
     // let shape = new CANNON.Box(new CANNON.Vec3(0.5 * 3, 0.5 * 3, 2 * 3))
     this.body.addShape(shape)

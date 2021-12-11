@@ -5,6 +5,7 @@ import { Hadouken } from './Hadouken.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 import { Splash } from './Splash.js'
 import { RobotBossHadouken } from './RobotBossHadouken.js'
+import { RobotBossWeakness } from './RobotBossWeakness.js'
 
 class RobotBoss {
   constructor({ position }) {
@@ -49,9 +50,19 @@ class RobotBoss {
             on: {
               run: { target: 'run' },
               attack: { target: 'attack' },
-              hit: { target: 'hit' },
+              // hit: { target: 'hit' },
+              weak: { target: 'weak' },
             },
             tags: ['canFacing'],
+          },
+          weak: {
+            entry: 'playWeak',
+            on: {
+              hit: { target: 'hit' },
+            },
+            after: {
+              5000: { target: 'idle' },
+            },
           },
           run: {
             entry: 'playRun',
@@ -91,6 +102,13 @@ class RobotBoss {
 
           playIdle: () => {
             this.fadeToAction('idle', 0.2)
+
+            this.shield.visible = true
+            this.hadouken.start()
+          },
+          playWeak: () => {
+            this.shield.visible = false
+            this.hadouken.stop()
           },
           playRun: () => {
             this.fadeToAction('running', 0.2)
@@ -188,6 +206,10 @@ class RobotBoss {
     this.hadouken = new RobotBossHadouken({
       owner: this,
     })
+
+    this.weakness = new RobotBossWeakness({
+      owner: this,
+    })
   }
 
   update(dt) {
@@ -259,6 +281,20 @@ class RobotBoss {
             // console.log('finished')
             this.service.send('idle')
           })
+
+          //
+
+          this.shield = new THREE.Mesh(
+            new THREE.IcosahedronGeometry(this.bodyRadius * 1.2, 2),
+            new THREE.MeshBasicMaterial({
+              color: 0xffff00,
+              transparent: true,
+              opacity: 0.3,
+            })
+          )
+          this.shield.position.y = this.bodyRadius
+          this.mesh.add(this.shield)
+
           this.service.send('loaded')
           resolve()
         },

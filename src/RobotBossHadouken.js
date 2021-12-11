@@ -30,10 +30,12 @@ class RobotBossHadouken extends Attacker {
       // blending: THREE.AdditiveBlending,
     })
 
+    this.collisionFilterGroup = g.GROUP_ENEMY_ATTACKER
+
     for (let i = 0; i < num; i++) {
       // body
 
-      this.bodies[i].collisionFilterGroup = g.GROUP_ENEMY_ATTACKER
+      this.bodies[i].collisionFilterGroup = g.GROUP_NO_COLLIDE
       this.bodies[i].collisionFilterMask = g.GROUP_ROLE
 
       let shape = new CANNON.Box(new CANNON.Vec3(this.width / 2, this.height / 2, this.depth / 2))
@@ -43,6 +45,7 @@ class RobotBossHadouken extends Attacker {
       // mesh
 
       let mesh = new THREE.Mesh(geometry, material)
+      mesh.visible = false
       this.meshes.push(mesh)
       // this.mesh.castShadow = true
       // this.mesh.receiveShadow = true
@@ -62,7 +65,7 @@ class RobotBossHadouken extends Attacker {
       this.bodies[i].position.copy(this.owner.body.position)
       // this.bodies[i].quaternion.copy(this.owner.mesh.quaternion)
       // this.bodies[i].quaternion.setFromEuler(0, Math.sin(time * 0.001) + this.meshes[i].rotation.y, 0) // random_effect
-      this.bodies[i].quaternion.setFromEuler(0, Math.sin(time * 0.001 + i * Math.PI) * 0.8 + this.owner.mesh.rotation.y, 0) // random_effect
+      this.bodies[i].quaternion.setFromEuler(0, Math.sin(time * 0.001 + i * Math.PI) * 0.8 + this.owner.mesh.rotation.y, 0)
 
       this.meshes[i].position.copy(this.bodies[i].position)
       this.meshes[i].quaternion.copy(this.bodies[i].quaternion)
@@ -93,9 +96,39 @@ class RobotBossHadouken extends Attacker {
     // })
   }
 
+  start() {
+    // this.bodies.forEach((body, i) => {
+    //   world.addBody(this.bodies[i])
+    //   scene.add(this.meshes[i])
+    //   body.collidings.length = 0
+    // })
+    this.bodies.forEach((body) => {
+      body.collisionFilterGroup = this.collisionFilterGroup
+      body.collidings.length = 0
+    })
+    this.meshes.forEach((mesh) => {
+      mesh.visible = true
+    })
+  }
+
+  stop() {
+    // this.bodies.forEach((body, i) => {
+    //   world.removeBody(this.bodies[i])
+    //   scene.remove(this.meshes[i])
+    //   body.collidings.length = 0
+    // })
+    this.bodies.forEach((body) => {
+      body.collisionFilterGroup = g.GROUP_NO_COLLIDE
+      body.collidings.length = 0
+    })
+    this.meshes.forEach((mesh) => {
+      mesh.visible = false
+    })
+  }
+
   dispose() {
-    world.removeBody(this.bodies[i])
-    scene.remove(this.mesh) // TODO: dispose geometry material.
+    // world.removeBody(this.bodies[i])
+    // scene.remove(this.mesh) // TODO: dispose geometry material.
   }
 }
 

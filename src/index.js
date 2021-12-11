@@ -99,6 +99,7 @@ function init_xstate() {
         maria: { entry: 'entryMaria' },
         paladin: { entry: 'entryPaladin', exit: 'exitPaladin' },
         robot: { entry: 'entryRobot', exit: 'exitRobot' },
+        robotBoss: { entry: 'entryRobotBoss', exit: 'exitRobotBoss' },
         parrot: { entry: 'entryParrot', exit: 'exitParrot' },
         mutant: { entry: 'entryMutant', exit: 'exitMutant' },
       },
@@ -106,6 +107,7 @@ function init_xstate() {
         maria: { target: '.maria' },
         paladin: { target: '.paladin' },
         robot: { target: '.robot' },
+        robotBoss: { target: '.robotBoss' },
         parrot: { target: '.parrot' },
         mutant: { target: '.mutant' },
       },
@@ -154,6 +156,22 @@ function init_xstate() {
         },
         exitRobot: () => {
           if (robot.ai) robot.ai.enabled = true
+        },
+        entryRobotBoss: () => {
+          if (!window.roleControls) window.roleControls = new RoleControls(robotBoss) ///todo: Use ECS?
+          roleControls.setRole(robotBoss)
+
+          // ai.setTarget(robotBoss)
+
+          Array.prototype.forEach.call(domRoles.children, (domRole) => {
+            domRole.disabled = false
+          })
+          domRobotBoss.disabled = true
+
+          if (robotBoss.ai) robotBoss.ai.enabled = false
+        },
+        exitRobotBoss: () => {
+          if (robotBoss.ai) robotBoss.ai.enabled = true
         },
         entryParrot: () => {
           if (!window.roleControls) window.roleControls = new RoleControls(parrot) ///todo: Use ECS?
@@ -376,6 +394,9 @@ function init() {
   domRobot.addEventListener('click', (event) => {
     window.service.send('robot')
   })
+  domRobot.addEventListener('click', (event) => {
+    window.service.send('robotBoss')
+  })
   domParrot.addEventListener('click', (event) => {
     window.service.send('parrot')
   })
@@ -396,6 +417,9 @@ function init() {
         break
       case 'Digit3':
         window.service.send('robot')
+        break
+      case 'Digit6':
+        window.service.send('robotBoss')
         break
       case 'Digit4':
         window.service.send('parrot')

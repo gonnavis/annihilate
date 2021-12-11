@@ -4,6 +4,7 @@ import * as THREE from '../lib/three.js/build/three.module.js'
 import { Hadouken } from './Hadouken.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 import { Splash } from './Splash.js'
+import { RobotBossHadouken } from './RobotBossHadouken.js'
 
 class RobotBoss {
   constructor({ position }) {
@@ -154,16 +155,16 @@ class RobotBoss {
     // => 'resolved'
 
     this.mass = 50 * 3.8 * 3.8 * 3.8
-    this.bodySize = 0.6 * 3.8
+    this.bodyRadius = 0.6 * 3.8
     this.body = new CANNON.Body({
       mass: this.mass,
       collisionFilterGroup: g.GROUP_ENEMY,
       collisionFilterMask: g.GROUP_SCENE | g.GROUP_ROLE | g.GROUP_ENEMY | g.GROUP_ROLE_ATTACKER,
     })
     this.body.belongTo = this
-    let shape = new CANNON.Sphere(this.bodySize)
-    // let shape = new CANNON.Cylinder(this.bodySize, this.bodySize, 3, 8)
-    // let shape = new CANNON.Cylinder(this.bodySize, this.bodySize, 5, 8)
+    let shape = new CANNON.Sphere(this.bodyRadius)
+    // let shape = new CANNON.Cylinder(this.bodyRadius, this.bodyRadius, 3, 8)
+    // let shape = new CANNON.Cylinder(this.bodyRadius, this.bodyRadius, 5, 8)
     // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     this.body.angularDamping = 1
     this.body.addShape(shape)
@@ -181,12 +182,18 @@ class RobotBoss {
     // setInterval(() => {
     //   this.service.send('attack')
     // }, 3000)
+
+    //
+
+    this.hadouken = new RobotBossHadouken({
+      owner: this,
+    })
   }
 
   update(dt) {
     if (this.service.state.value === 'loading') return
     this.mixer.update(dt)
-    this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodySize, this.body.position.z)
+    this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyRadius, this.body.position.z)
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
 

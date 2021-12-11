@@ -1,8 +1,10 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-import { Geometry } from '../lib/three.js/examples/jsm/deprecated/Geometry.js'
+// import { Geometry } from '../lib/three.js/examples/jsm/deprecated/Geometry.js'
 // import { mergeVertices } from '../lib/three.js/examples/jsm/utils/BufferGeometryUtils.js'
+import { geometryToShape } from '../lib/cannon-es/three-conversion-utils_my.js'
+
 class Hill {
   constructor() {
     this.isGround = true
@@ -14,8 +16,6 @@ class Hill {
     // let bufferGeometry = new THREE.BoxGeometry(6, 6, 6)
     // bufferGeometry = mergeVertices(bufferGeometry, 2)
     // bufferGeometry.computeVertexNormals()
-    const geometry = new Geometry().fromBufferGeometry(bufferGeometry)
-    geometry.mergeVertices()
     const material = new THREE.MeshPhongMaterial({ color: 0x555555 })
     const cone = new THREE.Mesh(bufferGeometry, material)
     this.mesh = cone
@@ -24,33 +24,44 @@ class Hill {
     // console.log(bufferGeometry)
     // console.log(geometry)
 
-    let vertices = []
-    geometry.vertices.forEach((vertex) => {
-      vertices.push(new CANNON.Vec3(vertex.x, vertex.y, vertex.z))
-    })
-    // for (let i = 0; i < bufferGeometry.attributes.position.array.length; ) {
-    //   let x = bufferGeometry.attributes.position.array[i++]
-    //   let y = bufferGeometry.attributes.position.array[i++]
-    //   let z = bufferGeometry.attributes.position.array[i++]
-    //   vertices.push(new CANNON.Vec3(x, y, z))
-    // }
-    // console.log(vertices)
+    //
 
-    let faces = []
-    geometry.faces.forEach((face) => {
-      faces.push([face.a, face.b, face.c])
-    })
-    // for (let i = 0; i < bufferGeometry.index.array.length; ) {
-    //   let a = bufferGeometry.index.array[i++]
-    //   let b = bufferGeometry.index.array[i++]
-    //   let c = bufferGeometry.index.array[i++]
-    //   faces.push([a, b, c])
-    // }
-    // console.log(faces)
+    // const geometry = new Geometry().fromBufferGeometry(bufferGeometry)
+    // geometry.mergeVertices()
 
-    // console.log(vertices)
-    // console.log(faces)
-    let shape = new CANNON.ConvexPolyhedron({ vertices, faces })
+    // let vertices = []
+    // geometry.vertices.forEach((vertex) => {
+    //   vertices.push(new CANNON.Vec3(vertex.x, vertex.y, vertex.z))
+    // })
+    // // for (let i = 0; i < bufferGeometry.attributes.position.array.length; ) {
+    // //   let x = bufferGeometry.attributes.position.array[i++]
+    // //   let y = bufferGeometry.attributes.position.array[i++]
+    // //   let z = bufferGeometry.attributes.position.array[i++]
+    // //   vertices.push(new CANNON.Vec3(x, y, z))
+    // // }
+    // // console.log(vertices)
+
+    // let faces = []
+    // geometry.faces.forEach((face) => {
+    //   faces.push([face.a, face.b, face.c])
+    // })
+    // // for (let i = 0; i < bufferGeometry.index.array.length; ) {
+    // //   let a = bufferGeometry.index.array[i++]
+    // //   let b = bufferGeometry.index.array[i++]
+    // //   let c = bufferGeometry.index.array[i++]
+    // //   faces.push([a, b, c])
+    // // }
+    // // console.log(faces)
+
+    // // console.log(vertices)
+    // // console.log(faces)
+    // let shape = new CANNON.ConvexPolyhedron({ vertices, faces })
+
+    //
+
+    const shape = geometryToShape(bufferGeometry)
+    // const shape = geometryToShape(geometry)
+
     this.body = new CANNON.Body({
       mass: 0,
       collisionFilterGroup: g.GROUP_SCENE,

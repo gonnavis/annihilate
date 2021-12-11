@@ -16,7 +16,7 @@ class RobotBossHadouken extends Attacker {
 
     this.width = 0.5
     this.height = 2
-    this.depth = 20
+    this.depth = 30
 
     this.translateY = -this.owner.bodyRadius + this.height / 2
     this.translateZ = this.depth / 2
@@ -52,7 +52,8 @@ class RobotBossHadouken extends Attacker {
 
     this.body.position.copy(this.owner.body.position)
     // this.body.quaternion.copy(this.owner.mesh.quaternion)
-    this.body.quaternion.setFromEuler(0, Math.sin(time * 0.001), 0)
+    // this.body.quaternion.setFromEuler(0, Math.sin(time * 0.001) + this.mesh.rotation.y, 0) // random_effect
+    this.body.quaternion.setFromEuler(0, Math.sin(time * 0.001) + this.owner.mesh.rotation.y, 0) // random_effect
 
     this.mesh.position.copy(this.body.position)
     this.mesh.quaternion.copy(this.body.quaternion)

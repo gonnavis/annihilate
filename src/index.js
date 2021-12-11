@@ -73,8 +73,8 @@ window.grenades = []
 let fsm
 window.service = null
 
-let cameraDist = 11
-// let cameraDist=15
+// let cameraDist = 11
+let cameraDist = 15
 let cameraPosX = 0
 let cameraPosY = g.getQueryStringByName('view') === 'front' ? 0 : cameraDist
 let cameraPosZ = g.getQueryStringByName('view') === 'top' ? 0 : cameraDist

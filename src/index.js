@@ -95,7 +95,7 @@ function init_xstate() {
       states: {
         initial: {},
         maria: { entry: 'entryMaria' },
-        paladin: { entry: 'entryPaladin' },
+        paladin: { entry: 'entryPaladin', exit: 'exitPaladin' },
         robot: { entry: 'entryRobot', exit: 'exitRobot' },
         parrot: { entry: 'entryParrot', exit: 'exitParrot' },
         mutant: { entry: 'entryMutant', exit: 'exitMutant' },
@@ -131,6 +131,11 @@ function init_xstate() {
             domRole.disabled = false
           })
           domPaladin.disabled = true
+
+          if (paladin.ai) paladin.ai.enabled = false
+        },
+        exitPaladin: () => {
+          if (paladin.ai) paladin.ai.enabled = true
         },
         entryRobot: () => {
           if (!window.roleControls) window.roleControls = new RoleControls(robot) ///todo: Use ECS?

@@ -28,7 +28,16 @@ class PaladinHadouken extends Attacker {
               rebound: { target: 'rebound' },
             },
             after: {
-              2000: { target: 'dispose' },
+              1500: { target: 'revert' },
+            },
+          },
+          revert: {
+            entry: 'entryRevert',
+            on: {
+              rebound: { target: 'rebound' },
+            },
+            after: {
+              1500: { target: 'dispose' },
             },
           },
           rebound: {
@@ -44,6 +53,10 @@ class PaladinHadouken extends Attacker {
       },
       {
         actions: {
+          entryRevert: () => {
+            this.movement.multiplyScalar(-1)
+            this.body.quaternion.setFromEuler(0, -this.owner.facing.angle(), -Math.PI / 4)
+          },
           entryDispose: () => {
             this.dispose()
           },

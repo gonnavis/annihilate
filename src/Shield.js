@@ -8,6 +8,7 @@ class Shield {
     this.owner = null
 
     this.is_hit = false
+    this.collisionFilterGroup = g.GROUP_ENEMY_SHIELD
 
     // body
 
@@ -16,7 +17,7 @@ class Shield {
       type: CANNON.Body.DYNAMIC,
       collisionResponse: false,
       //
-      collisionFilterGroup: g.GROUP_ENEMY_SHIELD,
+      collisionFilterGroup: this.collisionFilterGroup,
       collisionFilterMask: g.GROUP_ROLE_ATTACKER,
     })
     this.body.belongTo = this

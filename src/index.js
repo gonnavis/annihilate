@@ -27,6 +27,7 @@ import { RoleControls } from './RoleControls.js'
 import { Ai } from './Ai.js'
 import { MutantAi } from './MutantAi.js'
 import { RobotAi } from './RobotAi.js'
+import { PaladinAi } from './PaladinAi.js'
 import { ParrotAi } from './ParrotAi.js'
 import { HandKnife } from './HandKnife.js'
 import { Teleporter } from './Teleporter.js'
@@ -290,7 +291,9 @@ function init() {
   window.greatSword = new GreatSword()
   greatSword.owner = maria
 
-  window.paladin = new Paladin(5, 5, 0)
+  window.paladin = new Paladin({
+    position: new THREE.Vector3(5, 5, 0),
+  })
   // window.paladin = new Paladin(0, 5, 0)
   paladin.load(() => {
     // paladin.mesh.rotation.set(0, Math.PI, 0)
@@ -300,6 +303,7 @@ function init() {
   sword.owner = paladin
   window.shield = new Shield()
   shield.owner = paladin
+  paladin.ai = new PaladinAi(paladin, 8)
 
   window.mutants = []
   // let mutantsCount = g.getQueryStringByName('mutants') === 'false' ? 0 : 3

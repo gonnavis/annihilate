@@ -1,12 +1,12 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-import { Hadouken } from './Hadouken.js'
+import { PaladinHadouken } from './PaladinHadouken.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 import { Splash } from './Splash.js'
 
 class Paladin {
-  constructor(x, y, z) {
+  constructor({ position }) {
     this.isCharacter = true
     this.isEnemy = true
 
@@ -16,13 +16,21 @@ class Paladin {
     this.oaction = {}
     this.mixer
     // this.speed = 0.15
-    this.speed = 0.11
+    // this.speed = 0.11
     this.attackSpeed = 1.6
     this.tmpVec3 = new THREE.Vector3()
+    this.isAir = true
+    this.airLiftVelocity = 1.5
+    this.position = position
+    this.initialPosition = this.position.clone()
+
+    // for RoleControls.js
     this.direction = vec2() // direction may be zero length.
     this.facing = vec2(0, 1) // facing always not zero length.
-    this.isAir = false
-    this.airLiftVelocity = 1.5
+    this.speed = 0.04
+
+    // for Ai.js
+    this.detectorRadius = 12
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -76,6 +84,7 @@ class Paladin {
               dash: { target: 'dash' },
               blocked: { target: 'blocked' },
             },
+            tags: ['canFacing'],
           },
           run: {
             entry: 'playRun',
@@ -89,7 +98,7 @@ class Paladin {
               dash: { target: 'dash' },
               // blocked: { target: 'blocked' }, // Note: Can block when running or in other states? No, more by intended operation, less by luck.
             },
-            tags: ['canMove'],
+            tags: ['canMove', 'canFacing'],
           },
           attackStart: {
             entry: 'playAttackStart',
@@ -130,6 +139,7 @@ class Paladin {
           },
           bashEnd: {
             entry: 'playBashEnd',
+            exit: 'exitBashEnd',
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -319,11 +329,16 @@ class Paladin {
             this.fadeToAction('punch', 0.2)
           },
           playBashEnd: () => {
-            new Hadouken(scene, updates, this, window.role.mesh.position) // TODO: Use seqKey instead of bash to throw hadouken.
+            new PaladinHadouken(scene, updates, this, window.role.mesh.position) // TODO: Use seqKey instead of bash to throw paladinHadouken.
+
+            window.shield.body.collisionFilterGroup = g.GROUP_NO_COLLIDE
 
             setTimeout(() => {
               this.service.send('finish')
-            }, 1000)
+            }, 3000)
+          },
+          exitBashEnd: () => {
+            window.shield.body.collisionFilterGroup = window.shield.collisionFilterGroup
           },
           playDashAttack: () => {
             this.oaction['strike'].timeScale = this.attackSpeed
@@ -411,7 +426,7 @@ class Paladin {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('paladin: state:', state.value)
+      // if (state.changed) console.log('paladin: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -449,7 +464,7 @@ class Paladin {
     this.body.addShape(sphereShape, new CANNON.Vec3(0, -this.bodyCylinderHeight / 2, 0))
     this.body.addShape(cylinderShape)
 
-    this.body.position.set(x, y, z) ///formal
+    this.body.position.copy(this.position) ///formal
     // this.body.position.set(10.135119435295582, -0.000010295802922222208, -14.125613840025014)///test
     world.addBody(this.body)
     // this.body.addEventListener('collide', (event) => {

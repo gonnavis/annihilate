@@ -38,6 +38,7 @@ import { BirdFlock } from './BirdFlock.js'
 import { JumpPoint } from './JumpPoint.js'
 import { RobotBoss } from './RobotBoss.js'
 // import { TorusKnot } from './TorusKnot.js'
+// import { TranslatedBox } from './TranslatedBox.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -254,6 +255,10 @@ function init() {
   //   position: new THREE.Vector3(0, 2, 0),
   // })
 
+  // window.translatedBox = new TranslatedBox({
+  //   position: new THREE.Vector3(0, 1.5, 0),
+  // })
+
   // air box
   window.airBox = new Box(15, 1.5, 30)
   airBox.mesh.position.set(-20, 12, -33)
@@ -301,19 +306,21 @@ function init() {
   window.greatSword = new GreatSword()
   greatSword.owner = maria
 
-  window.paladin = new Paladin({
-    position: new THREE.Vector3(5, 5, 0),
-  })
-  // window.paladin = new Paladin(0, 5, 0)
-  paladin.load(() => {
-    // paladin.mesh.rotation.set(0, Math.PI, 0)
-    paladin.setFacing(-1, 0)
-  })
-  window.sword = new Sword()
-  sword.owner = paladin
-  window.shield = new Shield()
-  shield.owner = paladin
-  paladin.ai = new PaladinAi(paladin, 8)
+  if (!(g.getQueryStringByName('paladin') === 'false')) {
+    window.paladin = new Paladin({
+      position: new THREE.Vector3(5, 5, 0),
+    })
+    // window.paladin = new Paladin(0, 5, 0)
+    paladin.load(() => {
+      // paladin.mesh.rotation.set(0, Math.PI, 0)
+      paladin.setFacing(-1, 0)
+    })
+    window.sword = new Sword()
+    sword.owner = paladin
+    window.shield = new Shield()
+    shield.owner = paladin
+    paladin.ai = new PaladinAi(paladin, 8)
+  }
 
   window.mutants = []
   // let mutantsCount = g.getQueryStringByName('mutants') === 'false' ? 0 : 3

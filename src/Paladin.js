@@ -408,6 +408,8 @@ class Paladin {
             this.oaction['hit'].timeScale = 1.7
             this.fadeToAction('hit', 0.2)
 
+            if (g.isDamage) this.health -= 34
+
             new Splash(event.collideEvent)
 
             if (this.isAir) {
@@ -417,6 +419,8 @@ class Paladin {
           playKnockDown: (context, event, o) => {
             this.oaction['knockDown'].timeScale = 2
             this.fadeToAction('knockDown', 0.2)
+
+            if (g.isDamage) this.health -= 34
 
             new Splash(event.collideEvent)
           },
@@ -441,7 +445,7 @@ class Paladin {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('paladin: state:', state.value)
+      if (state.changed) console.log('paladin: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value
@@ -496,6 +500,7 @@ class Paladin {
   }
 
   update(dt) {
+    // console.log(this.health)
     if (this.service.state.matches('loading')) return
 
     this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyHeightHalf, this.body.position.z) // todo: Why not this.bodyCylinderHeight / 2 ?
@@ -513,7 +518,6 @@ class Paladin {
     // }else{
     //   this.service.send('hit', { collideEvent })
     // }
-    if (g.isDamage) this.health -= 34 // todo: Merge with hit().
     this.service.send('hit', { collideEvent })
     if (this.health <= 0) {
       this.service.send('dead', { collideEvent })
@@ -522,7 +526,6 @@ class Paladin {
   }
 
   knockDown(collideEvent) {
-    if (g.isDamage) this.health -= 34 // todo: Merge with hit().
     this.service.send('knockDown', { collideEvent })
     if (this.health <= 0) {
       this.service.send('dead', { collideEvent })

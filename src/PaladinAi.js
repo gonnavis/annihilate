@@ -38,7 +38,7 @@ class PaladinAi extends Ai {
     )
 
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('paladinAi: state:', state.value)
+      // if (state.changed) console.log('paladinAi: state:', state.value)
     })
 
     this.service.start()

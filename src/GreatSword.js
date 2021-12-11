@@ -38,6 +38,7 @@ class GreatSword extends Attacker {
 
     // TODO: update() run one tick after collide(), not good. But do not run update() after world.step() in index.js.
     // TODO: Check collideShieldEvent & collideBodyEvent's contact position to judge if real blocked.
+    // if (this.isCollideShield && (!this.collideBodyEvent || this.collideShieldEvent.body === this.collideBodyEvent.body)) { // TODO: Prevent shield help other enemies block.
     if (this.isCollideShield) {
       // debugger
       let event = this.collideShieldEvent
@@ -57,7 +58,8 @@ class GreatSword extends Attacker {
         // debugger
 
         // if (this.owner.service.state.matches('launch')) {
-        if (this.owner.service.state.hasTag('canLaunch') && !event.body.belongTo.isAir) { // TODO: If enemy not real hit, such as paladin blocked, do not launch?
+        if (this.owner.service.state.hasTag('canLaunch') && !event.body.belongTo.isAir) {
+          // TODO: If enemy not real hit, such as paladin blocked, do not launch?
           // console.log(111)
           // event.body.velocity.y += 30
           // NOTE: Direct change position instead of velocity, to prevent friction between enemy herd cause not lift.

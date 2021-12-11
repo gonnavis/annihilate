@@ -62,9 +62,6 @@ class Paladin {
     this.fsm = createMachine(
       {
         id: 'paladin',
-        context: {
-          health: 100,
-        },
         initial: 'loading',
         states: {
           loading: {
@@ -240,12 +237,14 @@ class Paladin {
               hit: { target: 'hit' },
               knockDown: { target: 'knockDown' },
               finish: { target: 'idle' },
+              dead: { target: 'dead' },
             },
           },
           knockDown: {
             entry: ['playKnockDown'],
             on: {
               finish: { target: 'idle' },
+              dead: { target: 'dead' },
             },
           },
           blocked: {
@@ -280,6 +279,10 @@ class Paladin {
               land: { target: 'idle' },
             },
             exit: 'exitJumpDash',
+          },
+          dead: {
+            entry: 'playDead',
+            type: 'final',
           },
         },
       },
@@ -420,6 +423,18 @@ class Paladin {
           playBlocked: () => {
             this.fadeToAction('impactBlock', 0.2)
           },
+          playDead: (context, event, o) => {
+            // this.oaction['knockDown'].timeScale = 2
+            this.fadeToAction('knockDown', 0.2)
+
+            new Splash(event.collideEvent)
+
+            // this.body.collisionResponse = false
+            this.body.collisionFilterMask = g.GROUP_SCENE
+            setTimeout(() => {
+              this.body.velocity.set(0, 0, 0)
+            }, 0)
+          },
         },
       }
     )
@@ -496,12 +511,22 @@ class Paladin {
     // if(this.health<=0){
     //   this.service.send('dead')
     // }else{
-    this.service.send('hit', { collideEvent })
+    //   this.service.send('hit', { collideEvent })
     // }
+    if (g.isDamage) this.health -= 34 // todo: Merge with hit().
+    this.service.send('hit', { collideEvent })
+    if (this.health <= 0) {
+      this.service.send('dead', { collideEvent })
+    } else {
+    }
   }
 
   knockDown(collideEvent) {
+    if (g.isDamage) this.health -= 34 // todo: Merge with hit().
     this.service.send('knockDown', { collideEvent })
+    if (this.health <= 0) {
+      this.service.send('dead', { collideEvent })
+    }
   }
 
   load(callback) {

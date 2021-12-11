@@ -23,7 +23,7 @@ class PaladinAi extends Ai {
           },
           cantAttack: {
             after: {
-              4000: { target: 'canAttack' },
+              6000: { target: 'canAttack' },
             },
           },
         },

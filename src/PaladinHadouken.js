@@ -55,7 +55,7 @@ class PaladinHadouken extends Attacker {
         actions: {
           entryRevert: () => {
             this.movement.multiplyScalar(-1)
-            this.body.quaternion.setFromEuler(0, -this.owner.facing.angle(), -Math.PI / 4)
+            this.body.quaternion.setFromEuler(0, this.rotationY, -Math.PI / 4)
           },
           entryDispose: () => {
             this.dispose()
@@ -108,7 +108,9 @@ class PaladinHadouken extends Attacker {
     //
 
     // this.body.quaternion.setFromEuler(0, -this.owner.facing.angle() + (Math.PI / 2) * 3, 0)
-    this.body.quaternion.setFromEuler(0, -this.owner.facing.angle(), Math.PI / 4)
+
+    this.rotationY = -this.owner.facing.angle()
+    this.body.quaternion.setFromEuler(0, this.rotationY, Math.PI / 4)
   }
 
   update(dt) {

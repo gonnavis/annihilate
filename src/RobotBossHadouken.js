@@ -42,7 +42,9 @@ class RobotBossHadouken extends Attacker {
 
       let shape = new CANNON.Box(new CANNON.Vec3(this.width / 2, this.height / 2, this.depth / 2))
       this.bodies[i].addShape(shape, new CANNON.Vec3(0, this.translateY, this.translateZ))
-      world.addBody(this.bodies[i])
+      setTimeout(() => {
+        world.addBody(this.bodies[i])
+      }, 0)
 
       // mesh
 
@@ -51,10 +53,10 @@ class RobotBossHadouken extends Attacker {
       this.meshes.push(mesh)
       // this.mesh.castShadow = true
       // this.mesh.receiveShadow = true
-      // setTimeout(() => {
-      // setTimeout 0 to prevent show and blink at world center.
-      window.scene.add(mesh)
-      // }, 0)
+      setTimeout(() => {
+        // setTimeout 0 to prevent show and blink at world center.
+        window.scene.add(mesh)
+      }, 0)
 
       //
     }
@@ -105,16 +107,18 @@ class RobotBossHadouken extends Attacker {
   start() {
     this.startTime = performance.now()
 
-    // this.bodies.forEach((body, i) => {
-    //   world.addBody(this.bodies[i])
-    //   scene.add(this.meshes[i])
-    //   body.collidings.length = 0
-    // })
-    this.bodies.forEach((body) => {
-      body.collisionFilterGroup = this.collisionFilterGroup
-      body.collidings.length = 0
-    })
     setTimeout(() => {
+      // NOTE: setTimeout 0 to prevent unwanted hit if prev frame body rotation just collide role.
+
+      // this.bodies.forEach((body, i) => {
+      //   world.addBody(this.bodies[i])
+      //   scene.add(this.meshes[i])
+      //   body.collidings.length = 0
+      // })
+      this.bodies.forEach((body) => {
+        body.collisionFilterGroup = this.collisionFilterGroup
+        body.collidings.length = 0
+      })
       this.meshes.forEach((mesh) => {
         mesh.visible = true
       })

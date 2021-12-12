@@ -21,6 +21,7 @@ class RobotBoss {
     this.position = position
     this.initialPosition = this.position.clone()
     this.isWeak = false
+    this.hadoukenDuration = 7000
 
     // for RoleControls.js
     this.direction = vec2() // direction may be zero length.
@@ -97,6 +98,7 @@ class RobotBoss {
             on: {
               finish: [{ target: 'weak', cond: 'isWeak' }, { target: 'idle' }],
               hit: { target: 'hit' },
+              stopWeak: { target: 'idle' },
             },
           },
           dead: {
@@ -126,6 +128,8 @@ class RobotBoss {
             // clearTimeout(this.timeoutStopWeak) // NOTE: Can't clearTimeout here. Hit will reenter weak and reset timeout.
             this.timeoutStopWeak = setTimeout(() => {
               this.isWeak = false
+              this.weakness.restore()
+              this.ai.service.send('restore')
               this.service.send('stopWeak')
             }, 7000)
           },
@@ -141,7 +145,7 @@ class RobotBoss {
 
             this.timeoutHadouken = setTimeout(() => {
               this.service.send('finish')
-            }, 7000)
+            }, this.hadoukenDuration)
           },
           exitHadouken: () => {
             clearTimeout(this.timeoutHadouken)
@@ -159,6 +163,8 @@ class RobotBoss {
             setTimeout(() => {
               this.body.velocity.set(0, 0, 0)
             }, 0)
+
+            clearTimeout(this.timeoutStopWeak) // NOTE: Prevent restore weakness after dead.
 
             // let interval
             // setTimeout(() => {

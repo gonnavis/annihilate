@@ -18,15 +18,15 @@ class ParrotAi extends Ai {
         states: {
           canAttack: {
             on: {
-              attack: { target: 'cantAttack', actions: 'attack' },
+              attack: { target: 'canNotAttack', actions: 'attack' },
             },
           },
           canGrenade: {
             on: {
-              attack: { target: 'cantAttack', actions: 'grenade' },
+              attack: { target: 'canNotAttack', actions: 'grenade' },
             },
           },
-          cantAttack: {
+          canNotAttack: {
             after: {
               3000: [{ target: 'canAttack', cond: 'rand2' }, { target: 'canGrenade' }],
             },
@@ -58,7 +58,7 @@ class ParrotAi extends Ai {
   attack() {
     if (!g.isAttack) return
 
-    if (this.service.state.matches('cantAttack')) {
+    if (this.service.state.matches('canNotAttack')) {
       this.character.service.send('stop') // prevent keep play running animation when in attack range and not moving.
     } else {
       this.service.send('attack')

@@ -21,12 +21,15 @@ class RobotBossAi extends Ai {
         states: {
           canAttack: {
             on: {
-              attack: { target: 'cantAttack', actions: 'attack' },
+              attack: { target: 'canNotAttack', actions: 'attack' },
             },
           },
-          cantAttack: {
+          canNotAttack: {
+            on: {
+              restore: { target: 'canAttack' },
+            },
             after: {
-              10000: { target: 'canAttack' },
+              9000: { target: 'canAttack' },
             },
           },
         },
@@ -51,11 +54,15 @@ class RobotBossAi extends Ai {
     if (!g.isAttack) return
     // console.log(111)
 
-    if (this.service.state.matches('cantAttack')) {
-      this.character.service.send('stop') // prevent keep play running animation when in attack range and not moving.
-    } else {
+    if (this.service.state.matches('canAttack')) {
       this.service.send('attack')
     }
+
+    // if (this.service.state.matches('canNotAttack')) {
+    //   this.character.service.send('stop') // prevent keep play running animation when in attack range and not moving.
+    // } else {
+    //   this.service.send('attack')
+    // }
 
     // this.character.service.send('hadouken')
   }

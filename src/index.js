@@ -385,7 +385,7 @@ function init() {
     position: new THREE.Vector3(-40, 5, 10),
   })
   robotBoss.load()
-  robotBoss.ai = new RobotBossAi(robotBoss, 8)
+  robotBoss.ai = new RobotBossAi(robotBoss, 8) // TODO: Create in RobotBoss.js? Because need access ai in it.
 
   domMaria.addEventListener('click', (event) => {
     window.service.send('maria')

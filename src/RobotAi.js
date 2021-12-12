@@ -18,10 +18,10 @@ class RobotAi extends Ai {
         states: {
           canAttack: {
             on: {
-              attack: { target: 'cantAttack', actions: 'attack' },
+              attack: { target: 'canNotAttack', actions: 'attack' },
             },
           },
-          cantAttack: {
+          canNotAttack: {
             after: {
               4000: { target: 'canAttack' },
             },
@@ -47,7 +47,7 @@ class RobotAi extends Ai {
   attack() {
     if (!g.isAttack) return
 
-    if (this.service.state.matches('cantAttack')) {
+    if (this.service.state.matches('canNotAttack')) {
       this.character.service.send('stop') // prevent keep play running animation when in attack range and not moving.
     } else {
       this.service.send('attack')

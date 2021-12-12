@@ -18,10 +18,10 @@ class PaladinAi extends Ai {
         states: {
           canAttack: {
             on: {
-              attack: { target: 'cantAttack', actions: 'attack' },
+              attack: { target: 'canNotAttack', actions: 'attack' },
             },
           },
-          cantAttack: {
+          canNotAttack: {
             after: {
               6000: { target: 'canAttack' },
             },
@@ -49,7 +49,7 @@ class PaladinAi extends Ai {
 
     if (this.character.isAir) return
 
-    if (this.service.state.matches('cantAttack')) {
+    if (this.service.state.matches('canNotAttack')) {
       this.character.service.send('stop') // prevent keep play running animation when in attack range and not moving.
     } else {
       this.service.send('attack')

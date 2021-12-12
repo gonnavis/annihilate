@@ -82,6 +82,13 @@ class RobotBossWeakness {
       // mesh.quaternion.copy(this.body.quaternion)
     }
   }
+
+  restore() {
+    this.bodies.forEach((body) => {
+      body._isHit = false
+      body._mesh.material.color.setRGB(1, 0, 0)
+    })
+  }
 }
 
 export { RobotBossWeakness }

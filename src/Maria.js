@@ -404,7 +404,8 @@ class Maria {
             },
           },
           airBashStartWithCharge: {
-            entry: ['playAirBashStartWithCharge'],
+            entry: ['playAirBashStartWithCharge', 'setMassZero'],
+            exit: ['restoreMass'],
             on: {
               finish: { target: 'airChargeBash' },
               hit: { target: 'hit' },
@@ -560,7 +561,6 @@ class Maria {
           },
           airAttack: {
             entry: 'playAirAttack',
-            exit: 'restoreMass',
             on: {
               // todo: hit airDash
             },
@@ -1020,7 +1020,6 @@ class Maria {
             // this.body.velocity.y = 20
             // this.body.velocity.z = this.tmpVec3.z
 
-            this.body.mass = 0
             this.body.velocity.set(0, 0, 0)
           },
           playAirBashStart: (context, event, o) => {

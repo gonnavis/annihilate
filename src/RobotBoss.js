@@ -10,6 +10,7 @@ class RobotBoss {
   constructor({ position }) {
     this.isCharacter = true
     this.isEnemy = true
+    this.isMassive = true
 
     updates.push(this)
 

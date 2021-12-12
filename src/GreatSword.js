@@ -61,7 +61,7 @@ class GreatSword extends Attacker {
         // debugger
 
         // if (this.owner.service.state.matches('launch')) {
-        if (this.owner.service.state.hasTag('canLaunch') && !event.body.belongTo.isAir) {
+        if (this.owner.service.state.hasTag('canLaunch') && !event.body.belongTo.isAir && !event.body.belongTo.isMassive) {
           // TODO: If enemy not real hit, such as paladin blocked, do not launch?
           // console.log(111)
           // event.body.velocity.y += 30

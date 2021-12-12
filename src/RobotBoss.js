@@ -1,7 +1,6 @@
 import { g } from './global.js'
 
 import * as THREE from '../lib/three.js/build/three.module.js'
-import { Hadouken } from './Hadouken.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 import { Splash } from './Splash.js'
 import { RobotBossHadouken } from './RobotBossHadouken.js'
@@ -27,7 +26,7 @@ class RobotBoss {
     this.speed = 0.04
 
     // for Ai.js
-    this.detectorRadius = 12
+    this.detectorRadius = 22
 
     const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -50,6 +49,7 @@ class RobotBoss {
             on: {
               run: { target: 'run' },
               attack: { target: 'attack' },
+              hadouken: { target: 'hadouken' },
               // hit: { target: 'hit' },
               weak: { target: 'weak' },
             },
@@ -76,18 +76,23 @@ class RobotBoss {
           attack: {
             entry: 'playAttack',
             on: {
-              idle: {
-                target: 'idle',
-                actions: 'throwHadouken',
-              },
+              finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
+          },
+          hadouken: {
+            entry: 'playHadouken',
+            exit: 'exitHadouken',
+            on: {
+              finish: { target: 'idle' },
+            },
+            tags: ['canFacing'],
           },
           hit: {
             entry: ['decreaseHealth', 'playHit'],
             always: [{ target: 'dead', actions: 'dead', cond: 'isDead' }],
             on: {
-              idle: { target: 'idle' },
+              finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
           },
@@ -98,17 +103,15 @@ class RobotBoss {
       },
       {
         actions: {
-          decreaseHealth: assign({ health: (context, event) => context.health - (g.isDamage ? 35 : 0) }),
+          decreaseHealth: assign({ health: (context, event) => context.health - (g.isDamage ? 10 : 0) }),
 
           playIdle: () => {
-            this.fadeToAction('idle', 0.2)
+            // this.fadeToAction('idle', 0.2)
 
             this.shield.visible = true
-            this.hadouken.start()
           },
           playWeak: () => {
             this.shield.visible = false
-            this.hadouken.stop()
           },
           playRun: () => {
             this.fadeToAction('running', 0.2)
@@ -117,14 +120,20 @@ class RobotBoss {
           playAttack: () => {
             this.fadeToAction('dance', 0.2)
           },
+          playHadouken: () => {
+            this.hadouken.start()
+
+            setTimeout(() => {
+              this.service.send('finish')
+            }, 5000)
+          },
+          exitHadouken: () => {
+            this.hadouken.stop()
+          },
           playHit: (context, event, o) => {
             this.fadeToAction('jump', 0.2)
 
             new Splash(event.collideEvent)
-          },
-          throwHadouken: () => {
-            // if (g.isAttack && window.role.gltf && this.gltf) new Hadouken(scene, updates, this, window.role.mesh.position)
-            new Hadouken(scene, updates, this, window.role.mesh.position)
           },
           dead: () => {
             this.fadeToAction('death', 0.2)
@@ -159,7 +168,7 @@ class RobotBoss {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('robotBoss: state:', state.value)
+      if (state.changed) console.log('robotBoss: state:', state.value)
       // if (state.changed) console.log(state.value,state)
       // this.currentState = state.value
       ///currentState === this.service.state.value
@@ -279,7 +288,7 @@ class RobotBoss {
           this.action_act.play()
           this.mixer.addEventListener('finished', (event) => {
             // console.log('finished')
-            this.service.send('idle')
+            this.service.send('finish')
           })
 
           //

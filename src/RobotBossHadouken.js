@@ -15,10 +15,12 @@ class RobotBossHadouken extends Attacker {
 
     this.width = 0.5
     this.height = 2
-    this.depth = 30
+    this.depth = this.owner.detectorRadius
 
     this.translateY = -this.owner.bodyRadius + this.height / 2
     this.translateZ = this.depth / 2
+
+    this.startTime = 0
 
     let geometry = new THREE.BoxBufferGeometry(this.width, this.height, this.depth) // todo: reuse geometry & material
     geometry.translate(0, this.translateY, this.translateZ) // mark
@@ -65,7 +67,11 @@ class RobotBossHadouken extends Attacker {
       this.bodies[i].position.copy(this.owner.body.position)
       // this.bodies[i].quaternion.copy(this.owner.mesh.quaternion)
       // this.bodies[i].quaternion.setFromEuler(0, Math.sin(time * 0.001) + this.meshes[i].rotation.y, 0) // random_effect
-      this.bodies[i].quaternion.setFromEuler(0, Math.sin(time * 0.001 + i * Math.PI) * 0.8 + this.owner.mesh.rotation.y, 0)
+      let sign = i === 0 ? 1 : -1
+      let rotY = Math.sin((time - this.startTime) * 0.001 + Math.PI / 2) * 0.8
+      rotY *= sign
+      rotY += this.owner.mesh.rotation.y
+      this.bodies[i].quaternion.setFromEuler(0, rotY, 0)
 
       this.meshes[i].position.copy(this.bodies[i].position)
       this.meshes[i].quaternion.copy(this.bodies[i].quaternion)
@@ -97,6 +103,8 @@ class RobotBossHadouken extends Attacker {
   }
 
   start() {
+    this.startTime = performance.now()
+
     // this.bodies.forEach((body, i) => {
     //   world.addBody(this.bodies[i])
     //   scene.add(this.meshes[i])

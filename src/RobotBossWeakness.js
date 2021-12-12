@@ -56,12 +56,12 @@ class RobotBossWeakness {
     if (this.owner.service.state.matches('loading')) return
 
     this.body.position.copy(this.owner.body.position)
-    this.body.quaternion.copy(this.owner.mesh.quaternion)
+    // this.body.quaternion.copy(this.owner.mesh.quaternion)
     // this.body.quaternion.setFromEuler(0, Math.sin(time * 0.001) + this.meshes[i].rotation.y, 0) // random_effect
     // this.body.quaternion.setFromEuler(0, Math.sin(time * 0.001 + i * Math.PI) * 0.8 + this.owner.mesh.rotation.y, 0)
 
     this.mesh.position.copy(this.body.position)
-    this.mesh.quaternion.copy(this.body.quaternion)
+    // this.mesh.quaternion.copy(this.body.quaternion)
   }
 }
 

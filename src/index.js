@@ -27,6 +27,7 @@ import { RoleControls } from './RoleControls.js'
 import { Ai } from './Ai.js'
 import { MutantAi } from './MutantAi.js'
 import { RobotAi } from './RobotAi.js'
+import { RobotBossAi } from './RobotBossAi.js'
 import { PaladinAi } from './PaladinAi.js'
 import { ParrotAi } from './ParrotAi.js'
 import { HandKnife } from './HandKnife.js'
@@ -309,7 +310,7 @@ function init() {
   if (g.getQueryStringByName('roleAirBox') === 'true') {
     window.maria = new Maria(-20, 15, -45)
   } else if (g.getQueryStringByName('boss') === 'true') {
-    window.maria = new Maria(-40, 5, 18)
+    window.maria = new Maria(-40, 5, 35)
   } else {
     window.maria = new Maria(-2, 2, 0)
     // window.maria = new Maria(-2, 2, 8)
@@ -384,6 +385,7 @@ function init() {
     position: new THREE.Vector3(-40, 5, 10),
   })
   robotBoss.load()
+  robotBoss.ai = new RobotBossAi(robotBoss, 8)
 
   domMaria.addEventListener('click', (event) => {
     window.service.send('maria')

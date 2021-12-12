@@ -64,7 +64,7 @@ class Robot {
           attack: {
             entry: 'playAttack',
             on: {
-              idle: {
+              finish: {
                 target: 'idle',
                 actions: 'throwHadouken',
               },
@@ -75,7 +75,7 @@ class Robot {
             entry: ['decreaseHealth', 'playHit'],
             always: [{ target: 'dead', actions: 'dead', cond: 'isDead' }],
             on: {
-              idle: { target: 'idle' },
+              finish: { target: 'idle' },
               hit: { target: 'hit' },
             },
           },
@@ -250,7 +250,7 @@ class Robot {
           this.action_act.play()
           this.mixer.addEventListener('finished', (event) => {
             // console.log('finished')
-            this.service.send('idle')
+            this.service.send('finish')
           })
           this.service.send('loaded')
           resolve()

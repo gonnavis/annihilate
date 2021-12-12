@@ -34,7 +34,7 @@ class RobotBossAi extends Ai {
       {
         actions: {
           attack: () => {
-            this.character.service.send('hadouken')
+            this.character.service.send('attack')
           },
         },
       }

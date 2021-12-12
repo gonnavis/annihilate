@@ -48,8 +48,8 @@ class RobotBoss {
             entry: 'playIdle',
             on: {
               run: { target: 'run' },
-              attack: { target: 'attack' },
-              hadouken: { target: 'hadouken' },
+              // attack: { target: 'attack' },
+              attack: { target: 'hadouken' },
               // hit: { target: 'hit' },
               weak: { target: 'weak' },
             },
@@ -68,8 +68,9 @@ class RobotBoss {
             entry: 'playRun',
             on: {
               stop: { target: 'idle' },
-              attack: { target: 'attack' },
-              hit: { target: 'hit' },
+              attack: { target: 'hadouken' },
+              // hit: { target: 'hit' },
+              weak: { target: 'weak' },
             },
             tags: ['canMove', 'canFacing'],
           },
@@ -77,7 +78,8 @@ class RobotBoss {
             entry: 'playAttack',
             on: {
               finish: { target: 'idle' },
-              hit: { target: 'hit' },
+              // hit: { target: 'hit' },
+              weak: { target: 'weak' },
             },
           },
           hadouken: {
@@ -85,8 +87,9 @@ class RobotBoss {
             exit: 'exitHadouken',
             on: {
               finish: { target: 'idle' },
+              weak: { target: 'weak' },
             },
-            tags: ['canFacing'],
+            tags: ['canMove', 'canFacing'],
           },
           hit: {
             entry: ['decreaseHealth', 'playHit'],
@@ -106,7 +109,7 @@ class RobotBoss {
           decreaseHealth: assign({ health: (context, event) => context.health - (g.isDamage ? 10 : 0) }),
 
           playIdle: () => {
-            // this.fadeToAction('idle', 0.2)
+            this.fadeToAction('idle', 0.2)
 
             this.shield.visible = true
           },

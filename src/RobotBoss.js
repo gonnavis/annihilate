@@ -106,23 +106,28 @@ class RobotBoss {
       },
       {
         actions: {
-          decreaseHealth: assign({ health: (context, event) => context.health - (g.isDamage ? 10 : 0) }),
+          decreaseHealth: assign({ health: (context, event) => context.health - (g.isDamage ? 5 : 0) }),
 
           playIdle: () => {
+            // console.log('playIdle', performance.now())
             this.fadeToAction('idle', 0.2)
 
             this.shield.visible = true
+
+            clearTimeout(this.timeoutStopWeak) // NOTE: Prevent show shiled bug when too fast into next weak.
           },
           playWeak: () => {
+            // console.log('playWeak', performance.now())
             this.fadeToAction('idle', 0.2)
 
             this.shield.visible = false
 
             this.isWeak = true
-            setTimeout(() => {
+            // clearTimeout(this.timeoutStopWeak) // NOTE: Can't clearTimeout here. Hit will reenter weak and reset timeout.
+            this.timeoutStopWeak = setTimeout(() => {
               this.isWeak = false
               this.service.send('stopWeak')
-            }, 10000)
+            }, 7000)
           },
           playRun: () => {
             this.fadeToAction('running', 0.2)
@@ -148,6 +153,7 @@ class RobotBoss {
             new Splash(event.collideEvent)
           },
           dead: () => {
+            // console.log('dead', performance.now())
             this.fadeToAction('death', 0.2)
             this.body.collisionFilterMask = g.GROUP_SCENE
             setTimeout(() => {

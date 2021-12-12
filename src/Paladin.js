@@ -324,7 +324,8 @@ class Paladin {
             this.fadeToAction('punch', 0.2)
           },
           playBashStart: () => {
-            this.oaction['punchStart'].timeScale = this.attackSpeed * 2
+            // this.oaction['punchStart'].timeScale = this.attackSpeed * 2
+            this.oaction['punchStart'].timeScale = this.attackSpeed
             this.fadeToAction('punchStart')
           },
           playBash: () => {

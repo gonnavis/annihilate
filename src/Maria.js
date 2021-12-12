@@ -424,7 +424,7 @@ class Maria {
           airChargeBash: {
             entry: ['playAirChargeBash'],
             on: {
-              finish: { target: 'airBashEnd' },
+              finish: { target: 'airChargeBashEnd' },
               hit: { target: 'hit' },
               // // dash: { target: 'dash' },
             },
@@ -441,6 +441,15 @@ class Maria {
           },
           airBashEnd: {
             entry: ['playAirBashEnd'],
+            on: {
+              finish: { target: 'idle' },
+              hit: { target: 'hit' },
+              // // dash: { target: 'dash' },
+            },
+          },
+          airChargeBashEnd: {
+            // NOTE: For RobotBossWeakness attack more stable.
+            entry: ['playAirChargeBashEnd'],
             on: {
               finish: { target: 'idle' },
               hit: { target: 'hit' },
@@ -1060,6 +1069,10 @@ class Maria {
             this.oaction['jumpAttackEnd'].timeScale = this.airBashSpeed
             this.fadeToAction('jumpAttackEnd')
           },
+          playAirChargeBashEnd: (context, event, o) => {
+            this.oaction['jumpAttackEnd'].timeScale = this.airBashSpeed
+            this.fadeToAction('jumpAttackEnd')
+          },
           jump: () => {
             this.body.velocity.y = 5.2
           },
@@ -1150,7 +1163,7 @@ class Maria {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('maria: state:', state.value)
+      if (state.changed) console.log('maria: state:', state.value)
       // console.log(state)
       // if (state.changed) console.log(state)
       // this.currentState = state.value

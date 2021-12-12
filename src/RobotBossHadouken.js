@@ -114,9 +114,11 @@ class RobotBossHadouken extends Attacker {
       body.collisionFilterGroup = this.collisionFilterGroup
       body.collidings.length = 0
     })
-    this.meshes.forEach((mesh) => {
-      mesh.visible = true
-    })
+    setTimeout(() => {
+      this.meshes.forEach((mesh) => {
+        mesh.visible = true
+      })
+    }, 0)
   }
 
   stop() {

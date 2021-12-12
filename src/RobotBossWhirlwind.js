@@ -5,7 +5,7 @@ import { Attacker } from './Attacker.js'
 
 class RobotBossWhirlwind extends Attacker {
   constructor({ owner }) {
-    let num = 2
+    let num = 5
     super({ num })
 
     this.owner = owner
@@ -13,8 +13,8 @@ class RobotBossWhirlwind extends Attacker {
     this.num = num
     this.meshes = []
 
-    this.width = 0.5
-    this.height = 2
+    this.width = 2
+    this.height = 1
     this.depth = this.owner.detectorRadius
 
     this.translateY = -this.owner.bodyRadius + this.height / 2
@@ -70,9 +70,9 @@ class RobotBossWhirlwind extends Attacker {
       // this.bodies[i].quaternion.copy(this.owner.mesh.quaternion)
       // this.bodies[i].quaternion.setFromEuler(0, Math.sin(time * 0.001) + this.meshes[i].rotation.y, 0) // random_effect
       let sign = i === 0 ? 1 : -1
-      let rotY = Math.sin((time - this.startTime) * 0.0012 - Math.PI / 2.2) * 0.8
-      rotY *= sign
-      rotY += this.owner.mesh.rotation.y
+      let rotY = -(time - this.startTime) * 0.0005 + ((Math.PI * 2) / 5) * i
+      rotY += this.startRotY
+      rotY -= 0.41887902047863906 // (Math.PI * 2) / 5 / 3
       this.bodies[i].quaternion.setFromEuler(0, rotY, 0)
 
       this.meshes[i].position.copy(this.bodies[i].position)
@@ -106,6 +106,7 @@ class RobotBossWhirlwind extends Attacker {
 
   start() {
     this.startTime = performance.now()
+    this.startRotY = this.owner.mesh.rotation.y
 
     setTimeout(() => {
       // NOTE: setTimeout 0 to prevent unwanted hit if prev frame body rotation just collide role.

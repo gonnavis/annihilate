@@ -64,7 +64,8 @@ class RobotBossAi extends Ai {
       {
         actions: {
           entryAttack: () => {
-            this.character.service.send('attack')
+            this.character.service.send('attack') // formal
+            // this.character.service.send('bash') // test
           },
           entryBash: () => {
             this.character.service.send('bash')

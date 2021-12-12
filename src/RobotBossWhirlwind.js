@@ -23,6 +23,11 @@ class RobotBossWhirlwind extends Attacker {
     this.startTime = 0
 
     let geometry = new THREE.BoxBufferGeometry(this.width, this.height, this.depth) // todo: reuse geometry & material
+    for (let i = 0, i3 = 0; i < geometry.attributes.position.count; i += 1, i3 += 3) {
+      if (geometry.attributes.position.array[i3 + 2] > 0) {
+        geometry.attributes.position.array[i3 + 0] *= 3
+      }
+    }
     geometry.translate(0, this.translateY, this.translateZ) // mark
     let material = new THREE.MeshStandardMaterial({
       color: 'magenta',

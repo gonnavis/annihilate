@@ -31,6 +31,7 @@ class RobotBossAi extends Ai {
             },
             after: {
               7000: { target: 'attacked' },
+              // 7000: { target: 'bash' },
             },
           },
           attacked: {
@@ -48,6 +49,7 @@ class RobotBossAi extends Ai {
             },
             after: {
               7000: { target: 'bashed' },
+              // 7000: { target: 'idle' },
             },
           },
           bashed: {

@@ -1012,7 +1012,8 @@ class Maria {
             this.fadeToAction('strikeEnd', 0)
           },
           playAirBashStartWithCharge: (context, event, o) => {
-            this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 0.6
+            // this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 0.6
+            this.oaction['jumpAttackStart'].timeScale = this.attackSpeed * 0.7
             this.fadeToAction('jumpAttackStart')
 
             // this.tmpVec3.set(0, 0, 1).applyEuler(this.mesh.rotation).multiplyScalar(10)

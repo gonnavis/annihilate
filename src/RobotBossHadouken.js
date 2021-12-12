@@ -68,7 +68,7 @@ class RobotBossHadouken extends Attacker {
       // this.bodies[i].quaternion.copy(this.owner.mesh.quaternion)
       // this.bodies[i].quaternion.setFromEuler(0, Math.sin(time * 0.001) + this.meshes[i].rotation.y, 0) // random_effect
       let sign = i === 0 ? 1 : -1
-      let rotY = Math.sin((time - this.startTime) * 0.001 + Math.PI / 2) * 0.8
+      let rotY = Math.sin((time - this.startTime) * 0.0012 - Math.PI / 2.5) * 0.8
       rotY *= sign
       rotY += this.owner.mesh.rotation.y
       this.bodies[i].quaternion.setFromEuler(0, rotY, 0)

@@ -126,11 +126,12 @@ class RobotBoss {
           playHadouken: () => {
             this.hadouken.start()
 
-            setTimeout(() => {
+            this.timeoutHadouken = setTimeout(() => {
               this.service.send('finish')
-            }, 5000)
+            }, 7000)
           },
           exitHadouken: () => {
+            clearTimeout(this.timeoutHadouken)
             this.hadouken.stop()
           },
           playHit: (context, event, o) => {

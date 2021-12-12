@@ -4,6 +4,7 @@ import * as THREE from '../lib/three.js/build/three.module.js'
 import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 import { Splash } from './Splash.js'
 import { RobotBossHadouken } from './RobotBossHadouken.js'
+import { RobotBossWhirlwind } from './RobotBossWhirlwind.js'
 import { RobotBossWeakness } from './RobotBossWeakness.js'
 
 class RobotBoss {
@@ -22,6 +23,7 @@ class RobotBoss {
     this.initialPosition = this.position.clone()
     this.isWeak = false
     this.hadoukenDuration = 7000
+    this.whirlwindDuration = 7000
 
     // for RoleControls.js
     this.direction = vec2() // direction may be zero length.
@@ -53,6 +55,7 @@ class RobotBoss {
               run: { target: 'run' },
               // attack: { target: 'attack' },
               attack: { target: 'hadouken' },
+              bash: { target: 'whirlwind' },
               // hit: { target: 'hit' },
               weak: { target: 'weak' },
             },
@@ -70,6 +73,7 @@ class RobotBoss {
             on: {
               stop: { target: 'idle' },
               attack: { target: 'hadouken' },
+              bash: { target: 'whirlwind' },
               // hit: { target: 'hit' },
               weak: { target: 'weak' },
             },
@@ -86,6 +90,15 @@ class RobotBoss {
           hadouken: {
             entry: 'playHadouken',
             exit: 'exitHadouken',
+            on: {
+              finish: { target: 'idle' },
+              weak: { target: 'weak' },
+            },
+            tags: ['canMove', 'canFacing'],
+          },
+          whirlwind: {
+            entry: 'playWhirlwind',
+            exit: 'exitWhirlwind',
             on: {
               finish: { target: 'idle' },
               weak: { target: 'weak' },
@@ -151,6 +164,17 @@ class RobotBoss {
             clearTimeout(this.timeoutHadouken)
             this.hadouken.stop()
           },
+          playWhirlwind: () => {
+            this.whirlwind.start()
+
+            this.timeoutWhirlwind = setTimeout(() => {
+              this.service.send('finish')
+            }, this.whirlwindDuration)
+          },
+          exitWhirlwind: () => {
+            clearTimeout(this.timeoutWhirlwind)
+            this.whirlwind.stop()
+          },
           playHit: (context, event, o) => {
             this.fadeToAction('jump', 0.2)
 
@@ -195,7 +219,7 @@ class RobotBoss {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('robotBoss: state:', state.value)
+      // if (state.changed) console.log('robotBoss: state:', state.value)
       // if (state.changed) console.log(state.value,state)
       // this.currentState = state.value
       ///currentState === this.service.state.value
@@ -240,6 +264,10 @@ class RobotBoss {
     //
 
     this.hadouken = new RobotBossHadouken({
+      owner: this,
+    })
+
+    this.whirlwind = new RobotBossWhirlwind({
       owner: this,
     })
 

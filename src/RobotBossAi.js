@@ -17,34 +17,64 @@ class RobotBossAi extends Ai {
           health: 100,
           // health: Infinity,
         },
-        initial: 'canAttack',
+        initial: 'idle',
         states: {
-          canAttack: {
+          idle: {
             on: {
-              attack: { target: 'canNotAttack', actions: 'attack' },
+              next: { target: 'attack' },
             },
           },
-          canNotAttack: {
+          attack: {
+            entry: 'entryAttack',
             on: {
-              restore: { target: 'canAttack' },
+              restore: { target: 'idle' },
             },
             after: {
-              9000: { target: 'canAttack' },
+              7000: { target: 'attacked' },
             },
           },
+          attacked: {
+            on: {
+              restore: { target: 'idle' },
+            },
+            after: {
+              2000: { target: 'bash' },
+            },
+          },
+          bash: {
+            entry: 'entryBash',
+            on: {
+              restore: { target: 'idle' },
+            },
+            after: {
+              7000: { target: 'bashed' },
+            },
+          },
+          bashed: {
+            on: {
+              restore: { target: 'idle' },
+            },
+            after: {
+              2000: { target: 'idle' },
+            },
+          },
+          // TODO: Final state.
         },
       },
       {
         actions: {
-          attack: () => {
+          entryAttack: () => {
             this.character.service.send('attack')
+          },
+          entryBash: () => {
+            this.character.service.send('bash')
           },
         },
       }
     )
 
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('robotBossAi: state:', state.value)
+      if (state.changed) console.log('robotBossAi: state:', state.value)
     })
 
     this.service.start()
@@ -54,9 +84,12 @@ class RobotBossAi extends Ai {
     if (!g.isAttack) return
     // console.log(111)
 
-    if (this.service.state.matches('canAttack')) {
-      this.service.send('attack')
-    }
+    this.service.send('next')
+
+    // if (this.service.state.matches('canAttack')) {
+    // this.service.send('attack')
+    // }
+    // this.service.send('bash')
 
     // if (this.service.state.matches('canNotAttack')) {
     //   this.character.service.send('stop') // prevent keep play running animation when in attack range and not moving.

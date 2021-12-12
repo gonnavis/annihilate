@@ -20,6 +20,7 @@ class RobotBoss {
     this.isAir = false
     this.position = position
     this.initialPosition = this.position.clone()
+    this.isWeak = false
 
     // for RoleControls.js
     this.direction = vec2() // direction may be zero length.
@@ -59,10 +60,8 @@ class RobotBoss {
           weak: {
             entry: 'playWeak',
             on: {
-              hit: { target: 'hit' }, // TODO: Hit will into idle and restore shield before 10s.
-            },
-            after: {
-              10000: { target: 'idle' },
+              hit: { target: 'hit' }, // TODO√: Hit will into idle and restore shield before stopWeak.
+              stopWeak: { target: 'idle' },
             },
           },
           run: {
@@ -96,7 +95,7 @@ class RobotBoss {
             entry: ['decreaseHealth', 'playHit'],
             always: [{ target: 'dead', actions: 'dead', cond: 'isDead' }],
             on: {
-              finish: { target: 'idle' },
+              finish: [{ target: 'weak', cond: 'isWeak' }, { target: 'idle' }],
               hit: { target: 'hit' },
             },
           },
@@ -115,7 +114,15 @@ class RobotBoss {
             this.shield.visible = true
           },
           playWeak: () => {
+            this.fadeToAction('idle', 0.2)
+
             this.shield.visible = false
+
+            this.isWeak = true
+            setTimeout(() => {
+              this.isWeak = false
+              this.service.send('stopWeak')
+            }, 10000)
           },
           playRun: () => {
             this.fadeToAction('running', 0.2)
@@ -166,6 +173,9 @@ class RobotBoss {
         guards: {
           isDead(context) {
             return context.health <= 0
+          },
+          isWeak: () => {
+            return this.isWeak
           },
         },
       }

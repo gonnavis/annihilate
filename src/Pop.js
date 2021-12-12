@@ -81,7 +81,7 @@ class Pop extends Attacker {
     window.world.addBody(this.body)
     setTimeout(() => {
       window.world.removeBody(this.body)
-      this.collidings.length = 0
+      this.body.collidings.length = 0
     }, 0)
 
     let to = { t: 0, tv: 1 }

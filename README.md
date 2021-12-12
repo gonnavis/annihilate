@@ -111,6 +111,8 @@ Code: [three-pathfinding](https://github.com/donmccurdy/three-pathfinding), [Ske
 
 ### Todo: 
 
+Paladin do not hit by pop when shielded.
+
 Boss Fight map.
 
 Combat puzzle map.

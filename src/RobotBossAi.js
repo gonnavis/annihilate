@@ -77,7 +77,7 @@ class RobotBossAi extends Ai {
     )
 
     this.service = interpret(this.fsm).onTransition((state) => {
-      if (state.changed) console.log('robotBossAi: state:', state.value)
+      // if (state.changed) console.log('robotBossAi: state:', state.value)
     })
 
     this.service.start()

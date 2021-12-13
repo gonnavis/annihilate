@@ -10,6 +10,7 @@ class RobotBossPop extends Attacker {
     this.owner = owner
 
     this.tmpVec3 = new THREE.Vector3()
+    this.opacity = 0.7
 
     // body
 
@@ -28,7 +29,7 @@ class RobotBossPop extends Attacker {
       color: 'red',
       blending: THREE.AdditiveBlending,
       transparent: true,
-      opacity: 0.5,
+      opacity: this.opacity,
     })
     this.mesh = new THREE.Mesh(geometry, material)
     // this.owner.mesh.add(this.mesh)
@@ -47,6 +48,52 @@ class RobotBossPop extends Attacker {
 
     // // this.target.set(this.body.position.x, this.owner.body.position.y + this.height / 2, this.body.position.z - 50)
     // this.launch()
+
+    this.initHint()
+  }
+
+  initHint() {
+    // mesh
+    let geometry = new THREE.PlaneGeometry(this.radius * 2 * 1.1, this.radius * 2 * 1.1)
+    const material = new THREE.ShaderMaterial({
+      transparent: true,
+      uniforms: {
+        opacity: { value: 1 },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main(){
+          vUv = uv;
+          gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1);
+        }
+      `,
+      fragmentShader: `
+        varying vec2 vUv;
+        uniform float opacity;
+        void main(){
+          vec2 uv = vUv*2.2-1.1;
+          float dist = length(uv);
+          float a = abs(dist-1.);
+          a = pow(a, .55);
+          // a = step(.12, a);
+          a = smoothstep(.07,.13, a);
+          a = 1.-a;
+          vec4 cEdge = vec4(1,1,0,a);
+
+          a = 1.-step(1., dist);
+          vec4 cCenter = vec4(1,0,0,a*.3);
+
+          gl_FragColor = mix(cCenter, cEdge, cEdge.a);
+          gl_FragColor.a *= opacity;
+        }
+      `,
+    })
+    let mesh = new THREE.Mesh(geometry, material)
+    window.scene.add(mesh)
+
+    mesh.rotation.x = -Math.PI / 2
+    mesh.visible = false
+    this.hint = mesh
   }
 
   update() {
@@ -54,6 +101,17 @@ class RobotBossPop extends Attacker {
     this.body.position.y -= this.owner.bodyRadius
     // this.body.position.y -= 5
     this.mesh.position.copy(this.body.position)
+    this.hint.position.copy(this.body.position)
+    this.hint.position.y = 0.001
+
+    if (this.isPopping) {
+      let freq = performance.now() - this.startTime
+      freq = freq ** 1.6
+      freq *= 0.00057
+      let intensity = Math.sin(freq)
+      intensity = Math.max(0, intensity)
+      this.hint.material.uniforms.opacity.value = intensity * 0.5
+    }
   }
 
   collide(event, isBeginCollide) {
@@ -80,32 +138,42 @@ class RobotBossPop extends Attacker {
   }
 
   pop() {
-    window.world.addBody(this.body)
+    this.isPopping = true
+    this.hint.visible = true
+    this.startTime = performance.now()
     setTimeout(() => {
-      window.world.removeBody(this.body)
-      this.body.collidings.length = 0
-      // }, 0)
-    }, 300)
+      this.hint.visible = false
 
-    let to = { t: 0, tv: 1 }
-    gsap.to(to, {
-      duration: 0.2,
-      // duration: 3,
-      t: 1,
-      tv: 0,
-      onStart: () => {
-        this.mesh.visible = true
-        this.mesh.scale.setScalar(0)
-        this.mesh.material.opacity = 0.5
-      },
-      onUpdate: () => {
-        this.mesh.scale.setScalar(to.t)
-        this.mesh.material.opacity = 0.5 * to.tv
-      },
-      onComplete: () => {
-        this.mesh.visible = false
-      },
-    })
+      let dur = 0.2
+      window.world.addBody(this.body)
+      setTimeout(() => {
+        window.world.removeBody(this.body)
+        this.body.collidings.length = 0
+        // }, 0)
+      }, dur * 1000)
+
+      let to = { t: 0, tv: 1 }
+      gsap.to(to, {
+        duration: dur,
+        // duration: 3,
+        t: 1,
+        tv: 0,
+        onStart: () => {
+          this.mesh.visible = true
+          this.mesh.scale.setScalar(0)
+          this.mesh.material.opacity = this.opacity
+        },
+        onUpdate: () => {
+          this.mesh.scale.setScalar(to.t)
+          this.mesh.material.opacity = this.opacity * to.tv
+        },
+        onComplete: () => {
+          this.mesh.visible = false
+          this.isPopping = false
+          this.owner.service.send('popComplete')
+        },
+      })
+    }, 1500)
   }
 }
 

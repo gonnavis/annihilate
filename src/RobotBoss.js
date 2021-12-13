@@ -59,14 +59,21 @@ class RobotBoss {
               bash: { target: 'whirlwind' },
               // hit: { target: 'hit' },
               weak: { target: 'weak' },
+              dash: { target: 'weak' },
             },
             tags: ['canFacing'],
+          },
+          pop: {
+            entry: 'playPop',
+            on: {
+              popComplete: { target: 'idle' },
+            },
           },
           weak: {
             entry: 'playWeak',
             on: {
               hit: { target: 'hit' }, // TODO√: Hit will into idle and restore shield before stopWeak.
-              stopWeak: { target: 'idle' },
+              stopWeak: { target: 'pop' },
             },
           },
           run: {
@@ -77,6 +84,7 @@ class RobotBoss {
               bash: { target: 'whirlwind' },
               // hit: { target: 'hit' },
               weak: { target: 'weak' },
+              dash: { target: 'weak' },
             },
             tags: ['canMove', 'canFacing'],
           },
@@ -86,6 +94,7 @@ class RobotBoss {
               finish: { target: 'idle' },
               // hit: { target: 'hit' },
               weak: { target: 'weak' },
+              dash: { target: 'weak' },
             },
           },
           hadouken: {
@@ -94,6 +103,7 @@ class RobotBoss {
             on: {
               finish: { target: 'idle' },
               weak: { target: 'weak' },
+              dash: { target: 'weak' },
             },
             tags: ['canMove', 'canFacing'],
           },
@@ -103,6 +113,7 @@ class RobotBoss {
             on: {
               finish: { target: 'idle' },
               weak: { target: 'weak' },
+              dash: { target: 'weak' },
             },
             tags: ['canMove', 'canFacing'],
           },
@@ -110,9 +121,9 @@ class RobotBoss {
             entry: ['decreaseHealth', 'playHit'],
             always: [{ target: 'dead', actions: 'dead', cond: 'isDead' }],
             on: {
-              finish: [{ target: 'weak', cond: 'isWeak' }, { target: 'idle' }],
+              finish: [{ target: 'weak', cond: 'isWeak' }, { target: 'pop' }],
               hit: { target: 'hit' },
-              stopWeak: { target: 'idle' },
+              stopWeak: { target: 'pop' },
             },
           },
           dead: {
@@ -131,6 +142,9 @@ class RobotBoss {
             this.shield.visible = true
 
             clearTimeout(this.timeoutStopWeak) // NOTE: Prevent show shiled bug when too fast into next weak.
+          },
+          playPop: () => {
+            this.pop.pop()
           },
           playWeak: () => {
             // console.log('playWeak', performance.now())
@@ -220,7 +234,7 @@ class RobotBoss {
 
     // this.currentState
     this.service = interpret(this.fsm).onTransition((state) => {
-      // if (state.changed) console.log('robotBoss: state:', state.value)
+      if (state.changed) console.log('robotBoss: state:', state.value, performance.now().toFixed(2))
       // if (state.changed) console.log(state.value,state)
       // this.currentState = state.value
       ///currentState === this.service.state.value

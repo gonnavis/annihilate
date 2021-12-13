@@ -142,6 +142,10 @@ class RobotBoss {
 
             this.shield.visible = true
 
+            this.face.morphTargetInfluences[this.EXPRESSION.ANGRY] = 0
+            this.face.morphTargetInfluences[this.EXPRESSION.SURPRISED] = 0
+            this.face.morphTargetInfluences[this.EXPRESSION.SAD] = 0
+
             clearTimeout(this.timeoutStopWeak) // NOTE: Prevent show shiled bug when too fast into next weak.
           },
           playPop: () => {
@@ -150,6 +154,10 @@ class RobotBoss {
           playWeak: () => {
             // console.log('playWeak', performance.now())
             this.fadeToAction('idle', 0.2)
+
+            this.face.morphTargetInfluences[this.EXPRESSION.ANGRY] = 0
+            this.face.morphTargetInfluences[this.EXPRESSION.SURPRISED] = 1
+            this.face.morphTargetInfluences[this.EXPRESSION.SAD] = 1
 
             this.shield.visible = false
 
@@ -172,6 +180,10 @@ class RobotBoss {
           playHadouken: () => {
             this.hadouken.start()
 
+            this.face.morphTargetInfluences[this.EXPRESSION.ANGRY] = 1
+            this.face.morphTargetInfluences[this.EXPRESSION.SURPRISED] = 0
+            this.face.morphTargetInfluences[this.EXPRESSION.SAD] = 0
+
             this.timeoutHadouken = setTimeout(() => {
               this.service.send('finish')
             }, this.hadoukenDuration)
@@ -182,6 +194,10 @@ class RobotBoss {
           },
           playWhirlwind: () => {
             this.whirlwind.start()
+
+            this.face.morphTargetInfluences[this.EXPRESSION.ANGRY] = 1
+            this.face.morphTargetInfluences[this.EXPRESSION.SURPRISED] = 0
+            this.face.morphTargetInfluences[this.EXPRESSION.SAD] = 0
 
             this.timeoutWhirlwind = setTimeout(() => {
               this.service.send('finish')
@@ -365,6 +381,15 @@ class RobotBoss {
             // console.log('finished')
             this.service.send('finish')
           })
+
+          // expressions
+
+          this.face = this.mesh.getObjectByName('Head_4')
+          const expressions = Object.keys(this.face.morphTargetDictionary)
+          this.EXPRESSION = {}
+          for (let i = 0; i < expressions.length; i++) {
+            this.EXPRESSION[expressions[i].toUpperCase()] = i
+          }
 
           //
 

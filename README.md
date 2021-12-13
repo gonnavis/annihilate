@@ -123,7 +123,7 @@ Parkour and combat map.
 
 Challenge map where only rebound attacks can deal damage to enemies.
 
-Parrot/PhenixBoss: There's a bird's egg on the platform in the aerial platform. After breaking it, flies out of ParrotBoss. Magma rises from the ground to the platform, so player can't go down. Skills are firing barrage bullets, continuously throwing many grenades, and firebird forward charge/dash attack.  
+Parrot/PhenixBoss: There's a bird's egg on the aerial platform. After breaking it, flies out of ParrotBoss. Magma rises from the ground to the platform, so player can't go down. Skills are firing barrage bullets, continuously throwing many grenades, and firebird forward charge/dash attack.  
 
 Map: Drive sheepFlock/birdFlock into the fold, as fast as possible. And prevent enemies from killing the flock, as little as possible.
 

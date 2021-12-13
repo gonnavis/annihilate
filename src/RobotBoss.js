@@ -64,6 +64,7 @@ class RobotBoss {
             tags: ['canFacing'],
           },
           pop: {
+            // TODO: pop can hit. But be careful not to enter idle state after hit finish before pop complete. Use var isPop instead of pop state?
             entry: 'playPop',
             on: {
               popComplete: { target: 'idle' },

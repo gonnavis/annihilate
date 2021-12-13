@@ -3,8 +3,8 @@ import { g } from './global.js'
 import * as THREE from '../lib/three.js/build/three.module.js'
 import { Attacker } from './Attacker.js'
 
-class Pop extends Attacker {
-  constructor(owner) {
+class RobotBossPop extends Attacker {
+  constructor({ owner }) {
     super()
 
     this.owner = owner
@@ -13,10 +13,10 @@ class Pop extends Attacker {
 
     // body
 
-    this.body.collisionFilterGroup = g.GROUP_ROLE_ATTACKER
-    this.body.collisionFilterMask = g.GROUP_ENEMY
+    this.body.collisionFilterGroup = g.GROUP_ENEMY_ATTACKER
+    this.body.collisionFilterMask = g.GROUP_ROLE
 
-    this.radius = 3.7
+    this.radius = 5
     let shape = new CANNON.Sphere(this.radius)
     this.body.addShape(shape)
     // window.world.addBody(this.body)
@@ -25,7 +25,7 @@ class Pop extends Attacker {
 
     let geometry = new THREE.SphereGeometry(this.radius)
     let material = new THREE.MeshBasicMaterial({
-      color: 'cyan',
+      color: 'red',
       blending: THREE.AdditiveBlending,
       transparent: true,
       opacity: 0.5,
@@ -51,7 +51,9 @@ class Pop extends Attacker {
 
   update() {
     this.body.position.copy(this.owner.body.position)
-    this.mesh.position.copy(this.owner.body.position)
+    this.body.position.y -= this.owner.bodyRadius
+    // this.body.position.y -= 5
+    this.mesh.position.copy(this.body.position)
   }
 
   collide(event, isBeginCollide) {
@@ -82,8 +84,8 @@ class Pop extends Attacker {
     setTimeout(() => {
       window.world.removeBody(this.body)
       this.body.collidings.length = 0
-    }, 0)
-    // }, 300) // Doese need long time to be more stable? Tested that RobotBossPop need, not found problem on this Pop.
+      // }, 0)
+    }, 300)
 
     let to = { t: 0, tv: 1 }
     gsap.to(to, {
@@ -107,4 +109,4 @@ class Pop extends Attacker {
   }
 }
 
-export { Pop }
+export { RobotBossPop }

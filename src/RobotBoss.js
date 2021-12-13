@@ -5,6 +5,7 @@ import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 import { Splash } from './Splash.js'
 import { RobotBossHadouken } from './RobotBossHadouken.js'
 import { RobotBossWhirlwind } from './RobotBossWhirlwind.js'
+import { RobotBossPop } from './RobotBossPop.js'
 import { RobotBossWeakness } from './RobotBossWeakness.js'
 
 class RobotBoss {
@@ -268,6 +269,10 @@ class RobotBoss {
     })
 
     this.whirlwind = new RobotBossWhirlwind({
+      owner: this,
+    })
+
+    this.pop = new RobotBossPop({
       owner: this,
     })
 

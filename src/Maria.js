@@ -1310,6 +1310,10 @@ class Maria {
     // }
   }
 
+  knockDown(collideEvent) {
+    this.hit(collideEvent)
+  }
+
   load(callback) {
     return new Promise((resolve, reject) => {
       var loader = new GLTFLoader()

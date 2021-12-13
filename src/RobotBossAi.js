@@ -81,6 +81,12 @@ class RobotBossAi extends Ai {
     })
 
     this.service.start()
+
+    //
+
+    // setInterval(() => {
+    //   this.character.pop.pop()
+    // }, 5000)
   }
 
   attack() {

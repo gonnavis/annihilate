@@ -310,7 +310,8 @@ function init() {
   if (g.getQueryStringByName('roleAirBox') === 'true') {
     window.maria = new Maria(-20, 15, -45)
   } else if (g.getQueryStringByName('boss') === 'true') {
-    window.maria = new Maria(-40, 5, 35)
+    // window.maria = new Maria(-40, 5, 35)
+    window.maria = new Maria(-40, 5, 15)
   } else {
     window.maria = new Maria(-2, 2, 0)
     // window.maria = new Maria(-2, 2, 8)

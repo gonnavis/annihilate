@@ -410,7 +410,7 @@ function init() {
   window.addEventListener('keydown', (event) => {
     switch (event.code) {
       case 'Digit0':
-        window.setting['kill all mutants (0)']()
+        window.setting['defeat all mutants (0)']()
         break
       case 'Digit1':
         window.service.send('maria')
@@ -444,7 +444,7 @@ function init() {
         })
       }
     },
-    'kill all mutants (0)': () => {
+    'defeat all mutants (0)': () => {
       window.mutants.forEach((mutant) => {
         mutant.health = 0
         mutant.hit()
@@ -455,7 +455,7 @@ function init() {
   // gui.add(window.ai, 'enabled').name('simple enemy AI')
 
   gui.add(setting, 'show debugRenderer')
-  gui.add(setting, 'kill all mutants (0)')
+  gui.add(setting, 'defeat all mutants (0)')
   gui.add({ 'show cloud': false }, 'show cloud').onChange((bool) => {
     if (bool) {
       if (window.cloud) {

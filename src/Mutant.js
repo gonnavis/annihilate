@@ -531,7 +531,7 @@ class Mutant {
     let sphereShape = new CANNON.Sphere(this.bodyRadius)
     let cylinderShape = new CANNON.Cylinder(this.bodyRadius, this.bodyRadius, this.bodyCylinderHeight, 8)
     // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
-    this.body.angularDamping = 1
+    this.body.fixedRotation = true
     this.body.addShape(sphereShape, new CANNON.Vec3(0, this.bodyCylinderHeight / 2, 0))
     this.body.addShape(sphereShape, new CANNON.Vec3(0, -this.bodyCylinderHeight / 2, 0))
     this.body.addShape(cylinderShape)

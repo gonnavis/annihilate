@@ -180,7 +180,7 @@ class Parrot {
     // let shape = new CANNON.Cylinder(this.bodySize, this.bodySize, 3, 8)
     // let shape = new CANNON.Cylinder(this.bodySize, this.bodySize, 5, 8)
     // this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
-    this.body.angularDamping = 1
+    this.body.fixedRotation = true
     this.body.addShape(shape)
     this.body.position.copy(this.position)
     world.addBody(this.body)

@@ -7,6 +7,9 @@ class Sword extends Attacker {
   constructor() {
     super()
 
+    this.tmpVec3 = new THREE.Vector3()
+    this.tmpQuat = new THREE.Quaternion()
+
     // body
 
     this.body.collisionFilterGroup = g.GROUP_ENEMY_ATTACKER
@@ -19,13 +22,11 @@ class Sword extends Attacker {
 
   update() {
     if (this.owner.gltf) {
-      let tempVec3 = vec3() ///todo: performance
-      let tempQuat = new THREE.Quaternion() ///todo: performance
-      // this.owner.mesh.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
-      this.owner.swordDelegate.getWorldPosition(tempVec3)
-      this.owner.swordDelegate.getWorldQuaternion(tempQuat)
-      this.body.position.copy(tempVec3)
-      this.body.quaternion.copy(tempQuat)
+      // this.owner.mesh.children[0].children[0].children[1].children[0].getWorldPosition(this.tmpVec3)
+      this.owner.swordDelegate.getWorldPosition(this.tmpVec3)
+      this.owner.swordDelegate.getWorldQuaternion(this.tmpQuat)
+      this.body.position.copy(this.tmpVec3)
+      this.body.quaternion.copy(this.tmpQuat)
     }
   }
 

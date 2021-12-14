@@ -326,67 +326,69 @@ function init() {
   window.greatSword = new GreatSword()
   greatSword.owner = maria
 
-  if (!(g.getQueryStringByName('paladin') === 'false')) {
-    window.paladin = new Paladin({
-      position: new THREE.Vector3(5, 5, 0),
+  if (g.isEnemy) {
+    if (!(g.getQueryStringByName('paladin') === 'false')) {
+      window.paladin = new Paladin({
+        position: new THREE.Vector3(5, 5, 0),
+      })
+      // window.paladin = new Paladin(0, 5, 0)
+      paladin.load(() => {
+        // paladin.mesh.rotation.set(0, Math.PI, 0)
+        paladin.setFacing(-1, 0)
+      })
+      window.sword = new Sword()
+      sword.owner = paladin
+      window.shield = new Shield()
+      shield.owner = paladin
+      paladin.ai = new PaladinAi(paladin, 8)
+    }
+
+    window.mutants = []
+    // let mutantsCount = g.getQueryStringByName('mutants') === 'false' ? 0 : 3
+    let mutantsCount = parseInt(g.getQueryStringByName('mutants'))
+    if (Number.isNaN(mutantsCount)) mutantsCount = 3
+    for (let i = 0; i < mutantsCount; i++) {
+      let mutant = new Mutant({ position: new THREE.Vector3((Math.random() - 0.5) * 28, 2, (Math.random() - 0.5) * 28) })
+      // let mutant = new Mutant(-25, 5, 0)
+      let handKnife = new HandKnife()
+      handKnife.owner = mutant
+      mutant.load()
+      mutants.push(mutant)
+
+      let ai = new MutantAi(mutant, 4)
+      mutant.ai = ai
+      // ai.isAttack = false
+    }
+
+    if (!(g.getQueryStringByName('robot') === 'false')) {
+      window.robots = []
+      window.robot = new Robot({
+        position: new THREE.Vector3(6, 2, -4),
+      })
+      robots.push(robot)
+      robot.load()
+      robot.ai = new RobotAi(robot, 8)
+      // robot.ai.isAttack = false
+
+      // window.robot2 = new Robot(15, 5, 15)
+      // robots.push(robot2)
+      // robot2.load()
+    }
+
+    if (!(g.getQueryStringByName('parrot') === 'false')) {
+      window.parrot = new Parrot({
+        position: new THREE.Vector3(0, 4, -5),
+      })
+      parrot.load()
+      parrot.ai = new ParrotAi(parrot, 8)
+    }
+
+    window.robotBoss = new RobotBoss({
+      position: new THREE.Vector3(-40, 5, 10),
     })
-    // window.paladin = new Paladin(0, 5, 0)
-    paladin.load(() => {
-      // paladin.mesh.rotation.set(0, Math.PI, 0)
-      paladin.setFacing(-1, 0)
-    })
-    window.sword = new Sword()
-    sword.owner = paladin
-    window.shield = new Shield()
-    shield.owner = paladin
-    paladin.ai = new PaladinAi(paladin, 8)
+    robotBoss.load()
+    robotBoss.ai = new RobotBossAi(robotBoss, 8) // TODO: Create in RobotBoss.js? Because need access ai in it.
   }
-
-  window.mutants = []
-  // let mutantsCount = g.getQueryStringByName('mutants') === 'false' ? 0 : 3
-  let mutantsCount = parseInt(g.getQueryStringByName('mutants'))
-  if (Number.isNaN(mutantsCount)) mutantsCount = 3
-  for (let i = 0; i < mutantsCount; i++) {
-    let mutant = new Mutant({ position: new THREE.Vector3((Math.random() - 0.5) * 28, 2, (Math.random() - 0.5) * 28) })
-    // let mutant = new Mutant(-25, 5, 0)
-    let handKnife = new HandKnife()
-    handKnife.owner = mutant
-    mutant.load()
-    mutants.push(mutant)
-
-    let ai = new MutantAi(mutant, 4)
-    mutant.ai = ai
-    // ai.isAttack = false
-  }
-
-  if (!(g.getQueryStringByName('robot') === 'false')) {
-    window.robots = []
-    window.robot = new Robot({
-      position: new THREE.Vector3(6, 2, -4),
-    })
-    robots.push(robot)
-    robot.load()
-    robot.ai = new RobotAi(robot, 8)
-    // robot.ai.isAttack = false
-
-    // window.robot2 = new Robot(15, 5, 15)
-    // robots.push(robot2)
-    // robot2.load()
-  }
-
-  if (!(g.getQueryStringByName('parrot') === 'false')) {
-    window.parrot = new Parrot({
-      position: new THREE.Vector3(0, 4, -5),
-    })
-    parrot.load()
-    parrot.ai = new ParrotAi(parrot, 8)
-  }
-
-  window.robotBoss = new RobotBoss({
-    position: new THREE.Vector3(-40, 5, 10),
-  })
-  robotBoss.load()
-  robotBoss.ai = new RobotBossAi(robotBoss, 8) // TODO: Create in RobotBoss.js? Because need access ai in it.
 
   domMaria.addEventListener('click', (event) => {
     window.service.send('maria')

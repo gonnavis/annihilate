@@ -26,6 +26,7 @@ g.getQueryStringByName = function (name) {
 g.isAttack = g.getQueryStringByName('attack') === 'false' ? false : true
 g.isDamage = g.getQueryStringByName('damage') === 'false' ? false : true
 g.isOrbit = g.getQueryStringByName('orbit') === 'true' ? true : false
+g.isEnemy = g.getQueryStringByName('enemy') === 'false' ? false : true
 
 window.g = g
 export { g }

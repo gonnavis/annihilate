@@ -12,7 +12,7 @@ class RobotBoss {
   constructor({ position }) {
     this.isCharacter = true
     this.isEnemy = true
-    this.isMassive = true
+    this.isMassive = true // TODO: Do not move by pop.
 
     updates.push(this)
 

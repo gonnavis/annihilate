@@ -22,6 +22,7 @@ import { Mutant } from './Mutant.js'
 import { GreatSword } from './GreatSword.js'
 import { Sword } from './Sword.js'
 import { Shield } from './Shield.js'
+// import { Flail } from './Flail.js'
 import { Robot } from './Robot.js'
 import { RoleControls } from './RoleControls.js'
 import { Ai } from './Ai.js'
@@ -74,6 +75,7 @@ window.grenades = []
 let fsm
 window.service = null
 
+// let cameraDist = 7
 // let cameraDist = 11
 let cameraDist = 15
 let cameraPosX = 0
@@ -86,7 +88,7 @@ const gui = new GUI()
 init_xstate()
 init_three()
 init_cannon()
-if (g.getQueryStringByName('debugRenderer') === 'true') window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, { autoUpdate: false })
+if (g.getQueryStringByName('cannon') === 'true') window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, { autoUpdate: false })
 init()
 requestAnimationFrame(animate)
 
@@ -340,6 +342,8 @@ function init() {
       sword.owner = paladin
       window.shield = new Shield()
       shield.owner = paladin
+      // window.flail = new Flail() // TODO: Add to maria greatSword for test.
+      // flail.owner = paladin
       paladin.ai = new PaladinAi(paladin, 8)
     }
 

@@ -4,16 +4,18 @@ import * as THREE from '../lib/three.js/build/three.module.js'
 import { Attacker } from './Attacker.js'
 
 class Flail extends Attacker {
-  constructor() {
+  constructor({ delegate }) {
     super()
+
+    this.delegate = delegate
 
     this.tmpVec3 = new THREE.Vector3()
     this.tmpQuat = new THREE.Quaternion()
 
     // body
 
-    this.body.collisionFilterGroup = g.GROUP_ENEMY_ATTACKER
-    this.body.collisionFilterMask = g.GROUP_ROLE
+    // this.body.collisionFilterGroup = g.GROUP_ENEMY_ATTACKER
+    // this.body.collisionFilterMask = g.GROUP_ROLE
 
     this.size = 0.2
     let shape = new CANNON.Box(new CANNON.Vec3(this.size, this.size, this.size))
@@ -52,13 +54,15 @@ class Flail extends Attacker {
         sphereBody.addShape(sphereShape)
         sphereBody.position.set(0, dist * (this.N - i), 0)
         // sphereBody.velocity.x = -i
-        sphereBody.linearDamping = 0.99
+        sphereBody.linearDamping = 0.9
         // sphereBody.angularDamping = 0.99
         window.world.addBody(sphereBody)
 
         // Connect this body to the last one added
         if (previous) {
-          const distanceConstraint = new CANNON.DistanceConstraint(sphereBody, previous, dist)
+          let maxForce = 1e6 // https://pmndrs.github.io/cannon-es/docs/classes/distanceconstraint.html
+          // let maxForce = 1e100
+          const distanceConstraint = new CANNON.DistanceConstraint(sphereBody, previous, dist, maxForce)
           world.addConstraint(distanceConstraint)
         }
 
@@ -84,10 +88,10 @@ class Flail extends Attacker {
 
   update() {
     if (this.owner.gltf) {
-      this.owner.swordDelegate.getWorldPosition(this.tmpVec3)
-      // this.owner.swordDelegate.getWorldQuaternion(this.tmpQuat)
+      this.delegate.getWorldPosition(this.tmpVec3)
+      // this.delegate.getWorldQuaternion(this.tmpQuat)
       // this.tmpVec3.x += 0.3
-      this.tmpVec3.z -= 0.8
+      // this.tmpVec3.x -= 0.8
       this.spheres[0].position.copy(this.tmpVec3)
       // this.body.quaternion.copy(this.tmpQuat)
 

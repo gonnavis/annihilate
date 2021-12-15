@@ -35,6 +35,7 @@ class Maria {
     this.liftDistance = 3.7
     this.airLiftVelocity = 1.5
     this.climbContactSign = null
+    this.whirlwindOneTurnDuration = 0.3
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -1102,7 +1103,7 @@ class Maria {
             let to = { t: 0 }
             let _rotationY = this.mesh.rotation.y
             this.tweenWhirlwind = gsap.to(to, {
-              duration: 0.3,
+              duration: this.whirlwindOneTurnDuration,
               t: Math.PI * 2,
               repeat: Infinity,
               ease: 'none',
@@ -1397,6 +1398,10 @@ class Maria {
           this.swordDelegate.add(this.swordBlink.mesh)
 
           this.pop = new Pop(this)
+
+          this.swordTipDelegate = new THREE.Object3D()
+          this.swordDelegate.add(this.swordTipDelegate)
+          this.swordTipDelegate.position.z = 70
 
           //
 

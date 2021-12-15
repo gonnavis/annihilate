@@ -22,7 +22,7 @@ import { Mutant } from './Mutant.js'
 import { GreatSword } from './GreatSword.js'
 import { Sword } from './Sword.js'
 import { Shield } from './Shield.js'
-// import { Flail } from './Flail.js'
+import { Flail } from './Flail.js'
 import { Robot } from './Robot.js'
 import { RoleControls } from './RoleControls.js'
 import { Ai } from './Ai.js'
@@ -456,12 +456,21 @@ function init() {
         mutant.hit()
       })
     },
+    'add flail': () => {
+      window.flail = new Flail({ delegate: maria.swordTipDelegate }) // TODO: Add to maria greatSword for test.
+      flail.owner = maria
+      flail.body.collisionFilterGroup = g.GROUP_ROLE_ATTACKER
+      flail.body.collisionFilterMask = g.GROUP_ENEMY
+      maria.attackSpeed = 0.6
+      maria.whirlwindOneTurnDuration = 0.5
+    },
   }
 
   // gui.add(window.ai, 'enabled').name('simple enemy AI')
 
   gui.add(setting, 'show debugRenderer')
   gui.add(setting, 'defeat all mutants (0)')
+  gui.add(setting, 'add flail')
   gui.add({ 'show cloud': false }, 'show cloud').onChange((bool) => {
     if (bool) {
       if (window.cloud) {

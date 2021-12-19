@@ -125,7 +125,7 @@ Code: [three-pathfinding](https://github.com/donmccurdy/three-pathfinding), [Ske
 
 Paladin do not hit by pop when shielded.
 
-Boss Fight map.
+Boss Fight map.✔️
 
 Combat puzzle map.
 

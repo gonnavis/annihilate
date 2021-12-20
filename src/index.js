@@ -6,7 +6,7 @@ import { OrbitControls } from '../lib/three.js/examples/jsm/controls/OrbitContro
 
 import * as CANNON from '../lib/cannon-es_my.js'
 window.CANNON = CANNON
-import cannonDebugger from '../lib/cannon-es-debugger.js'
+import cannonDebugger from '../lib/cannon-es-debugger_my.js'
 // THREE.cannonDebugger = cannonDebugger
 
 import { GUI } from '../lib/lil-gui.module.min.js'
@@ -90,8 +90,14 @@ const gui = new GUI()
 init_xstate()
 init_three()
 init_cannon()
-if (g.getQueryStringByName('cannon') === 'true') window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, { autoUpdate: false })
 init()
+if (g.getQueryStringByName('cannon') === 'true') {
+  window.cannonDebugRenderer = cannonDebugger(scene, world.bodies, { autoUpdate: false })
+  cannonDebugRenderer.update()
+  cannonDebugRenderer.meshes.forEach((mesh) => {
+    mesh.matrixAutoUpdate = true
+  })
+}
 requestAnimationFrame(animate)
 
 function init_xstate() {

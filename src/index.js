@@ -42,6 +42,8 @@ import { RobotBoss } from './RobotBoss.js'
 // import { TorusKnot } from './TorusKnot.js'
 // import { TranslatedBox } from './TranslatedBox.js'
 
+THREE.Object3D.DefaultMatrixAutoUpdate = false;
+
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
 // glsl function

@@ -1299,6 +1299,7 @@ class Maria {
     // this.shadow.position.z = this.body.position.z
     this.mixer.update(dt)
 
+    // this.mesh.updateMatrix()
     this.mesh.traverse((child) => {
       child.updateMatrix() // TODO: Will trigger unnecessary updateMatrixWorld/updateWorldMatrix?
     })

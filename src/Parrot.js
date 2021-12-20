@@ -206,6 +206,10 @@ class Parrot {
     //     this.mesh.rotation.y = -angle + Math.PI / 2
     //   }
     // }
+
+    this.mesh.traverse((child) => {
+      child.updateMatrix() // TODO: Will trigger unnecessary updateMatrixWorld/updateWorldMatrix?
+    })
   }
 
   // attack() {

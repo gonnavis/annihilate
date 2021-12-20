@@ -14,7 +14,7 @@ class Ground {
 
     this.mesh.rotation.x = -Math.PI / 2
     this.mesh.receiveShadow = true
-    scene.add(this.mesh)
+    // scene.add(this.mesh)
 
     let shape = new CANNON.Plane()
     // let physicsMaterial = new CANNON.Material({

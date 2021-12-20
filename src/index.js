@@ -42,7 +42,7 @@ import { RobotBoss } from './RobotBoss.js'
 // import { TorusKnot } from './TorusKnot.js'
 // import { TranslatedBox } from './TranslatedBox.js'
 
-THREE.Object3D.DefaultMatrixAutoUpdate = false;
+THREE.Object3D.DefaultMatrixAutoUpdate = false
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -220,59 +220,60 @@ function init_xstate() {
 
 function init() {
   window.ground = new Ground() // todo: refactor
+  // ground.matrixAutoUpdate = true
 
   // window.level = new Level()
   // level.load()
 
-  // ground box
-  window.groundBox = new Box(8, 1.3, 30)
-  groundBox.mesh.position.set(-11, 0.65, 0)
-  groundBox.body.position.copy(groundBox.mesh.position)
+  // // ground box
+  // window.groundBox = new Box(8, 1.3, 30)
+  // groundBox.mesh.position.set(-11, 0.65, 0)
+  // groundBox.body.position.copy(groundBox.mesh.position)
 
-  // wall box
-  window.wallBoxL = new Box(2, 12, 6)
-  wallBoxL.isScene = true
-  wallBoxL.mesh.position.set(-24, 6, -12)
-  // wallBoxL.mesh.position.set(-5, 5, 0)
-  wallBoxL.body.position.copy(wallBoxL.mesh.position)
+  // // wall box
+  // window.wallBoxL = new Box(2, 12, 6)
+  // wallBoxL.isScene = true
+  // wallBoxL.mesh.position.set(-24, 6, -12)
+  // // wallBoxL.mesh.position.set(-5, 5, 0)
+  // wallBoxL.body.position.copy(wallBoxL.mesh.position)
 
-  window.wallBoxR = new Box(2, 12, 6)
-  wallBoxR.isScene = true
-  wallBoxR.mesh.position.set(-18, 6, -12)
-  // wallBoxR.mesh.position.set(1, 5, 0)
-  wallBoxR.body.position.copy(wallBoxR.mesh.position)
+  // window.wallBoxR = new Box(2, 12, 6)
+  // wallBoxR.isScene = true
+  // wallBoxR.mesh.position.set(-18, 6, -12)
+  // // wallBoxR.mesh.position.set(1, 5, 0)
+  // wallBoxR.body.position.copy(wallBoxR.mesh.position)
 
-  // catapult
-  window.catapult = new Catapult(3, 0.2, 4)
+  // // catapult
+  // window.catapult = new Catapult(3, 0.2, 4)
 
-  // teleporter
-  window.teleporter = new Teleporter(0.7, 0.7, 0.7)
-  teleporter.body.position.set(-13, 3.7, -12)
-  teleporter.mesh.position.copy(teleporter.body.position)
-  teleporter.dest.set(-21, 22, -18)
+  // // teleporter
+  // window.teleporter = new Teleporter(0.7, 0.7, 0.7)
+  // teleporter.body.position.set(-13, 3.7, -12)
+  // teleporter.mesh.position.copy(teleporter.body.position)
+  // teleporter.dest.set(-21, 22, -18)
 
-  window.teleporter2 = new Teleporter(0.7, 0.7, 0.7)
-  teleporter2.body.position.set(-11, 3.7, -12)
-  teleporter2.mesh.position.copy(teleporter2.body.position)
-  teleporter2.dest.set(-18, 220, -18)
+  // window.teleporter2 = new Teleporter(0.7, 0.7, 0.7)
+  // teleporter2.body.position.set(-11, 3.7, -12)
+  // teleporter2.mesh.position.copy(teleporter2.body.position)
+  // teleporter2.dest.set(-18, 220, -18)
 
-  window.teleporter3 = new Teleporter(0.7, 0.7, 0.7)
-  teleporter3.body.position.set(-9, 3.7, -12)
-  teleporter3.mesh.position.copy(teleporter3.body.position)
-  teleporter3.dest.set(-9, 22, -12)
+  // window.teleporter3 = new Teleporter(0.7, 0.7, 0.7)
+  // teleporter3.body.position.set(-9, 3.7, -12)
+  // teleporter3.mesh.position.copy(teleporter3.body.position)
+  // teleporter3.dest.set(-9, 22, -12)
 
-  window.teleporter4 = new Teleporter(0.7, 0.7, 0.7)
-  teleporter4.body.position.set(-19, 3, -60)
-  teleporter4.mesh.position.copy(teleporter4.body.position)
-  teleporter4.dest.set(-20, 15, -45)
+  // window.teleporter4 = new Teleporter(0.7, 0.7, 0.7)
+  // teleporter4.body.position.set(-19, 3, -60)
+  // teleporter4.mesh.position.copy(teleporter4.body.position)
+  // teleporter4.dest.set(-20, 15, -45)
 
-  // jumpPoint
-  window.jumpPoint = new JumpPoint(0.7)
-  jumpPoint.body.position.set(-16, 14, -60)
-  // jumpPoint.body.position.set(-16, 12, -55)
-  jumpPoint.mesh.position.copy(jumpPoint.body.position)
+  // // jumpPoint
+  // window.jumpPoint = new JumpPoint(0.7)
+  // jumpPoint.body.position.set(-16, 14, -60)
+  // // jumpPoint.body.position.set(-16, 12, -55)
+  // jumpPoint.mesh.position.copy(jumpPoint.body.position)
 
-  window.hill = new Hill()
+  // window.hill = new Hill()
 
   // window.torusKnot = new TorusKnot({
   //   position: new THREE.Vector3(0, 2, 0),
@@ -282,32 +283,32 @@ function init() {
   //   position: new THREE.Vector3(0, 1.5, 0),
   // })
 
-  // air box
-  window.airBox = new Box(15, 1.5, 30)
-  airBox.mesh.position.set(-20, 12, -33)
-  airBox.body.position.copy(airBox.mesh.position)
+  // // air box
+  // window.airBox = new Box(15, 1.5, 30)
+  // airBox.mesh.position.set(-20, 12, -33)
+  // airBox.body.position.copy(airBox.mesh.position)
 
-  window.airBox2 = new Box(6, 1.5, 30)
-  // airBox2.mesh.position.set(-20, 12, -68)
-  airBox2.mesh.position.set(-25, 12, -75)
-  airBox2.body.position.copy(airBox2.mesh.position)
+  // window.airBox2 = new Box(6, 1.5, 30)
+  // // airBox2.mesh.position.set(-20, 12, -68)
+  // airBox2.mesh.position.set(-25, 12, -75)
+  // airBox2.body.position.copy(airBox2.mesh.position)
 
-  window.airBox3 = new Box(6, 1.5, 30)
-  // airBox3.mesh.position.set(-20, 12, -68)
-  airBox3.mesh.position.set(-15, 12, -90)
-  airBox3.body.position.copy(airBox3.mesh.position)
+  // window.airBox3 = new Box(6, 1.5, 30)
+  // // airBox3.mesh.position.set(-20, 12, -68)
+  // airBox3.mesh.position.set(-15, 12, -90)
+  // airBox3.body.position.copy(airBox3.mesh.position)
 
-  window.floatingBoxes = []
-  for (let i = 0; i < 7; i++) {
-    let floatingBox = new FloatingBox(3.7, 0.37, 3.7)
-    // floatingBox.body.position.x = i * 20
-    floatingBox.body.position.y = 2.2 * (i + 1)
-    floatingBox.body.position.z = -12.96 - i * 2.6
-    // floatingBox.body.position.z = -35 - (i % 2) * 5
-    // floatingBox.timeBias = i * 2
+  // window.floatingBoxes = []
+  // for (let i = 0; i < 7; i++) {
+  //   let floatingBox = new FloatingBox(3.7, 0.37, 3.7)
+  //   // floatingBox.body.position.x = i * 20
+  //   floatingBox.body.position.y = 2.2 * (i + 1)
+  //   floatingBox.body.position.z = -12.96 - i * 2.6
+  //   // floatingBox.body.position.z = -35 - (i % 2) * 5
+  //   // floatingBox.timeBias = i * 2
 
-    floatingBoxes.push(floatingBox)
-  }
+  //   floatingBoxes.push(floatingBox)
+  // }
 
   //
 
@@ -326,6 +327,10 @@ function init() {
   maria.load(() => {
     // maria.mesh.rotation.set(0, Math.PI, 0)
     maria.setFacing(0, -1)
+
+    // maria.mesh.traverse((child) => {
+    //   child.matrixAutoUpdate = true
+    // })
   })
   window.greatSword = new GreatSword()
   greatSword.owner = maria
@@ -519,7 +524,12 @@ function init_three() {
   document.body.appendChild(container)
 
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 370)
+  // camera.matrixAutoUpdate = true
   camera.position.set(cameraPosX, cameraPosY, cameraPosZ)
+  camera.updateMatrix()
+  // camera.updateMatrixWorld()
+  // camera.updateWorldMatrix()
+  // camera.matrixWorldNeedsUpdate = true
   camera.lookAt(0, 0, 0)
 
   scene = new THREE.Scene()
@@ -671,6 +681,7 @@ function animate(time) {
     if (!window.controls) {
       camera.position.set(role.mesh.position.x + cameraPosX, role.mesh.position.y + cameraPosY, role.mesh.position.z + cameraPosZ)
       // camera.lookAt(role.mesh.position)
+      camera.updateMatrix()
     }
     shadowLight.position.x = shadowLight.target.position.x = window.role.body.position.x
     shadowLight.position.z = shadowLight.target.position.z = window.role.body.position.z

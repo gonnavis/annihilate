@@ -1298,6 +1298,10 @@ class Maria {
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
     this.mixer.update(dt)
+
+    this.mesh.traverse((child) => {
+      child.updateMatrix() // TODO: Will trigger unnecessary updateMatrixWorld/updateWorldMatrix?
+    })
   }
 
   hit(collideEvent) {

@@ -231,10 +231,11 @@ function init() {
   // window.level = new Level()
   // level.load()
 
-  // // ground box
-  // window.groundBox = new Box(8, 1.3, 30)
-  // groundBox.mesh.position.set(-11, 0.65, 0)
-  // groundBox.body.position.copy(groundBox.mesh.position)
+  // ground box
+  window.groundBox = new Box(8, 1.3, 30)
+  groundBox.mesh.position.set(-11, 0.65, 0)
+  groundBox.body.position.copy(groundBox.mesh.position)
+  groundBox.mesh.updateMatrix()
 
   // // wall box
   // window.wallBoxL = new Box(2, 12, 6)
@@ -252,26 +253,30 @@ function init() {
   // // catapult
   // window.catapult = new Catapult(3, 0.2, 4)
 
-  // // teleporter
-  // window.teleporter = new Teleporter(0.7, 0.7, 0.7)
-  // teleporter.body.position.set(-13, 3.7, -12)
-  // teleporter.mesh.position.copy(teleporter.body.position)
-  // teleporter.dest.set(-21, 22, -18)
+  // teleporter
+  window.teleporter = new Teleporter(0.7, 0.7, 0.7)
+  teleporter.body.position.set(-13, 3.7, -12)
+  teleporter.mesh.position.copy(teleporter.body.position)
+  teleporter.dest.set(-21, 22, -18)
+  teleporter.mesh.matrixAutoUpdate = true
 
-  // window.teleporter2 = new Teleporter(0.7, 0.7, 0.7)
-  // teleporter2.body.position.set(-11, 3.7, -12)
-  // teleporter2.mesh.position.copy(teleporter2.body.position)
-  // teleporter2.dest.set(-18, 220, -18)
+  window.teleporter2 = new Teleporter(0.7, 0.7, 0.7)
+  teleporter2.body.position.set(-11, 3.7, -12)
+  teleporter2.mesh.position.copy(teleporter2.body.position)
+  teleporter2.dest.set(-18, 220, -18)
+  teleporter2.mesh.matrixAutoUpdate = true
 
-  // window.teleporter3 = new Teleporter(0.7, 0.7, 0.7)
-  // teleporter3.body.position.set(-9, 3.7, -12)
-  // teleporter3.mesh.position.copy(teleporter3.body.position)
-  // teleporter3.dest.set(-9, 22, -12)
+  window.teleporter3 = new Teleporter(0.7, 0.7, 0.7)
+  teleporter3.body.position.set(-9, 3.7, -12)
+  teleporter3.mesh.position.copy(teleporter3.body.position)
+  teleporter3.dest.set(-9, 22, -12)
+  teleporter3.mesh.matrixAutoUpdate = true
 
-  // window.teleporter4 = new Teleporter(0.7, 0.7, 0.7)
-  // teleporter4.body.position.set(-19, 3, -60)
-  // teleporter4.mesh.position.copy(teleporter4.body.position)
-  // teleporter4.dest.set(-20, 15, -45)
+  window.teleporter4 = new Teleporter(0.7, 0.7, 0.7)
+  teleporter4.body.position.set(-19, 3, -60)
+  teleporter4.mesh.position.copy(teleporter4.body.position)
+  teleporter4.dest.set(-20, 15, -45)
+  teleporter4.mesh.matrixAutoUpdate = true
 
   // // jumpPoint
   // window.jumpPoint = new JumpPoint(0.7)
@@ -279,7 +284,8 @@ function init() {
   // // jumpPoint.body.position.set(-16, 12, -55)
   // jumpPoint.mesh.position.copy(jumpPoint.body.position)
 
-  // window.hill = new Hill()
+  window.hill = new Hill()
+  hill.mesh.updateMatrix()
 
   // window.torusKnot = new TorusKnot({
   //   position: new THREE.Vector3(0, 2, 0),
@@ -289,20 +295,23 @@ function init() {
   //   position: new THREE.Vector3(0, 1.5, 0),
   // })
 
-  // // air box
-  // window.airBox = new Box(15, 1.5, 30)
-  // airBox.mesh.position.set(-20, 12, -33)
-  // airBox.body.position.copy(airBox.mesh.position)
+  // air box
+  window.airBox = new Box(15, 1.5, 30)
+  airBox.mesh.position.set(-20, 12, -33)
+  airBox.body.position.copy(airBox.mesh.position)
+  airBox.mesh.updateMatrix()
 
-  // window.airBox2 = new Box(6, 1.5, 30)
-  // // airBox2.mesh.position.set(-20, 12, -68)
-  // airBox2.mesh.position.set(-25, 12, -75)
-  // airBox2.body.position.copy(airBox2.mesh.position)
+  window.airBox2 = new Box(6, 1.5, 30)
+  // airBox2.mesh.position.set(-20, 12, -68)
+  airBox2.mesh.position.set(-25, 12, -75)
+  airBox2.body.position.copy(airBox2.mesh.position)
+  airBox2.mesh.updateMatrix()
 
-  // window.airBox3 = new Box(6, 1.5, 30)
-  // // airBox3.mesh.position.set(-20, 12, -68)
-  // airBox3.mesh.position.set(-15, 12, -90)
-  // airBox3.body.position.copy(airBox3.mesh.position)
+  window.airBox3 = new Box(6, 1.5, 30)
+  // airBox3.mesh.position.set(-20, 12, -68)
+  airBox3.mesh.position.set(-15, 12, -90)
+  airBox3.body.position.copy(airBox3.mesh.position)
+  airBox3.mesh.updateMatrix()
 
   // window.floatingBoxes = []
   // for (let i = 0; i < 7; i++) {
@@ -566,6 +575,9 @@ function init_three() {
   // shadowLight.shadow.bias = - 0.00006;
   scene.add(shadowLight)
   scene.add(shadowLight.target)
+  shadowLight.matrixAutoUpdate = true // TODO: No autoUpdate, update on demand.
+  shadowLight.target.matrixAutoUpdate = true // TODO: No autoUpdate, update on demand.
+  shadowLight.shadow.camera.matrixAutoUpdate = true // TODO: No autoUpdate, update on demand.
 
   // window.supLight = new THREE.DirectionalLight(0x888888)
   window.supLight = new THREE.DirectionalLight(0x333333)

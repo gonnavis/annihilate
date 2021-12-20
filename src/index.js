@@ -571,6 +571,7 @@ function init_three() {
   gridHelper.material.opacity = 0.2
   gridHelper.material.transparent = true
   scene.add(gridHelper)
+  // gridHelper.updateMatrix()
 
   renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setPixelRatio(window.devicePixelRatio)
@@ -687,6 +688,7 @@ function animate(time) {
     shadowLight.position.z = shadowLight.target.position.z = window.role.body.position.z
     gridHelper.position.x = Math.round(window.role.body.position.x)
     gridHelper.position.z = Math.round(window.role.body.position.z)
+    gridHelper.updateMatrix()
   }
 
   if (window.cannonDebugRenderer) cannonDebugRenderer.update()

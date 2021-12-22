@@ -67,7 +67,7 @@ class Ai {
       if (this.isMove && this.character.direction.length() > this.distance) {
         this.character.service.send('run')
 
-        this.character.direction.normalize().multiplyScalar(this.character.speed)
+        this.character.direction.normalize().multiplyScalar(this.character.speed * dt * 60)
         if (this.character.service.state.hasTag('canMove')) {
           this.character.body.position.x += this.character.direction.x
           this.character.body.position.z += this.character.direction.y
@@ -104,7 +104,7 @@ class Ai {
         // this.character.mesh.rotation.y = -this.character.facing.angle()+Math.PI///test
       }
 
-      this.character.direction.normalize().multiplyScalar(this.character.speed)
+      this.character.direction.normalize().multiplyScalar(this.character.speed * dt * 60)
       if (this.isMove && this.character.service.state.hasTag('canMove')) {
         this.character.body.position.x += this.character.direction.x
         this.character.body.position.z += this.character.direction.y

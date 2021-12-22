@@ -151,7 +151,7 @@ class RoleControls {
     if (this.holdKey.KeyS || this.holdKey.ArrowDown) this.role.direction.add(vec2(0, 1))
     if (this.holdKey.KeyA || this.holdKey.ArrowLeft) this.role.direction.add(vec2(-1, 0))
     if (this.holdKey.KeyD || this.holdKey.ArrowRight) this.role.direction.add(vec2(1, 0))
-    this.role.direction.normalize().multiplyScalar(this.role.speed)
+    this.role.direction.normalize().multiplyScalar(this.role.speed * dt * 60)
     // console.log(this.role.direction)
     let directionLengthSq = this.role.direction.lengthSq()
 

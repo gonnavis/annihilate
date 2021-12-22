@@ -114,8 +114,8 @@ class PaladinHadouken extends Attacker {
   }
 
   update(dt) {
-    this.body.position.x += this.movement.x
-    this.body.position.z += this.movement.y
+    this.body.position.x += this.movement.x * dt * 60
+    this.body.position.z += this.movement.y * dt * 60
     this.mesh.position.copy(this.body.position)
     this.mesh.quaternion.copy(this.body.quaternion)
   }

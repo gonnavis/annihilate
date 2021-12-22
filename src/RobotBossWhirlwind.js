@@ -77,7 +77,7 @@ class RobotBossWhirlwind extends Attacker {
       let sign = i === 0 ? 1 : -1
       let rotY = -(time - this.startTime) * 0.0005 + ((Math.PI * 2) / 5) * i
       rotY += this.startRotY
-      rotY -= 0.41887902047863906 // (Math.PI * 2) / 5 / 3
+      rotY -= 0.41887902047863906 // 0.41887902047863906 = (Math.PI * 2) / 5 / 3 // avoid immediately hit role on start
       this.bodies[i].quaternion.setFromEuler(0, rotY, 0)
 
       this.meshes[i].position.copy(this.bodies[i].position)

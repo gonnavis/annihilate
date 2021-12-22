@@ -91,9 +91,9 @@ class Bullet extends Attacker {
   }
 
   update(dt) {
-    this.body.position.x += this.movement.x
-    this.body.position.y += this.movement.y
-    this.body.position.z += this.movement.z
+    this.body.position.x += this.movement.x * dt * 60
+    this.body.position.y += this.movement.y * dt * 60
+    this.body.position.z += this.movement.z * dt * 60
     this.mesh.position.copy(this.body.position)
   }
 

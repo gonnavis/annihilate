@@ -1,6 +1,6 @@
 # Annihilate - js action game
 
-### Play online
+## Play online
 
  [ dev ](https://raw.githack.com/gonnavis/annihilate/dev/index.html)
 
@@ -14,7 +14,7 @@
 
  [ use self rig-and-animated naive model ](https://raw.githack.com/gonnavis/annihilate/main/index.html)
 
-### Brief
+## Brief
 
 An action game prototype made in 2018.
 
@@ -51,7 +51,7 @@ Videos:
 [Cloud & BirdFlock](https://twitter.com/gonnavis/status/1468695103640260609/video/1),
 [Boss](https://twitter.com/gonnavis/status/1470434848925896706).
 
-### Key Map:
+## Key Map:
 
 J = Attack
 
@@ -93,7 +93,7 @@ touch wall = climb ( currently only support +-X axis wall, todo: +-Z axis )
 
 when climb J = fall
 
-### Ref and Goal:
+## Ref and Goal:
     
 Action: **DMC**, **Guilty Gear** ...
     
@@ -121,7 +121,7 @@ Code: [three-pathfinding](https://github.com/donmccurdy/three-pathfinding), [Ske
 [9](https://twitter.com/Assault_Spy/status/1436881155542831111)
 ...
 
-### Todo: 
+## Todo: 
 
 Paladin do not hit by pop when shielded.
 

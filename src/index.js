@@ -44,6 +44,22 @@ import { RobotBoss } from './RobotBoss.js'
 
 THREE.Object3D.DefaultMatrixAutoUpdate = false;
 
+THREE.Object3D.prototype.add = (function () {
+  const cachedFunction = THREE.Object3D.prototype.add
+
+  return function () {
+    // your code
+
+    var result = cachedFunction.apply(this, arguments) // use .apply() to call it
+
+    // more of your code
+    arguments[0].traverse(child => child.updateMatrix())
+    arguments[0].updateMatrixWorld()
+
+    return result
+  }
+})()
+
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
 // glsl function

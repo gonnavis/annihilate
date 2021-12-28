@@ -654,7 +654,7 @@ function onWindowResize() {
 //
 
 function animate(time) {
-  debugger
+  // debugger
   console.log('animate')
   requestAnimationFrame(animate)
 

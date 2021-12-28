@@ -682,5 +682,5 @@ function animate(time) {
   renderer.render(scene, camera)
 
   stats.update()
-  debugger
+  // debugger
 }

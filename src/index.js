@@ -654,7 +654,8 @@ function onWindowResize() {
 //
 
 function animate(time) {
-  // console.log('animate')
+  debugger
+  console.log('animate')
   requestAnimationFrame(animate)
 
   var dt = clock.getDelta()
@@ -681,4 +682,5 @@ function animate(time) {
   renderer.render(scene, camera)
 
   stats.update()
+  debugger
 }

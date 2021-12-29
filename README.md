@@ -53,6 +53,8 @@ Videos:
 
 ## Key Map:
 
+[Video](https://twitter.com/gonnavis/status/1465219502199562243)
+
 J = Attack
 
 J + J + J = Combo

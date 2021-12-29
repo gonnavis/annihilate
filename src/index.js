@@ -658,6 +658,9 @@ function animate(time) {
   console.log('animate')
   requestAnimationFrame(animate)
 
+  window.getProgramCacheKeyTime = 0
+  window.updateMatrixWorldTime = 0
+
   var dt = clock.getDelta()
 
   updates.forEach((entity) => {
@@ -683,4 +686,7 @@ function animate(time) {
 
   stats.update()
   // debugger
+
+  console.log(window.getProgramCacheKeyTime.toFixed(2), window.updateMatrixWorldTime.toFixed(2))
+  // console.log(window.getProgramCacheKeyTime > window.updateMatrixWorldTime)
 }

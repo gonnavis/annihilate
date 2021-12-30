@@ -348,11 +348,12 @@ function init() {
     }
 
     window.mutants = []
+    THREE.MathUtils.seededRandom( 1 );
     // let mutantsCount = g.getQueryStringByName('mutants') === 'false' ? 0 : 3
     let mutantsCount = parseInt(g.getQueryStringByName('mutants'))
     if (Number.isNaN(mutantsCount)) mutantsCount = 3
     for (let i = 0; i < mutantsCount; i++) {
-      let mutant = new Mutant({ position: new THREE.Vector3((Math.random() - 0.5) * 28, 2, (Math.random() - 0.5) * 28) })
+      let mutant = new Mutant({ position: new THREE.Vector3((THREE.MathUtils.seededRandom() - 0.5) * 28, 2, (THREE.MathUtils.seededRandom() - 0.5) * 28) })
       // let mutant = new Mutant(-25, 5, 0)
       let handKnife = new HandKnife()
       handKnife.owner = mutant

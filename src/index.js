@@ -42,6 +42,9 @@ import { RobotBoss } from './RobotBoss.js'
 // import { TorusKnot } from './TorusKnot.js'
 // import { TranslatedBox } from './TranslatedBox.js'
 
+window.getProgramCacheKeyTime = 0
+window.updateMatrixWorldTime = 0
+
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
 // glsl function
@@ -507,6 +510,8 @@ function init() {
   // gui.add(teleporter.mesh.position, 'y', -50, 50, 1)
   // gui.add(teleporter.mesh.position, 'z', -50, 50, 1)
 
+  gui.close()
+
   if (g.getQueryStringByName('gui') === 'false') gui.close()
 
   ///todo: fix bug after ```roleControls.role = paladin```.
@@ -658,8 +663,8 @@ function animate(time) {
   console.log('animate')
   requestAnimationFrame(animate)
 
-  window.getProgramCacheKeyTime = 0
-  window.updateMatrixWorldTime = 0
+  // window.getProgramCacheKeyTime = 0
+  // window.updateMatrixWorldTime = 0
 
   var dt = clock.getDelta()
 
@@ -687,6 +692,9 @@ function animate(time) {
   stats.update()
   // debugger
 
-  console.log('getProgramCacheKeyTime:', window.getProgramCacheKeyTime.toFixed(2), 'updateMatrixWorldTime:', window.updateMatrixWorldTime.toFixed(2))
+  // console.log('getProgramCacheKeyTime:', window.getProgramCacheKeyTime.toFixed(2), 'updateMatrixWorldTime:', window.updateMatrixWorldTime.toFixed(2))
   // console.log(window.getProgramCacheKeyTime > window.updateMatrixWorldTime)
+
+  domGetProgramCacheKeyTime.innerText = window.getProgramCacheKeyTime.toFixed(2)
+  domUpdateMatrixWorldTime.innerText = window.updateMatrixWorldTime.toFixed(2)
 }

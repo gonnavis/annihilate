@@ -104,8 +104,8 @@ class Robot {
             new Splash(event.collideEvent)
           },
           throwHadouken: () => {
-            // if (g.isAttack && window.role.gltf && this.gltf) new Hadouken(scene, updates, this, window.role.mesh.position)
-            new Hadouken(scene, updates, this, window.role.mesh.position)
+            // if (g.isAttack && window.role.mesh && this.mesh) new Hadouken(scene, updates, this, window.role.mesh.position)
+            if (window.role.mesh) new Hadouken(scene, updates, this, window.role.mesh.position)
           },
           dead: () => {
             this.fadeToAction('death', 0.2)

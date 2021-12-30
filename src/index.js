@@ -687,6 +687,6 @@ function animate(time) {
   stats.update()
   // debugger
 
-  console.log(window.getProgramCacheKeyTime.toFixed(2), window.updateMatrixWorldTime.toFixed(2))
+  console.log('getProgramCacheKeyTime:', window.getProgramCacheKeyTime.toFixed(2), 'updateMatrixWorldTime:', window.updateMatrixWorldTime.toFixed(2))
   // console.log(window.getProgramCacheKeyTime > window.updateMatrixWorldTime)
 }

@@ -660,7 +660,7 @@ function onWindowResize() {
 
 function animate(time) {
   // debugger
-  console.log('animate')
+  // console.log('animate')
   requestAnimationFrame(animate)
 
   // window.getProgramCacheKeyTime = 0

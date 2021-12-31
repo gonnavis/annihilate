@@ -51,6 +51,8 @@ window.updateMatrixWorldTimePositionalAudio = 0
 window.updateMatrixWorldTimeSkeletonHelper = 0
 window.updateMatrixWorldTimeBox3Helper = 0
 window.updateMatrixWorldTimePlaneHelper = 0
+window.updateMatrixTimeObject3D = 0
+window.updateMatrixTimeTexture = 0
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -711,4 +713,6 @@ function animate(time) {
   domUpdateMatrixWorldTimeSkeletonHelper.innerText = window.updateMatrixWorldTimeSkeletonHelper.toFixed(2)
   domUpdateMatrixWorldTimeBox3Helper.innerText = window.updateMatrixWorldTimeBox3Helper.toFixed(2)
   domUpdateMatrixWorldTimePlaneHelper.innerText = window.updateMatrixWorldTimePlaneHelper.toFixed(2)
+  domUpdateMatrixTimeObject3D.innerText = window.updateMatrixTimeObject3D.toFixed(2)
+  domUpdateMatrixTimeTexture.innerText = window.updateMatrixTimeTexture.toFixed(2)
 }

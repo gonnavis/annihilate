@@ -43,7 +43,14 @@ import { RobotBoss } from './RobotBoss.js'
 // import { TranslatedBox } from './TranslatedBox.js'
 
 window.getProgramCacheKeyTime = 0
-window.updateMatrixWorldTime = 0
+window.updateMatrixWorldTimeObject3D = 0
+window.updateMatrixWorldTimeCamera = 0
+window.updateMatrixWorldTimeSkinnedMesh = 0
+window.updateMatrixWorldTimeAudioListener = 0
+window.updateMatrixWorldTimePositionalAudio = 0
+window.updateMatrixWorldTimeSkeletonHelper = 0
+window.updateMatrixWorldTimeBox3Helper = 0
+window.updateMatrixWorldTimePlaneHelper = 0
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -696,5 +703,12 @@ function animate(time) {
   // console.log(window.getProgramCacheKeyTime > window.updateMatrixWorldTime)
 
   domGetProgramCacheKeyTime.innerText = window.getProgramCacheKeyTime.toFixed(2)
-  domUpdateMatrixWorldTime.innerText = window.updateMatrixWorldTime.toFixed(2)
+  domUpdateMatrixWorldTimeObject3D.innerText = window.updateMatrixWorldTimeObject3D.toFixed(2)
+  domUpdateMatrixWorldTimeCamera.innerText = window.updateMatrixWorldTimeCamera.toFixed(2)
+  domUpdateMatrixWorldTimeSkinnedMesh.innerText = window.updateMatrixWorldTimeSkinnedMesh.toFixed(2)
+  domUpdateMatrixWorldTimeAudioListener.innerText = window.updateMatrixWorldTimeAudioListener.toFixed(2)
+  domUpdateMatrixWorldTimePositionalAudio.innerText = window.updateMatrixWorldTimePositionalAudio.toFixed(2)
+  domUpdateMatrixWorldTimeSkeletonHelper.innerText = window.updateMatrixWorldTimeSkeletonHelper.toFixed(2)
+  domUpdateMatrixWorldTimeBox3Helper.innerText = window.updateMatrixWorldTimeBox3Helper.toFixed(2)
+  domUpdateMatrixWorldTimePlaneHelper.innerText = window.updateMatrixWorldTimePlaneHelper.toFixed(2)
 }

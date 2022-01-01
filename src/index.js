@@ -79,6 +79,9 @@ glmw.init().then((ready) => {
 
     return function multiplyMatrices() {
       // your code
+      if (Array.isArray(this.elements)) {
+        this.elements = new Float32Array(this.elements)
+      }
 
       // // TypeError: Cannot perform %TypedArray%.prototype.set on a detached
       // // To avoid such a problem, you can't save references to buffer (or typed arrays on it) over calls that might grow memory. Just make a new array view right before using it.
@@ -148,22 +151,24 @@ glmw.init().then((ready) => {
       // // console.log('c', c) // same as `a`
       // debugger
 
-      this.elements[0] = mat4cView[0]
-      this.elements[1] = mat4cView[1]
-      this.elements[2] = mat4cView[2]
-      this.elements[3] = mat4cView[3]
-      this.elements[4] = mat4cView[4]
-      this.elements[5] = mat4cView[5]
-      this.elements[6] = mat4cView[6]
-      this.elements[7] = mat4cView[7]
-      this.elements[8] = mat4cView[8]
-      this.elements[9] = mat4cView[9]
-      this.elements[10] = mat4cView[10]
-      this.elements[11] = mat4cView[11]
-      this.elements[12] = mat4cView[12]
-      this.elements[13] = mat4cView[13]
-      this.elements[14] = mat4cView[14]
-      this.elements[15] = mat4cView[15]
+      // this.elements[0] = mat4cView[0]
+      // this.elements[1] = mat4cView[1]
+      // this.elements[2] = mat4cView[2]
+      // this.elements[3] = mat4cView[3]
+      // this.elements[4] = mat4cView[4]
+      // this.elements[5] = mat4cView[5]
+      // this.elements[6] = mat4cView[6]
+      // this.elements[7] = mat4cView[7]
+      // this.elements[8] = mat4cView[8]
+      // this.elements[9] = mat4cView[9]
+      // this.elements[10] = mat4cView[10]
+      // this.elements[11] = mat4cView[11]
+      // this.elements[12] = mat4cView[12]
+      // this.elements[13] = mat4cView[13]
+      // this.elements[14] = mat4cView[14]
+      // this.elements[15] = mat4cView[15]
+
+      this.elements.set(mat4cView)
 
       // this.elements = Array.from(mat4cView) // poor perfromance
 
@@ -209,6 +214,10 @@ glmw.init().then((ready) => {
     const sArr = []
 
     return function compose() {
+      if (Array.isArray(this.elements)) {
+        this.elements = new Float32Array(this.elements)
+      }
+
       const position = arguments[0]
       const quaternion = arguments[1]
       const scale = arguments[2]
@@ -235,22 +244,24 @@ glmw.init().then((ready) => {
 
       mat4.fromRotationTranslationScale(out, q, v, s)
 
-      this.elements[0] = outView[0]
-      this.elements[1] = outView[1]
-      this.elements[2] = outView[2]
-      this.elements[3] = outView[3]
-      this.elements[4] = outView[4]
-      this.elements[5] = outView[5]
-      this.elements[6] = outView[6]
-      this.elements[7] = outView[7]
-      this.elements[8] = outView[8]
-      this.elements[9] = outView[9]
-      this.elements[10] = outView[10]
-      this.elements[11] = outView[11]
-      this.elements[12] = outView[12]
-      this.elements[13] = outView[13]
-      this.elements[14] = outView[14]
-      this.elements[15] = outView[15]
+      // this.elements[0] = outView[0]
+      // this.elements[1] = outView[1]
+      // this.elements[2] = outView[2]
+      // this.elements[3] = outView[3]
+      // this.elements[4] = outView[4]
+      // this.elements[5] = outView[5]
+      // this.elements[6] = outView[6]
+      // this.elements[7] = outView[7]
+      // this.elements[8] = outView[8]
+      // this.elements[9] = outView[9]
+      // this.elements[10] = outView[10]
+      // this.elements[11] = outView[11]
+      // this.elements[12] = outView[12]
+      // this.elements[13] = outView[13]
+      // this.elements[14] = outView[14]
+      // this.elements[15] = outView[15]
+
+      this.elements.set(outView)
 
       return this
     }

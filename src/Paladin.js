@@ -25,8 +25,8 @@ class Paladin {
     this.initialPosition = this.position.clone()
 
     // for RoleControls.js
-    this.direction = vec2() // direction may be zero length.
-    this.facing = vec2(0, 1) // facing always not zero length.
+    this.direction = new THREE.Vector2() // direction may be zero length.
+    this.facing = new THREE.Vector2(0, 1) // facing always not zero length.
     this.speed = 0.04
 
     // for Ai.js

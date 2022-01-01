@@ -44,14 +44,6 @@ import { RobotBoss } from './RobotBoss.js'
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
-// glsl function
-window.vec2 = function (x, y) {
-  return new THREE.Vector2(...arguments)
-}
-window.vec3 = function (x, y, z) {
-  return new THREE.Vector3(...arguments)
-}
-
 // setting
 
 window.container = null

@@ -27,8 +27,8 @@ class Maria {
     // this.attackSpeed = this.landAttackSpeed
     this.chargeAttackCoe = 2
     this.tmpVec3 = new THREE.Vector3()
-    this.direction = vec2() // direction may be zero length.
-    this.facing = vec2(0, 1) // facing always not zero length.
+    this.direction = new THREE.Vector2() // direction may be zero length.
+    this.facing = new THREE.Vector2(0, 1) // facing always not zero length.
     this.mass = 80
     this.chargedLevel = 0 // 0: normal/slow combo | 1: fast combo | 2: fast combo & swordBlaster
     this.isAir = false

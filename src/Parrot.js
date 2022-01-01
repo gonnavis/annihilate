@@ -20,8 +20,8 @@ class Parrot {
     this.initialPosition = this.position.clone()
 
     // for RoleControls.js
-    this.direction = vec2() // direction may be zero length.
-    this.facing = vec2(0, 1) // facing always not zero length.
+    this.direction = new THREE.Vector2() // direction may be zero length.
+    this.facing = new THREE.Vector2(0, 1) // facing always not zero length.
     this.speed = 0.06
 
     // for Ai.js
@@ -200,7 +200,7 @@ class Parrot {
     // if (this.service.state.value !== 'dead') {
     //   {
     //     // look at role
-    //     let vec2_diff = vec2(role.mesh.position.x - this.mesh.position.x, role.mesh.position.z - this.mesh.position.z)
+    //     let vec2_diff = new THREE.Vector2(role.mesh.position.x - this.mesh.position.x, role.mesh.position.z - this.mesh.position.z)
     //     let angle = vec2_diff.angle()
     //     // console.log(angle)
     //     this.mesh.rotation.y = -angle + Math.PI / 2

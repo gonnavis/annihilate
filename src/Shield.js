@@ -45,7 +45,7 @@ class Shield {
 
   update() {
     if (paladin.gltf) {
-      let tempVec3 = vec3() ///todo: performance
+      let tempVec3 = new THREE.Vector3() ///todo: performance
       let tempQuat = new THREE.Quaternion() ///todo: performance
       // paladin.mesh.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
       paladin.shieldDelegate.getWorldPosition(tempVec3)

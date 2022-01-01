@@ -9,7 +9,7 @@ class Grenade extends Attacker {
 
     this.owner = owner
     let speed = 0.11
-    this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed) // TODO: parabola.
+    this.movement /*vec3*/ = new THREE.Vector3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed) // TODO: parabola.
     this.stopTime = 0
 
     // fsm

@@ -9,7 +9,7 @@ class Bullet extends Attacker {
 
     this.owner = owner
     let speed = 0.18
-    this.movement /*vec3*/ = vec3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed)
+    this.movement /*vec3*/ = new THREE.Vector3().subVectors(target, owner.body.position).normalize().multiplyScalar(speed)
 
     // fsm
 

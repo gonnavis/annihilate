@@ -107,7 +107,7 @@ class GreatSword {
   update() {
     // console.log(this.collidings.length)
     if (this.owner.gltf) {
-      let tempVec3 = vec3() ///todo: performance
+      let tempVec3 = new THREE.Vector3() ///todo: performance
       let tempQuat = new THREE.Quaternion() ///todo: performance
       // this.owner.mesh.children[0].children[0].children[1].children[0].getWorldPosition(tempVec3)
       this.owner.swordDelegate.getWorldPosition(tempVec3)

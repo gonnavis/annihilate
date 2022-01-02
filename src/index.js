@@ -31,7 +31,18 @@ animate()
 function animate() {
   requestAnimationFrame(animate)
 
-  window.matrix4c.multiplyMatrices(matrix4a, matrix4b)
+  for(let i=0;i<10000;i++){
+
+    // window.matrix4a = new THREE.Matrix4()
+    // window.matrix4b = new THREE.Matrix4()
+
+    // for(let i=0;i<16;i++){
+    //   matrix4a.elements[i]=Math.random()*1000
+    //   matrix4b.elements[i]=Math.random()*1000
+    // }
+
+    window.matrix4c.multiplyMatrices(matrix4a, matrix4b)
+  }
 
   domAverageTime.innerText = window.totalTime / window.count
 }

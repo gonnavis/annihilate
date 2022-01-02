@@ -395,14 +395,14 @@ function init() {
   domRobot.addEventListener('click', (event) => {
     window.service.send('robot')
   })
-  domRobot.addEventListener('click', (event) => {
-    window.service.send('robotBoss')
-  })
   domParrot.addEventListener('click', (event) => {
     window.service.send('parrot')
   })
   domMutant.addEventListener('click', (event) => {
     window.service.send('mutant')
+  })
+  domRobotBoss.addEventListener('click', (event) => {
+    window.service.send('robotBoss')
   })
 
   window.addEventListener('keydown', (event) => {
@@ -419,14 +419,14 @@ function init() {
       case 'Digit3':
         window.service.send('robot')
         break
-      case 'Digit6':
-        window.service.send('robotBoss')
-        break
       case 'Digit4':
         window.service.send('parrot')
         break
       case 'Digit5':
         window.service.send('mutant')
+        break
+      case 'Digit6':
+        window.service.send('robotBoss')
         break
     }
   })

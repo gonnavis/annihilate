@@ -53,10 +53,8 @@ glmw.init().then((ready) => {
 
     const mat4a = mat4.create();
     const mat4b = mat4.create();
-    const mat4c = mat4.create();
     const mat4aView = mat4.view(mat4a);
     const mat4bView = mat4.view(mat4b);
-    const mat4cView = mat4.view(mat4c);
 
     let startTime;
 
@@ -64,16 +62,14 @@ glmw.init().then((ready) => {
       startTime = performance.now()
 
       if (Array.isArray(this.elements)) {
-        this.elements = new Float32Array(this.elements)
+        this._elementsPointer = mat4.create();
+        this.elements = mat4.view(this._elementsPointer);
       }
       
       mat4aView.set(arguments[0].elements)
       mat4bView.set(arguments[1].elements)
 
-      mat4.multiply(mat4c, mat4a, mat4b)
-
-      this.elements.set(mat4cView)
-      // debugger
+      mat4.multiply(this._elementsPointer, mat4a, mat4b)
 
       window.totalTime += performance.now() - startTime
       window.count += 1

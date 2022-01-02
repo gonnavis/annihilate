@@ -40,18 +40,18 @@ import { BirdFlock } from './BirdFlock.js'
 import { JumpPoint } from './JumpPoint.js'
 import { RobotBoss } from './RobotBoss.js'
 
+
+window.startTime;
+window.oneTime;
+window.count=0
+window.averageTime
 THREE.Matrix4.prototype.multiplyMatrices = (function () {
   var cachedFunction = THREE.Matrix4.prototype.multiplyMatrices
 
-  let startTime;
-
   return function multiplyMatrices() {
-    startTime = performance.now()
 
     var result = cachedFunction.apply(this, arguments) // use .apply() to call it
 
-    window.totalTime += performance.now() - startTime
-    window.count += 1
     return result
   }
 })()
@@ -692,7 +692,9 @@ function animate(time) {
 
   domAverageTime.innerText = window.totalTime / window.count
 
-  window.domAverageTime.innerText = `${window.count} | ${window.totalTime / window.count}`
+  window.averageTime = window.totalTime / window.count
+  window.domAverageTime.innerText = `${window.count} | ${window.averageTime}`
+  // if(window.averageTime>.001) debugger // will not update `window.domAverageTime.innerText` until next animate()
   
   stats.update()
 }

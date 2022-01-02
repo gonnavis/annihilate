@@ -39,8 +39,26 @@ import { Cloud } from './Cloud.js'
 import { BirdFlock } from './BirdFlock.js'
 import { JumpPoint } from './JumpPoint.js'
 import { RobotBoss } from './RobotBoss.js'
-// import { TorusKnot } from './TorusKnot.js'
-// import { TranslatedBox } from './TranslatedBox.js'
+
+window.isLogAverageTime = false
+window.totalTime = 0
+window.count = 0
+window.averageTime = 0
+THREE.Matrix4.prototype.multiplyMatrices = (function () {
+  var cachedFunction = THREE.Matrix4.prototype.multiplyMatrices
+
+  let startTime;
+
+  return function multiplyMatrices() {
+    startTime = performance.now()
+
+    var result = cachedFunction.apply(this, arguments) // use .apply() to call it
+
+    window.totalTime += performance.now() - startTime
+    window.count += 1
+    return result
+  }
+})()
 
 const { createMachine, actions, interpret, assign } = XState // global variable: window.XState
 
@@ -499,7 +517,8 @@ function init() {
   // gui.add(teleporter.mesh.position, 'y', -50, 50, 1)
   // gui.add(teleporter.mesh.position, 'z', -50, 50, 1)
 
-  if (g.getQueryStringByName('gui') === 'false') gui.close()
+  // if (g.getQueryStringByName('gui') === 'false') gui.close()
+  gui.close()
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 }
@@ -671,6 +690,8 @@ function animate(time) {
   if (window.cannonDebugRenderer) cannonDebugRenderer.update()
   world.step(fixedTimeStep, dt, maxSubSteps)
   renderer.render(scene, camera)
+
+  domAverageTime.innerText = window.totalTime / window.count
 
   stats.update()
 }

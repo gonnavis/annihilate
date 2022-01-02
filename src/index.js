@@ -66,6 +66,7 @@ glmw.init().then((ready) => {
         this.elements = mat4.view(this._elementsPointer);
       }
       
+      // WARNING: If mutants=100, will cause error: `index.js:69 Uncaught TypeError: Cannot perform %TypedArray%.prototype.set on a detached ArrayBuffer`
       mat4aView.set(arguments[0].elements)
       mat4bView.set(arguments[1].elements)
 

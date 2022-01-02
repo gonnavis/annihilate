@@ -46,9 +46,9 @@ glmw.init().then((ready) => {
   // glmw is now ready and can be used anywhere
   
   window.isLogAverageTime = false
-  let totalTime = 0
-  let averageTime = 0
-  let count = 0
+  window.totalTime = 0
+  window.count = 0
+  window.averageTime = 0
   THREE.Matrix4.prototype.multiplyMatrices = (function () {
 
     const mat4a = mat4.create();
@@ -61,6 +61,8 @@ glmw.init().then((ready) => {
     let startTime;
 
     return function multiplyMatrices() {
+      startTime = performance.now()
+
       if (Array.isArray(this.elements)) {
         this.elements = new Float32Array(this.elements)
       }
@@ -71,8 +73,10 @@ glmw.init().then((ready) => {
       mat4.multiply(mat4c, mat4a, mat4b)
 
       this.elements.set(mat4cView)
-      debugger
+      // debugger
 
+      window.totalTime += performance.now() - startTime
+      window.count += 1
       return this
     }
   })()
@@ -572,7 +576,8 @@ function init() {
   // gui.add(teleporter.mesh.position, 'y', -50, 50, 1)
   // gui.add(teleporter.mesh.position, 'z', -50, 50, 1)
 
-  if (g.getQueryStringByName('gui') === 'false') gui.close()
+  // if (g.getQueryStringByName('gui') === 'false') gui.close()
+  gui.close()
 
   ///todo: fix bug after ```roleControls.role = paladin```.
 }
@@ -744,6 +749,8 @@ function animate(time) {
   if (window.cannonDebugRenderer) cannonDebugRenderer.update()
   world.step(fixedTimeStep, dt, maxSubSteps)
   renderer.render(scene, camera)
+
+  domAverageTime.innerText = window.totalTime / window.count
 
   stats.update()
 }

@@ -56,24 +56,24 @@ glmw.init().then((ready) => {
   window.glmwInited = true
   window.matrix4s = null
   
-  window.isLogAverageTime = false
-  window.totalTime = 0
-  window.count = 0
-  window.averageTime = 0
-  THREE.Matrix4.prototype.multiplyMatrices = (function () {
+  // window.isLogAverageTime = false
+  // window.totalTime = 0
+  // window.count = 0
+  // window.averageTime = 0
+  // THREE.Matrix4.prototype.multiplyMatrices = (function () {
 
-    let startTime;
+  //   let startTime;
 
-    return function multiplyMatrices() {
-      startTime = performance.now()
+  //   return function multiplyMatrices() {
+  //     startTime = performance.now()
 
-      mat4.multiply(this._elementsPointer, arguments[0]._elementsPointer, arguments[1]._elementsPointer)
+  //     mat4.multiply(this._elementsPointer, arguments[0]._elementsPointer, arguments[1]._elementsPointer)
 
-      window.totalTime += performance.now() - startTime
-      window.count += 1
-      return this
-    }
-  })()
+  //     window.totalTime += performance.now() - startTime
+  //     window.count += 1
+  //     return this
+  //   }
+  // })()
   
   // THREE.Matrix4.prototype.compose = (function () {
 
@@ -744,7 +744,7 @@ function animate(time) {
   world.step(fixedTimeStep, dt, maxSubSteps)
   renderer.render(scene, camera)
 
-  domAverageTime.innerText = window.totalTime / window.count
+  // domAverageTime.innerText = window.totalTime / window.count
 
   stats.update()
 }

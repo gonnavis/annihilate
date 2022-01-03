@@ -65,12 +65,12 @@ glmw.init().then((ready) => {
     let startTime;
 
     return function multiplyMatrices() {
-      startTime = performance.now()
+      // startTime = performance.now()
 
       mat4.multiply(this._elementsPointer, arguments[0]._elementsPointer, arguments[1]._elementsPointer)
 
-      window.totalTime += performance.now() - startTime
-      window.count += 1
+      // window.totalTime += performance.now() - startTime
+      // window.count += 1
       return this
     }
   })()
@@ -747,7 +747,7 @@ function animate(time) {
   world.step(fixedTimeStep, dt, maxSubSteps)
   renderer.render(scene, camera)
 
-  domAverageTime.innerText = window.totalTime / window.count
+  // domAverageTime.innerText = window.totalTime / window.count
 
   stats.update()
 }

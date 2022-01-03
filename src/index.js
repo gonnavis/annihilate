@@ -57,20 +57,20 @@ glmw.init().then((ready) => {
   window.matrix4s = null
   
   // window.isLogAverageTime = false
-  // window.totalTime = 0
-  // window.count = 0
+  window.totalTime = 0
+  window.count = 0
   // window.averageTime = 0
   THREE.Matrix4.prototype.multiplyMatrices = (function () {
 
-    // let startTime;
+    let startTime;
 
     return function multiplyMatrices() {
-      // startTime = performance.now()
+      startTime = performance.now()
 
       mat4.multiply(this._elementsPointer, arguments[0]._elementsPointer, arguments[1]._elementsPointer)
 
-      // window.totalTime += performance.now() - startTime
-      // window.count += 1
+      window.totalTime += performance.now() - startTime
+      window.count += 1
       return this
     }
   })()
@@ -721,6 +721,9 @@ function animate(time) {
   // console.log('animate')
   requestAnimationFrame(animate)
 
+  // window.totalTime = 0
+  // window.count = 0
+
   var dt = clock.getDelta()
 
   updates.forEach((entity) => {
@@ -744,7 +747,7 @@ function animate(time) {
   world.step(fixedTimeStep, dt, maxSubSteps)
   renderer.render(scene, camera)
 
-  // domAverageTime.innerText = window.totalTime / window.count
+  domAverageTime.innerText = window.totalTime / window.count
 
   stats.update()
 }

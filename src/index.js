@@ -69,6 +69,7 @@ glmw.init().then((ready) => {
 
       mat4.multiply(this._elementsPointer, arguments[0]._elementsPointer, arguments[1]._elementsPointer)
 
+      // NOTE: Add time calc for pint will severely increase the profile time. 
       // window.totalTime += performance.now() - startTime
       // window.count += 1
       return this

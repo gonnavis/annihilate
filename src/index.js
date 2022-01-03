@@ -50,12 +50,13 @@ THREE.Matrix4.prototype.multiplyMatrices = (function () {
   let startTime;
 
   return function multiplyMatrices() {
-    startTime = performance.now()
+    // startTime = performance.now()
 
     var result = cachedFunction.apply(this, arguments) // use .apply() to call it
 
-    window.totalTime += performance.now() - startTime
-    window.count += 1
+    // NOTE: Add time calc for pint will severely increase the profile time. 
+    // window.totalTime += performance.now() - startTime
+    // window.count += 1
     return result
   }
 })()
@@ -691,7 +692,7 @@ function animate(time) {
   world.step(fixedTimeStep, dt, maxSubSteps)
   renderer.render(scene, camera)
 
-  domAverageTime.innerText = window.totalTime / window.count
+  // domAverageTime.innerText = window.totalTime / window.count
 
   stats.update()
 }

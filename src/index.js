@@ -45,7 +45,7 @@ window.mat4 = mat4
 
 window.glmwInited = false
 glmw.init().then((ready) => {
-  // glmw is now ready and can be used anywhere
+  console.log('glmw is now ready and can be used anywhere')
   // debugger
   
   window.matrix4s.forEach(matrix4=>{

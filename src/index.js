@@ -41,9 +41,20 @@ import { JumpPoint } from './JumpPoint.js'
 import { RobotBoss } from './RobotBoss.js'
 
 const {vec3, vec4, mat4} = glmw;
+window.mat4 = mat4
 
+window.glmwInited = false
 glmw.init().then((ready) => {
   // glmw is now ready and can be used anywhere
+  // debugger
+  
+  window.matrix4s.forEach(matrix4=>{
+    matrix4._elementsPointer = mat4.create()
+    mat4.view(matrix4._elementsPointer).set(matrix4.elements)
+  })
+  
+  window.glmwInited = true
+  window.matrix4s = null
   
   window.isLogAverageTime = false
   window.totalTime = 0
@@ -51,26 +62,12 @@ glmw.init().then((ready) => {
   window.averageTime = 0
   THREE.Matrix4.prototype.multiplyMatrices = (function () {
 
-    const mat4a = mat4.create();
-    const mat4b = mat4.create();
-    const mat4aView = mat4.view(mat4a);
-    const mat4bView = mat4.view(mat4b);
-
     let startTime;
 
     return function multiplyMatrices() {
       startTime = performance.now()
 
-      if (Array.isArray(this.elements)) {
-        this._elementsPointer = mat4.create();
-        this.elements = mat4.view(this._elementsPointer);
-      }
-      
-      // TODO: WARNING: If mutants=100, will cause error: `index.js:69 Uncaught TypeError: Cannot perform %TypedArray%.prototype.set on a detached ArrayBuffer`
-      mat4aView.set(arguments[0].elements)
-      mat4bView.set(arguments[1].elements)
-
-      mat4.multiply(this._elementsPointer, mat4a, mat4b)
+      mat4.multiply(this._elementsPointer, arguments[0]._elementsPointer, arguments[1]._elementsPointer)
 
       window.totalTime += performance.now() - startTime
       window.count += 1

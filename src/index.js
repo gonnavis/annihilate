@@ -3,6 +3,399 @@
 import * as THREE from '../lib/three.js/build/three.module.js'
 window.THREE = THREE
 import { OrbitControls } from '../lib/three.js/examples/jsm/controls/OrbitControls.js'
+import { ConvexGeometry } from '../lib/three.js/examples/jsm/geometries/ConvexGeometry.js';
+
+
+/* console_test
+  addBox()
+  setTimeout(()=>doCut(),1000)
+*/
+
+window.addBox = function() {
+  const geometry = new THREE.BoxGeometry()
+  const material = new THREE.MeshStandardMaterial({
+    // color: 'red',
+    map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg')
+  })
+  const mesh = new THREE.Mesh(geometry, material)
+  window.scene.add(mesh)
+  // mesh.position.y = 1
+  // mesh.position.z = -6
+  mesh.updateMatrixWorld()
+  window.box = mesh
+}
+
+window.doCut = function() {
+  window.cutByPlane(window.box, new THREE.Plane(), window.output)
+  if (window.output.object1) {
+    window.scene.add(window.output.object1)
+    window.output.object1.position.x += -1
+    // window.output.object1.updateMatrixWorld()
+  }
+  if (window.output.object2) {
+    window.scene.add(window.output.object2)
+    window.output.object2.position.x += 1
+    // window.output.object2.updateMatrixWorld()
+  }
+  window.box.visible = false
+}
+
+window.output = { object1: null, object2: null };
+
+window.transformFreeVectorInverse = function( v, m ) {
+
+  // input:
+  // vector interpreted as a free vector
+  // THREE.Matrix4 orthogonal matrix (matrix without scale)
+
+  const x = v.x, y = v.y, z = v.z;
+  const e = m.elements;
+
+  v.x = e[ 0 ] * x + e[ 1 ] * y + e[ 2 ] * z;
+  v.y = e[ 4 ] * x + e[ 5 ] * y + e[ 6 ] * z;
+  v.z = e[ 8 ] * x + e[ 9 ] * y + e[ 10 ] * z;
+
+  return v;
+
+}
+
+window.transformTiedVectorInverse = function( v, m ) {
+
+  // input:
+  // vector interpreted as a tied (ordinary) vector
+  // THREE.Matrix4 orthogonal matrix (matrix without scale)
+
+  const x = v.x, y = v.y, z = v.z;
+  const e = m.elements;
+
+  v.x = e[ 0 ] * x + e[ 1 ] * y + e[ 2 ] * z - e[ 12 ];
+  v.y = e[ 4 ] * x + e[ 5 ] * y + e[ 6 ] * z - e[ 13 ];
+  v.z = e[ 8 ] * x + e[ 9 ] * y + e[ 10 ] * z - e[ 14 ];
+
+  return v;
+
+}
+
+window.transformPlaneToLocalSpace = function( plane, m, resultPlane ) {
+window._v1 = new THREE.Vector3();
+
+  resultPlane.normal.copy( plane.normal );
+  resultPlane.constant = plane.constant;
+
+  const referencePoint = transformTiedVectorInverse( plane.coplanarPoint( window._v1 ), m );
+
+  transformFreeVectorInverse( resultPlane.normal, m );
+
+  // recalculate constant (like in setFromNormalAndCoplanarPoint)
+  resultPlane.constant = - referencePoint.dot( resultPlane.normal );
+
+}
+
+window.cutByPlane = function( object, plane, output ) {
+
+  this.minSizeForBreak = 1.4;
+  this.smallDelta = 0.0001;
+
+  this.tempLine1 = new THREE.Line3();
+  this.tempPlane1 = new THREE.Plane();
+  this.tempPlane2 = new THREE.Plane();
+  this.tempPlane_Cut = new THREE.Plane();
+  this.tempCM1 = new THREE.Vector3();
+  this.tempCM2 = new THREE.Vector3();
+  this.tempVector3 = new THREE.Vector3();
+  this.tempVector3_2 = new THREE.Vector3();
+  this.tempVector3_3 = new THREE.Vector3();
+  this.tempVector3_P0 = new THREE.Vector3();
+  this.tempVector3_P1 = new THREE.Vector3();
+  this.tempVector3_P2 = new THREE.Vector3();
+  this.tempVector3_N0 = new THREE.Vector3();
+  this.tempVector3_N1 = new THREE.Vector3();
+  this.tempVector3_AB = new THREE.Vector3();
+  this.tempVector3_CB = new THREE.Vector3();
+  this.tempResultObjects = { object1: null, object2: null };
+
+  this.segments = [];
+
+  // Returns breakable objects in output.object1 and output.object2 members, the resulting 2 pieces of the cut.
+  // object2 can be null if the plane doesn't cut the object.
+  // object1 can be null only in case of internal error
+  // Returned value is number of pieces, 0 for error.
+
+  const geometry = object.geometry;
+  const coords = geometry.attributes.position.array;
+  const normals = geometry.attributes.normal.array;
+
+  const numPoints = coords.length / 3;
+  let numFaces = numPoints / 3;
+
+  let indices = geometry.getIndex();
+
+  if ( indices ) {
+
+    indices = indices.array;
+    numFaces = indices.length / 3;
+
+  }
+
+  function getVertexIndex( faceIdx, vert ) {
+
+    // vert = 0, 1 or 2.
+
+    const idx = faceIdx * 3 + vert;
+
+    return indices ? indices[ idx ] : idx;
+
+  }
+
+  const points1 = [];
+  const points2 = [];
+
+  const delta = this.smallDelta;
+
+  // Reset segments mark
+  const numPointPairs = numPoints * numPoints;
+  for ( let i = 0; i < numPointPairs; i ++ ) this.segments[ i ] = false;
+
+  const p0 = this.tempVector3_P0;
+  const p1 = this.tempVector3_P1;
+  const n0 = this.tempVector3_N0;
+  const n1 = this.tempVector3_N1;
+  const u0 = new THREE.Vector2()
+  const u1 = new THREE.Vector2()
+
+  // Iterate through the faces to mark edges shared by coplanar faces
+  for ( let i = 0; i < numFaces - 1; i ++ ) {
+
+    const a1 = getVertexIndex( i, 0 );
+    const b1 = getVertexIndex( i, 1 );
+    const c1 = getVertexIndex( i, 2 );
+
+    // Assuming all 3 vertices have the same normal
+    n0.set( normals[ a1 ], normals[ a1 ] + 1, normals[ a1 ] + 2 );
+
+    for ( let j = i + 1; j < numFaces; j ++ ) {
+
+      const a2 = getVertexIndex( j, 0 );
+      const b2 = getVertexIndex( j, 1 );
+      const c2 = getVertexIndex( j, 2 );
+
+      // Assuming all 3 vertices have the same normal
+      n1.set( normals[ a2 ], normals[ a2 ] + 1, normals[ a2 ] + 2 );
+
+      const coplanar = 1 - n0.dot( n1 ) < delta;
+
+      if ( coplanar ) {
+
+        if ( a1 === a2 || a1 === b2 || a1 === c2 ) {
+
+          if ( b1 === a2 || b1 === b2 || b1 === c2 ) {
+
+            this.segments[ a1 * numPoints + b1 ] = true;
+            this.segments[ b1 * numPoints + a1 ] = true;
+
+          }	else {
+
+            this.segments[ c1 * numPoints + a1 ] = true;
+            this.segments[ a1 * numPoints + c1 ] = true;
+
+          }
+
+        }	else if ( b1 === a2 || b1 === b2 || b1 === c2 ) {
+
+          this.segments[ c1 * numPoints + b1 ] = true;
+          this.segments[ b1 * numPoints + c1 ] = true;
+
+        }
+
+      }
+
+    }
+
+  }
+
+  // Transform the plane to object local space
+  const localPlane = this.tempPlane_Cut;
+  object.updateMatrix();
+  transformPlaneToLocalSpace( plane, object.matrix, localPlane );
+
+  // Iterate through the faces adding points to both pieces
+  for ( let i = 0; i < numFaces; i ++ ) {
+
+    const va = getVertexIndex( i, 0 );
+    const vb = getVertexIndex( i, 1 );
+    const vc = getVertexIndex( i, 2 );
+
+    for ( let segment = 0; segment < 3; segment ++ ) {
+
+      const i0 = segment === 0 ? va : ( segment === 1 ? vb : vc );
+      const i1 = segment === 0 ? vb : ( segment === 1 ? vc : va );
+
+      const segmentState = this.segments[ i0 * numPoints + i1 ];
+
+      if ( segmentState ) continue; // The segment already has been processed in another face
+
+      // Mark segment as processed (also inverted segment)
+      this.segments[ i0 * numPoints + i1 ] = true;
+      this.segments[ i1 * numPoints + i0 ] = true;
+
+      p0.set( coords[ 3 * i0 ], coords[ 3 * i0 + 1 ], coords[ 3 * i0 + 2 ] );
+      p1.set( coords[ 3 * i1 ], coords[ 3 * i1 + 1 ], coords[ 3 * i1 + 2 ] );
+
+      // mark: 1 for negative side, 2 for positive side, 3 for coplanar point
+      let mark0 = 0;
+
+      let d = localPlane.distanceToPoint( p0 );
+
+      if ( d > delta ) {
+
+        mark0 = 2;
+        points2.push( p0.clone() );
+
+      } else if ( d < - delta ) {
+
+        mark0 = 1;
+        points1.push( p0.clone() );
+
+      } else {
+
+        mark0 = 3;
+        points1.push( p0.clone() );
+        points2.push( p0.clone() );
+
+      }
+
+      // mark: 1 for negative side, 2 for positive side, 3 for coplanar point
+      let mark1 = 0;
+
+      d = localPlane.distanceToPoint( p1 );
+
+      if ( d > delta ) {
+
+        mark1 = 2;
+        points2.push( p1.clone() );
+
+      } else if ( d < - delta ) {
+
+        mark1 = 1;
+        points1.push( p1.clone() );
+
+      }	else {
+
+        mark1 = 3;
+        points1.push( p1.clone() );
+        points2.push( p1.clone() );
+
+      }
+
+      if ( ( mark0 === 1 && mark1 === 2 ) || ( mark0 === 2 && mark1 === 1 ) ) {
+
+        // Intersection of segment with the plane
+
+        this.tempLine1.start.copy( p0 );
+        this.tempLine1.end.copy( p1 );
+
+        let intersection = new THREE.Vector3();
+        intersection = localPlane.intersectLine( this.tempLine1, intersection );
+
+        if ( intersection === null ) {
+
+          // Shouldn't happen
+          console.error( 'Internal error: segment does not intersect plane.' );
+          output.segmentedObject1 = null;
+          output.segmentedObject2 = null;
+          return 0;
+
+        }
+
+        points1.push( intersection );
+        points2.push( intersection.clone() );
+
+      }
+
+    }
+
+  }
+
+  // Calculate debris mass (very fast and imprecise):
+  const newMass = object.userData.mass * 0.5;
+
+  // Calculate debris Center of Mass (again fast and imprecise)
+  this.tempCM1.set( 0, 0, 0 );
+  let radius1 = 0;
+  const numPoints1 = points1.length;
+
+  if ( numPoints1 > 0 ) {
+
+    for ( let i = 0; i < numPoints1; i ++ ) this.tempCM1.add( points1[ i ] );
+
+    this.tempCM1.divideScalar( numPoints1 );
+    for ( let i = 0; i < numPoints1; i ++ ) {
+
+      const p = points1[ i ];
+      p.sub( this.tempCM1 );
+      radius1 = Math.max( radius1, p.x, p.y, p.z );
+
+    }
+
+    this.tempCM1.add( object.position );
+
+  }
+
+  this.tempCM2.set( 0, 0, 0 );
+  let radius2 = 0;
+  const numPoints2 = points2.length;
+  if ( numPoints2 > 0 ) {
+
+    for ( let i = 0; i < numPoints2; i ++ ) this.tempCM2.add( points2[ i ] );
+
+    this.tempCM2.divideScalar( numPoints2 );
+    for ( let i = 0; i < numPoints2; i ++ ) {
+
+      const p = points2[ i ];
+      p.sub( this.tempCM2 );
+      radius2 = Math.max( radius2, p.x, p.y, p.z );
+
+    }
+
+    this.tempCM2.add( object.position );
+
+  }
+
+  let object1 = null;
+  let object2 = null;
+
+  let numObjects = 0;
+
+  if ( numPoints1 > 4 ) {
+
+    object1 = new THREE.Mesh( new ConvexGeometry( points1 ), object.material );
+    object1.position.copy( this.tempCM1 );
+    object1.quaternion.copy( object.quaternion );
+
+    // this.prepareBreakableObject( object1, newMass, object.userData.velocity, object.userData.angularVelocity, 2 * radius1 > this.minSizeForBreak );
+
+    numObjects ++;
+
+  }
+
+  if ( numPoints2 > 4 ) {
+
+    object2 = new THREE.Mesh( new ConvexGeometry( points2 ), object.material );
+    object2.position.copy( this.tempCM2 );
+    object2.quaternion.copy( object.quaternion );
+
+    // this.prepareBreakableObject( object2, newMass, object.userData.velocity, object.userData.angularVelocity, 2 * radius2 > this.minSizeForBreak );
+
+    numObjects ++;
+
+  }
+
+  output.object1 = object1;
+  output.object2 = object2;
+
+  return numObjects;
+
+}
 
 // import * as CANNON from '../lib/cannon-es_my.js'
 // window.CANNON = CANNON
@@ -510,7 +903,7 @@ function init_three() {
 
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 370)
   // camera.position.set(cameraPosX, cameraPosY, cameraPosZ)
-  camera.position.set(10, 15, 20)
+  camera.position.set(3, 5, 7)
   camera.lookAt(0, 0, 0)
 
   scene = new THREE.Scene()

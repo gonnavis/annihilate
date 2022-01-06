@@ -7,8 +7,10 @@ import { ConvexGeometry } from '../lib/three.js/examples/jsm/geometries/ConvexGe
 
 
 /* console_test
+  plane = new THREE.Vector3(0,0,0).normalize()
+  constant = 0
   addBox()
-  setTimeout(()=>doCut(),1000)
+  setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
 */
 
 window.addBox = function() {
@@ -25,8 +27,8 @@ window.addBox = function() {
   window.box = mesh
 }
 
-window.doCut = function() {
-  window.cutByPlane(window.box, new THREE.Plane(), window.output)
+window.doCut = function(palne) {
+  window.cutByPlane(window.box, palne, window.output)
   if (window.output.object1) {
     window.scene.add(window.output.object1)
     window.output.object1.position.x += -1

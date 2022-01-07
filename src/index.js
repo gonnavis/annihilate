@@ -5,21 +5,6 @@ window.THREE = THREE
 import { OrbitControls } from '../lib/three.js/examples/jsm/controls/OrbitControls.js'
 import { ConvexGeometry } from '../lib/three.js/examples/jsm/geometries/ConvexGeometry.js';
 
-window.doCut = function(palne) {
-  window.cutByPlane(window.box, palne, window.output)
-  if (window.output.object1) {
-    window.scene.add(window.output.object1)
-    window.output.object1.position.x += -1
-    // window.output.object1.updateMatrixWorld()
-  }
-  if (window.output.object2) {
-    window.scene.add(window.output.object2)
-    window.output.object2.position.x += 1
-    // window.output.object2.updateMatrixWorld()
-  }
-  window.box.visible = false
-}
-
 window.output = { object1: null, object2: null };
 
 window.transformFreeVectorInverse = function( v, m ) {
@@ -128,6 +113,31 @@ window.cutByPlane = function( object, plane, output ) {
   }
 
   const points1 = [];
+
+  // // debug
+  // const handler = {
+  //   set: (obj, prop, newVal) => {
+  //     // debugger
+  //     console.log(newVal)
+  //     if(typeof newVal === 'object') {
+  //       obj[prop] = new Proxy(newVal, {
+  //         set: (obj, prop, newVal) => {
+  //           debugger
+  //           console.log(newVal)
+  //           obj[prop] = newVal;
+  //           return true
+  //         }
+  //       });
+
+  //     } else {
+  //       obj[prop] = newVal;
+  //     }
+  //     return true;
+  //   },
+  // }
+  // const points1 = new Proxy([], handler);
+  // //
+
   const points2 = [];
 
   const delta = this.smallDelta;
@@ -212,7 +222,10 @@ window.cutByPlane = function( object, plane, output ) {
 
       const segmentState = this.segments[ i0 * numPoints + i1 ];
 
-      if ( segmentState ) continue; // The segment already has been processed in another face
+      if ( segmentState ) {
+        // debugger
+        continue; // The segment already has been processed in another face
+      }
 
       // Mark segment as processed (also inverted segment)
       this.segments[ i0 * numPoints + i1 ] = true;
@@ -229,19 +242,21 @@ window.cutByPlane = function( object, plane, output ) {
       if ( d > delta ) {
 
         mark0 = 2;
+        // debugger
         points2.push( p0.clone() );
 
       } else if ( d < - delta ) {
 
         mark0 = 1;
+        // debugger
         points1.push( p0.clone() );
 
       } else {
 
         mark0 = 3;
+        // debugger
         points1.push( p0.clone() );
         points2.push( p0.clone() );
-
       }
 
       // mark: 1 for negative side, 2 for positive side, 3 for coplanar point
@@ -252,16 +267,19 @@ window.cutByPlane = function( object, plane, output ) {
       if ( d > delta ) {
 
         mark1 = 2;
+        // debugger
         points2.push( p1.clone() );
 
       } else if ( d < - delta ) {
 
         mark1 = 1;
+        // debugger
         points1.push( p1.clone() );
 
       }	else {
 
         mark1 = 3;
+        // debugger
         points1.push( p1.clone() );
         points2.push( p1.clone() );
 
@@ -287,6 +305,7 @@ window.cutByPlane = function( object, plane, output ) {
 
         }
 
+        // debugger
         points1.push( intersection );
         points2.push( intersection.clone() );
 
@@ -296,10 +315,16 @@ window.cutByPlane = function( object, plane, output ) {
 
   }
 
-  // Calculate debris mass (very fast and imprecise):
-  const newMass = object.userData.mass * 0.5;
+  // debugger
+  // debugger
+  // debugger
+  // debugger
+  // debugger
 
-  // Calculate debris Center of Mass (again fast and imprecise)
+  // Calculate debris mass (very fast and imprecise):
+  const newMass = object.userData.mass * 0.5; // todo: not need?
+
+  // Calculate debris Center of Mass (again fast and imprecise) // todo: not need?
   this.tempCM1.set( 0, 0, 0 );
   let radius1 = 0;
   const numPoints1 = points1.length;
@@ -311,7 +336,8 @@ window.cutByPlane = function( object, plane, output ) {
     this.tempCM1.divideScalar( numPoints1 );
     for ( let i = 0; i < numPoints1; i ++ ) {
 
-      const p = points1[ i ];
+      // debugger
+      const p = points1[ i ]; // mark
       p.sub( this.tempCM1 );
       radius1 = Math.max( radius1, p.x, p.y, p.z );
 
@@ -348,6 +374,7 @@ window.cutByPlane = function( object, plane, output ) {
 
   if ( numPoints1 > 4 ) {
 
+    // debugger
     object1 = new THREE.Mesh( new ConvexGeometry( points1 ), object.material );
     object1.position.copy( this.tempCM1 );
     object1.quaternion.copy( object.quaternion );
@@ -360,6 +387,7 @@ window.cutByPlane = function( object, plane, output ) {
 
   if ( numPoints2 > 4 ) {
 
+    // debugger
     object2 = new THREE.Mesh( new ConvexGeometry( points2 ), object.material );
     object2.position.copy( this.tempCM2 );
     object2.quaternion.copy( object.quaternion );
@@ -1051,8 +1079,10 @@ function animate(time) {
 
 
 const geometry = new THREE.BoxGeometry()
+// const geometry = new THREE.PlaneGeometry()
 const material = new THREE.MeshStandardMaterial({
   // color: 'red',
+  wireframe: true,
   map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg')
 })
 const mesh = new THREE.Mesh(geometry, material)
@@ -1064,4 +1094,18 @@ window.box = mesh
 
 window.plane = new THREE.Vector3(1,0,0).normalize()
 window.constant = 0
-setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
+// setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
+setTimeout(()=>{
+  window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)
+  if (window.output.object1) {
+    // window.scene.add(window.output.object1)
+    // window.output.object1.position.x += -1
+    // window.output.object1.updateMatrixWorld()
+  }
+  if (window.output.object2) {
+    window.scene.add(window.output.object2)
+    // window.output.object2.position.x += 1
+    // window.output.object2.updateMatrixWorld()
+  }
+  window.box.visible = false
+},1000)

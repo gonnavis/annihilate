@@ -5,28 +5,6 @@ window.THREE = THREE
 import { OrbitControls } from '../lib/three.js/examples/jsm/controls/OrbitControls.js'
 import { ConvexGeometry } from '../lib/three.js/examples/jsm/geometries/ConvexGeometry.js';
 
-
-/* console_test
-  plane = new THREE.Vector3(0,0,0).normalize()
-  constant = 0
-  addBox()
-  setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
-*/
-
-window.addBox = function() {
-  const geometry = new THREE.BoxGeometry()
-  const material = new THREE.MeshStandardMaterial({
-    // color: 'red',
-    map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg')
-  })
-  const mesh = new THREE.Mesh(geometry, material)
-  window.scene.add(mesh)
-  // mesh.position.y = 1
-  // mesh.position.z = -6
-  mesh.updateMatrixWorld()
-  window.box = mesh
-}
-
 window.doCut = function(palne) {
   window.cutByPlane(window.box, palne, window.output)
   if (window.output.object1) {
@@ -1071,7 +1049,19 @@ function animate(time) {
   stats.update()
 }
 
-window.plane = new THREE.Vector3(0,0,0).normalize()
+
+const geometry = new THREE.BoxGeometry()
+const material = new THREE.MeshStandardMaterial({
+  // color: 'red',
+  map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg')
+})
+const mesh = new THREE.Mesh(geometry, material)
+window.scene.add(mesh)
+// mesh.position.y = 1
+// mesh.position.z = -6
+mesh.updateMatrixWorld()
+window.box = mesh
+
+window.plane = new THREE.Vector3(1,0,0).normalize()
 window.constant = 0
-addBox()
 setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)

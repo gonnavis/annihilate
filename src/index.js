@@ -1070,3 +1070,8 @@ function animate(time) {
 
   stats.update()
 }
+
+window.plane = new THREE.Vector3(0,0,0).normalize()
+window.constant = 0
+addBox()
+setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)

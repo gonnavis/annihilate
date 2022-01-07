@@ -89,6 +89,7 @@ window.cutByPlane = function( object, plane, output ) {
   const geometry = object.geometry;
   const coords = geometry.attributes.position.array;
   const normals = geometry.attributes.normal.array;
+  const uvs = geometry.attributes.uv.array;
 
   const numPoints = coords.length / 3;
   let numFaces = numPoints / 3;
@@ -139,6 +140,9 @@ window.cutByPlane = function( object, plane, output ) {
   // //
 
   const points2 = [];
+
+  const uvs1 = [];
+  const uvs2 = [];
 
   const delta = this.smallDelta;
 
@@ -234,6 +238,9 @@ window.cutByPlane = function( object, plane, output ) {
       p0.set( coords[ 3 * i0 ], coords[ 3 * i0 + 1 ], coords[ 3 * i0 + 2 ] );
       p1.set( coords[ 3 * i1 ], coords[ 3 * i1 + 1 ], coords[ 3 * i1 + 2 ] );
 
+      u0.set( uvs[ 2 * i0 ], uvs[ 2 * i0 + 1 ] );
+      u1.set( uvs[ 2 * i1 ], uvs[ 2 * i1 + 1 ] );
+
       // mark: 1 for negative side, 2 for positive side, 3 for coplanar point
       let mark0 = 0;
 
@@ -244,19 +251,23 @@ window.cutByPlane = function( object, plane, output ) {
         mark0 = 2;
         // debugger
         points2.push( p0.clone() );
+        uvs2.push( u0.clone() );
 
       } else if ( d < - delta ) {
 
         mark0 = 1;
         // debugger
         points1.push( p0.clone() );
+        uvs1.push( u0.clone() );
 
       } else {
 
         mark0 = 3;
         // debugger
         points1.push( p0.clone() );
+        uvs1.push( u0.clone() );
         points2.push( p0.clone() );
+        uvs2.push( u0.clone );
       }
 
       // mark: 1 for negative side, 2 for positive side, 3 for coplanar point
@@ -269,19 +280,23 @@ window.cutByPlane = function( object, plane, output ) {
         mark1 = 2;
         // debugger
         points2.push( p1.clone() );
+        uvs2.push( u1.clone() );
 
       } else if ( d < - delta ) {
 
         mark1 = 1;
         // debugger
         points1.push( p1.clone() );
+        uvs1.push( u1.clone() );
 
       }	else {
 
         mark1 = 3;
         // debugger
         points1.push( p1.clone() );
+        uvs1.push( u1.clone() );
         points2.push( p1.clone() );
+        uvs2.push( u1.clone() );
 
       }
 
@@ -315,7 +330,7 @@ window.cutByPlane = function( object, plane, output ) {
 
   }
 
-  // debugger
+  debugger
   // debugger
   // debugger
   // debugger

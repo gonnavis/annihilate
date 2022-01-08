@@ -320,11 +320,20 @@ window.cutByPlane = function( object, plane, output ) {
 
         }
 
+        // todo: performance: no new Vector.
+        let total = new THREE.Vector3().subVectors( p1, p0 ).length()
+        let part = new THREE.Vector3().subVectors( intersection, p0 ).length()
+        let ratio = part / total;
+        let uvPart = new THREE.Vector2().subVectors( u1, u0 ).multiplyScalar( ratio );
+        let uvIntersection = new THREE.Vector2().copy( u0 ).add( uvPart );
+
         // debugger
         points1.push( intersection );
-        uvs1.push( u0.clone() );
+        uvs1.push( uvIntersection.clone() );
         points2.push( intersection.clone() );
-        uvs2.push( u1.clone() );
+        uvs2.push( uvIntersection.clone() );
+
+        debugger
 
       }
 
@@ -1116,12 +1125,12 @@ setTimeout(()=>{
   window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)
   if (window.output.object1) {
     window.scene.add(window.output.object1)
-    window.output.object1.position.x += -1
+    window.output.object1.position.x += -.1
     // window.output.object1.updateMatrixWorld()
   }
   if (window.output.object2) {
     window.scene.add(window.output.object2)
-    window.output.object2.position.x += 1
+    window.output.object2.position.x += .1
     // window.output.object2.updateMatrixWorld()
   }
   window.box.visible = false

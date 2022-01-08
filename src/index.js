@@ -141,6 +141,9 @@ window.cutByPlane = function( object, plane, output ) {
 
   const points2 = [];
 
+  const normals1 = [];
+  const normals2 = [];
+
   const uvs1 = [];
   const uvs2 = [];
 
@@ -238,6 +241,9 @@ window.cutByPlane = function( object, plane, output ) {
       p0.set( coords[ 3 * i0 ], coords[ 3 * i0 + 1 ], coords[ 3 * i0 + 2 ] );
       p1.set( coords[ 3 * i1 ], coords[ 3 * i1 + 1 ], coords[ 3 * i1 + 2 ] );
 
+      n0.set( normals[ 3 * i0 ], normals[ 3 * i0 + 1 ], normals[ 3 * i0 + 2 ] );
+      n1.set( normals[ 3 * i1 ], normals[ 3 * i1 + 1 ], normals[ 3 * i1 + 2 ] );
+
       u0.set( uvs[ 2 * i0 ], uvs[ 2 * i0 + 1 ] );
       u1.set( uvs[ 2 * i1 ], uvs[ 2 * i1 + 1 ] );
 
@@ -251,6 +257,7 @@ window.cutByPlane = function( object, plane, output ) {
         mark0 = 2;
         // debugger
         points2.push( p0.clone() );
+        normals2.push( n0.clone() );
         uvs2.push( u0.clone() );
 
       } else if ( d < - delta ) {
@@ -258,6 +265,7 @@ window.cutByPlane = function( object, plane, output ) {
         mark0 = 1;
         // debugger
         points1.push( p0.clone() );
+        normals1.push( n0.clone() );
         uvs1.push( u0.clone() );
 
       } else {
@@ -265,8 +273,10 @@ window.cutByPlane = function( object, plane, output ) {
         mark0 = 3;
         // debugger
         points1.push( p0.clone() );
+        normals1.push( n0.clone() );
         uvs1.push( u0.clone() );
         points2.push( p0.clone() );
+        normals2.push( n0.clone() );
         uvs2.push( u0.clone );
       }
 
@@ -280,6 +290,7 @@ window.cutByPlane = function( object, plane, output ) {
         mark1 = 2;
         // debugger
         points2.push( p1.clone() );
+        normals2.push( n1.clone() );
         uvs2.push( u1.clone() );
 
       } else if ( d < - delta ) {
@@ -287,6 +298,7 @@ window.cutByPlane = function( object, plane, output ) {
         mark1 = 1;
         // debugger
         points1.push( p1.clone() );
+        normals1.push( n1.clone() );
         uvs1.push( u1.clone() );
 
       }	else {
@@ -294,8 +306,10 @@ window.cutByPlane = function( object, plane, output ) {
         mark1 = 3;
         // debugger
         points1.push( p1.clone() );
+        normals1.push( n1.clone() );
         uvs1.push( u1.clone() );
         points2.push( p1.clone() );
+        normals2.push( n1.clone() );
         uvs2.push( u1.clone() );
 
       }
@@ -329,11 +343,13 @@ window.cutByPlane = function( object, plane, output ) {
 
         // debugger
         points1.push( intersection );
+        normals1.push( n0.clone() );
         uvs1.push( uvIntersection.clone() );
         points2.push( intersection.clone() );
+        normals2.push( n0.clone() );
         uvs2.push( uvIntersection.clone() );
 
-        debugger
+        // debugger
 
       }
 
@@ -341,7 +357,7 @@ window.cutByPlane = function( object, plane, output ) {
 
   }
 
-  debugger
+  // debugger
   // debugger
   // debugger
   // debugger
@@ -401,7 +417,7 @@ window.cutByPlane = function( object, plane, output ) {
   if ( numPoints1 > 4 ) {
 
     // debugger
-    object1 = new THREE.Mesh( new ConvexGeometry( points1, uvs1 ), object.material );
+    object1 = new THREE.Mesh( new ConvexGeometry( points1, uvs1, normals1 ), object.material );
     // object1.position.copy( this.tempCM1 );
     object1.quaternion.copy( object.quaternion );
 
@@ -414,7 +430,7 @@ window.cutByPlane = function( object, plane, output ) {
   if ( numPoints2 > 4 ) {
 
     // debugger
-    object2 = new THREE.Mesh( new ConvexGeometry( points2, uvs2 ), object.material );
+    object2 = new THREE.Mesh( new ConvexGeometry( points2, uvs2, normals2 ), object.material );
     // object2.position.copy( this.tempCM2 );
     object2.quaternion.copy( object.quaternion );
 

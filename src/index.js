@@ -223,16 +223,17 @@ window.cutByPlane = function( object, plane, output ) {
     const vc = getVertexIndex( i, 2 );
 
     for ( let segment = 0; segment < 3; segment ++ ) {
+      // console.log('segment')
 
       const i0 = segment === 0 ? va : ( segment === 1 ? vb : vc );
       const i1 = segment === 0 ? vb : ( segment === 1 ? vc : va );
 
       const segmentState = this.segments[ i0 * numPoints + i1 ];
 
-      if ( segmentState ) {
-        // debugger
-        continue; // The segment already has been processed in another face
-      }
+      // if ( segmentState ) {
+      //   // debugger
+      //   continue; // The segment already has been processed in another face
+      // }
 
       // Mark segment as processed (also inverted segment)
       this.segments[ i0 * numPoints + i1 ] = true;
@@ -324,6 +325,10 @@ window.cutByPlane = function( object, plane, output ) {
         let intersection = new THREE.Vector3();
         intersection = localPlane.intersectLine( this.tempLine1, intersection );
 
+        intersection.x = Math.round(intersection.x*1000000)/1000000
+        intersection.y = Math.round(intersection.y*1000000)/1000000
+        intersection.z = Math.round(intersection.z*1000000)/1000000
+
         if ( intersection === null ) {
 
           // Shouldn't happen
@@ -341,7 +346,10 @@ window.cutByPlane = function( object, plane, output ) {
         let uvPart = new THREE.Vector2().subVectors( u1, u0 ).multiplyScalar( ratio );
         let uvIntersection = new THREE.Vector2().copy( u0 ).add( uvPart );
 
-        // debugger
+        // if(n0.x===0&&n0.y===0&&n0.z===1) debugger
+        // console.log(intersection)
+        if(intersection.equals(new THREE.Vector3(-0.19999999999999996, -0.5, 0.5))) debugger
+        if(intersection.equals(new THREE.Vector3(-0.2, -0.5, 0.5))) debugger
         points1.push( intersection );
         normals1.push( n0.clone() );
         uvs1.push( uvIntersection.clone() );
@@ -1138,6 +1146,7 @@ window.box = mesh
 window.plane = new THREE.Vector3(Math.random(),Math.random(),Math.random()).normalize()
 // window.constant = 0
 window.constant = Math.random()*.5
+// window.constant = .2
 // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
 setTimeout(()=>{
   window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)

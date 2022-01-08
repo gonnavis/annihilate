@@ -1134,8 +1134,10 @@ window.scene.add(mesh)
 mesh.updateMatrixWorld()
 window.box = mesh
 
-window.plane = new THREE.Vector3(1,0,0).normalize()
-window.constant = 0
+// window.plane = new THREE.Vector3(1,0,0).normalize()
+window.plane = new THREE.Vector3(Math.random(),Math.random(),Math.random()).normalize()
+// window.constant = 0
+window.constant = Math.random()*.5
 // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
 setTimeout(()=>{
   window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)

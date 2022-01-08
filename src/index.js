@@ -1143,21 +1143,21 @@ mesh.updateMatrixWorld()
 window.box = mesh
 
 // window.plane = new THREE.Vector3(1,0,0).normalize()
-window.plane = new THREE.Vector3(Math.random(),Math.random(),Math.random()).normalize()
+window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
 // window.constant = 0
-window.constant = Math.random()*.5
+window.constant = Math.random()-.5
 // window.constant = .2
 // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
 setTimeout(()=>{
   window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)
   if (window.output.object1) {
     window.scene.add(window.output.object1)
-    window.output.object1.position.x += -.1
+    window.output.object1.position.x += -1
     // window.output.object1.updateMatrixWorld()
   }
   if (window.output.object2) {
     window.scene.add(window.output.object2)
-    window.output.object2.position.x += .1
+    window.output.object2.position.x += 1
     // window.output.object2.updateMatrixWorld()
   }
   window.box.visible = false

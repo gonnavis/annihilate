@@ -322,7 +322,9 @@ window.cutByPlane = function( object, plane, output ) {
 
         // debugger
         points1.push( intersection );
+        uvs1.push( u0.clone() );
         points2.push( intersection.clone() );
+        uvs2.push( u1.clone() );
 
       }
 
@@ -339,48 +341,48 @@ window.cutByPlane = function( object, plane, output ) {
   // Calculate debris mass (very fast and imprecise):
   const newMass = object.userData.mass * 0.5; // todo: not need?
 
-  // Calculate debris Center of Mass (again fast and imprecise) // todo: not need?
-  this.tempCM1.set( 0, 0, 0 );
-  let radius1 = 0;
+  // // Calculate debris Center of Mass (again fast and imprecise) // todo: not need?
+  // this.tempCM1.set( 0, 0, 0 );
+  // let radius1 = 0;
   const numPoints1 = points1.length;
 
-  if ( numPoints1 > 0 ) {
+  // if ( numPoints1 > 0 ) {
 
-    for ( let i = 0; i < numPoints1; i ++ ) this.tempCM1.add( points1[ i ] );
+  //   for ( let i = 0; i < numPoints1; i ++ ) this.tempCM1.add( points1[ i ] );
 
-    this.tempCM1.divideScalar( numPoints1 );
-    for ( let i = 0; i < numPoints1; i ++ ) {
+  //   this.tempCM1.divideScalar( numPoints1 );
+  //   for ( let i = 0; i < numPoints1; i ++ ) {
 
-      // debugger
-      const p = points1[ i ]; // mark
-      p.sub( this.tempCM1 );
-      radius1 = Math.max( radius1, p.x, p.y, p.z );
+  //     // debugger
+  //     const p = points1[ i ]; // mark
+  //     p.sub( this.tempCM1 );
+  //     radius1 = Math.max( radius1, p.x, p.y, p.z );
 
-    }
+  //   }
 
-    this.tempCM1.add( object.position );
+  //   this.tempCM1.add( object.position );
 
-  }
+  // }
 
-  this.tempCM2.set( 0, 0, 0 );
-  let radius2 = 0;
+  // this.tempCM2.set( 0, 0, 0 );
+  // let radius2 = 0;
   const numPoints2 = points2.length;
-  if ( numPoints2 > 0 ) {
+  // if ( numPoints2 > 0 ) {
 
-    for ( let i = 0; i < numPoints2; i ++ ) this.tempCM2.add( points2[ i ] );
+  //   for ( let i = 0; i < numPoints2; i ++ ) this.tempCM2.add( points2[ i ] );
 
-    this.tempCM2.divideScalar( numPoints2 );
-    for ( let i = 0; i < numPoints2; i ++ ) {
+  //   this.tempCM2.divideScalar( numPoints2 );
+  //   for ( let i = 0; i < numPoints2; i ++ ) {
 
-      const p = points2[ i ];
-      p.sub( this.tempCM2 );
-      radius2 = Math.max( radius2, p.x, p.y, p.z );
+  //     const p = points2[ i ];
+  //     p.sub( this.tempCM2 );
+  //     radius2 = Math.max( radius2, p.x, p.y, p.z );
 
-    }
+  //   }
 
-    this.tempCM2.add( object.position );
+  //   this.tempCM2.add( object.position );
 
-  }
+  // }
 
   let object1 = null;
   let object2 = null;
@@ -390,8 +392,8 @@ window.cutByPlane = function( object, plane, output ) {
   if ( numPoints1 > 4 ) {
 
     // debugger
-    object1 = new THREE.Mesh( new ConvexGeometry( points1 ), object.material );
-    object1.position.copy( this.tempCM1 );
+    object1 = new THREE.Mesh( new ConvexGeometry( points1, uvs1 ), object.material );
+    // object1.position.copy( this.tempCM1 );
     object1.quaternion.copy( object.quaternion );
 
     // this.prepareBreakableObject( object1, newMass, object.userData.velocity, object.userData.angularVelocity, 2 * radius1 > this.minSizeForBreak );
@@ -403,8 +405,8 @@ window.cutByPlane = function( object, plane, output ) {
   if ( numPoints2 > 4 ) {
 
     // debugger
-    object2 = new THREE.Mesh( new ConvexGeometry( points2 ), object.material );
-    object2.position.copy( this.tempCM2 );
+    object2 = new THREE.Mesh( new ConvexGeometry( points2, uvs2 ), object.material );
+    // object2.position.copy( this.tempCM2 );
     object2.quaternion.copy( object.quaternion );
 
     // this.prepareBreakableObject( object2, newMass, object.userData.velocity, object.userData.angularVelocity, 2 * radius2 > this.minSizeForBreak );
@@ -1097,7 +1099,7 @@ const geometry = new THREE.BoxGeometry()
 // const geometry = new THREE.PlaneGeometry()
 const material = new THREE.MeshStandardMaterial({
   // color: 'red',
-  wireframe: true,
+  // wireframe: true,
   map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg')
 })
 const mesh = new THREE.Mesh(geometry, material)
@@ -1113,13 +1115,13 @@ window.constant = 0
 setTimeout(()=>{
   window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)
   if (window.output.object1) {
-    // window.scene.add(window.output.object1)
-    // window.output.object1.position.x += -1
+    window.scene.add(window.output.object1)
+    window.output.object1.position.x += -1
     // window.output.object1.updateMatrixWorld()
   }
   if (window.output.object2) {
     window.scene.add(window.output.object2)
-    // window.output.object2.position.x += 1
+    window.output.object2.position.x += 1
     // window.output.object2.updateMatrixWorld()
   }
   window.box.visible = false

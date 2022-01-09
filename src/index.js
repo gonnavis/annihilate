@@ -551,7 +551,7 @@ const geometry = new THREE.BoxGeometry()
 // const geometry = new THREE.TorusKnotGeometry()
 const material = new THREE.MeshStandardMaterial({
   // color: 'red',
-  // wireframe: true,
+  wireframe: true,
   map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg')
 })
 const mesh = new THREE.Mesh(geometry, material)
@@ -561,23 +561,39 @@ window.scene.add(mesh)
 mesh.updateMatrixWorld()
 window.box = mesh
 
-// window.plane = new THREE.Vector3(1,0,0).normalize()
-window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
-// window.constant = 0
-window.constant = Math.random()-.5
-// window.constant = .2
-// setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
-setTimeout(()=>{
-  window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)
-  if (window.output.object1) {
-    window.scene.add(window.output.object1)
-    window.output.object1.position.x += -1
-    // window.output.object1.updateMatrixWorld()
-  }
-  if (window.output.object2) {
-    window.scene.add(window.output.object2)
-    window.output.object2.position.x += 1
-    // window.output.object2.updateMatrixWorld()
-  }
-  window.box.visible = false
-},1000)
+//
+
+let arr
+
+arr = [...box.geometry.attributes.position.array]
+arr.push(-2,-2,-2)
+box.geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( arr, 3 ) );
+box.geometry.attributes.position.needsUpdate=true
+
+arr = [...box.geometry.index.array]
+arr.push(23,21,24)
+box.geometry.setIndex( new THREE.BufferAttribute( new Uint16Array( arr ), 1 ) );
+box.geometry.index.needsUpdate=true
+
+//
+
+// // window.plane = new THREE.Vector3(1,0,0).normalize()
+// window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
+// // window.constant = 0
+// window.constant = Math.random()-.5
+// // window.constant = .2
+// // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
+// setTimeout(()=>{
+//   window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)
+//   if (window.output.object1) {
+//     window.scene.add(window.output.object1)
+//     window.output.object1.position.x += -1
+//     // window.output.object1.updateMatrixWorld()
+//   }
+//   if (window.output.object2) {
+//     window.scene.add(window.output.object2)
+//     window.output.object2.position.x += 1
+//     // window.output.object2.updateMatrixWorld()
+//   }
+//   window.box.visible = false
+// },1000)

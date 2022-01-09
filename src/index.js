@@ -522,8 +522,8 @@ function init_three() {
   window.addEventListener('resize', onWindowResize, false)
 
   // stats
-  stats = new Stats()
-  container.appendChild(stats.dom)
+  // stats = new Stats()
+  // container.appendChild(stats.dom)
 
   window.controls = new OrbitControls(camera, renderer.domElement)
 }
@@ -541,7 +541,7 @@ function animate(time) {
   requestAnimationFrame(animate)
   renderer.render(scene, camera)
 
-  stats.update()
+  // stats.update()
 }
 
 

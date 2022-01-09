@@ -503,7 +503,7 @@ function init_three() {
   scene.add(supLight)
 
   window.gridHelper = new THREE.GridHelper(100, 100, 0x000000, 0x000000)
-  gridHelper.position.y = 0.037
+  // gridHelper.position.y = 0.037
   gridHelper.material.opacity = 0.2
   gridHelper.material.transparent = true
   scene.add(gridHelper)
@@ -545,7 +545,9 @@ function animate(time) {
 }
 
 
-const geometry = new THREE.BoxGeometry()
+const geometry = new THREE.BoxGeometry().toNonIndexed()
+geometry.clearGroups()
+
 // const geometry = new THREE.PlaneGeometry()
 // const geometry = new THREE.CylinderGeometry()
 // const geometry = new THREE.TorusKnotGeometry()
@@ -565,15 +567,24 @@ window.box = mesh
 
 let arr
 
-arr = [...box.geometry.attributes.position.array]
+arr = [...geometry.attributes.position.array]
+arr.push(-2,-0,-0)
+arr.push(-2,-0,-1)
 arr.push(-2,-2,-2)
-box.geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( arr, 3 ) );
-box.geometry.attributes.position.needsUpdate=true
+geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( arr, 3 ) );
+geometry.attributes.position.needsUpdate=true
 
-arr = [...box.geometry.index.array]
-arr.push(23,21,24)
-box.geometry.setIndex( new THREE.BufferAttribute( new Uint16Array( arr ), 1 ) );
-box.geometry.index.needsUpdate=true
+// arr = [...geometry.attributes.position.array]
+// arr[0] = -2
+// arr[1] = -2
+// arr[2] = -2
+// geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( arr, 3 ) );
+// geometry.attributes.position.needsUpdate=true
+
+// arr = [...box.geometry.index.array]
+// arr.push(23,21,24)
+// box.geometry.setIndex( new THREE.BufferAttribute( new Uint16Array( arr ), 1 ) );
+// // box.geometry.index.needsUpdate=true
 
 //
 

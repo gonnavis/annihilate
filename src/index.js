@@ -190,27 +190,31 @@ window.cutByPlane = function( object, plane, output ) {
         // points2.push(v2,vI0,vI1)
         // uvs2.push(u2,uI0,uI1)
       }else if(sign0===1){
-        let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
-        let {vI:vI1,uI:uI1} = getIntersectNode(v1,v2,u1,u2)
-        points2.push(v0,vI1,vI0)
-        uvs2.push(u0,uI1,uI0)
-        points2.push(v0,v1,vI1)
-        uvs2.push(u0,u1,uI1)
-        points1.push(v2,vI0,vI1)
-        uvs1.push(u2,uI0,uI1)
+        // let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
+        // let {vI:vI1,uI:uI1} = getIntersectNode(v1,v2,u1,u2)
+        // points2.push(v0,vI1,vI0)
+        // uvs2.push(u0,uI1,uI0)
+        // points2.push(v0,v1,vI1)
+        // uvs2.push(u0,u1,uI1)
+        // points1.push(v2,vI0,vI1)
+        // uvs1.push(u2,uI0,uI1)
       }
     }else if(sign1===sign2){
-      // if(sign1===-1){
-      //   points1.push(v1,v2)
-      //   uvs1.push(u1,u2)
-      //   points2.push(v0)
-      //   uvs2.push(u0)
-      // }else if(sign1===1){
-      //   points2.push(v1,v2)
-      //   uvs2.push(u1,u2)
-      //   points1.push(v0)
-      //   uvs1.push(u0)
-      // }
+      if(sign1===-1){
+        let {vI:vI0,uI:uI0} = getIntersectNode(v1,v0,u1,u0)
+        let {vI:vI1,uI:uI1} = getIntersectNode(v2,v0,u2,u0)
+        points1.push(v1,vI1,vI0)
+        uvs1.push(u1,uI1,uI0)
+        points1.push(v1,v2,vI1)
+        uvs1.push(u1,u2,uI1)
+        points2.push(v0,vI0,vI1)
+        uvs2.push(u0,uI0,uI1)
+      }else if(sign1===1){
+        // points2.push(v1,v2)
+        // uvs2.push(u1,u2)
+        // points1.push(v0)
+        // uvs1.push(u0)
+      }
     }else if(sign2===sign0){
       // if(sign2===-1){
       //   points1.push(v2,v0)

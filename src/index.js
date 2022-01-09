@@ -160,56 +160,6 @@ window.cutByPlane = function( object, plane, output ) {
   const u0 = new THREE.Vector2()
   const u1 = new THREE.Vector2()
 
-  // Iterate through the faces to mark edges shared by coplanar faces
-  for ( let i = 0; i < numFaces - 1; i ++ ) {
-
-    const a1 = getVertexIndex( i, 0 );
-    const b1 = getVertexIndex( i, 1 );
-    const c1 = getVertexIndex( i, 2 );
-
-    // Assuming all 3 vertices have the same normal
-    n0.set( normals[ a1 ], normals[ a1 ] + 1, normals[ a1 ] + 2 );
-
-    for ( let j = i + 1; j < numFaces; j ++ ) {
-
-      const a2 = getVertexIndex( j, 0 );
-      const b2 = getVertexIndex( j, 1 );
-      const c2 = getVertexIndex( j, 2 );
-
-      // Assuming all 3 vertices have the same normal
-      n1.set( normals[ a2 ], normals[ a2 ] + 1, normals[ a2 ] + 2 );
-
-      const coplanar = 1 - n0.dot( n1 ) < delta;
-
-      if ( coplanar ) {
-
-        if ( a1 === a2 || a1 === b2 || a1 === c2 ) {
-
-          if ( b1 === a2 || b1 === b2 || b1 === c2 ) {
-
-            // this.segments[ a1 * numPoints + b1 ] = true;
-            // this.segments[ b1 * numPoints + a1 ] = true;
-
-          }	else {
-
-            // this.segments[ c1 * numPoints + a1 ] = true;
-            // this.segments[ a1 * numPoints + c1 ] = true;
-
-          }
-
-        }	else if ( b1 === a2 || b1 === b2 || b1 === c2 ) {
-
-          // this.segments[ c1 * numPoints + b1 ] = true;
-          // this.segments[ b1 * numPoints + c1 ] = true;
-
-        }
-
-      }
-
-    }
-
-  }
-
   // Transform the plane to object local space
   const localPlane = this.tempPlane_Cut;
   object.updateMatrix();

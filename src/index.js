@@ -181,34 +181,34 @@ window.cutByPlane = function( object, plane, output ) {
       }
     }else if(sign0===sign1){
       if(sign0===-1){
-        // let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
-        // let {vI:vI1,uI:uI1} = getIntersectNode(v1,v2,u1,u2)
-        // points1.push(v0,vI1,vI0)
-        // uvs1.push(u0,uI1,uI0)
-        // points1.push(v0,v1,vI1)
-        // uvs1.push(u0,u1,uI1)
-        // points2.push(v2,vI0,vI1)
-        // uvs2.push(u2,uI0,uI1)
+        let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
+        let {vI:vI1,uI:uI1} = getIntersectNode(v1,v2,u1,u2)
+        points1.push(v0,vI1,vI0)
+        uvs1.push(u0,uI1,uI0)
+        points1.push(v0,v1,vI1)
+        uvs1.push(u0,u1,uI1)
+        points2.push(v2,vI0,vI1)
+        uvs2.push(u2,uI0,uI1)
       }else if(sign0===1){
-        // let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
-        // let {vI:vI1,uI:uI1} = getIntersectNode(v1,v2,u1,u2)
-        // points2.push(v0,vI1,vI0)
-        // uvs2.push(u0,uI1,uI0)
-        // points2.push(v0,v1,vI1)
-        // uvs2.push(u0,u1,uI1)
-        // points1.push(v2,vI0,vI1)
-        // uvs1.push(u2,uI0,uI1)
+        let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
+        let {vI:vI1,uI:uI1} = getIntersectNode(v1,v2,u1,u2)
+        points2.push(v0,vI1,vI0)
+        uvs2.push(u0,uI1,uI0)
+        points2.push(v0,v1,vI1)
+        uvs2.push(u0,u1,uI1)
+        points1.push(v2,vI0,vI1)
+        uvs1.push(u2,uI0,uI1)
       }
     }else if(sign1===sign2){
       if(sign1===-1){
-        // let {vI:vI0,uI:uI0} = getIntersectNode(v1,v0,u1,u0)
-        // let {vI:vI1,uI:uI1} = getIntersectNode(v2,v0,u2,u0)
-        // points1.push(v1,vI1,vI0)
-        // uvs1.push(u1,uI1,uI0)
-        // points1.push(v1,v2,vI1)
-        // uvs1.push(u1,u2,uI1)
-        // points2.push(v0,vI0,vI1)
-        // uvs2.push(u0,uI0,uI1)
+        let {vI:vI0,uI:uI0} = getIntersectNode(v1,v0,u1,u0)
+        let {vI:vI1,uI:uI1} = getIntersectNode(v2,v0,u2,u0)
+        points1.push(v1,vI1,vI0)
+        uvs1.push(u1,uI1,uI0)
+        points1.push(v1,v2,vI1)
+        uvs1.push(u1,u2,uI1)
+        points2.push(v0,vI0,vI1)
+        uvs2.push(u0,uI0,uI1)
       }else if(sign1===1){
         let {vI:vI0,uI:uI0} = getIntersectNode(v1,v0,u1,u0)
         let {vI:vI1,uI:uI1} = getIntersectNode(v2,v0,u2,u0)
@@ -220,17 +220,25 @@ window.cutByPlane = function( object, plane, output ) {
         uvs1.push(u0,uI0,uI1)
       }
     }else if(sign2===sign0){
-      // if(sign2===-1){
-      //   points1.push(v2,v0)
-      //   uvs1.push(u2,u0)
-      //   points2.push(v1)
-      //   uvs2.push(u1)
-      // }else if(sign2===1){
-      //   points2.push(v2,v0)
-      //   uvs2.push(u2,u0)
-      //   points1.push(v1)
-      //   uvs1.push(u1)
-      // }
+      if(sign2===-1){
+        let {vI:vI0,uI:uI0} = getIntersectNode(v2,v1,u2,u1)
+        let {vI:vI1,uI:uI1} = getIntersectNode(v0,v1,u0,u1)
+        points1.push(v2,vI1,vI0)
+        uvs1.push(u2,uI1,uI0)
+        points1.push(v2,v0,vI1)
+        uvs1.push(u2,u0,uI1)
+        points2.push(v1,vI0,vI1)
+        uvs2.push(u1,uI0,uI1)
+      }else if(sign2===1){
+        let {vI:vI0,uI:uI0} = getIntersectNode(v2,v1,u2,u1)
+        let {vI:vI1,uI:uI1} = getIntersectNode(v0,v1,u0,u1)
+        points2.push(v2,vI1,vI0)
+        uvs2.push(u2,uI1,uI0)
+        points2.push(v2,v0,vI1)
+        uvs2.push(u2,u0,uI1)
+        points1.push(v1,vI0,vI1)
+        uvs1.push(u1,uI0,uI1)
+      }
     }
 
     // let intersections = []
@@ -412,12 +420,14 @@ function animate(time) {
 }
 
 
-const geometry = new THREE.BoxGeometry().toNonIndexed()
+// const indexedGeometry = new THREE.BoxGeometry()
+// const indexedGeometry = new THREE.PlaneGeometry()
+// const indexedGeometry = new THREE.CylinderGeometry()
+const indexedGeometry = new THREE.TorusKnotGeometry(); indexedGeometry.scale(.5,.5,.5)
+
+const geometry = indexedGeometry.toNonIndexed()
 geometry.clearGroups()
 
-// const geometry = new THREE.PlaneGeometry()
-// const geometry = new THREE.CylinderGeometry()
-// const geometry = new THREE.TorusKnotGeometry()
 // const material = new THREE.MeshStandardMaterial({
 const material = new THREE.MeshBasicMaterial({
   // color: 'red',
@@ -457,24 +467,26 @@ window.box = mesh
 //
 
 if(true){
-  window.plane = new THREE.Vector3(1,0,0).normalize()
-  // window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
-  window.constant = 0
-  // window.constant = Math.random()-.5
+  // window.plane = new THREE.Vector3(1,0,0).normalize()
+  // window.plane = new THREE.Vector3(0,1,0).normalize()
+  // window.plane = new THREE.Vector3(0,0,1).normalize()
+  window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
+  // window.constant = 0
+  window.constant = Math.random()-.5
   // window.constant = .2
   // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
   setTimeout(()=>{
     window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)
     if (window.output.object1) {
       window.scene.add(window.output.object1)
-      window.output.object1.position.x += -.1
-      window.output.object1.position.z += 1.5
+      window.output.object1.position.x += -1
+      window.output.object1.position.z += 2
       // window.output.object1.updateMatrixWorld()
     }
     if (window.output.object2) {
       window.scene.add(window.output.object2)
-      window.output.object2.position.x += .1
-      window.output.object2.position.z += 1.5
+      window.output.object2.position.x += 1
+      window.output.object2.position.z += 2
       // window.output.object2.updateMatrixWorld()
     }
     // window.box.visible = false

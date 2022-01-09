@@ -79,7 +79,7 @@ window.cutByPlane = function( object, plane, output ) {
   this.tempVector3_CB = new THREE.Vector3();
   this.tempResultObjects = { object1: null, object2: null };
 
-  this.segments = [];
+  // this.segments = [];
 
   // Returns breakable objects in output.object1 and output.object2 members, the resulting 2 pieces of the cut.
   // object2 can be null if the plane doesn't cut the object.
@@ -150,8 +150,8 @@ window.cutByPlane = function( object, plane, output ) {
   const delta = this.smallDelta;
 
   // Reset segments mark
-  const numPointPairs = numPoints * numPoints;
-  for ( let i = 0; i < numPointPairs; i ++ ) this.segments[ i ] = false;
+  // const numPointPairs = numPoints * numPoints;
+  // for ( let i = 0; i < numPointPairs; i ++ ) this.segments[ i ] = false;
 
   const p0 = this.tempVector3_P0;
   const p1 = this.tempVector3_P1;
@@ -187,20 +187,20 @@ window.cutByPlane = function( object, plane, output ) {
 
           if ( b1 === a2 || b1 === b2 || b1 === c2 ) {
 
-            this.segments[ a1 * numPoints + b1 ] = true;
-            this.segments[ b1 * numPoints + a1 ] = true;
+            // this.segments[ a1 * numPoints + b1 ] = true;
+            // this.segments[ b1 * numPoints + a1 ] = true;
 
           }	else {
 
-            this.segments[ c1 * numPoints + a1 ] = true;
-            this.segments[ a1 * numPoints + c1 ] = true;
+            // this.segments[ c1 * numPoints + a1 ] = true;
+            // this.segments[ a1 * numPoints + c1 ] = true;
 
           }
 
         }	else if ( b1 === a2 || b1 === b2 || b1 === c2 ) {
 
-          this.segments[ c1 * numPoints + b1 ] = true;
-          this.segments[ b1 * numPoints + c1 ] = true;
+          // this.segments[ c1 * numPoints + b1 ] = true;
+          // this.segments[ b1 * numPoints + c1 ] = true;
 
         }
 
@@ -228,7 +228,7 @@ window.cutByPlane = function( object, plane, output ) {
       const i0 = segment === 0 ? va : ( segment === 1 ? vb : vc );
       const i1 = segment === 0 ? vb : ( segment === 1 ? vc : va );
 
-      const segmentState = this.segments[ i0 * numPoints + i1 ];
+      // const segmentState = this.segments[ i0 * numPoints + i1 ];
 
       // if ( segmentState ) {
       //   // debugger
@@ -236,8 +236,8 @@ window.cutByPlane = function( object, plane, output ) {
       // }
 
       // Mark segment as processed (also inverted segment)
-      this.segments[ i0 * numPoints + i1 ] = true;
-      this.segments[ i1 * numPoints + i0 ] = true;
+      // this.segments[ i0 * numPoints + i1 ] = true;
+      // this.segments[ i1 * numPoints + i0 ] = true;
 
       p0.set( coords[ 3 * i0 ], coords[ 3 * i0 + 1 ], coords[ 3 * i0 + 2 ] );
       p1.set( coords[ 3 * i1 ], coords[ 3 * i1 + 1 ], coords[ 3 * i1 + 2 ] );

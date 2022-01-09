@@ -139,135 +139,120 @@ window.cutByPlane = function( object, plane, output ) {
     const vb = getVertexIndex( i, 1 );
     const vc = getVertexIndex( i, 2 );
 
-    for ( let segment = 0; segment < 3; segment ++ ) {
+    const v0 = new THREE.Vector3(coords[ 3 * va ], coords[ 3 * va + 1 ], coords[ 3 * va + 2 ])
+    const v1 = new THREE.Vector3(coords[ 3 * vb ], coords[ 3 * vb + 1 ], coords[ 3 * vb + 2 ])
+    const v2 = new THREE.Vector3(coords[ 3 * vc ], coords[ 3 * vc + 1 ], coords[ 3 * vc + 2 ])
 
-      const i0 = segment === 0 ? va : ( segment === 1 ? vb : vc );
-      const i1 = segment === 0 ? vb : ( segment === 1 ? vc : va );
+    const u0 = new THREE.Vector3(uvs[ 2 * va ], uvs[ 2 * va + 1 ])
+    const u1 = new THREE.Vector3(uvs[ 2 * vb ], uvs[ 2 * vb + 1 ])
+    const u2 = new THREE.Vector3(uvs[ 2 * vc ], uvs[ 2 * vc + 1 ])
 
-      p0.set( coords[ 3 * i0 ], coords[ 3 * i0 + 1 ], coords[ 3 * i0 + 2 ] );
-      p1.set( coords[ 3 * i1 ], coords[ 3 * i1 + 1 ], coords[ 3 * i1 + 2 ] );
+    let d0 = localPlane.distanceToPoint( v0 );
+    let d1 = localPlane.distanceToPoint( v1 );
+    let d2 = localPlane.distanceToPoint( v2 );
 
-      n0.set( normals[ 3 * i0 ], normals[ 3 * i0 + 1 ], normals[ 3 * i0 + 2 ] );
-      n1.set( normals[ 3 * i1 ], normals[ 3 * i1 + 1 ], normals[ 3 * i1 + 2 ] );
+    let sign0 = Math.sign(d0)
+    let sign1 = Math.sign(d1)
+    let sign2 = Math.sign(d2)
 
-      u0.set( uvs[ 2 * i0 ], uvs[ 2 * i0 + 1 ] );
-      u1.set( uvs[ 2 * i1 ], uvs[ 2 * i1 + 1 ] );
-
-      // mark: 1 for negative side, 2 for positive side, 3 for coplanar point
-      let mark0 = 0;
-
-      let d = localPlane.distanceToPoint( p0 );
-
-      if ( d > delta ) {
-
-        mark0 = 2;
-        // debugger
-        points2.push( p0.clone() );
-        normals2.push( n0.clone() );
-        uvs2.push( u0.clone() );
-
-      } else if ( d < - delta ) {
-
-        mark0 = 1;
-        // debugger
-        points1.push( p0.clone() );
-        normals1.push( n0.clone() );
-        uvs1.push( u0.clone() );
-
-      } else {
-
-        mark0 = 3;
-        // debugger
-        points1.push( p0.clone() );
-        normals1.push( n0.clone() );
-        uvs1.push( u0.clone() );
-        points2.push( p0.clone() );
-        normals2.push( n0.clone() );
-        uvs2.push( u0.clone );
+    if(sign0===sign1&&sign1===sign2&&sign2===sign0){
+      if(sign0===-1){
+        points1.push(v0,v1,v2)
+        uvs1.push(u0,u1,u2)
+      }else if(sign0===1){
+        points2.push(v0,v1,v2)
+        uvs2.push(u0,u1,u2)
       }
-
-      // mark: 1 for negative side, 2 for positive side, 3 for coplanar point
-      let mark1 = 0;
-
-      d = localPlane.distanceToPoint( p1 );
-
-      if ( d > delta ) {
-
-        mark1 = 2;
-        // debugger
-        points2.push( p1.clone() );
-        normals2.push( n1.clone() );
-        uvs2.push( u1.clone() );
-
-      } else if ( d < - delta ) {
-
-        mark1 = 1;
-        // debugger
-        points1.push( p1.clone() );
-        normals1.push( n1.clone() );
-        uvs1.push( u1.clone() );
-
-      }	else {
-
-        mark1 = 3;
-        // debugger
-        points1.push( p1.clone() );
-        normals1.push( n1.clone() );
-        uvs1.push( u1.clone() );
-        points2.push( p1.clone() );
-        normals2.push( n1.clone() );
-        uvs2.push( u1.clone() );
-
+    }else if(sign0===sign1){
+      if(sign0===-1){
+        points1.push(v0,v1)
+        uvs1.push(u0,u1)
+        points2.push(v2)
+        uvs2.push(u2)
+      }else if(sign0===1){
+        points2.push(v0,v1)
+        uvs2.push(u0,u1)
+        points1.push(v2)
+        uvs1.push(u2)
       }
-
-      if ( ( mark0 === 1 && mark1 === 2 ) || ( mark0 === 2 && mark1 === 1 ) ) {
-
-        // Intersection of segment with the plane
-
-        this.tempLine1.start.copy( p0 );
-        this.tempLine1.end.copy( p1 );
-
-        let intersection = new THREE.Vector3();
-        intersection = localPlane.intersectLine( this.tempLine1, intersection );
-
-        intersection.x = Math.round(intersection.x*1000000)/1000000
-        intersection.y = Math.round(intersection.y*1000000)/1000000
-        intersection.z = Math.round(intersection.z*1000000)/1000000
-
-        if ( intersection === null ) {
-
-          // Shouldn't happen
-          console.error( 'Internal error: segment does not intersect plane.' );
-          output.segmentedObject1 = null;
-          output.segmentedObject2 = null;
-          return 0;
-
-        }
-
-        // todo: performance: no new Vector.
-        let total = new THREE.Vector3().subVectors( p1, p0 ).length()
-        let part = new THREE.Vector3().subVectors( intersection, p0 ).length()
-        let ratio = part / total;
-        let uvPart = new THREE.Vector2().subVectors( u1, u0 ).multiplyScalar( ratio );
-        let uvIntersection = new THREE.Vector2().copy( u0 ).add( uvPart );
-
-        // if(n0.x===0&&n0.y===0&&n0.z===1) debugger
-        // console.log(intersection)
-        if(intersection.equals(new THREE.Vector3(-0.19999999999999996, -0.5, 0.5))) debugger
-        if(intersection.equals(new THREE.Vector3(-0.2, -0.5, 0.5))) debugger
-        points1.push( intersection );
-        normals1.push( n0.clone() );
-        uvs1.push( uvIntersection.clone() );
-        points2.push( intersection.clone() );
-        normals2.push( n0.clone() );
-        uvs2.push( uvIntersection.clone() );
-
-        // debugger
-
+    }else if(sign1===sign2){
+      if(sign1===-1){
+        points1.push(v1,v2)
+        uvs1.push(u1,u2)
+        points2.push(v0)
+        uvs2.push(u0)
+      }else if(sign1===1){
+        points2.push(v1,v2)
+        uvs2.push(u1,u2)
+        points1.push(v0)
+        uvs1.push(u0)
       }
-
+    }else if(sign2===sign0){
+      if(sign2===-1){
+        points1.push(v2,v0)
+        uvs1.push(u2,u0)
+        points2.push(v1)
+        uvs2.push(u1)
+      }else if(sign2===1){
+        points2.push(v2,v0)
+        uvs2.push(u2,u0)
+        points1.push(v1)
+        uvs1.push(u1)
+      }
     }
 
+    // let intersections = []
+
+    // for ( let segment = 0; segment < 3; segment ++ ) {
+
+    //   const i0 = segment === 0 ? va : ( segment === 1 ? vb : vc );
+    //   const i1 = segment === 0 ? vb : ( segment === 1 ? vc : va );
+
+    //   p0.set( coords[ 3 * i0 ], coords[ 3 * i0 + 1 ], coords[ 3 * i0 + 2 ] );
+    //   p1.set( coords[ 3 * i1 ], coords[ 3 * i1 + 1 ], coords[ 3 * i1 + 2 ] );
+
+    //   n0.set( normals[ 3 * i0 ], normals[ 3 * i0 + 1 ], normals[ 3 * i0 + 2 ] );
+    //   n1.set( normals[ 3 * i1 ], normals[ 3 * i1 + 1 ], normals[ 3 * i1 + 2 ] );
+
+    //   u0.set( uvs[ 2 * i0 ], uvs[ 2 * i0 + 1 ] );
+    //   u1.set( uvs[ 2 * i1 ], uvs[ 2 * i1 + 1 ] );
+
+    //   // mark: 1 for negative side, 2 for positive side, 3 for coplanar point
+    //   let mark0 = 0;
+    //   let d = localPlane.distanceToPoint( p0 );
+    //   if ( d > delta ) {
+    //     mark0 = 2;
+    //   } else if ( d < - delta ) {
+    //     mark0 = 1;
+    //   } else {
+    //     mark0 = 3;
+    //   }
+
+    //   // mark: 1 for negative side, 2 for positive side, 3 for coplanar point
+    //   let mark1 = 0;
+    //   d = localPlane.distanceToPoint( p1 );
+    //   if ( d > delta ) {
+    //     mark1 = 2;
+    //   } else if ( d < - delta ) {
+    //     mark1 = 1;
+    //   }	else {
+    //     mark1 = 3;
+    //   }
+
+    //   if ( ( mark0 === 1 && mark1 === 2 ) || ( mark0 === 2 && mark1 === 1 ) ) {
+    //     // Intersection of segment with the plane
+    //     this.tempLine1.start.copy( p0 );
+    //     this.tempLine1.end.copy( p1 );
+
+    //     let intersection = new THREE.Vector3();
+    //     intersection = localPlane.intersectLine( this.tempLine1, intersection );
+    //     intersections.push(intersection)
+    //   }
+    // }
+    // console.log(intersections.length)
+    // if(intersections.length===2){
+
+    // }
   }
 
   // debugger
@@ -401,7 +386,8 @@ geometry.clearGroups()
 // const geometry = new THREE.PlaneGeometry()
 // const geometry = new THREE.CylinderGeometry()
 // const geometry = new THREE.TorusKnotGeometry()
-const material = new THREE.MeshStandardMaterial({
+// const material = new THREE.MeshStandardMaterial({
+const material = new THREE.MeshBasicMaterial({
   // color: 'red',
   // wireframe: true,
   map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg')
@@ -438,23 +424,25 @@ window.box = mesh
 
 //
 
-window.plane = new THREE.Vector3(1,0,0).normalize()
-// window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
-window.constant = 0
-// window.constant = Math.random()-.5
-// window.constant = .2
-// setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
-setTimeout(()=>{
-  window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)
-  if (window.output.object1) {
-    window.scene.add(window.output.object1)
-    window.output.object1.position.x += -1
-    // window.output.object1.updateMatrixWorld()
-  }
-  if (window.output.object2) {
-    window.scene.add(window.output.object2)
-    window.output.object2.position.x += 1
-    // window.output.object2.updateMatrixWorld()
-  }
-  window.box.visible = false
-},1000)
+if(1){
+  window.plane = new THREE.Vector3(1,0,0).normalize()
+  // window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
+  window.constant = 0
+  // window.constant = Math.random()-.5
+  // window.constant = .2
+  // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
+  setTimeout(()=>{
+    window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)
+    if (window.output.object1) {
+      window.scene.add(window.output.object1)
+      window.output.object1.position.x += -.1
+      // window.output.object1.updateMatrixWorld()
+    }
+    if (window.output.object2) {
+      window.scene.add(window.output.object2)
+      window.output.object2.position.x += .1
+      // window.output.object2.updateMatrixWorld()
+    }
+    window.box.visible = false
+  },1000)
+}

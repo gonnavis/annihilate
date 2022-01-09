@@ -1,5 +1,3 @@
-// import { g } from './global.js'
-
 import * as THREE from '../lib/three.js/build/three.module.js'
 window.THREE = THREE
 import { OrbitControls } from '../lib/three.js/examples/jsm/controls/OrbitControls.js'
@@ -79,8 +77,6 @@ window.cutByPlane = function( object, plane, output ) {
   this.tempVector3_CB = new THREE.Vector3();
   this.tempResultObjects = { object1: null, object2: null };
 
-  // this.segments = [];
-
   // Returns breakable objects in output.object1 and output.object2 members, the resulting 2 pieces of the cut.
   // object2 can be null if the plane doesn't cut the object.
   // object1 can be null only in case of internal error
@@ -114,31 +110,6 @@ window.cutByPlane = function( object, plane, output ) {
   }
 
   const points1 = [];
-
-  // // debug
-  // const handler = {
-  //   set: (obj, prop, newVal) => {
-  //     // debugger
-  //     console.log(newVal)
-  //     if(typeof newVal === 'object') {
-  //       obj[prop] = new Proxy(newVal, {
-  //         set: (obj, prop, newVal) => {
-  //           debugger
-  //           console.log(newVal)
-  //           obj[prop] = newVal;
-  //           return true
-  //         }
-  //       });
-
-  //     } else {
-  //       obj[prop] = newVal;
-  //     }
-  //     return true;
-  //   },
-  // }
-  // const points1 = new Proxy([], handler);
-  // //
-
   const points2 = [];
 
   const normals1 = [];
@@ -148,10 +119,6 @@ window.cutByPlane = function( object, plane, output ) {
   const uvs2 = [];
 
   const delta = this.smallDelta;
-
-  // Reset segments mark
-  // const numPointPairs = numPoints * numPoints;
-  // for ( let i = 0; i < numPointPairs; i ++ ) this.segments[ i ] = false;
 
   const p0 = this.tempVector3_P0;
   const p1 = this.tempVector3_P1;
@@ -173,21 +140,9 @@ window.cutByPlane = function( object, plane, output ) {
     const vc = getVertexIndex( i, 2 );
 
     for ( let segment = 0; segment < 3; segment ++ ) {
-      // console.log('segment')
 
       const i0 = segment === 0 ? va : ( segment === 1 ? vb : vc );
       const i1 = segment === 0 ? vb : ( segment === 1 ? vc : va );
-
-      // const segmentState = this.segments[ i0 * numPoints + i1 ];
-
-      // if ( segmentState ) {
-      //   // debugger
-      //   continue; // The segment already has been processed in another face
-      // }
-
-      // Mark segment as processed (also inverted segment)
-      // this.segments[ i0 * numPoints + i1 ] = true;
-      // this.segments[ i1 * numPoints + i0 ] = true;
 
       p0.set( coords[ 3 * i0 ], coords[ 3 * i0 + 1 ], coords[ 3 * i0 + 2 ] );
       p1.set( coords[ 3 * i1 ], coords[ 3 * i1 + 1 ], coords[ 3 * i1 + 2 ] );
@@ -316,56 +271,9 @@ window.cutByPlane = function( object, plane, output ) {
   }
 
   // debugger
-  // debugger
-  // debugger
-  // debugger
-  // debugger
 
-  // Calculate debris mass (very fast and imprecise):
-  const newMass = object.userData.mass * 0.5; // todo: not need?
-
-  // // Calculate debris Center of Mass (again fast and imprecise) // todo: not need?
-  // this.tempCM1.set( 0, 0, 0 );
-  // let radius1 = 0;
   const numPoints1 = points1.length;
-
-  // if ( numPoints1 > 0 ) {
-
-  //   for ( let i = 0; i < numPoints1; i ++ ) this.tempCM1.add( points1[ i ] );
-
-  //   this.tempCM1.divideScalar( numPoints1 );
-  //   for ( let i = 0; i < numPoints1; i ++ ) {
-
-  //     // debugger
-  //     const p = points1[ i ]; // mark
-  //     p.sub( this.tempCM1 );
-  //     radius1 = Math.max( radius1, p.x, p.y, p.z );
-
-  //   }
-
-  //   this.tempCM1.add( object.position );
-
-  // }
-
-  // this.tempCM2.set( 0, 0, 0 );
-  // let radius2 = 0;
   const numPoints2 = points2.length;
-  // if ( numPoints2 > 0 ) {
-
-  //   for ( let i = 0; i < numPoints2; i ++ ) this.tempCM2.add( points2[ i ] );
-
-  //   this.tempCM2.divideScalar( numPoints2 );
-  //   for ( let i = 0; i < numPoints2; i ++ ) {
-
-  //     const p = points2[ i ];
-  //     p.sub( this.tempCM2 );
-  //     radius2 = Math.max( radius2, p.x, p.y, p.z );
-
-  //   }
-
-  //   this.tempCM2.add( object.position );
-
-  // }
 
   let object1 = null;
   let object2 = null;
@@ -376,11 +284,7 @@ window.cutByPlane = function( object, plane, output ) {
 
     // debugger
     object1 = new THREE.Mesh( new ConvexGeometry( points1, uvs1, normals1 ), object.material );
-    // object1.position.copy( this.tempCM1 );
     object1.quaternion.copy( object.quaternion );
-
-    // this.prepareBreakableObject( object1, newMass, object.userData.velocity, object.userData.angularVelocity, 2 * radius1 > this.minSizeForBreak );
-
     numObjects ++;
 
   }
@@ -389,11 +293,7 @@ window.cutByPlane = function( object, plane, output ) {
 
     // debugger
     object2 = new THREE.Mesh( new ConvexGeometry( points2, uvs2, normals2 ), object.material );
-    // object2.position.copy( this.tempCM2 );
     object2.quaternion.copy( object.quaternion );
-
-    // this.prepareBreakableObject( object2, newMass, object.userData.velocity, object.userData.angularVelocity, 2 * radius2 > this.minSizeForBreak );
-
     numObjects ++;
 
   }

@@ -1130,6 +1130,8 @@ function animate(time) {
 
 const geometry = new THREE.BoxGeometry()
 // const geometry = new THREE.PlaneGeometry()
+// const geometry = new THREE.CylinderGeometry()
+// const geometry = new THREE.TorusKnotGeometry()
 const material = new THREE.MeshStandardMaterial({
   // color: 'red',
   // wireframe: true,

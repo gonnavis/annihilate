@@ -77,6 +77,22 @@ window.cutByPlane = function( object, plane, output ) {
   this.tempVector3_CB = new THREE.Vector3();
   this.tempResultObjects = { object1: null, object2: null };
 
+  let getIntersectNode = (v0,v1,u0,u1)=>{
+    this.tempLine1.start.copy(v0)
+    this.tempLine1.end.copy(v1)
+    let vI = new THREE.Vector3()
+    vI = localPlane.intersectLine(this.tempLine1, vI)
+
+    // todo: performance: no new Vector.
+    let total = new THREE.Vector3().subVectors( v1, v0 ).length() // todo: performance: use lengthSq()?
+    let part = new THREE.Vector3().subVectors( vI, v0 ).length()
+    let ratio = part / total;
+    let uvPart = new THREE.Vector2().subVectors( u1, u0 ).multiplyScalar( ratio );
+    let uI = new THREE.Vector2().copy( u0 ).add( uvPart );
+
+    return {vI,uI}
+  }
+
   // Returns breakable objects in output.object1 and output.object2 members, the resulting 2 pieces of the cut.
   // object2 can be null if the plane doesn't cut the object.
   // object1 can be null only in case of internal error
@@ -165,10 +181,14 @@ window.cutByPlane = function( object, plane, output ) {
       }
     }else if(sign0===sign1){
       if(sign0===-1){
-        points1.push(v0,v1)
-        uvs1.push(u0,u1)
-        points2.push(v2)
-        uvs2.push(u2)
+        let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
+        let {vI:vI1,uI:uI1} = getIntersectNode(v1,v2,u1,u2)
+        points1.push(v0,vI1,vI0)
+        uvs1.push(u0,uI1,uI0)
+        points1.push(v0,v1,vI1)
+        uvs1.push(u0,u1,uI1)
+        points2.push(v2,vI0,vI1)
+        uvs2.push(u2,uI0,uI1)
       }else if(sign0===1){
         points2.push(v0,v1)
         uvs2.push(u0,u1)
@@ -389,7 +409,7 @@ geometry.clearGroups()
 // const material = new THREE.MeshStandardMaterial({
 const material = new THREE.MeshBasicMaterial({
   // color: 'red',
-  // wireframe: true,
+  wireframe: true,
   map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg')
 })
 const mesh = new THREE.Mesh(geometry, material)
@@ -424,7 +444,7 @@ window.box = mesh
 
 //
 
-if(1){
+if(true){
   window.plane = new THREE.Vector3(1,0,0).normalize()
   // window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
   window.constant = 0
@@ -436,13 +456,15 @@ if(1){
     if (window.output.object1) {
       window.scene.add(window.output.object1)
       window.output.object1.position.x += -.1
+      window.output.object1.position.z += 1.5
       // window.output.object1.updateMatrixWorld()
     }
     if (window.output.object2) {
       window.scene.add(window.output.object2)
       window.output.object2.position.x += .1
+      window.output.object2.position.z += 1.5
       // window.output.object2.updateMatrixWorld()
     }
-    window.box.visible = false
+    // window.box.visible = false
   },1000)
 }

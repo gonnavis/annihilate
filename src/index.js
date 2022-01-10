@@ -520,10 +520,10 @@ function animate(time) {
 }
 
 
-const indexedGeometry = new THREE.BoxGeometry()
+// const indexedGeometry = new THREE.BoxGeometry()
 // const indexedGeometry = new THREE.PlaneGeometry()
 // const indexedGeometry = new THREE.CylinderGeometry()
-// const indexedGeometry = new THREE.TorusKnotGeometry(); indexedGeometry.scale(.5,.5,.5)
+const indexedGeometry = new THREE.TorusKnotGeometry(); indexedGeometry.scale(.5,.5,.5)
 
 const geometry = indexedGeometry.toNonIndexed()
 geometry.clearGroups()
@@ -532,6 +532,7 @@ geometry.clearGroups()
 const material = new THREE.MeshBasicMaterial({
   // color: 'red',
   // wireframe: true,
+  // side: THREE.DoubleSide,
   map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg')
 })
 const mesh = new THREE.Mesh(geometry, material)
@@ -571,10 +572,10 @@ if(true){
   // window.plane = new THREE.Vector3(1,0,0).normalize()
   // window.plane = new THREE.Vector3(0,1,0).normalize()
   // window.plane = new THREE.Vector3(0,0,1).normalize()
-  window.plane = new THREE.Vector3(1,0,1).normalize()
-  // window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
-  window.constant = 0
-  // window.constant = Math.random()-.5
+  // window.plane = new THREE.Vector3(1,0,1).normalize()
+  window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
+  // window.constant = 0
+  window.constant = Math.random()-.5
   // window.constant = .5
   // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
   setTimeout(()=>{

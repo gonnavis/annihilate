@@ -297,6 +297,45 @@ window.cutByPlane = function( object, plane, output ) {
           uvs2.push(u0,u1,u2)
         }
       }
+    }else if(sign0===0){
+      let {vI:vI0,uI:uI0} = getIntersectNode(v1,v2,u1,u2)
+      if(sign1===1){
+        points1.push(v0,vI0,v2)
+        uvs1.push(u0,uI0,u2)
+        points2.push(v0,v1,vI0)
+        uvs2.push(u0,u1,uI0)
+      }else if(sign1===-1){
+        points2.push(v0,vI0,v2)
+        uvs2.push(u0,uI0,u2)
+        points1.push(v0,v1,vI0)
+        uvs1.push(u0,u1,uI0)
+      }
+    }else if(sign1===0){
+      let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
+      if(sign2===1){
+        points1.push(v1,vI0,v0)
+        uvs1.push(u1,uI0,u0)
+        points2.push(v1,v2,vI0)
+        uvs2.push(u1,u2,uI0)
+      }else if(sign2===-1){
+        points2.push(v1,vI0,v0)
+        uvs2.push(u1,uI0,u0)
+        points1.push(v1,v2,vI0)
+        uvs1.push(u1,u2,uI0)
+      }
+    }else if(sign2===0){
+      let {vI:vI0,uI:uI0} = getIntersectNode(v1,v0,u1,u0)
+      if(sign0===1){
+        points1.push(v2,vI0,v1)
+        uvs1.push(u2,uI0,u1)
+        points2.push(v2,v0,vI0)
+        uvs2.push(u2,u0,uI0)
+      }else if(sign0===-1){
+        points2.push(v2,vI0,v1)
+        uvs2.push(u2,uI0,u1)
+        points1.push(v2,v0,vI0)
+        uvs1.push(u2,u0,uI0)
+      }
     }
 
     // let intersections = []
@@ -499,6 +538,7 @@ const mesh = new THREE.Mesh(geometry, material)
 window.scene.add(mesh)
 // mesh.position.y = 1
 // mesh.position.z = -6
+// mesh.rotation.y = Math.PI/4
 mesh.updateMatrixWorld()
 window.box = mesh
 
@@ -528,13 +568,14 @@ window.box = mesh
 //
 
 if(true){
-  window.plane = new THREE.Vector3(1,0,0).normalize()
+  // window.plane = new THREE.Vector3(1,0,0).normalize()
   // window.plane = new THREE.Vector3(0,1,0).normalize()
   // window.plane = new THREE.Vector3(0,0,1).normalize()
+  window.plane = new THREE.Vector3(1,0,1).normalize()
   // window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
-  // window.constant = 0
+  window.constant = 0
   // window.constant = Math.random()-.5
-  window.constant = .5
+  // window.constant = .5
   // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
   setTimeout(()=>{
     window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)

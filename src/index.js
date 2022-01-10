@@ -2,6 +2,7 @@ import * as THREE from '../lib/three.js/build/three.module.js'
 window.THREE = THREE
 import { OrbitControls } from '../lib/three.js/examples/jsm/controls/OrbitControls.js'
 import { MeshCutter } from './MeshCutter.js'
+import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 
 window.container = null
 window.stats = null
@@ -94,55 +95,75 @@ function animate(time) {
 
 window.meshCutter = new MeshCutter()
 
-// const geometry = new THREE.BoxGeometry()
-// const geometry = new THREE.PlaneGeometry()
-// const geometry = new THREE.CylinderGeometry()
-const geometry = new THREE.TorusKnotGeometry()
-geometry.scale(0.5, 0.5, 0.5)
+// box
 
-// const geometry = indexedGeometry.toNonIndexed()
-// geometry.clearGroups()
+// // const geometry = new THREE.BoxGeometry()
+// // const geometry = new THREE.PlaneGeometry()
+// // const geometry = new THREE.CylinderGeometry()
+// const geometry = new THREE.TorusKnotGeometry()
+// geometry.scale(0.5, 0.5, 0.5)
 
-const material = new THREE.MeshStandardMaterial({
-  // const material = new THREE.MeshBasicMaterial({
-  // color: 'red',
-  // wireframe: true,
-  // side: THREE.DoubleSide,
-  map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg'),
+// // const geometry = indexedGeometry.toNonIndexed()
+// // geometry.clearGroups()
+
+// const material = new THREE.MeshStandardMaterial({
+//   // const material = new THREE.MeshBasicMaterial({
+//   // color: 'red',
+//   // wireframe: true,
+//   // side: THREE.DoubleSide,
+//   map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg'),
+// })
+// const mesh = new THREE.Mesh(geometry, material)
+// window.scene.add(mesh)
+// // mesh.position.y = 1
+// // mesh.position.z = -6
+// // mesh.rotation.y = Math.PI/4
+// mesh.updateMatrixWorld()
+// window.box = mesh
+
+// mutant
+new GLTFLoader().load('./model/mutant/a.gltf', (gltf) => {
+  window.gltf = gltf
+  gltf.scene.traverse((child) => {
+    if (child.isMesh) {
+      child.castShadow = true
+      child.receiveShadow = true
+      child.material = new THREE.MeshStandardMaterial()
+      child.material.map = new THREE.TextureLoader().load('./model/mutant/a.jpg')
+      child.material.map.flipY = false
+      child.material.map.encoding = THREE.sRGBEncoding
+      child.material.skinning = true
+    }
+  })
+  scene.add(gltf.scene)
+  window.box = gltf.scene.children[0].children[1]
+
+  if (true) {
+    // window.constant = 0
+    window.constant = (Math.random() - 0.5) * .1
+    // window.constant = -.15
+  
+    // window.plane = new THREE.Plane(new THREE.Vector3(1,0,0).normalize(), constant)
+    // window.plane = new THREE.Plane(new THREE.Vector3(0,1,0).normalize(), constant)
+    // window.plane = new THREE.Plane(new THREE.Vector3(0,0,1).normalize(), constant)
+    // window.plane = new THREE.Plane(new THREE.Vector3(1,.1,1).normalize(), constant)
+    window.plane = new THREE.Plane(new THREE.Vector3(Math.random() - 0.5, (Math.random() - 0.5)*.1, Math.random() - 0.5).normalize(), constant)
+  
+    setTimeout(() => {
+      window.output = window.meshCutter.cutByPlane(window.box, window.plane)
+      if (window.output.object1) {
+        window.scene.add(window.output.object1)
+        window.output.object1.position.x += -1
+        window.output.object1.position.z += 2
+        // window.output.object1.updateMatrixWorld()
+      }
+      if (window.output.object2) {
+        window.scene.add(window.output.object2)
+        window.output.object2.position.x += 1
+        window.output.object2.position.z += 2
+        // window.output.object2.updateMatrixWorld()
+      }
+      // window.box.visible = false
+    }, 1000)
+  }
 })
-const mesh = new THREE.Mesh(geometry, material)
-window.scene.add(mesh)
-// mesh.position.y = 1
-// mesh.position.z = -6
-// mesh.rotation.y = Math.PI/4
-mesh.updateMatrixWorld()
-window.box = mesh
-
-if (true) {
-  // window.constant = 0
-  window.constant = (Math.random() - 0.5) * 1
-  // window.constant = .5
-
-  // window.plane = new THREE.Plane(new THREE.Vector3(1,0,0).normalize(), constant)
-  // window.plane = new THREE.Plane(new THREE.Vector3(0,1,0).normalize(), constant)
-  // window.plane = new THREE.Plane(new THREE.Vector3(0,0,1).normalize(), constant)
-  // window.plane = new THREE.Plane(new THREE.Vector3(1,0,1).normalize(), constant)
-  window.plane = new THREE.Plane(new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize(), constant)
-
-  setTimeout(() => {
-    window.output = window.meshCutter.cutByPlane(window.box, window.plane)
-    if (window.output.object1) {
-      window.scene.add(window.output.object1)
-      window.output.object1.position.x += -1
-      window.output.object1.position.z += 2
-      // window.output.object1.updateMatrixWorld()
-    }
-    if (window.output.object2) {
-      window.scene.add(window.output.object2)
-      window.output.object2.position.x += 1
-      window.output.object2.position.z += 2
-      // window.output.object2.updateMatrixWorld()
-    }
-    // window.box.visible = false
-  }, 1000)
-}

@@ -136,15 +136,6 @@ window.cutByPlane = function( object, plane, output ) {
   const uvs1 = [];
   const uvs2 = [];
 
-  const delta = this.smallDelta;
-
-  const p0 = this.tempVector3_P0;
-  const p1 = this.tempVector3_P1;
-  const n0 = this.tempVector3_N0;
-  const n1 = this.tempVector3_N1;
-  const u0 = new THREE.Vector2()
-  const u1 = new THREE.Vector2()
-
   // Transform the plane to object local space
   const localPlane = this.tempPlane_Cut;
   object.updateMatrix();
@@ -337,59 +328,6 @@ window.cutByPlane = function( object, plane, output ) {
         uvs1.push(u2,u0,uI0)
       }
     }
-
-    // let intersections = []
-
-    // for ( let segment = 0; segment < 3; segment ++ ) {
-
-    //   const i0 = segment === 0 ? va : ( segment === 1 ? vb : vc );
-    //   const i1 = segment === 0 ? vb : ( segment === 1 ? vc : va );
-
-    //   p0.set( coords[ 3 * i0 ], coords[ 3 * i0 + 1 ], coords[ 3 * i0 + 2 ] );
-    //   p1.set( coords[ 3 * i1 ], coords[ 3 * i1 + 1 ], coords[ 3 * i1 + 2 ] );
-
-    //   n0.set( normals[ 3 * i0 ], normals[ 3 * i0 + 1 ], normals[ 3 * i0 + 2 ] );
-    //   n1.set( normals[ 3 * i1 ], normals[ 3 * i1 + 1 ], normals[ 3 * i1 + 2 ] );
-
-    //   u0.set( uvs[ 2 * i0 ], uvs[ 2 * i0 + 1 ] );
-    //   u1.set( uvs[ 2 * i1 ], uvs[ 2 * i1 + 1 ] );
-
-    //   // mark: 1 for negative side, 2 for positive side, 3 for coplanar point
-    //   let mark0 = 0;
-    //   let d = localPlane.distanceToPoint( p0 );
-    //   if ( d > delta ) {
-    //     mark0 = 2;
-    //   } else if ( d < - delta ) {
-    //     mark0 = 1;
-    //   } else {
-    //     mark0 = 3;
-    //   }
-
-    //   // mark: 1 for negative side, 2 for positive side, 3 for coplanar point
-    //   let mark1 = 0;
-    //   d = localPlane.distanceToPoint( p1 );
-    //   if ( d > delta ) {
-    //     mark1 = 2;
-    //   } else if ( d < - delta ) {
-    //     mark1 = 1;
-    //   }	else {
-    //     mark1 = 3;
-    //   }
-
-    //   if ( ( mark0 === 1 && mark1 === 2 ) || ( mark0 === 2 && mark1 === 1 ) ) {
-    //     // Intersection of segment with the plane
-    //     this.tempLine1.start.copy( p0 );
-    //     this.tempLine1.end.copy( p1 );
-
-    //     let intersection = new THREE.Vector3();
-    //     intersection = localPlane.intersectLine( this.tempLine1, intersection );
-    //     intersections.push(intersection)
-    //   }
-    // }
-    // console.log(intersections.length)
-    // if(intersections.length===2){
-
-    // }
   }
 
   console.log(points1)
@@ -520,13 +458,13 @@ function animate(time) {
 }
 
 
-// const indexedGeometry = new THREE.BoxGeometry()
-// const indexedGeometry = new THREE.PlaneGeometry()
-// const indexedGeometry = new THREE.CylinderGeometry()
-const indexedGeometry = new THREE.TorusKnotGeometry(); indexedGeometry.scale(.5,.5,.5)
+// const geometry = new THREE.BoxGeometry()
+// const geometry = new THREE.PlaneGeometry()
+// const geometry = new THREE.CylinderGeometry()
+const geometry = new THREE.TorusKnotGeometry(); geometry.scale(.5,.5,.5)
 
-const geometry = indexedGeometry.toNonIndexed()
-geometry.clearGroups()
+// const geometry = indexedGeometry.toNonIndexed()
+// geometry.clearGroups()
 
 // const material = new THREE.MeshStandardMaterial({
 const material = new THREE.MeshBasicMaterial({
@@ -542,31 +480,6 @@ window.scene.add(mesh)
 // mesh.rotation.y = Math.PI/4
 mesh.updateMatrixWorld()
 window.box = mesh
-
-//
-
-// let arr
-
-// arr = [...geometry.attributes.position.array]
-// arr.push(-2,-0,-0)
-// arr.push(-2,-0,-1)
-// arr.push(-2,-2,-2)
-// geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( arr, 3 ) );
-// geometry.attributes.position.needsUpdate=true
-
-// arr = [...geometry.attributes.position.array]
-// arr[0] = -2
-// arr[1] = -2
-// arr[2] = -2
-// geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( arr, 3 ) );
-// geometry.attributes.position.needsUpdate=true
-
-// arr = [...box.geometry.index.array]
-// arr.push(23,21,24)
-// box.geometry.setIndex( new THREE.BufferAttribute( new Uint16Array( arr ), 1 ) );
-// // box.geometry.index.needsUpdate=true
-
-//
 
 if(true){
   // window.plane = new THREE.Vector3(1,0,0).normalize()

@@ -119,30 +119,39 @@ mesh.updateMatrixWorld()
 window.box = mesh
 
 if (true) {
-  // window.constant = 0
-  window.constant = (Math.random() - 0.5) * 1
+  window.constant = 0
+  // window.constant = (Math.random() - 0.5) * 1
   // window.constant = .5
 
-  // window.plane = new THREE.Plane(new THREE.Vector3(1,0,0).normalize(), constant)
+  window.plane = new THREE.Plane(new THREE.Vector3(1,0,0).normalize(), constant)
   // window.plane = new THREE.Plane(new THREE.Vector3(0,1,0).normalize(), constant)
   // window.plane = new THREE.Plane(new THREE.Vector3(0,0,1).normalize(), constant)
   // window.plane = new THREE.Plane(new THREE.Vector3(1,0,1).normalize(), constant)
-  window.plane = new THREE.Plane(new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize(), constant)
+  // window.plane = new THREE.Plane(new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize(), constant)
 
-  setTimeout(() => {
-    window.output = window.meshCutter.cutByPlane(window.box, window.plane)
-    if (window.output.object1) {
-      window.scene.add(window.output.object1)
-      window.output.object1.position.x += -1
-      window.output.object1.position.z += 2
-      // window.output.object1.updateMatrixWorld()
-    }
-    if (window.output.object2) {
-      window.scene.add(window.output.object2)
-      window.output.object2.position.x += 1
-      window.output.object2.position.z += 2
-      // window.output.object2.updateMatrixWorld()
-    }
-    // window.box.visible = false
-  }, 1000)
+  // setTimeout(() => {
+  //   window.output = window.meshCutter.cutByPlane(window.box, window.plane)
+  //   if (window.output.object1) {
+  //     window.scene.add(window.output.object1)
+  //     window.output.object1.position.x += -1
+  //     window.output.object1.position.z += 2
+  //     // window.output.object1.updateMatrixWorld()
+  //   }
+  //   if (window.output.object2) {
+  //     window.scene.add(window.output.object2)
+  //     window.output.object2.position.x += 1
+  //     window.output.object2.position.z += 2
+  //     // window.output.object2.updateMatrixWorld()
+  //   }
+  //   // window.box.visible = false
+  // }, 1000)
 }
+
+/* console_test
+  startTime = performance.now()
+  for(let i=0;i<10000;i++){
+    window.meshCutter.cutByPlane(window.box, window.plane)
+  }
+  console.log(performance.now()-startTime)
+  -> 1683.699999988079
+*/

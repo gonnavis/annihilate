@@ -364,33 +364,33 @@ class MeshCutter {
       }
     }
 
-    const numPoints1 = points1.length
-    const numPoints2 = points2.length
+    // const numPoints1 = points1.length
+    // const numPoints2 = points2.length
 
-    let object1 = null
-    let object2 = null
+    // let object1 = null
+    // let object2 = null
 
-    let numObjects = 0
+    // let numObjects = 0
 
-    if (numPoints1 > 4) {
-      let geometry = this.createGeometry(points1, uvs1, normals1)
-      object1 = new THREE.Mesh(geometry, object.material)
-      object1.quaternion.copy(object.quaternion)
-      numObjects++
-    }
+    // if (numPoints1 > 4) {
+    //   let geometry = this.createGeometry(points1, uvs1, normals1)
+    //   object1 = new THREE.Mesh(geometry, object.material)
+    //   object1.quaternion.copy(object.quaternion)
+    //   numObjects++
+    // }
 
-    if (numPoints2 > 4) {
-      let geometry = this.createGeometry(points2, uvs2, normals2)
-      object2 = new THREE.Mesh(geometry, object.material)
-      object2.quaternion.copy(object.quaternion)
-      numObjects++
-    }
+    // if (numPoints2 > 4) {
+    //   let geometry = this.createGeometry(points2, uvs2, normals2)
+    //   object2 = new THREE.Mesh(geometry, object.material)
+    //   object2.quaternion.copy(object.quaternion)
+    //   numObjects++
+    // }
 
-    return {
-      object1,
-      object2,
-      numObjects,
-    }
+    // return {
+    //   object1,
+    //   object2,
+    //   numObjects,
+    // }
   }
 }
 

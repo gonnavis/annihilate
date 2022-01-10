@@ -103,8 +103,8 @@ const geometry = new THREE.TorusKnotGeometry(); geometry.scale(.5,.5,.5)
 // const geometry = indexedGeometry.toNonIndexed()
 // geometry.clearGroups()
 
-// const material = new THREE.MeshStandardMaterial({
-const material = new THREE.MeshBasicMaterial({
+const material = new THREE.MeshStandardMaterial({
+// const material = new THREE.MeshBasicMaterial({
   // color: 'red',
   // wireframe: true,
   // side: THREE.DoubleSide,
@@ -119,13 +119,13 @@ mesh.updateMatrixWorld()
 window.box = mesh
 
 if(true){
-  // window.plane = new THREE.Vector3(1,0,0).normalize()
+  window.plane = new THREE.Vector3(1,0,0).normalize()
   // window.plane = new THREE.Vector3(0,1,0).normalize()
   // window.plane = new THREE.Vector3(0,0,1).normalize()
   // window.plane = new THREE.Vector3(1,0,1).normalize()
-  window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
-  // window.constant = 0
-  window.constant = (Math.random()-.5)*1
+  // window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
+  window.constant = 0
+  // window.constant = (Math.random()-.5)*1
   // window.constant = .5
   // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
   setTimeout(()=>{

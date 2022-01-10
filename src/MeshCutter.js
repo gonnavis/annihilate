@@ -76,25 +76,24 @@ class MeshCutter {
     return indices ? indices[idx] : idx
   }
 
-  createGeometry( points, uvs, normals ) {
-
+  createGeometry(points, uvs, normals) {
     let geometry = new THREE.BufferGeometry()
 
-		// buffers
+    // buffers
 
-		let aPoints = []
-		points.forEach(point=>aPoints.push(point.x, point.y, point.z))
-		let aNormals = []
-		normals.forEach(normal=>aNormals.push(normal.x, normal.y, normal.z))
-		let aUvs = []
-		uvs.forEach(uv=>aUvs.push(uv.x, uv.y))
+    let aPoints = []
+    points.forEach((point) => aPoints.push(point.x, point.y, point.z))
+    let aNormals = []
+    normals.forEach((normal) => aNormals.push(normal.x, normal.y, normal.z))
+    let aUvs = []
+    uvs.forEach((uv) => aUvs.push(uv.x, uv.y))
 
-		geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( aPoints, 3 ) );
-		geometry.setAttribute( 'normal', new THREE.Float32BufferAttribute( aNormals, 3 ) );
-		geometry.setAttribute( 'uv', new THREE.Float32BufferAttribute( aUvs, 2 ) );
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(aPoints, 3))
+    geometry.setAttribute('normal', new THREE.Float32BufferAttribute(aNormals, 3))
+    geometry.setAttribute('uv', new THREE.Float32BufferAttribute(aUvs, 2))
 
     return geometry
-	}
+  }
 
   cutByPlane(object, plane) {
     // Returns breakable objects in output.object1 and output.object2 members, the resulting 2 pieces of the cut.
@@ -140,6 +139,10 @@ class MeshCutter {
       const v1 = new THREE.Vector3(coords[3 * vb], coords[3 * vb + 1], coords[3 * vb + 2])
       const v2 = new THREE.Vector3(coords[3 * vc], coords[3 * vc + 1], coords[3 * vc + 2])
 
+      const n0 = new THREE.Vector3(normals[3 * va], normals[3 * va + 1], normals[3 * va + 2])
+      // const n1 = new THREE.Vector3(normals[3 * vb], normals[3 * vb + 1], normals[3 * vb + 2])
+      // const n2 = new THREE.Vector3(normals[3 * vc], normals[3 * vc + 1], normals[3 * vc + 2])
+
       const u0 = new THREE.Vector2(uvs[2 * va], uvs[2 * va + 1])
       const u1 = new THREE.Vector2(uvs[2 * vb], uvs[2 * vb + 1])
       const u2 = new THREE.Vector2(uvs[2 * vc], uvs[2 * vc + 1])
@@ -155,9 +158,11 @@ class MeshCutter {
       if (sign0 === sign1 && sign1 === sign2 && sign2 === sign0) {
         if (sign0 === -1) {
           points1.push(v0, v1, v2)
+          normals1.push(n0, n0, n0)
           uvs1.push(u0, u1, u2)
         } else if (sign0 === 1) {
           points2.push(v0, v1, v2)
+          normals2.push(n0, n0, n0)
           uvs2.push(u0, u1, u2)
         }
       } else if (sign0 === sign1) {
@@ -166,13 +171,17 @@ class MeshCutter {
             let { vI: vI0, uI: uI0 } = this.getIntersectNode(v0, v2, u0, u2)
             let { vI: vI1, uI: uI1 } = this.getIntersectNode(v1, v2, u1, u2)
             points1.push(v0, vI1, vI0)
+            normals1.push(n0, n0, n0)
             uvs1.push(u0, uI1, uI0)
             points1.push(v0, v1, vI1)
+            normals1.push(n0, n0, n0)
             uvs1.push(u0, u1, uI1)
             points2.push(v2, vI0, vI1)
+            normals2.push(n0, n0, n0)
             uvs2.push(u2, uI0, uI1)
           } else if (sign2 === 0) {
             points1.push(v0, v1, v2)
+            normals1.push(n0, n0, n0)
             uvs1.push(u0, u1, u2)
           }
         } else if (sign0 === 1) {
@@ -180,21 +189,27 @@ class MeshCutter {
             let { vI: vI0, uI: uI0 } = this.getIntersectNode(v0, v2, u0, u2)
             let { vI: vI1, uI: uI1 } = this.getIntersectNode(v1, v2, u1, u2)
             points2.push(v0, vI1, vI0)
+            normals2.push(n0, n0, n0)
             uvs2.push(u0, uI1, uI0)
             points2.push(v0, v1, vI1)
+            normals2.push(n0, n0, n0)
             uvs2.push(u0, u1, uI1)
             points1.push(v2, vI0, vI1)
+            normals1.push(n0, n0, n0)
             uvs1.push(u2, uI0, uI1)
           } else if (sign2 === 0) {
             points2.push(v0, v1, v2)
+            normals2.push(n0, n0, n0)
             uvs2.push(u0, u1, u2)
           }
         } else if (sign0 === 0) {
           if (sign2 === -1) {
             points1.push(v0, v1, v2)
+            normals1.push(n0, n0, n0)
             uvs1.push(u0, u1, u2)
           } else if (sign2 === 1) {
             points2.push(v0, v1, v2)
+            normals2.push(n0, n0, n0)
             uvs2.push(u0, u1, u2)
           }
         }
@@ -204,13 +219,17 @@ class MeshCutter {
             let { vI: vI0, uI: uI0 } = this.getIntersectNode(v1, v0, u1, u0)
             let { vI: vI1, uI: uI1 } = this.getIntersectNode(v2, v0, u2, u0)
             points1.push(v1, vI1, vI0)
+            normals1.push(n0, n0, n0)
             uvs1.push(u1, uI1, uI0)
             points1.push(v1, v2, vI1)
+            normals1.push(n0, n0, n0)
             uvs1.push(u1, u2, uI1)
             points2.push(v0, vI0, vI1)
+            normals2.push(n0, n0, n0)
             uvs2.push(u0, uI0, uI1)
           } else if (sign0 === 0) {
             points1.push(v0, v1, v2)
+            normals1.push(n0, n0, n0)
             uvs1.push(u0, u1, u2)
           }
         } else if (sign1 === 1) {
@@ -218,21 +237,27 @@ class MeshCutter {
             let { vI: vI0, uI: uI0 } = this.getIntersectNode(v1, v0, u1, u0)
             let { vI: vI1, uI: uI1 } = this.getIntersectNode(v2, v0, u2, u0)
             points2.push(v1, vI1, vI0)
+            normals2.push(n0, n0, n0)
             uvs2.push(u1, uI1, uI0)
             points2.push(v1, v2, vI1)
+            normals2.push(n0, n0, n0)
             uvs2.push(u1, u2, uI1)
             points1.push(v0, vI0, vI1)
+            normals1.push(n0, n0, n0)
             uvs1.push(u0, uI0, uI1)
           } else if (sign0 === 0) {
             points2.push(v0, v1, v2)
+            normals2.push(n0, n0, n0)
             uvs2.push(u0, u1, u2)
           }
         } else if (sign1 === 0) {
           if (sign0 === -1) {
             points1.push(v0, v1, v2)
+            normals1.push(n0, n0, n0)
             uvs1.push(u0, u1, u2)
           } else if (sign0 === 1) {
             points2.push(v0, v1, v2)
+            normals2.push(n0, n0, n0)
             uvs2.push(u0, u1, u2)
           }
         }
@@ -242,13 +267,17 @@ class MeshCutter {
             let { vI: vI0, uI: uI0 } = this.getIntersectNode(v2, v1, u2, u1)
             let { vI: vI1, uI: uI1 } = this.getIntersectNode(v0, v1, u0, u1)
             points1.push(v2, vI1, vI0)
+            normals1.push(n0, n0, n0)
             uvs1.push(u2, uI1, uI0)
             points1.push(v2, v0, vI1)
+            normals1.push(n0, n0, n0)
             uvs1.push(u2, u0, uI1)
             points2.push(v1, vI0, vI1)
+            normals2.push(n0, n0, n0)
             uvs2.push(u1, uI0, uI1)
           } else if (sign1 === 0) {
             points1.push(v0, v1, v2)
+            normals1.push(n0, n0, n0)
             uvs1.push(u0, u1, u2)
           }
         } else if (sign2 === 1) {
@@ -256,21 +285,27 @@ class MeshCutter {
             let { vI: vI0, uI: uI0 } = this.getIntersectNode(v2, v1, u2, u1)
             let { vI: vI1, uI: uI1 } = this.getIntersectNode(v0, v1, u0, u1)
             points2.push(v2, vI1, vI0)
+            normals2.push(n0, n0, n0)
             uvs2.push(u2, uI1, uI0)
             points2.push(v2, v0, vI1)
+            normals2.push(n0, n0, n0)
             uvs2.push(u2, u0, uI1)
             points1.push(v1, vI0, vI1)
+            normals1.push(n0, n0, n0)
             uvs1.push(u1, uI0, uI1)
           } else if (sign1 === 0) {
             points2.push(v0, v1, v2)
+            normals2.push(n0, n0, n0)
             uvs2.push(u0, u1, u2)
           }
         } else if (sign2 === 0) {
           if (sign1 === -1) {
             points1.push(v0, v1, v2)
+            normals1.push(n0, n0, n0)
             uvs1.push(u0, u1, u2)
           } else if (sign1 === 1) {
             points2.push(v0, v1, v2)
+            normals2.push(n0, n0, n0)
             uvs2.push(u0, u1, u2)
           }
         }
@@ -278,39 +313,51 @@ class MeshCutter {
         let { vI: vI0, uI: uI0 } = this.getIntersectNode(v1, v2, u1, u2)
         if (sign1 === 1) {
           points1.push(v0, vI0, v2)
+          normals1.push(n0, n0, n0)
           uvs1.push(u0, uI0, u2)
           points2.push(v0, v1, vI0)
+          normals2.push(n0, n0, n0)
           uvs2.push(u0, u1, uI0)
         } else if (sign1 === -1) {
           points2.push(v0, vI0, v2)
+          normals2.push(n0, n0, n0)
           uvs2.push(u0, uI0, u2)
           points1.push(v0, v1, vI0)
+          normals1.push(n0, n0, n0)
           uvs1.push(u0, u1, uI0)
         }
       } else if (sign1 === 0) {
         let { vI: vI0, uI: uI0 } = this.getIntersectNode(v0, v2, u0, u2)
         if (sign2 === 1) {
           points1.push(v1, vI0, v0)
+          normals1.push(n0, n0, n0)
           uvs1.push(u1, uI0, u0)
           points2.push(v1, v2, vI0)
+          normals2.push(n0, n0, n0)
           uvs2.push(u1, u2, uI0)
         } else if (sign2 === -1) {
           points2.push(v1, vI0, v0)
+          normals2.push(n0, n0, n0)
           uvs2.push(u1, uI0, u0)
           points1.push(v1, v2, vI0)
+          normals1.push(n0, n0, n0)
           uvs1.push(u1, u2, uI0)
         }
       } else if (sign2 === 0) {
         let { vI: vI0, uI: uI0 } = this.getIntersectNode(v1, v0, u1, u0)
         if (sign0 === 1) {
           points1.push(v2, vI0, v1)
+          normals1.push(n0, n0, n0)
           uvs1.push(u2, uI0, u1)
           points2.push(v2, v0, vI0)
+          normals2.push(n0, n0, n0)
           uvs2.push(u2, u0, uI0)
         } else if (sign0 === -1) {
           points2.push(v2, vI0, v1)
+          normals2.push(n0, n0, n0)
           uvs2.push(u2, uI0, u1)
           points1.push(v2, v0, vI0)
+          normals1.push(n0, n0, n0)
           uvs1.push(u2, u0, uI0)
         }
       }
@@ -339,7 +386,7 @@ class MeshCutter {
     return {
       object1,
       object2,
-      numObjects
+      numObjects,
     }
   }
 }

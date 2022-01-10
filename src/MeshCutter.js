@@ -373,13 +373,15 @@ class MeshCutter {
     let numObjects = 0
 
     if (numPoints1 > 4) {
-      object1 = new THREE.Mesh(this.createGeometry(points1, uvs1, normals1), object.material)
+      let geometry = this.createGeometry(points1, uvs1, normals1)
+      object1 = new THREE.Mesh(geometry, object.material)
       object1.quaternion.copy(object.quaternion)
       numObjects++
     }
 
     if (numPoints2 > 4) {
-      object2 = new THREE.Mesh(this.createGeometry(points2, uvs2, normals2), object.material)
+      let geometry = this.createGeometry(points2, uvs2, normals2)
+      object2 = new THREE.Mesh(geometry, object.material)
       object2.quaternion.copy(object.quaternion)
       numObjects++
     }

@@ -60,22 +60,11 @@ window.cutByPlane = function( object, plane, output ) {
   this.smallDelta = 0.0001;
 
   this.tempLine1 = new THREE.Line3();
-  this.tempPlane1 = new THREE.Plane();
-  this.tempPlane2 = new THREE.Plane();
   this.tempPlane_Cut = new THREE.Plane();
-  this.tempCM1 = new THREE.Vector3();
-  this.tempCM2 = new THREE.Vector3();
   this.tempVector3 = new THREE.Vector3();
-  this.tempVector3_2 = new THREE.Vector3();
-  this.tempVector3_3 = new THREE.Vector3();
-  this.tempVector3_P0 = new THREE.Vector3();
-  this.tempVector3_P1 = new THREE.Vector3();
-  this.tempVector3_P2 = new THREE.Vector3();
-  this.tempVector3_N0 = new THREE.Vector3();
-  this.tempVector3_N1 = new THREE.Vector3();
-  this.tempVector3_AB = new THREE.Vector3();
-  this.tempVector3_CB = new THREE.Vector3();
-  this.tempResultObjects = { object1: null, object2: null };
+  // this.tempVector3_2 = new THREE.Vector3();
+  this.tempVector2 = new THREE.Vector2();
+  // this.tempVector2_2 = new THREE.Vector2();
 
   let getIntersectNode = (v0,v1,u0,u1)=>{
     console.log(v0,v1)
@@ -85,11 +74,10 @@ window.cutByPlane = function( object, plane, output ) {
     vI = localPlane.intersectLine(this.tempLine1, vI)
     console.log('vI', vI)
 
-    // todo: performance: no new Vector.
-    let total = new THREE.Vector3().subVectors( v1, v0 ).length() // todo: performance: use lengthSq()?
-    let part = new THREE.Vector3().subVectors( vI, v0 ).length()
-    let ratio = part / total;
-    let uvPart = new THREE.Vector2().subVectors( u1, u0 ).multiplyScalar( ratio );
+    let total = this.tempVector3.subVectors( v1, v0 ).lengthSq()
+    let part = this.tempVector3.subVectors( vI, v0 ).lengthSq()
+    let ratio = Math.sqrt(part / total);
+    let uvPart = this.tempVector2.subVectors( u1, u0 ).multiplyScalar( ratio );
     let uI = new THREE.Vector2().copy( u0 ).add( uvPart );
 
     return {vI,uI}
@@ -488,7 +476,7 @@ if(true){
   // window.plane = new THREE.Vector3(1,0,1).normalize()
   window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
   // window.constant = 0
-  window.constant = Math.random()-.5
+  window.constant = (Math.random()-.5)*1
   // window.constant = .5
   // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
   setTimeout(()=>{

@@ -78,10 +78,12 @@ window.cutByPlane = function( object, plane, output ) {
   this.tempResultObjects = { object1: null, object2: null };
 
   let getIntersectNode = (v0,v1,u0,u1)=>{
+    console.log(v0,v1)
     this.tempLine1.start.copy(v0)
     this.tempLine1.end.copy(v1)
     let vI = new THREE.Vector3()
     vI = localPlane.intersectLine(this.tempLine1, vI)
+    console.log('vI', vI)
 
     // todo: performance: no new Vector.
     let total = new THREE.Vector3().subVectors( v1, v0 ).length() // todo: performance: use lengthSq()?
@@ -159,9 +161,9 @@ window.cutByPlane = function( object, plane, output ) {
     const v1 = new THREE.Vector3(coords[ 3 * vb ], coords[ 3 * vb + 1 ], coords[ 3 * vb + 2 ])
     const v2 = new THREE.Vector3(coords[ 3 * vc ], coords[ 3 * vc + 1 ], coords[ 3 * vc + 2 ])
 
-    const u0 = new THREE.Vector3(uvs[ 2 * va ], uvs[ 2 * va + 1 ])
-    const u1 = new THREE.Vector3(uvs[ 2 * vb ], uvs[ 2 * vb + 1 ])
-    const u2 = new THREE.Vector3(uvs[ 2 * vc ], uvs[ 2 * vc + 1 ])
+    const u0 = new THREE.Vector2(uvs[ 2 * va ], uvs[ 2 * va + 1 ])
+    const u1 = new THREE.Vector2(uvs[ 2 * vb ], uvs[ 2 * vb + 1 ])
+    const u2 = new THREE.Vector2(uvs[ 2 * vc ], uvs[ 2 * vc + 1 ])
 
     let d0 = localPlane.distanceToPoint( v0 );
     let d1 = localPlane.distanceToPoint( v1 );
@@ -171,74 +173,79 @@ window.cutByPlane = function( object, plane, output ) {
     let sign1 = Math.sign(d1)
     let sign2 = Math.sign(d2)
 
+    console.log(sign0, sign1, sign2)
+
     if(sign0===sign1&&sign1===sign2&&sign2===sign0){
-      if(sign0===-1){
+      // if(sign0===-1||sign0===0){
+      //   points1.push(v0,v1,v2)
+      //   uvs1.push(u0,u1,u2)
+      // }else if(sign0===1){
+      //   points2.push(v0,v1,v2)
+      //   uvs2.push(u0,u1,u2)
+      // }
+    }else if(sign0===sign1){
+      if(sign0===-1&&sign2===1){
+        // let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
+        // let {vI:vI1,uI:uI1} = getIntersectNode(v1,v2,u1,u2)
+        // points1.push(v0,vI1,vI0)
+        // uvs1.push(u0,uI1,uI0)
+        // points1.push(v0,v1,vI1)
+        // uvs1.push(u0,u1,uI1)
+        // points2.push(v2,vI0,vI1)
+        // uvs2.push(u2,uI0,uI1)
+      }else if(sign0===1||sign2===-1){
+        // let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
+        // let {vI:vI1,uI:uI1} = getIntersectNode(v1,v2,u1,u2)
+        // points2.push(v0,vI1,vI0)
+        // uvs2.push(u0,uI1,uI0)
+        // points2.push(v0,v1,vI1)
+        // uvs2.push(u0,u1,uI1)
+        // points1.push(v2,vI0,vI1)
+        // uvs1.push(u2,uI0,uI1)
+      }else if(sign0===-1&&sign2===0){
         points1.push(v0,v1,v2)
         uvs1.push(u0,u1,u2)
-      }else if(sign0===1){
-        points2.push(v0,v1,v2)
-        uvs2.push(u0,u1,u2)
-      }
-    }else if(sign0===sign1){
-      if(sign0===-1){
-        let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
-        let {vI:vI1,uI:uI1} = getIntersectNode(v1,v2,u1,u2)
-        points1.push(v0,vI1,vI0)
-        uvs1.push(u0,uI1,uI0)
-        points1.push(v0,v1,vI1)
-        uvs1.push(u0,u1,uI1)
-        points2.push(v2,vI0,vI1)
-        uvs2.push(u2,uI0,uI1)
-      }else if(sign0===1){
-        let {vI:vI0,uI:uI0} = getIntersectNode(v0,v2,u0,u2)
-        let {vI:vI1,uI:uI1} = getIntersectNode(v1,v2,u1,u2)
-        points2.push(v0,vI1,vI0)
-        uvs2.push(u0,uI1,uI0)
-        points2.push(v0,v1,vI1)
-        uvs2.push(u0,u1,uI1)
-        points1.push(v2,vI0,vI1)
-        uvs1.push(u2,uI0,uI1)
       }
     }else if(sign1===sign2){
-      if(sign1===-1){
-        let {vI:vI0,uI:uI0} = getIntersectNode(v1,v0,u1,u0)
-        let {vI:vI1,uI:uI1} = getIntersectNode(v2,v0,u2,u0)
-        points1.push(v1,vI1,vI0)
-        uvs1.push(u1,uI1,uI0)
-        points1.push(v1,v2,vI1)
-        uvs1.push(u1,u2,uI1)
-        points2.push(v0,vI0,vI1)
-        uvs2.push(u0,uI0,uI1)
-      }else if(sign1===1){
-        let {vI:vI0,uI:uI0} = getIntersectNode(v1,v0,u1,u0)
-        let {vI:vI1,uI:uI1} = getIntersectNode(v2,v0,u2,u0)
-        points2.push(v1,vI1,vI0)
-        uvs2.push(u1,uI1,uI0)
-        points2.push(v1,v2,vI1)
-        uvs2.push(u1,u2,uI1)
-        points1.push(v0,vI0,vI1)
-        uvs1.push(u0,uI0,uI1)
-      }
+      // if(sign1===-1||(sign1===0&&sign0===-1)){
+      //   let {vI:vI0,uI:uI0} = getIntersectNode(v1,v0,u1,u0)
+      //   let {vI:vI1,uI:uI1} = getIntersectNode(v2,v0,u2,u0)
+      //   points1.push(v1,vI1,vI0)
+      //   uvs1.push(u1,uI1,uI0)
+      //   points1.push(v1,v2,vI1)
+      //   uvs1.push(u1,u2,uI1)
+      //   points2.push(v0,vI0,vI1)
+      //   uvs2.push(u0,uI0,uI1)
+      // }else if(sign1===1||(sign1===0&&sign0===1)){
+      //   let {vI:vI0,uI:uI0} = getIntersectNode(v1,v0,u1,u0)
+      //   let {vI:vI1,uI:uI1} = getIntersectNode(v2,v0,u2,u0)
+      //   points2.push(v1,vI1,vI0)
+      //   uvs2.push(u1,uI1,uI0)
+      //   points2.push(v1,v2,vI1)
+      //   uvs2.push(u1,u2,uI1)
+      //   points1.push(v0,vI0,vI1)
+      //   uvs1.push(u0,uI0,uI1)
+      // }
     }else if(sign2===sign0){
-      if(sign2===-1){
-        let {vI:vI0,uI:uI0} = getIntersectNode(v2,v1,u2,u1)
-        let {vI:vI1,uI:uI1} = getIntersectNode(v0,v1,u0,u1)
-        points1.push(v2,vI1,vI0)
-        uvs1.push(u2,uI1,uI0)
-        points1.push(v2,v0,vI1)
-        uvs1.push(u2,u0,uI1)
-        points2.push(v1,vI0,vI1)
-        uvs2.push(u1,uI0,uI1)
-      }else if(sign2===1){
-        let {vI:vI0,uI:uI0} = getIntersectNode(v2,v1,u2,u1)
-        let {vI:vI1,uI:uI1} = getIntersectNode(v0,v1,u0,u1)
-        points2.push(v2,vI1,vI0)
-        uvs2.push(u2,uI1,uI0)
-        points2.push(v2,v0,vI1)
-        uvs2.push(u2,u0,uI1)
-        points1.push(v1,vI0,vI1)
-        uvs1.push(u1,uI0,uI1)
-      }
+      // if(sign2===-1||(sign2===0&&sign1===-1)){
+      //   let {vI:vI0,uI:uI0} = getIntersectNode(v2,v1,u2,u1)
+      //   let {vI:vI1,uI:uI1} = getIntersectNode(v0,v1,u0,u1)
+      //   points1.push(v2,vI1,vI0)
+      //   uvs1.push(u2,uI1,uI0)
+      //   points1.push(v2,v0,vI1)
+      //   uvs1.push(u2,u0,uI1)
+      //   points2.push(v1,vI0,vI1)
+      //   uvs2.push(u1,uI0,uI1)
+      // }else if(sign2===1||(sign2===0&&sign1===1)){
+      //   let {vI:vI0,uI:uI0} = getIntersectNode(v2,v1,u2,u1)
+      //   let {vI:vI1,uI:uI1} = getIntersectNode(v0,v1,u0,u1)
+      //   points2.push(v2,vI1,vI0)
+      //   uvs2.push(u2,uI1,uI0)
+      //   points2.push(v2,v0,vI1)
+      //   uvs2.push(u2,u0,uI1)
+      //   points1.push(v1,vI0,vI1)
+      //   uvs1.push(u1,uI0,uI1)
+      // }
     }
 
     // let intersections = []
@@ -294,6 +301,9 @@ window.cutByPlane = function( object, plane, output ) {
 
     // }
   }
+
+  console.log(points1)
+  console.log(points2)
 
   // debugger
 
@@ -420,10 +430,10 @@ function animate(time) {
 }
 
 
-// const indexedGeometry = new THREE.BoxGeometry()
+const indexedGeometry = new THREE.BoxGeometry()
 // const indexedGeometry = new THREE.PlaneGeometry()
 // const indexedGeometry = new THREE.CylinderGeometry()
-const indexedGeometry = new THREE.TorusKnotGeometry(); indexedGeometry.scale(.5,.5,.5)
+// const indexedGeometry = new THREE.TorusKnotGeometry(); indexedGeometry.scale(.5,.5,.5)
 
 const geometry = indexedGeometry.toNonIndexed()
 geometry.clearGroups()
@@ -467,13 +477,13 @@ window.box = mesh
 //
 
 if(true){
-  // window.plane = new THREE.Vector3(1,0,0).normalize()
+  window.plane = new THREE.Vector3(1,0,0).normalize()
   // window.plane = new THREE.Vector3(0,1,0).normalize()
   // window.plane = new THREE.Vector3(0,0,1).normalize()
-  window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
+  // window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
   // window.constant = 0
-  window.constant = Math.random()-.5
-  // window.constant = .2
+  // window.constant = Math.random()-.5
+  window.constant = -.5
   // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
   setTimeout(()=>{
     window.cutByPlane(window.box, new THREE.Plane(plane,constant), window.output)

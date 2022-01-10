@@ -1,8 +1,5 @@
 class MeshCutter {
   constructor() {
-    this.minSizeForBreak = 1.4
-    this.smallDelta = 0.0001
-
     this.tempLine1 = new THREE.Line3()
     this.localPlane = new THREE.Plane()
     this.tempVector3 = new THREE.Vector3()

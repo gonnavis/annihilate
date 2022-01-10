@@ -92,23 +92,23 @@ function animate(time) {
   // stats.update()
 }
 
-
 window.meshCutter = new MeshCutter()
 
 // const geometry = new THREE.BoxGeometry()
 // const geometry = new THREE.PlaneGeometry()
 // const geometry = new THREE.CylinderGeometry()
-const geometry = new THREE.TorusKnotGeometry(); geometry.scale(.5,.5,.5)
+const geometry = new THREE.TorusKnotGeometry()
+geometry.scale(0.5, 0.5, 0.5)
 
 // const geometry = indexedGeometry.toNonIndexed()
 // geometry.clearGroups()
 
 const material = new THREE.MeshStandardMaterial({
-// const material = new THREE.MeshBasicMaterial({
+  // const material = new THREE.MeshBasicMaterial({
   // color: 'red',
   // wireframe: true,
   // side: THREE.DoubleSide,
-  map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg')
+  map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg'),
 })
 const mesh = new THREE.Mesh(geometry, material)
 window.scene.add(mesh)
@@ -118,18 +118,19 @@ window.scene.add(mesh)
 mesh.updateMatrixWorld()
 window.box = mesh
 
-if(true){
-  // window.plane = new THREE.Vector3(1,0,0).normalize()
-  // window.plane = new THREE.Vector3(0,1,0).normalize()
-  // window.plane = new THREE.Vector3(0,0,1).normalize()
-  // window.plane = new THREE.Vector3(1,0,1).normalize()
-  window.plane = new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize()
+if (true) {
   // window.constant = 0
-  window.constant = (Math.random()-.5)*1
+  window.constant = (Math.random() - 0.5) * 1
   // window.constant = .5
-  // setTimeout(()=>doCut(new THREE.Plane(plane,constant)),1000)
-  setTimeout(()=>{
-    window.output = window.meshCutter.cutByPlane(window.box, new THREE.Plane(plane,constant))
+
+  // window.plane = new THREE.Plane(new THREE.Vector3(1,0,0).normalize(), constant)
+  // window.plane = new THREE.Plane(new THREE.Vector3(0,1,0).normalize(), constant)
+  // window.plane = new THREE.Plane(new THREE.Vector3(0,0,1).normalize(), constant)
+  // window.plane = new THREE.Plane(new THREE.Vector3(1,0,1).normalize(), constant)
+  window.plane = new THREE.Plane(new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize(), constant)
+
+  setTimeout(() => {
+    window.output = window.meshCutter.cutByPlane(window.box, window.plane)
     if (window.output.object1) {
       window.scene.add(window.output.object1)
       window.output.object1.position.x += -1
@@ -143,5 +144,5 @@ if(true){
       // window.output.object2.updateMatrixWorld()
     }
     // window.box.visible = false
-  },1000)
+  }, 1000)
 }

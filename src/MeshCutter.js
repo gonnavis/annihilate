@@ -6,9 +6,7 @@ class MeshCutter {
     this.tempLine1 = new THREE.Line3()
     this.localPlane = new THREE.Plane()
     this.tempVector3 = new THREE.Vector3()
-    // this.tempVector3_2 = new THREE.Vector3();
     this.tempVector2 = new THREE.Vector2()
-    // this.tempVector2_2 = new THREE.Vector2();
   }
 
   transformFreeVectorInverse(v, m) {
@@ -58,12 +56,10 @@ class MeshCutter {
   }
 
   getIntersectNode(v0, v1, u0, u1) {
-    console.log(v0, v1)
     this.tempLine1.start.copy(v0)
     this.tempLine1.end.copy(v1)
     let vI = new THREE.Vector3()
     vI = this.localPlane.intersectLine(this.tempLine1, vI)
-    console.log('vI', vI)
 
     let total = this.tempVector3.subVectors(v1, v0).lengthSq()
     let part = this.tempVector3.subVectors(vI, v0).lengthSq()
@@ -81,8 +77,6 @@ class MeshCutter {
   }
 
   createGeometry( points, uvs, normals ) {
-		// console.log(points, uvs, normals)
-		// debugger
 
     let geometry = new THREE.BufferGeometry()
 
@@ -95,7 +89,6 @@ class MeshCutter {
 		let aUvs = []
 		uvs.forEach(uv=>aUvs.push(uv.x, uv.y))
 
-		// debugger
 		geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( aPoints, 3 ) );
 		geometry.setAttribute( 'normal', new THREE.Float32BufferAttribute( aNormals, 3 ) );
 		geometry.setAttribute( 'uv', new THREE.Float32BufferAttribute( aUvs, 2 ) );
@@ -158,8 +151,6 @@ class MeshCutter {
       let sign0 = Math.sign(d0)
       let sign1 = Math.sign(d1)
       let sign2 = Math.sign(d2)
-
-      console.log(sign0, sign1, sign2)
 
       if (sign0 === sign1 && sign1 === sign2 && sign2 === sign0) {
         if (sign0 === -1) {
@@ -325,11 +316,6 @@ class MeshCutter {
       }
     }
 
-    console.log(points1)
-    console.log(points2)
-
-    // debugger
-
     const numPoints1 = points1.length
     const numPoints2 = points2.length
 
@@ -339,14 +325,12 @@ class MeshCutter {
     let numObjects = 0
 
     if (numPoints1 > 4) {
-      // debugger
       object1 = new THREE.Mesh(this.createGeometry(points1, uvs1, normals1), object.material)
       object1.quaternion.copy(object.quaternion)
       numObjects++
     }
 
     if (numPoints2 > 4) {
-      // debugger
       object2 = new THREE.Mesh(this.createGeometry(points2, uvs2, normals2), object.material)
       object2.quaternion.copy(object.quaternion)
       numObjects++

@@ -55,7 +55,7 @@ class MeshCutter {
     resultPlane.constant = -referencePoint.dot(resultPlane.normal)
   }
 
-  getIntersectNode(v0, v1, u0, u1) {
+  getIntersectNode(v0, v1, n0, n1, u0, u1) {
     this.tempLine1.start.copy(v0)
     this.tempLine1.end.copy(v1)
     let vI = new THREE.Vector3()
@@ -64,10 +64,14 @@ class MeshCutter {
     let total = this.tempVector3.subVectors(v1, v0).lengthSq()
     let part = this.tempVector3.subVectors(vI, v0).lengthSq()
     let ratio = Math.sqrt(part / total)
+
+    let normalPart = this.tempVector3.subVectors(n1, n0).multiplyScalar(ratio)
+    let nI = new THREE.Vector3().copy(n0).add(normalPart)
+
     let uvPart = this.tempVector2.subVectors(u1, u0).multiplyScalar(ratio)
     let uI = new THREE.Vector2().copy(u0).add(uvPart)
 
-    return { vI, uI }
+    return { vI, nI, uI }
   }
 
   getVertexIndex(faceIdx, vert, indices) {
@@ -140,8 +144,8 @@ class MeshCutter {
       const v2 = new THREE.Vector3(coords[3 * vc], coords[3 * vc + 1], coords[3 * vc + 2])
 
       const n0 = new THREE.Vector3(normals[3 * va], normals[3 * va + 1], normals[3 * va + 2])
-      // const n1 = new THREE.Vector3(normals[3 * vb], normals[3 * vb + 1], normals[3 * vb + 2])
-      // const n2 = new THREE.Vector3(normals[3 * vc], normals[3 * vc + 1], normals[3 * vc + 2])
+      const n1 = new THREE.Vector3(normals[3 * vb], normals[3 * vb + 1], normals[3 * vb + 2])
+      const n2 = new THREE.Vector3(normals[3 * vc], normals[3 * vc + 1], normals[3 * vc + 2])
 
       const u0 = new THREE.Vector2(uvs[2 * va], uvs[2 * va + 1])
       const u1 = new THREE.Vector2(uvs[2 * vb], uvs[2 * vb + 1])
@@ -158,206 +162,206 @@ class MeshCutter {
       if (sign0 === sign1 && sign1 === sign2 && sign2 === sign0) {
         if (sign0 === -1) {
           points1.push(v0, v1, v2)
-          normals1.push(n0, n0, n0)
+          normals1.push(n0, n1, n2)
           uvs1.push(u0, u1, u2)
         } else if (sign0 === 1) {
           points2.push(v0, v1, v2)
-          normals2.push(n0, n0, n0)
+          normals2.push(n0, n1, n2)
           uvs2.push(u0, u1, u2)
         }
       } else if (sign0 === sign1) {
         if (sign0 === -1) {
           if (sign2 === 1) {
-            let { vI: vI0, uI: uI0 } = this.getIntersectNode(v0, v2, u0, u2)
-            let { vI: vI1, uI: uI1 } = this.getIntersectNode(v1, v2, u1, u2)
+            let { vI: vI0, nI: nI0, uI: uI0 } = this.getIntersectNode(v0, v2, n0, n1, u0, u2)
+            let { vI: vI1, nI: nI1, uI: uI1 } = this.getIntersectNode(v1, v2, n1, n2, u1, u2)
             points1.push(v0, vI1, vI0)
-            normals1.push(n0, n0, n0)
+            normals1.push(n0, nI1, nI0)
             uvs1.push(u0, uI1, uI0)
             points1.push(v0, v1, vI1)
-            normals1.push(n0, n0, n0)
+            normals1.push(n0, n1, nI1)
             uvs1.push(u0, u1, uI1)
             points2.push(v2, vI0, vI1)
-            normals2.push(n0, n0, n0)
+            normals2.push(n2, nI0, nI1)
             uvs2.push(u2, uI0, uI1)
           } else if (sign2 === 0) {
             points1.push(v0, v1, v2)
-            normals1.push(n0, n0, n0)
+            normals1.push(n0, n1, n2)
             uvs1.push(u0, u1, u2)
           }
         } else if (sign0 === 1) {
           if (sign2 === -1) {
-            let { vI: vI0, uI: uI0 } = this.getIntersectNode(v0, v2, u0, u2)
-            let { vI: vI1, uI: uI1 } = this.getIntersectNode(v1, v2, u1, u2)
+            let { vI: vI0, nI: nI0, uI: uI0 } = this.getIntersectNode(v0, v2, n0, n2, u0, u2)
+            let { vI: vI1, nI: nI1, uI: uI1 } = this.getIntersectNode(v1, v2, n1, n2, u1, u2)
             points2.push(v0, vI1, vI0)
-            normals2.push(n0, n0, n0)
+            normals2.push(n0, nI1, nI0)
             uvs2.push(u0, uI1, uI0)
             points2.push(v0, v1, vI1)
-            normals2.push(n0, n0, n0)
+            normals2.push(n0, n1, nI1)
             uvs2.push(u0, u1, uI1)
             points1.push(v2, vI0, vI1)
-            normals1.push(n0, n0, n0)
+            normals1.push(n2, nI0, nI1)
             uvs1.push(u2, uI0, uI1)
           } else if (sign2 === 0) {
             points2.push(v0, v1, v2)
-            normals2.push(n0, n0, n0)
+            normals2.push(n0, n1, n2)
             uvs2.push(u0, u1, u2)
           }
         } else if (sign0 === 0) {
           if (sign2 === -1) {
             points1.push(v0, v1, v2)
-            normals1.push(n0, n0, n0)
+            normals1.push(n0, n1, n2)
             uvs1.push(u0, u1, u2)
           } else if (sign2 === 1) {
             points2.push(v0, v1, v2)
-            normals2.push(n0, n0, n0)
+            normals2.push(n0, n1, n2)
             uvs2.push(u0, u1, u2)
           }
         }
       } else if (sign1 === sign2) {
         if (sign1 === -1) {
           if (sign0 === 1) {
-            let { vI: vI0, uI: uI0 } = this.getIntersectNode(v1, v0, u1, u0)
-            let { vI: vI1, uI: uI1 } = this.getIntersectNode(v2, v0, u2, u0)
+            let { vI: vI0, nI: nI0, uI: uI0 } = this.getIntersectNode(v1, v0, n1, n0, u1, u0)
+            let { vI: vI1, nI: nI1, uI: uI1 } = this.getIntersectNode(v2, v0, n2, n0, u2, u0)
             points1.push(v1, vI1, vI0)
-            normals1.push(n0, n0, n0)
+            normals1.push(n1, nI1, nI0)
             uvs1.push(u1, uI1, uI0)
             points1.push(v1, v2, vI1)
-            normals1.push(n0, n0, n0)
+            normals1.push(n1, n2, nI1)
             uvs1.push(u1, u2, uI1)
             points2.push(v0, vI0, vI1)
-            normals2.push(n0, n0, n0)
+            normals2.push(n0, nI0, nI1)
             uvs2.push(u0, uI0, uI1)
           } else if (sign0 === 0) {
             points1.push(v0, v1, v2)
-            normals1.push(n0, n0, n0)
+            normals1.push(n0, n1, n2)
             uvs1.push(u0, u1, u2)
           }
         } else if (sign1 === 1) {
           if (sign0 === -1) {
-            let { vI: vI0, uI: uI0 } = this.getIntersectNode(v1, v0, u1, u0)
-            let { vI: vI1, uI: uI1 } = this.getIntersectNode(v2, v0, u2, u0)
+            let { vI: vI0, nI: nI0, uI: uI0 } = this.getIntersectNode(v1, v0, n1, n0, u1, u0)
+            let { vI: vI1, nI: nI1, uI: uI1 } = this.getIntersectNode(v2, v0, n2, n0, u2, u0)
             points2.push(v1, vI1, vI0)
-            normals2.push(n0, n0, n0)
+            normals2.push(n1, nI1, nI0)
             uvs2.push(u1, uI1, uI0)
             points2.push(v1, v2, vI1)
-            normals2.push(n0, n0, n0)
+            normals2.push(n1, n2, nI1)
             uvs2.push(u1, u2, uI1)
             points1.push(v0, vI0, vI1)
-            normals1.push(n0, n0, n0)
+            normals1.push(n0, nI0, nI1)
             uvs1.push(u0, uI0, uI1)
           } else if (sign0 === 0) {
             points2.push(v0, v1, v2)
-            normals2.push(n0, n0, n0)
+            normals2.push(n0, n1, n2)
             uvs2.push(u0, u1, u2)
           }
         } else if (sign1 === 0) {
           if (sign0 === -1) {
             points1.push(v0, v1, v2)
-            normals1.push(n0, n0, n0)
+            normals1.push(n0, n1, n2)
             uvs1.push(u0, u1, u2)
           } else if (sign0 === 1) {
             points2.push(v0, v1, v2)
-            normals2.push(n0, n0, n0)
+            normals2.push(n0, n1, n2)
             uvs2.push(u0, u1, u2)
           }
         }
       } else if (sign2 === sign0) {
         if (sign2 === -1) {
           if (sign1 === 1) {
-            let { vI: vI0, uI: uI0 } = this.getIntersectNode(v2, v1, u2, u1)
-            let { vI: vI1, uI: uI1 } = this.getIntersectNode(v0, v1, u0, u1)
+            let { vI: vI0, nI: nI0, uI: uI0 } = this.getIntersectNode(v2, v1, n2, n1, u2, u1)
+            let { vI: vI1, nI: nI1, uI: uI1 } = this.getIntersectNode(v0, v1, n0, n1, u0, u1)
             points1.push(v2, vI1, vI0)
-            normals1.push(n0, n0, n0)
+            normals1.push(n2, nI1, nI0)
             uvs1.push(u2, uI1, uI0)
             points1.push(v2, v0, vI1)
-            normals1.push(n0, n0, n0)
+            normals1.push(n2, n0, nI1)
             uvs1.push(u2, u0, uI1)
             points2.push(v1, vI0, vI1)
-            normals2.push(n0, n0, n0)
+            normals2.push(n1, nI0, nI1)
             uvs2.push(u1, uI0, uI1)
           } else if (sign1 === 0) {
             points1.push(v0, v1, v2)
-            normals1.push(n0, n0, n0)
+            normals1.push(n0, n1, n2)
             uvs1.push(u0, u1, u2)
           }
         } else if (sign2 === 1) {
           if (sign1 === -1) {
-            let { vI: vI0, uI: uI0 } = this.getIntersectNode(v2, v1, u2, u1)
-            let { vI: vI1, uI: uI1 } = this.getIntersectNode(v0, v1, u0, u1)
+            let { vI: vI0, nI: nI0, uI: uI0 } = this.getIntersectNode(v2, v1, n2, n1, u2, u1)
+            let { vI: vI1, nI: nI1, uI: uI1 } = this.getIntersectNode(v0, v1, n0, n1, u0, u1)
             points2.push(v2, vI1, vI0)
-            normals2.push(n0, n0, n0)
+            normals2.push(n2, nI1, nI0)
             uvs2.push(u2, uI1, uI0)
             points2.push(v2, v0, vI1)
-            normals2.push(n0, n0, n0)
+            normals2.push(n2, n0, nI1)
             uvs2.push(u2, u0, uI1)
             points1.push(v1, vI0, vI1)
-            normals1.push(n0, n0, n0)
+            normals1.push(n1, nI0, nI1)
             uvs1.push(u1, uI0, uI1)
           } else if (sign1 === 0) {
             points2.push(v0, v1, v2)
-            normals2.push(n0, n0, n0)
+            normals2.push(n0, n1, n2)
             uvs2.push(u0, u1, u2)
           }
         } else if (sign2 === 0) {
           if (sign1 === -1) {
             points1.push(v0, v1, v2)
-            normals1.push(n0, n0, n0)
+            normals1.push(n0, n1, n2)
             uvs1.push(u0, u1, u2)
           } else if (sign1 === 1) {
             points2.push(v0, v1, v2)
-            normals2.push(n0, n0, n0)
+            normals2.push(n0, n1, n2)
             uvs2.push(u0, u1, u2)
           }
         }
       } else if (sign0 === 0) {
-        let { vI: vI0, uI: uI0 } = this.getIntersectNode(v1, v2, u1, u2)
+        let { vI: vI0, nI: nI0, uI: uI0 } = this.getIntersectNode(v1, v2, n1, n2, u1, u2)
         if (sign1 === 1) {
           points1.push(v0, vI0, v2)
-          normals1.push(n0, n0, n0)
+          normals1.push(n0, nI0, n2)
           uvs1.push(u0, uI0, u2)
           points2.push(v0, v1, vI0)
-          normals2.push(n0, n0, n0)
+          normals2.push(n0, n1, nI0)
           uvs2.push(u0, u1, uI0)
         } else if (sign1 === -1) {
           points2.push(v0, vI0, v2)
-          normals2.push(n0, n0, n0)
+          normals2.push(n0, nI0, n2)
           uvs2.push(u0, uI0, u2)
           points1.push(v0, v1, vI0)
-          normals1.push(n0, n0, n0)
+          normals1.push(n0, n1, nI0)
           uvs1.push(u0, u1, uI0)
         }
       } else if (sign1 === 0) {
-        let { vI: vI0, uI: uI0 } = this.getIntersectNode(v0, v2, u0, u2)
+        let { vI: vI0, nI: nI0, uI: uI0 } = this.getIntersectNode(v0, v2, n0, n2, u0, u2)
         if (sign2 === 1) {
           points1.push(v1, vI0, v0)
-          normals1.push(n0, n0, n0)
+          normals1.push(n1, nI0, n0)
           uvs1.push(u1, uI0, u0)
           points2.push(v1, v2, vI0)
-          normals2.push(n0, n0, n0)
+          normals2.push(n1, n2, nI0)
           uvs2.push(u1, u2, uI0)
         } else if (sign2 === -1) {
           points2.push(v1, vI0, v0)
-          normals2.push(n0, n0, n0)
+          normals2.push(n1, nI0, n0)
           uvs2.push(u1, uI0, u0)
           points1.push(v1, v2, vI0)
-          normals1.push(n0, n0, n0)
+          normals1.push(n1, n2, nI0)
           uvs1.push(u1, u2, uI0)
         }
       } else if (sign2 === 0) {
-        let { vI: vI0, uI: uI0 } = this.getIntersectNode(v1, v0, u1, u0)
+        let { vI: vI0, nI: nI0, uI: uI0 } = this.getIntersectNode(v1, v0, n1, n0, u1, u0)
         if (sign0 === 1) {
           points1.push(v2, vI0, v1)
-          normals1.push(n0, n0, n0)
+          normals1.push(n2, nI0, n1)
           uvs1.push(u2, uI0, u1)
           points2.push(v2, v0, vI0)
-          normals2.push(n0, n0, n0)
+          normals2.push(n2, n0, nI0)
           uvs2.push(u2, u0, uI0)
         } else if (sign0 === -1) {
           points2.push(v2, vI0, v1)
-          normals2.push(n0, n0, n0)
+          normals2.push(n2, nI0, n1)
           uvs2.push(u2, uI0, u1)
           points1.push(v2, v0, vI0)
-          normals1.push(n0, n0, n0)
+          normals1.push(n2, n0, nI0)
           uvs1.push(u2, u0, uI0)
         }
       }

@@ -147,7 +147,7 @@ new GLTFLoader().load('./model/mutant/a.gltf', (gltf) => {
     // window.plane = new THREE.Plane(new THREE.Vector3(0,1,0).normalize(), constant)
     // window.plane = new THREE.Plane(new THREE.Vector3(0,0,1).normalize(), constant)
     // window.plane = new THREE.Plane(new THREE.Vector3(1,.1,1).normalize(), constant)
-    window.plane = new THREE.Plane(new THREE.Vector3(Math.random() - 0.5, (Math.random() - 0.5)*.1, Math.random() - 0.5).normalize(), constant)
+    window.plane = new THREE.Plane(new THREE.Vector3(Math.random() - 0.5, (Math.random() - 0.5)*.5, Math.random() - 0.5).normalize(), constant)
   
     setTimeout(() => {
       window.output = window.meshCutter.cutByPlane(window.box, window.plane)

@@ -167,6 +167,7 @@ class MeshCutter {
           normals2.push(n0, n1, n2)
           uvs2.push(u0, u1, u2)
         }
+        // else if (sign0 === 0 ) { } // Deliberately do not add
       } else if (sign0 === sign1) {
         if (sign0 === -1) {
           if (sign2 === 1) {

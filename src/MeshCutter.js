@@ -107,14 +107,15 @@ class MeshCutter {
     const normals = geometry.attributes.normal.array
     const uvs = geometry.attributes.uv.array
 
-    const numPoints = coords.length / 3
-    let numFaces = numPoints / 3
+    const pointsCount = coords.length / 3
+    let facesCount = pointsCount / 3
 
     let indices = geometry.getIndex()
+    debugger
 
     if (indices) {
       indices = indices.array
-      numFaces = indices.length / 3
+      facesCount = indices.length / 3
     }
 
     const points1 = []
@@ -131,7 +132,7 @@ class MeshCutter {
     this.transformPlaneToLocalSpace(plane, object.matrix, this.localPlane)
 
     // Iterate through the faces adding points to both pieces
-    for (let i = 0; i < numFaces; i++) {
+    for (let i = 0; i < facesCount; i++) {
       const va = this.getVertexIndex(i, 0, indices)
       const vb = this.getVertexIndex(i, 1, indices)
       const vc = this.getVertexIndex(i, 2, indices)

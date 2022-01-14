@@ -94,10 +94,10 @@ function animate(time) {
 
 window.meshCutter = new MeshCutter()
 
-// const geometry = new THREE.BoxGeometry()
+const geometry = new THREE.BoxGeometry()
 // const geometry = new THREE.PlaneGeometry()
 // const geometry = new THREE.CylinderGeometry()
-const geometry = new THREE.TorusKnotGeometry()
+// const geometry = new THREE.TorusKnotGeometry()
 geometry.scale(0.5, 0.5, 0.5)
 
 // const geometry = indexedGeometry.toNonIndexed()

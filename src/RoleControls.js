@@ -181,6 +181,7 @@ class RoleControls {
       // // move 2.1: change velocity absolute
       // // Has climb hill not slow down problem.
       // // Has break ordinary velocity problem.
+      // // May has move slow when collide/slide wall by friction problem.
       // let velocityScale = 70
       // this.role.body.velocity.x = this.role.direction.x * velocityScale
       // this.role.body.velocity.z = this.role.direction.y * velocityScale
@@ -192,6 +193,9 @@ class RoleControls {
       // let forceScale = 10000 * 3
       // let force = new CANNON.Vec3(this.role.direction.x * forceScale, 0, this.role.direction.y * forceScale)
       // this.role.body.applyForce(force)
+
+      // // Related reading: https://gameworksdocs.nvidia.com/PhysX/4.1/documentation/physxguide/Manual/CharacterControllers.html
+      // // Why cannonjs such powerful that can change the position of dynamic body directly?
 
       // } // end if here to not set velocity 0 when stop.
     }

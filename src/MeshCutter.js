@@ -452,6 +452,11 @@ class MeshCutter {
     //   new THREE.Vector3(0, 1, 1),
     // )
 
+    // test
+    points1.length = 0
+    normals1.length = 0
+    uvs1.length = 0
+
     console.log({pointsInner})
     const coords2D = [];
     pointsInner.forEach(point => {

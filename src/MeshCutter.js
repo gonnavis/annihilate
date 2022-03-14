@@ -358,16 +358,16 @@ class MeshCutter {
             points1.push(v0, v1, v2);
             normals1.push(n0, n1, n2);
             uvs1.push(u0, u1, u2);
-            pointsInner.push(vI2, vI0);
-            normalsInner.push(nI2, nI0);
-            uvsInner.push(uI2, uI0);
+            pointsInner.push(v2, v0);
+            normalsInner.push(n2, n0);
+            uvsInner.push(u2, u0);
           } else if (sign1 === 1) {
             points2.push(v0, v1, v2);
             normals2.push(n0, n1, n2);
             uvs2.push(u0, u1, u2);
-            pointsInner.push(vI2, vI0);
-            normalsInner.push(nI2, nI0);
-            uvsInner.push(uI2, uI0);
+            pointsInner.push(v2, v0);
+            normalsInner.push(n2, n0);
+            uvsInner.push(u2, u0);
           }
         }
       } else if (sign0 === 0) {

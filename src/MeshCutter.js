@@ -128,11 +128,11 @@ class MeshCutter {
 
     const normals1 = [];
     const normals2 = [];
-    const normalsInner = [];
+    const normalsInner = []; // should don't need, just re-calc is ok.
 
     const uvs1 = [];
     const uvs2 = [];
-    const uvsInner = [];
+    const uvsInner = []; // should don't need, just re-calc is ok.
 
     // Transform the plane to object local space
     object.updateMatrix();

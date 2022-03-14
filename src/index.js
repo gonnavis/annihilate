@@ -54,7 +54,7 @@ function init_three() {
   // gridHelper.position.y = 0.037
   gridHelper.material.opacity = 0.2
   gridHelper.material.transparent = true
-  scene.add(gridHelper)
+  // scene.add(gridHelper)
 
   renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setPixelRatio(window.devicePixelRatio)
@@ -117,6 +117,7 @@ const extrudeSettings = {
 	bevelEnabled: false,
 };
 const geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+geometry.translate(0, 0, -.5)
 
 // const positions = [
 

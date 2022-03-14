@@ -515,49 +515,58 @@ class MeshCutter {
       const y2 = coords2D[delaunay.triangles[i * 3 + 2] * 2 + 1]
       
       // filter out outer triangles: if has any edge not overlap with original model's edges, delete the triangle.
-      let isOverlap0 = false
-      for(let il = 0; il < linesInner.length; il += 2) {
-        const p0 = linesInner[il]
-        const p1 = linesInner[il + 1]
-        if(
-          (x0 === p0.x && y0 === p0.y && x1 === p1.x && y1 === p1.y) ||
-          (x0 === p1.x && y0 === p1.y && x1 === p0.x && y1 === p0.y)
-        ) {
-          isOverlap0 = true;
-          break;
+      if(true) { // todo: need recur filter out.
+        if(delaunay.halfedges[i * 3 + 0] === -1) {
+          let isOverlap0 = false
+          for(let il = 0; il < linesInner.length; il += 2) {
+            const p0 = linesInner[il]
+            const p1 = linesInner[il + 1]
+            if(
+              (x0 === p0.x && y0 === p0.y && x1 === p1.x && y1 === p1.y) ||
+              (x0 === p1.x && y0 === p1.y && x1 === p0.x && y1 === p0.y)
+            ) {
+              isOverlap0 = true;
+              break;
+            }
+          }
+          if(!isOverlap0) continue;
+        }
+
+        if(delaunay.halfedges[i * 3 + 1] === -1) {
+          let isOverlap1 = false
+          for(let il = 0; il < linesInner.length; il += 2) {
+            const p0 = linesInner[il]
+            const p1 = linesInner[il + 1]
+            if(
+              (x1 === p0.x && y1 === p0.y && x2 === p1.x && y2 === p1.y) ||
+              (x1 === p1.x && y1 === p1.y && x2 === p0.x && y2 === p0.y)
+            ) {
+              isOverlap1 = true;
+              break;
+            }
+          }
+          if(!isOverlap1) continue;
+        }
+
+        if(delaunay.halfedges[i * 3 + 2] === -1) {
+          let isOverlap2 = false
+          for(let il = 0; il < linesInner.length; il += 2) {
+            const p0 = linesInner[il]
+            const p1 = linesInner[il + 1]
+            if(
+              (x2 === p0.x && y2 === p0.y && x0 === p1.x && y0 === p1.y) ||
+              (x2 === p1.x && y2 === p1.y && x0 === p0.x && y0 === p0.y)
+            ) {
+              isOverlap2 = true;
+              break;
+            }
+          }
+          if(!isOverlap2) continue;
         }
       }
-      if(!isOverlap0) continue;
-
-      let isOverlap1 = false
-      for(let il = 0; il < linesInner.length; il += 2) {
-        const p0 = linesInner[il]
-        const p1 = linesInner[il + 1]
-        if(
-          (x1 === p0.x && y1 === p0.y && x2 === p1.x && y2 === p1.y) ||
-          (x1 === p1.x && y1 === p1.y && x2 === p0.x && y2 === p0.y)
-        ) {
-          isOverlap1 = true;
-          break;
-        }
-      }
-      if(!isOverlap1) continue;
-
-      let isOverlap2 = false
-      for(let il = 0; il < linesInner.length; il += 2) {
-        const p0 = linesInner[il]
-        const p1 = linesInner[il + 1]
-        if(
-          (x2 === p0.x && y2 === p0.y && x0 === p1.x && y0 === p1.y) ||
-          (x2 === p1.x && y2 === p1.y && x0 === p0.x && y0 === p0.y)
-        ) {
-          isOverlap2 = true;
-          break;
-        }
-      }
-      if(!isOverlap2) continue;
-
       // end filter out outer triangles
+
+      console.log('remained triangle')
 
       points1.push(
         new THREE.Vector3(x0, y0, 0),

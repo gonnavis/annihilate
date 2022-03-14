@@ -117,7 +117,7 @@ const extrudeSettings = {
 	bevelEnabled: false,
 };
 const geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
-// geometry.translate(0, 0, -.5)
+geometry.translate(0, 0, -.5)
 
 // const positions = [
 

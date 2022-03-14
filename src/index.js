@@ -15,7 +15,7 @@ function init_three() {
   container = document.createElement('div')
   document.body.appendChild(container)
 
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 370)
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 370)
   camera.position.set(3, 5, 7)
   camera.lookAt(0, 0, 0)
 
@@ -106,7 +106,7 @@ geometry.scale(0.5, 0.5, 0.5)
 const material = new THREE.MeshStandardMaterial({
   // const material = new THREE.MeshBasicMaterial({
   // color: 'red',
-  wireframe: true,
+  // wireframe: true,
   // side: THREE.DoubleSide,
   map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg'),
 })
@@ -133,8 +133,8 @@ if (true) {
     window.output = window.meshCutter.cutByPlane(window.box, window.plane)
     if (window.output.object1) {
       window.scene.add(window.output.object1)
-      window.output.object1.position.x += -1
-      window.output.object1.position.z += 2
+      // window.output.object1.position.x += -1
+      // window.output.object1.position.z += 2
       // window.output.object1.updateMatrixWorld()
     }
     if (window.output.object2) {
@@ -143,6 +143,6 @@ if (true) {
       window.output.object2.position.z += 2
       // window.output.object2.updateMatrixWorld()
     }
-    // window.box.visible = false
+    window.box.visible = false
   }, 1000)
 }

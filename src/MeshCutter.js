@@ -473,6 +473,24 @@ class MeshCutter {
         new THREE.Vector3(x2, y2, 0),
         new THREE.Vector3(x1, y1, 0),
       )
+      
+      const uv0 = uvsInner[delaunay.triangles[i * 3 + 0]]
+      const uv1 = uvsInner[delaunay.triangles[i * 3 + 1]]
+      const uv2 = uvsInner[delaunay.triangles[i * 3 + 2]]
+      uvs1.push(
+        uv0,
+        uv2,
+        uv1,
+      )
+      
+      const normal0 = normalsInner[delaunay.triangles[i * 3 + 0]]
+      const normal1 = normalsInner[delaunay.triangles[i * 3 + 1]]
+      const normal2 = normalsInner[delaunay.triangles[i * 3 + 2]]
+      normals1.push(
+        normal0,
+        normal2,
+        normal1,
+      )
     }
 
     const numPoints1 = points1.length;

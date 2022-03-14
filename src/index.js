@@ -107,7 +107,7 @@ const material = new THREE.MeshStandardMaterial({
   // const material = new THREE.MeshBasicMaterial({
   // color: 'red',
   // wireframe: true,
-  side: THREE.DoubleSide,
+  // side: THREE.DoubleSide,
   map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg'),
 })
 const mesh = new THREE.Mesh(geometry, material)
@@ -123,9 +123,9 @@ if (true) {
   // window.constant = (Math.random() - 0.5) * 1
   // window.constant = .5
 
-  window.plane = new THREE.Plane(new THREE.Vector3(1,0,0).normalize(), constant)
+  // window.plane = new THREE.Plane(new THREE.Vector3(1,0,0).normalize(), constant)
   // window.plane = new THREE.Plane(new THREE.Vector3(0,1,0).normalize(), constant)
-  // window.plane = new THREE.Plane(new THREE.Vector3(0,0,1).normalize(), constant)
+  window.plane = new THREE.Plane(new THREE.Vector3(0,0,1).normalize(), constant)
   // window.plane = new THREE.Plane(new THREE.Vector3(1,0,1).normalize(), constant)
   // window.plane = new THREE.Plane(new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize(), constant)
 

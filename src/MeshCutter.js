@@ -452,6 +452,29 @@ class MeshCutter {
     //   new THREE.Vector3(0, 1, 1),
     // )
 
+    console.log({pointsInner})
+    const coords2D = [];
+    pointsInner.forEach(point => {
+      coords2D.push(point.x, point.y)
+    })
+    const delaunay = new Delaunator(coords2D);
+    console.log(delaunay);
+    const numTriangles = delaunay.trianglesLen / 3;
+    console.log({numTriangles})
+    for(let i = 0; i < numTriangles; i++) {
+      const x0 = coords2D[delaunay.triangles[i * 3 + 0] * 2]
+      const y0 = coords2D[delaunay.triangles[i * 3 + 0] * 2 + 1]
+      const x1 = coords2D[delaunay.triangles[i * 3 + 1] * 2]
+      const y1 = coords2D[delaunay.triangles[i * 3 + 1] * 2 + 1]
+      const x2 = coords2D[delaunay.triangles[i * 3 + 2] * 2]
+      const y2 = coords2D[delaunay.triangles[i * 3 + 2] * 2 + 1]
+      points1.push(
+        new THREE.Vector3(x0, y0, 0),
+        new THREE.Vector3(x2, y2, 0),
+        new THREE.Vector3(x1, y1, 0),
+      )
+    }
+
     const numPoints1 = points1.length;
     const numPoints2 = points2.length;
 

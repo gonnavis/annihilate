@@ -106,7 +106,7 @@ geometry.scale(0.5, 0.5, 0.5)
 const material = new THREE.MeshStandardMaterial({
   // const material = new THREE.MeshBasicMaterial({
   // color: 'red',
-  // wireframe: true,
+  wireframe: true,
   // side: THREE.DoubleSide,
   map: new THREE.TextureLoader().load('./image/uv_grid_opengl.jpg'),
 })

@@ -29,23 +29,23 @@ class RoleControls {
       this.tickKey[event.code] = true
 
       clearTimeout(this.timeoutSeqKey)
-      if (this.role.service.state.matches('block')) {
+      if (false && this.role.service.state.matches('block')) {
         let now = performance.now()
         // console.log(now - this.prevTime)
         this.prevTime = now
         if (event.code === 'KeyJ' || event.code === 'Numpad4') {
           if (this.seqKey.length === 2 && (this.seqKey[0] === 'KeyS' || this.seqKey[0] === 'ArrowDown') && (this.seqKey[1] === 'KeyD' || this.seqKey[1] === 'ArrowRight')) {
             // console.log('-- hadouken')
-            this.role.service.send('hadouken')
+            // this.role.service.send('hadouken')
           } else if (this.seqKey.length === 3 && (this.seqKey[0] === 'KeyD' || this.seqKey[0] === 'ArrowRight') && (this.seqKey[1] === 'KeyS' || this.seqKey[1] === 'ArrowDown') && (this.seqKey[2] === 'KeyD' || this.seqKey[2] === 'ArrowRight')) {
             // console.log('-- shoryuken')
-            this.role.service.send('shoryuken')
+            // this.role.service.send('shoryuken')
           }
           this.seqKey.length = 0
         } else if (event.code === 'KeyK' || event.code === 'Numpad5') {
           if (this.seqKey.length === 2 && (this.seqKey[0] === 'KeyS' || this.seqKey[0] === 'ArrowDown') && (this.seqKey[1] === 'KeyA' || this.seqKey[1] === 'ArrowLeft')) {
             // console.log('-- ajejebloken')
-            this.role.service.send('ajejebloken')
+            // this.role.service.send('ajejebloken')
           }
           this.seqKey.length = 0
         } else {
@@ -75,20 +75,20 @@ class RoleControls {
       switch (event.code) {
         case 'KeyJ':
         case 'Numpad4':
-          this.role.service.send('keyJUp')
+          // this.role.service.send('keyJUp')
           break
         case 'KeyU':
         case 'Numpad7':
-          this.role.service.send('keyUUp')
+          // this.role.service.send('keyUUp')
           break
         case 'KeyL':
         case 'Numpad6':
-          this.role.service.send('keyLUp')
+          // this.role.service.send('keyLUp')
           this.seqKey.length = 0
           break
         case 'KeyO':
         case 'Numpad9':
-          this.role.service.send('keyOUp')
+          // this.role.service.send('keyOUp')
           this.seqKey.length = 0
           break
         // case 'KeyA':
@@ -119,29 +119,29 @@ class RoleControls {
       ) {
         case 'KeyJ':
         case 'Numpad4':
-          this.role.service.send('attack')
+          // this.role.service.send('attack')
           // console.log('---keydown J')
           break
         case 'KeyK':
         case 'Numpad5':
-          this.role.service.send('jump')
+          // this.role.service.send('jump')
           // this.role.jump()
           break
         case 'KeyI':
         case 'Numpad8':
-          this.role.service.send('dash')
+          // this.role.service.send('dash')
           break
         case 'KeyU':
         case 'Numpad7':
-          this.role.service.send('bash')
+          // this.role.service.send('bash')
           break
         case 'KeyL':
         case 'Numpad6':
-          this.role.service.send('block')
+          // this.role.service.send('block')
           break
         case 'KeyO':
         case 'Numpad9':
-          this.role.service.send('launch')
+          // this.role.service.send('launch')
           break
       }
     }
@@ -155,7 +155,7 @@ class RoleControls {
     // console.log(this.role.direction)
     let directionLengthSq = this.role.direction.lengthSq()
 
-    if (this.role.service.state.hasTag('canMove')) {
+    if (false && this.role.service.state.hasTag('canMove')) {
       if (directionLengthSq > 0) {
         // change facing
         this.role.facing.copy(this.role.direction)
@@ -202,10 +202,10 @@ class RoleControls {
 
     // state change must after ```if (this.role.service.state.hasTag('canMove')){ ... real move codes ... }```, for move by velocity stop problem reason.
     if (directionLengthSq > 0) {
-      this.role.service.send('run')
+      // this.role.service.send('run')
     } else {
       // console.log('111111111111111')
-      this.role.service.send('stop')
+      // this.role.service.send('stop')
     }
 
     // if (this.holdKey.KeyJ) {

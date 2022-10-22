@@ -1,0 +1,7 @@
+<BehaviorTree>
+    <MemSequence>
+        <F0 />
+        <F1 />
+        <F2 />
+    </MemSequence>
+</BehaviorTree>

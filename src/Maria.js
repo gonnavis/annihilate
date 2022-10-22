@@ -87,79 +87,81 @@ class Maria {
     
     // --- behavior tree
 
+    const maria = this;
+
     let testCount1 = 0;
     let testCount2 = 0;
-    class F0 extends Action {
+    class Loading extends Action {
         constructor({properties = { text: null }} = {}) {
             super({properties})
         }
         start() {
-            console.log('*** 000 start')
+          console.log('*** Loading start')
         }
-        run(blackboard) {
-            console.log('000 SUCCESS')
+        run() {
+          if (maria.isLoaded) {
+            // console.log('Loading SUCCESS')
             return SUCCESS
-        }
-        end() {
-            console.log('*** 000 end')
+          } else {
+            // console.log('Loading RUNNING')
+            return RUNNING
+          }
         }
     }
-    class F1 extends Action {
+    class Idle extends Action {
         constructor({properties = { text: null }} = {}) {
             super({properties})
         }
         start() {
-            console.log('*** 111 start')
+            console.log('*** Idle start')
+
+            maria.fadeToAction('idle')
+
+            maria.chargedLevel = 0
+            maria.sword.material.emissive.setScalar(0)
+            maria.sword.material.color.setRGB(1, 1, 1)
         }
-        run(blackboard) {
-            testCount1++;
-            if (testCount1 <= 3) {
-              console.log('111 RUNNING')
-              return RUNNING
-            } else {
-              console.log('111 SUCCESS')
-              return SUCCESS
-            }
-        }
-        end() {
-            console.log('*** 111 end')
+        run() {
+          // console.log(window.allKey.KeyJ)
+          if (window.allKey.KeyJ) {
+            return SUCCESS
+          } else {
+            // console.log('Idle RUNNING')
+            return RUNNING
+          }
         }
     }
-    class F2 extends Action {
+    class Attack extends Action {
         constructor({properties = { text: null }} = {}) {
             super({properties})
         }
         start() {
-            console.log('*** 222 start')
+            console.log('*** Attack start')
+
+            maria.oaction['punchStart'].timeScale = maria.attackSpeed
+            maria.fadeToAction('punchStart')
         }
-        run(blackboard) {
-            testCount2++;
-            if (testCount2 <= 3) {
-              console.log('222 RUNNING')
-              return RUNNING
-            } else {
-              console.log('222 SUCCESS')
-              return SUCCESS
-            }
-        }
-        end() {
-            console.log('*** 222 end')
+        run() {
+          // console.log('Attack RUNNING')
+          return RUNNING
         }
     }
     
     async function initBehaviorTree() {
-      let mainTree = await BehaviorTree.parseFileXML('./src/maintree.xml', {F0, F1, F2})
+      let mainTree = await BehaviorTree.parseFileXML('./src/maintree.xml', {Loading, Idle, Attack})
       
       var bt = new BehaviorTree({tree: mainTree, blackboard: {someVariable: 123}})
 
-      let count = 0;
+      // let count = 0;
       async function step() {
         await bt.tick()
-        console.log('-----------------------------')
-        count++;
-        if (count < 10) setTimeout(step, 1000);
+        // console.log('-----------------------------')
+        // count++;
+        // if (count < 10) setTimeout(step, 1000);
+        requestAnimationFrame(step);
       }
-      step();
+      // step();
+      requestAnimationFrame(step);
     }
     initBehaviorTree();
 
@@ -394,6 +396,7 @@ class Maria {
           //
 
           // this.service.send('loaded')
+          this.isLoaded = true;
           resolve()
 
           if (callback) callback()

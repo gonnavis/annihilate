@@ -9,6 +9,7 @@ class RoleControls {
 
     updates.push(this)
 
+    window.allKey = {}
     this.holdKey = {}
     this.tickKey = {}
     this.seqKey = [] // sequentialKey
@@ -25,6 +26,7 @@ class RoleControls {
       if (this.holdKey[event.code]) return // Prevent: keyD -> keyJ long press -> keyD up, cause double attack bug.
       // event.prepeat & if (event.code === this.actkey) return, both not work.
 
+      window.allKey[event.code] = true
       this.holdKey[event.code] = true
       this.tickKey[event.code] = true
 
@@ -70,6 +72,7 @@ class RoleControls {
     })
     window.addEventListener('keyup', (event) => {
       // console.log(event)
+      window.allKey[event.code] = false
       this.holdKey[event.code] = false
 
       switch (event.code) {

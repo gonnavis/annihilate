@@ -123,11 +123,29 @@ class Maria {
         }
         run() {
           // console.log(window.allKey.KeyJ)
-          if (window.allKey.KeyJ) {
+          // if (window.allKey.KeyJ) {
             return SUCCESS
-          } else {
-            // console.log('Idle RUNNING')
+          // } else {
+          //   // console.log('Idle RUNNING')
+          //   return RUNNING
+          // }
+        }
+    }
+    class Run extends Action {
+        constructor({properties = { text: null }} = {}) {
+            super({properties})
+        }
+        start() {
+            console.log('*** Run start')
+
+            maria.fadeToAction('running')
+        }
+        run() {
+          if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
+            // console.log('Run RUNNING')
             return RUNNING
+          } else {
+            return SUCCESS
           }
         }
     }
@@ -148,7 +166,7 @@ class Maria {
     }
     
     async function initBehaviorTree() {
-      let mainTree = await BehaviorTree.parseFileXML('./src/maintree.xml', {Loading, Idle, Attack})
+      let mainTree = await BehaviorTree.parseFileXML('./src/maintree.xml', {Loading, Idle, Run, Attack})
       
       var bt = new BehaviorTree({tree: mainTree, blackboard: {someVariable: 123}})
 

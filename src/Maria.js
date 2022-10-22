@@ -6,6 +6,29 @@ import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 import { SwordBlink } from './SwordBlink.js'
 import { Pop } from './Pop.js'
 import { Splash } from './Splash.js'
+import {
+  BehaviorTree,
+  MemSequence,
+  MemSelector,
+  Action,
+  Composite,
+  Decorator,
+  Condition,
+  Sequence,
+  Selector,
+  Wait,
+  Inverter,
+  SUCCESS,
+  FAILURE,
+  RUNNING,
+  MaxTime
+} from '../lib/modular-behavior-tree/index.js'
+// import * as BT from '../lib/modular-behavior-tree/index.js'
+
+console.log(SUCCESS);
+console.log(FAILURE);
+console.log(RUNNING);
+console.log(MemSequence);
 
 class Maria {
   constructor(x, y, z) {

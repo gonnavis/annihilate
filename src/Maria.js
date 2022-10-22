@@ -147,19 +147,21 @@ class Maria {
         }
     }
     
-    
-    let mainTree = BehaviorTree.parseFileXML('./example/maintree.xml', {F0, F1, F2})
-    
-    var bt = new BehaviorTree({tree: mainTree, blackboard: {someVariable: 123}})
+    async function initBehaviorTree() {
+      let mainTree = await BehaviorTree.parseFileXML('./src/maintree.xml', {F0, F1, F2})
+      
+      var bt = new BehaviorTree({tree: mainTree, blackboard: {someVariable: 123}})
 
-    let count = 0;
-    async function step() {
-      await bt.tick()
-      console.log('-----------------------------')
-      count++;
-      if (count < 10) setTimeout(step, 1000);
+      let count = 0;
+      async function step() {
+        await bt.tick()
+        console.log('-----------------------------')
+        count++;
+        if (count < 10) setTimeout(step, 1000);
+      }
+      step();
     }
-    step();
+    initBehaviorTree();
 
     // --- end: behavior tree
 

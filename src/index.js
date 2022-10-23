@@ -646,7 +646,7 @@ function onWindowResize() {
 //
 
 function animate(time) {
-  // console.log('animate')
+  console.log('animate')
   requestAnimationFrame(animate)
 
   var dt = clock.getDelta()

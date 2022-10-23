@@ -97,10 +97,10 @@ class Maria {
         }
         run() {
           if (maria.isLoaded) {
-            console.log('Loading SUCCESS')
+            // console.log('Loading SUCCESS')
             return SUCCESS
           } else {
-            console.log('Loading FAILURE')
+            // console.log('Loading FAILURE')
             return FAILURE
           }
         }
@@ -135,7 +135,7 @@ class Maria {
             maria.body.position.x += maria.direction.x
             maria.body.position.z += maria.direction.y
 
-            console.log('Run SUCCESS')
+            // console.log('Run SUCCESS')
             return SUCCESS
           } else {
             // console.log('Run FAILURE')
@@ -149,8 +149,15 @@ class Maria {
             super({properties})
         }
         run() {
+          console.log('BT check tickKey')
+          // if (window.tickKey.KeyK) {
           if (window.allKey.KeyK) {
-            console.log('Jump SUCCESS')
+            if (!maria.isAir) {
+              maria.body.velocity.y = 5.2
+            } else {
+
+            }
+
             return SUCCESS
           } else {
             // console.log('Jump FAILURE')
@@ -164,7 +171,7 @@ class Maria {
             super({properties})
         }
         run() {
-          console.log('Attack RUNNING')
+          // console.log('Attack RUNNING')
           return RUNNING
         }
     }
@@ -441,7 +448,7 @@ class Maria {
         },
         undefined,
         (event) => {
-          console.error(event)
+          // console.error(event)
           reject()
         }
       )

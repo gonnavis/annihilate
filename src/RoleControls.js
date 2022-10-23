@@ -11,7 +11,7 @@ class RoleControls {
 
     window.allKey = {}
     this.holdKey = {}
-    this.tickKey = {}
+    window.tickKey = {}
     this.seqKey = [] // sequentialKey
     this.timeoutSeqKey = null
     // this.actkey = ''
@@ -28,7 +28,8 @@ class RoleControls {
 
       window.allKey[event.code] = true
       this.holdKey[event.code] = true
-      this.tickKey[event.code] = true
+      window.tickKey[event.code] = true
+      console.log('set tickKey')
 
       clearTimeout(this.timeoutSeqKey)
       if (false && this.role.service.state.matches('block')) {
@@ -113,12 +114,12 @@ class RoleControls {
     // console.log('update')
     // if (this.role.service.state.matches('loading')) return
 
-    if ((this.tickKey.KeyJ || this.tickKey.Numpad4) && (this.tickKey.KeyK || this.tickKey.Numpad5) && (this.tickKey.KeyL || this.tickKey.Numpad6)) {
+    if ((window.tickKey.KeyJ || window.tickKey.Numpad4) && (window.tickKey.KeyK || window.tickKey.Numpad5) && (window.tickKey.KeyL || window.tickKey.Numpad6)) {
       // console.log('pop')
       this.role.pop?.pop() // Whether need use: this.role.service.send('pop') ?
     } else {
       switch (
-        Object.keys(this.tickKey)[0] // note: The order of Object.keys may not by added order, but should no big problem.
+        Object.keys(window.tickKey)[0] // note: The order of Object.keys may not by added order, but should no big problem.
       ) {
         case 'KeyJ':
         case 'Numpad4':
@@ -220,7 +221,8 @@ class RoleControls {
     // }
 
     // restore
-    this.tickKey = {}
+    window.tickKey = {}
+    console.log('clear tickKey')
   }
   setRole(role) {
     this.role = role

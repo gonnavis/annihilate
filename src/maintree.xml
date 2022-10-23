@@ -2,8 +2,8 @@
     <MemSequence>
         <Loading />
         <MemSelector>
-            <Run />
             <Jump />
+            <Run />
         </MemSelector>
         <!-- <Attack /> -->
     </MemSequence>

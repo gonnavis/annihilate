@@ -95,16 +95,13 @@ class Maria {
         constructor({properties = { text: null }} = {}) {
             super({properties})
         }
-        start() {
-          console.log('*** Loading start')
-        }
         run() {
           if (maria.isLoaded) {
-            // console.log('Loading SUCCESS')
+            console.log('Loading SUCCESS')
             return SUCCESS
           } else {
-            // console.log('Loading RUNNING')
-            return RUNNING
+            console.log('Loading FAILURE')
+            return FAILURE
           }
         }
     }
@@ -112,22 +109,13 @@ class Maria {
         constructor({properties = { text: null }} = {}) {
             super({properties})
         }
-        start() {
-            console.log('*** Idle start')
-
-            maria.fadeToAction('idle')
-
-            maria.chargedLevel = 0
-            maria.sword.material.emissive.setScalar(0)
-            maria.sword.material.color.setRGB(1, 1, 1)
-        }
         run() {
           // console.log(window.allKey.KeyJ)
           // if (window.allKey.KeyJ) {
             return SUCCESS
           // } else {
-          //   // console.log('Idle RUNNING')
-          //   return RUNNING
+            // console.log('Idle RUNNING')
+            // return RUNNING
           // }
         }
     }
@@ -135,40 +123,70 @@ class Maria {
         constructor({properties = { text: null }} = {}) {
             super({properties})
         }
-        start() {
-            console.log('*** Run start')
-
-            maria.fadeToAction('running')
-        }
         run() {
           if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
-            // console.log('Run RUNNING')
-            return RUNNING
-          } else {
+            const directionLengthSq = maria.direction.lengthSq()
+            if (directionLengthSq > 0) {
+              // change facing
+              maria.facing.copy(maria.direction)
+            } // end if here to set velocity 0 when stop, but because linearDamping not 1, will no obvious effect.
+            maria.mesh.rotation.y = -maria.facing.angle() + Math.PI / 2
+
+            maria.body.position.x += maria.direction.x
+            maria.body.position.z += maria.direction.y
+
+            console.log('Run SUCCESS')
             return SUCCESS
+          } else {
+            // console.log('Run FAILURE')
+            return FAILURE
           }
+          // return RUNNING
+        }
+    }
+    class Jump extends Action {
+        constructor({properties = { text: null }} = {}) {
+            super({properties})
+        }
+        run() {
+          if (window.allKey.KeyK) {
+            console.log('Jump SUCCESS')
+            return SUCCESS
+          } else {
+            // console.log('Jump FAILURE')
+            return FAILURE
+          }
+          // return RUNNING
         }
     }
     class Attack extends Action {
         constructor({properties = { text: null }} = {}) {
             super({properties})
         }
-        start() {
-            console.log('*** Attack start')
-
-            maria.oaction['punchStart'].timeScale = maria.attackSpeed
-            maria.fadeToAction('punchStart')
-        }
         run() {
-          // console.log('Attack RUNNING')
+          console.log('Attack RUNNING')
           return RUNNING
         }
     }
     
     async function initBehaviorTree() {
-      let mainTree = await BehaviorTree.parseFileXML('./src/maintree.xml', {Loading, Idle, Run, Attack})
+      let mainTree = await BehaviorTree.parseFileXML('./src/maintree.xml', {Loading, Idle, Run, Jump, Attack})
       
       var bt = new BehaviorTree({tree: mainTree, blackboard: {someVariable: 123}})
+
+      // setInterval(async () => {
+      //   await bt.tick()
+      //   console.log('-----------------------------')
+      // }, 1000)
+
+      // let count = 0;
+      // async function step() {
+      //   await bt.tick()
+      //   console.log('-----------------------------')
+      //   count++;
+      //   if (count < 10) setTimeout(step, 1000);
+      // }
+      // step();
 
       // let count = 0;
       async function step() {
@@ -180,6 +198,8 @@ class Maria {
       }
       // step();
       requestAnimationFrame(step);
+
+      window.bt = bt;
     }
     initBehaviorTree();
 

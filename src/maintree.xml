@@ -1,8 +1,10 @@
 <BehaviorTree>
     <MemSequence>
         <Loading />
-        <Run />
-        <Idle />
+        <MemSelector>
+            <Run />
+            <Jump />
+        </MemSelector>
         <!-- <Attack /> -->
     </MemSequence>
 </BehaviorTree>

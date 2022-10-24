@@ -74,18 +74,26 @@ class Maria {
     const maria = this
 
     class Loading extends b3.Action {
+      open() {
+        // console.log('Loading open')
+      }
       tick() {
+        console.log('Loading tick')
         if (maria.isLoaded) {
           // console.log('Loading SUCCESS')
           return b3.SUCCESS
         } else {
-          // console.log('Loading FAILURE')
-          return b3.FAILURE
+          // console.log('Loading RUNNING')
+          return b3.RUNNING
         }
       }
     }
     class Idle extends b3.Action {
+      open() {
+        // console.log('Idle open')
+      }
       tick() {
+        // console.log('Idle tick')
         // console.log(window.allKey.KeyJ)
         // if (window.allKey.KeyJ) {
         return b3.SUCCESS
@@ -96,7 +104,11 @@ class Maria {
       }
     }
     class Run extends b3.Action {
+      open() {
+        // console.log('Run open')
+      }
       tick() {
+        // console.log('Run tick')
         if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
           const directionLengthSq = maria.direction.lengthSq()
           if (directionLengthSq > 0) {
@@ -118,7 +130,11 @@ class Maria {
       }
     }
     class Jump extends b3.Action {
+      open() {
+        // console.log('Jump open')
+      }
       tick() {
+        // console.log('Jump tick')
         // console.log('BT check tickKey')
         // if (window.tickKey.KeyK) {
         if (window.allKey.KeyK) {
@@ -136,7 +152,11 @@ class Maria {
       }
     }
     class Attack extends b3.Action {
+      open() {
+        // console.log('Attack open')
+      }
       tick() {
+        console.log('Attack tick')
         // console.log('Attack RUNNING')
         return b3.RUNNING
       }
@@ -146,9 +166,19 @@ class Maria {
     const blackboard = new b3.Blackboard()
 
     const tree = new b3.BehaviorTree()
-    // the tree -----------------------------------------------------------------------------------------------------------------------
-    tree.root = new b3.MemSequence({ children: [new Loading(), new b3.MemPriority({ children: [new Jump(), new Run()] })] })
-    // end: the tree-----------------------------------------------------------------------------------------------------------------------
+    window.tree = tree
+    // the tree -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    tree.root = new b3.MemSequence({ children: [
+      new Loading(),
+      new b3.Runnor({ child:
+        new b3.Priority({ children: [
+          new Jump(),
+          new Run(),
+          new Idle(),
+        ]})
+      })
+    ]})
+    // end: the tree-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // setInterval(() => {
     //   tree.tick(target, blackboard)

@@ -68,93 +68,88 @@ class Maria {
     // this.shadow.position.y = 0.01
     // this.shadow.renderOrder = 1 // need same as position.y order of all pseudo shadows
     // scene.add(this.shadow)
-    
+
     // --- behavior tree
 
-    const maria = this;
+    const maria = this
 
     class Loading extends b3.Action {
-        tick() {
-          if (maria.isLoaded) {
-            // console.log('Loading SUCCESS')
-            return b3.SUCCESS
-          } else {
-            // console.log('Loading FAILURE')
-            return b3.FAILURE
-          }
+      tick() {
+        if (maria.isLoaded) {
+          // console.log('Loading SUCCESS')
+          return b3.SUCCESS
+        } else {
+          // console.log('Loading FAILURE')
+          return b3.FAILURE
         }
+      }
     }
     class Idle extends b3.Action {
-        tick() {
-          // console.log(window.allKey.KeyJ)
-          // if (window.allKey.KeyJ) {
-            return b3.SUCCESS
-          // } else {
-            // console.log('Idle RUNNING')
-            // return b3.RUNNING
-          // }
-        }
+      tick() {
+        // console.log(window.allKey.KeyJ)
+        // if (window.allKey.KeyJ) {
+        return b3.SUCCESS
+        // } else {
+        // console.log('Idle RUNNING')
+        // return b3.RUNNING
+        // }
+      }
     }
     class Run extends b3.Action {
-        tick() {
-          if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
-            const directionLengthSq = maria.direction.lengthSq()
-            if (directionLengthSq > 0) {
-              // change facing
-              maria.facing.copy(maria.direction)
-            } // end if here to set velocity 0 when stop, but because linearDamping not 1, will no obvious effect.
-            maria.mesh.rotation.y = -maria.facing.angle() + Math.PI / 2
+      tick() {
+        if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
+          const directionLengthSq = maria.direction.lengthSq()
+          if (directionLengthSq > 0) {
+            // change facing
+            maria.facing.copy(maria.direction)
+          } // end if here to set velocity 0 when stop, but because linearDamping not 1, will no obvious effect.
+          maria.mesh.rotation.y = -maria.facing.angle() + Math.PI / 2
 
-            maria.body.position.x += maria.direction.x
-            maria.body.position.z += maria.direction.y
+          maria.body.position.x += maria.direction.x
+          maria.body.position.z += maria.direction.y
 
-            // console.log('Run SUCCESS')
-            return b3.SUCCESS
-          } else {
-            // console.log('Run FAILURE')
-            return b3.FAILURE
-          }
-          // return b3.RUNNING
+          // console.log('Run SUCCESS')
+          return b3.SUCCESS
+        } else {
+          // console.log('Run FAILURE')
+          return b3.FAILURE
         }
+        // return b3.RUNNING
+      }
     }
     class Jump extends b3.Action {
-        tick() {
-          // console.log('BT check tickKey')
-          // if (window.tickKey.KeyK) {
-          if (window.allKey.KeyK) {
-            if (!maria.isAir) {
-              maria.body.velocity.y = 5.2
-            } else {
-
-            }
-
-            return b3.SUCCESS
+      tick() {
+        // console.log('BT check tickKey')
+        // if (window.tickKey.KeyK) {
+        if (window.allKey.KeyK) {
+          if (!maria.isAir) {
+            maria.body.velocity.y = 5.2
           } else {
-            // console.log('Jump FAILURE')
-            return b3.FAILURE
           }
-          // return b3.RUNNING
+
+          return b3.SUCCESS
+        } else {
+          // console.log('Jump FAILURE')
+          return b3.FAILURE
         }
+        // return b3.RUNNING
+      }
     }
     class Attack extends b3.Action {
-        tick() {
-          // console.log('Attack RUNNING')
-          return b3.RUNNING
-        }
+      tick() {
+        // console.log('Attack RUNNING')
+        return b3.RUNNING
+      }
     }
 
     const target = {}
     const blackboard = new b3.Blackboard()
 
     const tree = new b3.BehaviorTree()
-    tree.root = new b3.MemSequence({children:[
-      new Loading(),
-      new b3.MemPriority({children:[
-        new Jump(),
-        new Run(),
-      ]})
-    ]})
-    
+    // the tree -----------------------------------------------------------------------------------------------------------------------
+    tree.root = new b3.MemSequence({ children: [new Loading(), new b3.MemPriority({ children: [new Jump(), new Run()] })] })
+    // end: the tree-----------------------------------------------------------------------------------------------------------------------
+
     // setInterval(() => {
     //   tree.tick(target, blackboard)
     //   console.log('-----------------------------')
@@ -172,9 +167,9 @@ class Maria {
     function step() {
       tree.tick(target, blackboard)
       // console.log('-----------------------------')
-      requestAnimationFrame(step);
+      requestAnimationFrame(step)
     }
-    requestAnimationFrame(step);
+    requestAnimationFrame(step)
 
     // --- end: behavior tree
 
@@ -293,7 +288,7 @@ class Maria {
     // else console.log('-')
 
     if (false && this.service.state.matches('loading')) return
-    if (!this.mesh) return;
+    if (!this.mesh) return
 
     this.mesh.position.set(this.body.position.x, this.body.position.y - this.bodyHeightHalf, this.body.position.z)
     // this.shadow.position.x = this.body.position.x
@@ -407,7 +402,7 @@ class Maria {
           //
 
           // this.service.send('loaded')
-          this.isLoaded = true;
+          this.isLoaded = true
           resolve()
 
           if (callback) callback()

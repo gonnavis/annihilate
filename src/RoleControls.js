@@ -29,7 +29,7 @@ class RoleControls {
       window.allKey[event.code] = true
       this.holdKey[event.code] = true
       window.tickKey[event.code] = true
-      console.log('set tickKey')
+      // console.log('set tickKey')
 
       clearTimeout(this.timeoutSeqKey)
       if (false && this.role.service.state.matches('block')) {
@@ -222,7 +222,7 @@ class RoleControls {
 
     // restore
     window.tickKey = {}
-    console.log('clear tickKey')
+    // console.log('clear tickKey')
   }
   setRole(role) {
     this.role = role

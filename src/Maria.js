@@ -6,24 +6,8 @@ import { GLTFLoader } from '../lib/three.js/examples/jsm/loaders/GLTFLoader.js'
 import { SwordBlink } from './SwordBlink.js'
 import { Pop } from './Pop.js'
 import { Splash } from './Splash.js'
-import {
-  BehaviorTree,
-  MemSequence,
-  MemSelector,
-  Action,
-  Composite,
-  Decorator,
-  Condition,
-  Sequence,
-  Selector,
-  Wait,
-  Inverter,
-  SUCCESS,
-  FAILURE,
-  RUNNING,
-  MaxTime
-} from '../lib/modular-behavior-tree/index.js'
-// import * as BT from '../lib/modular-behavior-tree/index.js'
+import * as b3 from '../lib/behavior3js/index.js'
+window.b3 = b3
 
 // console.log(SUCCESS);
 // console.log(FAILURE);
@@ -89,41 +73,30 @@ class Maria {
 
     const maria = this;
 
-    let testCount1 = 0;
-    let testCount2 = 0;
-    class Loading extends Action {
-        constructor({properties = { text: null }} = {}) {
-            super({properties})
-        }
-        run() {
+    class Loading extends b3.Action {
+        tick() {
           if (maria.isLoaded) {
             // console.log('Loading SUCCESS')
-            return SUCCESS
+            return b3.SUCCESS
           } else {
             // console.log('Loading FAILURE')
-            return FAILURE
+            return b3.FAILURE
           }
         }
     }
-    class Idle extends Action {
-        constructor({properties = { text: null }} = {}) {
-            super({properties})
-        }
-        run() {
+    class Idle extends b3.Action {
+        tick() {
           // console.log(window.allKey.KeyJ)
           // if (window.allKey.KeyJ) {
-            return SUCCESS
+            return b3.SUCCESS
           // } else {
             // console.log('Idle RUNNING')
-            // return RUNNING
+            // return b3.RUNNING
           // }
         }
     }
-    class Run extends Action {
-        constructor({properties = { text: null }} = {}) {
-            super({properties})
-        }
-        run() {
+    class Run extends b3.Action {
+        tick() {
           if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
             const directionLengthSq = maria.direction.lengthSq()
             if (directionLengthSq > 0) {
@@ -136,20 +109,17 @@ class Maria {
             maria.body.position.z += maria.direction.y
 
             // console.log('Run SUCCESS')
-            return SUCCESS
+            return b3.SUCCESS
           } else {
             // console.log('Run FAILURE')
-            return FAILURE
+            return b3.FAILURE
           }
-          // return RUNNING
+          // return b3.RUNNING
         }
     }
-    class Jump extends Action {
-        constructor({properties = { text: null }} = {}) {
-            super({properties})
-        }
-        run() {
-          console.log('BT check tickKey')
+    class Jump extends b3.Action {
+        tick() {
+          // console.log('BT check tickKey')
           // if (window.tickKey.KeyK) {
           if (window.allKey.KeyK) {
             if (!maria.isAir) {
@@ -158,57 +128,53 @@ class Maria {
 
             }
 
-            return SUCCESS
+            return b3.SUCCESS
           } else {
             // console.log('Jump FAILURE')
-            return FAILURE
+            return b3.FAILURE
           }
-          // return RUNNING
+          // return b3.RUNNING
         }
     }
-    class Attack extends Action {
-        constructor({properties = { text: null }} = {}) {
-            super({properties})
-        }
-        run() {
+    class Attack extends b3.Action {
+        tick() {
           // console.log('Attack RUNNING')
-          return RUNNING
+          return b3.RUNNING
         }
     }
+
+    const target = {}
+    const blackboard = new b3.Blackboard()
+
+    const tree = new b3.BehaviorTree()
+    tree.root = new b3.MemSequence({children:[
+      new Loading(),
+      new b3.MemPriority({children:[
+        new Jump(),
+        new Run(),
+      ]})
+    ]})
     
-    async function initBehaviorTree() {
-      let mainTree = await BehaviorTree.parseFileXML('./src/maintree.xml', {Loading, Idle, Run, Jump, Attack})
-      
-      var bt = new BehaviorTree({tree: mainTree, blackboard: {someVariable: 123}})
+    // setInterval(() => {
+    //   tree.tick(target, blackboard)
+    //   console.log('-----------------------------')
+    // }, 1000)
 
-      // setInterval(async () => {
-      //   await bt.tick()
-      //   console.log('-----------------------------')
-      // }, 1000)
+    // let count = 0;
+    // function step() {
+    //   tree.tick(target, blackboard)
+    //   console.log('-----------------------------')
+    //   count++;
+    //   if (count < 10) setTimeout(step, 1000);
+    // }
+    // step();
 
-      // let count = 0;
-      // async function step() {
-      //   await bt.tick()
-      //   console.log('-----------------------------')
-      //   count++;
-      //   if (count < 10) setTimeout(step, 1000);
-      // }
-      // step();
-
-      // let count = 0;
-      async function step() {
-        await bt.tick()
-        // console.log('-----------------------------')
-        // count++;
-        // if (count < 10) setTimeout(step, 1000);
-        requestAnimationFrame(step);
-      }
-      // step();
+    function step() {
+      tree.tick(target, blackboard)
+      // console.log('-----------------------------')
       requestAnimationFrame(step);
-
-      window.bt = bt;
     }
-    initBehaviorTree();
+    requestAnimationFrame(step);
 
     // --- end: behavior tree
 

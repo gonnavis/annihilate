@@ -1,0 +1,125 @@
+{
+  "version": "0.3.0",
+  "scope": "project",
+  "selectedTree": "c46f0aab-b015-45b2-b6f7-4c34e9d69bf6",
+  "trees": [
+    {
+      "version": "0.3.0",
+      "scope": "tree",
+      "id": "c46f0aab-b015-45b2-b6f7-4c34e9d69bf6",
+      "title": "A behavior tree",
+      "description": "",
+      "root": "3e4835e8-98f2-4c27-b6eb-b2d3ff4bcacf",
+      "properties": {},
+      "nodes": {
+        "3e4835e8-98f2-4c27-b6eb-b2d3ff4bcacf": {
+          "id": "3e4835e8-98f2-4c27-b6eb-b2d3ff4bcacf",
+          "name": "MemSequence",
+          "title": "MemSequence",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -492,
+            "y": -168
+          },
+          "children": [
+            "df1db638-4580-4322-b6e4-0b00379a39e9",
+            "63481379-782c-4e14-8f76-c05d59e464a8"
+          ]
+        },
+        "df1db638-4580-4322-b6e4-0b00379a39e9": {
+          "id": "df1db638-4580-4322-b6e4-0b00379a39e9",
+          "name": "Action",
+          "title": "Loading",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -312,
+            "y": -228
+          }
+        },
+        "a1c6e25d-bc98-4479-a917-fdb8119acf24": {
+          "id": "a1c6e25d-bc98-4479-a917-fdb8119acf24",
+          "name": "Priority",
+          "title": "Priority",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -192,
+            "y": -132
+          },
+          "children": [
+            "9da22c25-9956-4b36-8e9d-c4156a66f56d",
+            "584a419d-1793-44cd-ac50-ab9db844cf1d",
+            "531b6411-a7c9-44c0-98fe-b8400adf22c3"
+          ]
+        },
+        "9da22c25-9956-4b36-8e9d-c4156a66f56d": {
+          "id": "9da22c25-9956-4b36-8e9d-c4156a66f56d",
+          "name": "Action",
+          "title": "Jump",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -36,
+            "y": -216
+          }
+        },
+        "584a419d-1793-44cd-ac50-ab9db844cf1d": {
+          "id": "584a419d-1793-44cd-ac50-ab9db844cf1d",
+          "name": "Action",
+          "title": "Run",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -36,
+            "y": -132
+          }
+        },
+        "531b6411-a7c9-44c0-98fe-b8400adf22c3": {
+          "id": "531b6411-a7c9-44c0-98fe-b8400adf22c3",
+          "name": "Action",
+          "title": "Idle",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -36,
+            "y": -36
+          }
+        },
+        "63481379-782c-4e14-8f76-c05d59e464a8": {
+          "id": "63481379-782c-4e14-8f76-c05d59e464a8",
+          "name": "Repeater",
+          "title": "Repeat <maxLoop>x",
+          "description": "",
+          "properties": {
+            "maxLoop": -1
+          },
+          "display": {
+            "x": -324,
+            "y": -132
+          },
+          "child": "a1c6e25d-bc98-4479-a917-fdb8119acf24"
+        }
+      },
+      "display": {
+        "camera_x": 960,
+        "camera_y": 489.5,
+        "camera_z": 1,
+        "x": -600,
+        "y": -168
+      }
+    }
+  ],
+  "custom_nodes": [
+    {
+      "version": "0.3.0",
+      "scope": "node",
+      "name": "Action",
+      "category": "action",
+      "title": "",
+      "description": null,
+      "properties": {}
+    }
+  ]
+}

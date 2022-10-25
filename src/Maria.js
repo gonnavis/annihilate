@@ -87,9 +87,9 @@ class Maria {
           return b3.RUNNING
         }
       }
-      start() {
-        console.log('start Loading')
-      }
+      // start() {
+      //   console.log('start Loading')
+      // }
     }
     class Idle extends b3.Action {
       open() {
@@ -99,21 +99,25 @@ class Maria {
         // console.log('tick Idle')
         // console.log(window.allKey.KeyJ)
         // if (window.allKey.KeyJ) {
-        return b3.RUNNING
+        //   console.log('RUNNING Idle')
+        //   return b3.RUNNING
         // } else {
         // console.log('RUNNING Idle')
         // return b3.RUNNING
         // }
-      }
-      start() {
-        console.log('start Idle')
         
-        maria.fadeToAction('idle')
-
-        maria.chargedLevel = 0
-        maria.sword.material.emissive.setScalar(0)
-        maria.sword.material.color.setRGB(1, 1, 1)
+        console.log('SUCCESS Idle')
+        return b3.SUCCESS
       }
+      // start() {
+      //   console.log('start Idle')
+        
+      //   maria.fadeToAction('idle')
+
+      //   maria.chargedLevel = 0
+      //   maria.sword.material.emissive.setScalar(0)
+      //   maria.sword.material.color.setRGB(1, 1, 1)
+      // }
     }
     class Run extends b3.Action {
       open() {
@@ -132,18 +136,18 @@ class Maria {
           maria.body.position.x += maria.direction.x
           maria.body.position.z += maria.direction.y
 
-          // console.log('RUNNING Run')
+          console.log('RUNNING Run')
           return b3.RUNNING
         } else {
-          // console.log('Run FAILURE')
+          console.log('FAILURE Run')
           return b3.FAILURE
         }
         // return b3.RUNNING
       }
-      start() {
-        console.log('start Run')
-        maria.fadeToAction('running')
-      }
+      // start() {
+      //   console.log('start Run')
+      //   maria.fadeToAction('running')
+      // }
     }
     class Jump extends b3.Action {
       open() {
@@ -173,25 +177,33 @@ class Maria {
         }
         // return b3.RUNNING
       }
-      start() {
-        console.log('start Jump')
-        maria.body.velocity.y = 5.2
-        maria.fadeToAction('jump') // TODO: Mesh pos y do not move.
-        // maria.body.velocity.set(0, 0, 0) // For climb jump -> double jump clear velocity, thus can jump back to start wall, when roleControls move by change position.
-      }
+      // start() {
+      //   console.log('start Jump')
+      //   maria.body.velocity.y = 5.2
+      //   maria.fadeToAction('jump') // TODO: Mesh pos y do not move.
+      //   // maria.body.velocity.set(0, 0, 0) // For climb jump -> double jump clear velocity, thus can jump back to start wall, when roleControls move by change position.
+      // }
     }
     class Attack extends b3.Action {
       open() {
         // console.log('open Attack')
       }
       tick() {
-        console.log('tick Attack')
+        // console.log('tick Attack')
         // console.log('RUNNING Attack')
-        return b3.RUNNING
+        if (window.allKey.KeyJ) {
+          console.log('RUNNING Attack')
+          return b3.RUNNING
+        } else {
+          console.log('FAILURE Attack')
+          return b3.FAILURE
+        }
       }
-      start() {
-        console.log('start Attack')
-      }
+      // start() {
+      //   console.log('start Attack')
+      //   maria.oaction['punch'].timeScale = maria.attackSpeed
+      //   maria.fadeToAction('punch', 0)
+      // }
     }
 
     window.target = {}
@@ -202,8 +214,9 @@ class Maria {
     tree.root = new b3.MemSequence({ children: [
       new Loading(),
       new b3.Runnor({ child:
-        new b3.Priority({ children: [
-          new Jump(),
+        new b3.MemPriority({ children: [
+          new Attack(),
+          // new Jump(),
           new Run(),
           new Idle(),
         ]}),
@@ -308,6 +321,8 @@ class Maria {
   }
 
   update(dt) {
+    this.isAnimFinished = false
+
     tree.tick(target, blackboard)
 
     // console.log('tick')
@@ -426,6 +441,7 @@ class Maria {
             // } else {
             // this.service.send('finish')
             // }
+            this.isAnimFinished = true
           })
 
           //

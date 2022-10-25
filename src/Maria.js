@@ -74,9 +74,6 @@ class Maria {
     const maria = this
 
     class Loading extends b3.Action {
-      start() {
-        console.log('start Loading')
-      }
       open() {
         // console.log('open Loading')
       }
@@ -90,11 +87,11 @@ class Maria {
           return b3.RUNNING
         }
       }
+      start() {
+        console.log('start Loading')
+      }
     }
     class Idle extends b3.Action {
-      start() {
-        console.log('start Idle')
-      }
       open() {
         // console.log('open Idle')
       }
@@ -108,26 +105,32 @@ class Maria {
         // return b3.RUNNING
         // }
       }
+      start() {
+        console.log('start Idle')
+        
+        maria.fadeToAction('idle')
+
+        maria.chargedLevel = 0
+        maria.sword.material.emissive.setScalar(0)
+        maria.sword.material.color.setRGB(1, 1, 1)
+      }
     }
     class Run extends b3.Action {
-      start() {
-        console.log('start Run')
-      }
       open() {
         // console.log('open Run')
       }
       tick() {
         // console.log('tick Run')
         if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
-          // const directionLengthSq = maria.direction.lengthSq()
-          // if (directionLengthSq > 0) {
-          //   // change facing
-          //   maria.facing.copy(maria.direction)
-          // } // end if here to set velocity 0 when stop, but because linearDamping not 1, will no obvious effect.
-          // maria.mesh.rotation.y = -maria.facing.angle() + Math.PI / 2
+          const directionLengthSq = maria.direction.lengthSq()
+          if (directionLengthSq > 0) {
+            // change facing
+            maria.facing.copy(maria.direction)
+          } // end if here to set velocity 0 when stop, but because linearDamping not 1, will no obvious effect.
+          maria.mesh.rotation.y = -maria.facing.angle() + Math.PI / 2
 
-          // maria.body.position.x += maria.direction.x
-          // maria.body.position.z += maria.direction.y
+          maria.body.position.x += maria.direction.x
+          maria.body.position.z += maria.direction.y
 
           // console.log('RUNNING Run')
           return b3.RUNNING
@@ -137,11 +140,12 @@ class Maria {
         }
         // return b3.RUNNING
       }
+      start() {
+        console.log('start Run')
+        maria.fadeToAction('running')
+      }
     }
     class Jump extends b3.Action {
-      start() {
-        console.log('start Jump')
-      }
       open() {
         // console.log('open Jump')
       }
@@ -155,20 +159,28 @@ class Maria {
           // } else {
           // }
 
+          // console.log('jump 1')
           return b3.RUNNING
         } else {
-          // if (!maria.isAir) {
+          // if (maria.altitude > 0.0037) {
+          if (maria.altitude > 0.01) {
+            // console.log('jump 2')
+            return b3.RUNNING
+          } else {
             // console.log('Jump FAILURE')
             return b3.FAILURE
-          // }
+          }
         }
         // return b3.RUNNING
       }
+      start() {
+        console.log('start Jump')
+        maria.body.velocity.y = 5.2
+        maria.fadeToAction('jump') // TODO: Mesh pos y do not move.
+        // maria.body.velocity.set(0, 0, 0) // For climb jump -> double jump clear velocity, thus can jump back to start wall, when roleControls move by change position.
+      }
     }
     class Attack extends b3.Action {
-      start() {
-        console.log('start Attack')
-      }
       open() {
         // console.log('open Attack')
       }
@@ -176,6 +188,9 @@ class Maria {
         console.log('tick Attack')
         // console.log('RUNNING Attack')
         return b3.RUNNING
+      }
+      start() {
+        console.log('start Attack')
       }
     }
 
@@ -210,12 +225,12 @@ class Maria {
     // }
     // step();
 
-    function step() {
-      tree.tick(target, blackboard)
-      // console.log('-----------------------------')
-      requestAnimationFrame(step)
-    }
-    requestAnimationFrame(step)
+    // function step() {
+    //   tree.tick(target, blackboard)
+    //   // console.log('-----------------------------')
+    //   requestAnimationFrame(step)
+    // }
+    // requestAnimationFrame(step)
 
     // --- end: behavior tree
 
@@ -293,6 +308,8 @@ class Maria {
   }
 
   update(dt) {
+    tree.tick(target, blackboard)
+
     // console.log('tick')
     // console.log(this.body.velocity.x.toFixed(1), this.body.linearFactor.x, this.body.force.x, this.body.invMass)
 
@@ -309,26 +326,25 @@ class Maria {
 
     // console.log(Math.round(this.getAltitude()))
     let result = this.getAltitude(100)
-    let altitude
     if (result.body) {
-      altitude = this.body.position.y - this.bodyHeightHalf - result.hitPointWorld.y
+      maria.altitude = this.body.position.y - this.bodyHeightHalf - result.hitPointWorld.y
       // console.log(Math.round(this.body.position.y - result.hitPointWorld.y), result.body.belongTo)
     } else {
-      altitude = Infinity
+      maria.altitude = Infinity
     }
-    if (altitude > 0.37) {
+    if (maria.altitude > 0.37) {
       this.setAir(true)
       // this.service.send('air')
     } else {
       // NOTE: Check isAir to prevent immediate idle after jump.
-      // NOTE: Check altitude < 0.0037 too prevent sometimes not land bug.
-      // if (this.isAir || altitude < 0.0037) this.service.send('land')
+      // NOTE: Check maria.altitude < 0.0037 too prevent sometimes not land bug.
+      // if (this.isAir || maria.altitude < 0.0037) this.service.send('land')
       // this.service.send('land')
       this.setAir(false)
       this.body.mass = this.mass
     }
-    // console.log(this.isAir, altitude.toFixed(1), result.body?.belongTo?.constructor.name)
-    // console.log(this.isAir, altitude, result.body?.belongTo?.constructor.name)
+    // console.log(this.isAir, maria.altitude.toFixed(1), result.body?.belongTo?.constructor.name)
+    // console.log(this.isAir, maria.altitude, result.body?.belongTo?.constructor.name)
 
     // if (this.isAir) console.log('isAir')
     // else console.log('-')

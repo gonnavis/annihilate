@@ -75,40 +75,40 @@ class Maria {
 
     class Loading extends b3.Action {
       open() {
-        // console.log('Loading open')
+        // console.log('open Loading')
       }
       tick() {
-        console.log('Loading tick')
+        console.log('tick Loading')
         if (maria.isLoaded) {
-          // console.log('Loading SUCCESS')
+          // console.log('SUCCESS Loading')
           return b3.SUCCESS
         } else {
-          // console.log('Loading RUNNING')
+          // console.log('RUNNING Loading')
           return b3.RUNNING
         }
       }
     }
     class Idle extends b3.Action {
       open() {
-        // console.log('Idle open')
+        // console.log('open Idle')
       }
       tick() {
-        // console.log('Idle tick')
+        // console.log('tick Idle')
         // console.log(window.allKey.KeyJ)
         // if (window.allKey.KeyJ) {
         return b3.SUCCESS
         // } else {
-        // console.log('Idle RUNNING')
+        // console.log('RUNNING Idle')
         // return b3.RUNNING
         // }
       }
     }
     class Run extends b3.Action {
       open() {
-        // console.log('Run open')
+        // console.log('open Run')
       }
       tick() {
-        // console.log('Run tick')
+        // console.log('tick Run')
         if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
           const directionLengthSq = maria.direction.lengthSq()
           if (directionLengthSq > 0) {
@@ -120,7 +120,7 @@ class Maria {
           maria.body.position.x += maria.direction.x
           maria.body.position.z += maria.direction.y
 
-          // console.log('Run SUCCESS')
+          // console.log('SUCCESS Run')
           return b3.SUCCESS
         } else {
           // console.log('Run FAILURE')
@@ -131,10 +131,10 @@ class Maria {
     }
     class Jump extends b3.Action {
       open() {
-        // console.log('Jump open')
+        // console.log('open Jump')
       }
       tick() {
-        // console.log('Jump tick')
+        // console.log('tick Jump')
         // console.log('BT check tickKey')
         // if (window.tickKey.KeyK) {
         if (window.allKey.KeyK) {
@@ -153,11 +153,11 @@ class Maria {
     }
     class Attack extends b3.Action {
       open() {
-        // console.log('Attack open')
+        // console.log('open Attack')
       }
       tick() {
-        console.log('Attack tick')
-        // console.log('Attack RUNNING')
+        console.log('tick Attack')
+        // console.log('RUNNING Attack')
         return b3.RUNNING
       }
     }

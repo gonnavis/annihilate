@@ -102,7 +102,7 @@ class Maria {
         // console.log('tick Idle')
         // console.log(window.allKey.KeyJ)
         // if (window.allKey.KeyJ) {
-        return b3.SUCCESS
+        return b3.RUNNING
         // } else {
         // console.log('RUNNING Idle')
         // return b3.RUNNING
@@ -119,18 +119,18 @@ class Maria {
       tick() {
         // console.log('tick Run')
         if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
-          const directionLengthSq = maria.direction.lengthSq()
-          if (directionLengthSq > 0) {
-            // change facing
-            maria.facing.copy(maria.direction)
-          } // end if here to set velocity 0 when stop, but because linearDamping not 1, will no obvious effect.
-          maria.mesh.rotation.y = -maria.facing.angle() + Math.PI / 2
+          // const directionLengthSq = maria.direction.lengthSq()
+          // if (directionLengthSq > 0) {
+          //   // change facing
+          //   maria.facing.copy(maria.direction)
+          // } // end if here to set velocity 0 when stop, but because linearDamping not 1, will no obvious effect.
+          // maria.mesh.rotation.y = -maria.facing.angle() + Math.PI / 2
 
-          maria.body.position.x += maria.direction.x
-          maria.body.position.z += maria.direction.y
+          // maria.body.position.x += maria.direction.x
+          // maria.body.position.z += maria.direction.y
 
-          // console.log('SUCCESS Run')
-          return b3.SUCCESS
+          // console.log('RUNNING Run')
+          return b3.RUNNING
         } else {
           // console.log('Run FAILURE')
           return b3.FAILURE
@@ -150,17 +150,17 @@ class Maria {
         // console.log('BT check tickKey')
         // if (window.tickKey.KeyK) {
         if (window.allKey.KeyK) {
-          if (!maria.isAir) {
-            maria.body.velocity.y = 5.2
-          } else {
-          }
+          // if (!maria.isAir) {
+          //   maria.body.velocity.y = 5.2
+          // } else {
+          // }
 
-          return b3.SUCCESS
+          return b3.RUNNING
         } else {
-          if (!maria.isAir) {
+          // if (!maria.isAir) {
             // console.log('Jump FAILURE')
             return b3.FAILURE
-          }
+          // }
         }
         // return b3.RUNNING
       }

@@ -157,8 +157,10 @@ class Maria {
 
           return b3.SUCCESS
         } else {
-          // console.log('Jump FAILURE')
-          return b3.FAILURE
+          if (!maria.isAir) {
+            // console.log('Jump FAILURE')
+            return b3.FAILURE
+          }
         }
         // return b3.RUNNING
       }

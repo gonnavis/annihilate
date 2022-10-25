@@ -74,6 +74,9 @@ class Maria {
     const maria = this
 
     class Loading extends b3.Action {
+      start() {
+        console.log('start Loading')
+      }
       open() {
         // console.log('open Loading')
       }
@@ -89,6 +92,9 @@ class Maria {
       }
     }
     class Idle extends b3.Action {
+      start() {
+        console.log('start Idle')
+      }
       open() {
         // console.log('open Idle')
       }
@@ -104,6 +110,9 @@ class Maria {
       }
     }
     class Run extends b3.Action {
+      start() {
+        console.log('start Run')
+      }
       open() {
         // console.log('open Run')
       }
@@ -130,6 +139,9 @@ class Maria {
       }
     }
     class Jump extends b3.Action {
+      start() {
+        console.log('start Jump')
+      }
       open() {
         // console.log('open Jump')
       }
@@ -152,6 +164,9 @@ class Maria {
       }
     }
     class Attack extends b3.Action {
+      start() {
+        console.log('start Attack')
+      }
       open() {
         // console.log('open Attack')
       }
@@ -162,11 +177,10 @@ class Maria {
       }
     }
 
-    const target = {}
-    const blackboard = new b3.Blackboard()
+    window.target = {}
+    window.blackboard = new b3.Blackboard()
 
-    const tree = new b3.BehaviorTree()
-    window.tree = tree
+    window.tree = new b3.BehaviorTree()
     // the tree -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     tree.root = new b3.MemSequence({ children: [
       new Loading(),
@@ -175,8 +189,8 @@ class Maria {
           new Jump(),
           new Run(),
           new Idle(),
-        ]})
-      })
+        ]}),
+      }),
     ]})
     // end: the tree-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

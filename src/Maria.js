@@ -78,7 +78,7 @@ class Maria {
         // console.log('open Loading')
       }
       tick() {
-        console.log('tick Loading')
+        // console.log('tick Loading')
         if (maria.isLoaded) {
           // console.log('SUCCESS Loading')
           return b3.SUCCESS
@@ -96,7 +96,7 @@ class Maria {
         // console.log('open Idle')
       }
       tick() {
-        console.log('tick Idle')
+        // console.log('tick Idle')
         // console.log(window.allKey.KeyJ)
         // if (window.allKey.KeyJ) {
           // console.log('RUNNING Idle')
@@ -112,7 +112,7 @@ class Maria {
         maria.sword.material.emissive.setScalar(0)
         maria.sword.material.color.setRGB(1, 1, 1)
         
-        console.log('SUCCESS Idle')
+        // console.log('SUCCESS Idle')
         return b3.SUCCESS
       }
       // start() {
@@ -124,6 +124,19 @@ class Maria {
       //   maria.sword.material.emissive.setScalar(0)
       //   maria.sword.material.color.setRGB(1, 1, 1)
       // }
+    }
+    class RunStart extends b3.Action {
+      tick() {
+        // console.log('tick RunStart')
+        if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
+          maria.fadeToAction('running')
+          // console.log('SUCCESS RunStart')
+          return b3.SUCCESS
+        } else {
+          // console.log('FAILURE RunStart')
+          return b3.FAILURE
+        }
+      }
     }
     class Run extends b3.Action {
       open() {
@@ -200,7 +213,7 @@ class Maria {
         if (window.allKey.KeyJ) {
           maria.oaction['punch'].timeScale = maria.attackSpeed
           maria.fadeToAction('punch', 0)
-          console.log('SUCCESS Attack')
+          // console.log('SUCCESS Attack')
           return b3.SUCCESS
         } else {
           // console.log('FAILURE Attack')
@@ -215,8 +228,9 @@ class Maria {
     }
     class WaitAnimFinished extends b3.Action {
       tick() {
+        // console.log('tick WaitAnimFinished')
         if (maria.isAnimFinished) {
-          console.log('anim finished')
+          // console.log('anim finished')
           return b3.SUCCESS
         } else {
           return b3.RUNNING
@@ -234,13 +248,16 @@ class Maria {
       new b3.Runnor({ child:
         new b3.Priority({ children: [
           new b3.MemSequence({children:[
-            new Attack(),
+            new Attack(), // todo: Rename AttackStart?
             new WaitAnimFinished(),
           ]}),
           // new Jump(),
-          new Run(),
-          window.aaa = new b3.MemSequence({children:[ // todo: MemSequence not reset after failed, still remember Runner node.
-            new Idle(),
+          new b3.MemSequence({children:[
+            new RunStart(),
+            new Run(), // todo: Rename Running?
+          ]}),
+          window.aaa = new b3.MemSequence({children:[
+            new Idle(), // todo: Rename IdleStart?
             new b3.Runner(),
           ]}),
         ]}),
@@ -521,6 +538,7 @@ class Maria {
   }
 
   fadeToAction(name, duration = 0.1) {
+    console.log('fadeToAction:', name)
     // previousAction = this.action_act;
     // activeAction = this.oaction[ name ];
     // if ( previousAction !== activeAction ) {

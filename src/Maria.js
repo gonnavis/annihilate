@@ -99,14 +99,14 @@ class Maria {
         // console.log('tick Idle')
         // console.log(window.allKey.KeyJ)
         // if (window.allKey.KeyJ) {
-        //   console.log('RUNNING Idle')
+          // console.log('RUNNING Idle')
         //   return b3.RUNNING
         // } else {
         // console.log('RUNNING Idle')
         // return b3.RUNNING
         // }
         
-        console.log('SUCCESS Idle')
+        // console.log('SUCCESS Idle')
         return b3.SUCCESS
       }
       // start() {
@@ -136,10 +136,10 @@ class Maria {
           maria.body.position.x += maria.direction.x
           maria.body.position.z += maria.direction.y
 
-          console.log('RUNNING Run')
+          // console.log('RUNNING Run')
           return b3.RUNNING
         } else {
-          console.log('FAILURE Run')
+          // console.log('FAILURE Run')
           return b3.FAILURE
         }
         // return b3.RUNNING
@@ -192,10 +192,12 @@ class Maria {
         // console.log('tick Attack')
         // console.log('RUNNING Attack')
         if (window.allKey.KeyJ) {
-          console.log('RUNNING Attack')
-          return b3.RUNNING
+          maria.oaction['punch'].timeScale = maria.attackSpeed
+          maria.fadeToAction('punch', 0)
+          // console.log('SUCCESS Attack')
+          return b3.SUCCESS
         } else {
-          console.log('FAILURE Attack')
+          // console.log('FAILURE Attack')
           return b3.FAILURE
         }
       }
@@ -204,6 +206,16 @@ class Maria {
       //   maria.oaction['punch'].timeScale = maria.attackSpeed
       //   maria.fadeToAction('punch', 0)
       // }
+    }
+    class WaitAnimFinished extends b3.Action {
+      tick() {
+        if (maria.isAnimFinished) {
+          console.log('anim finished')
+          return b3.SUCCESS
+        } else {
+          return b3.RUNNING
+        }
+      }
     }
 
     window.target = {}
@@ -214,8 +226,11 @@ class Maria {
     tree.root = new b3.MemSequence({ children: [
       new Loading(),
       new b3.Runnor({ child:
-        new b3.MemPriority({ children: [
-          new Attack(),
+        new b3.Priority({ children: [
+          new b3.MemSequence({children:[
+            new Attack(),
+            new WaitAnimFinished(),
+          ]}),
           // new Jump(),
           new Run(),
           new Idle(),
@@ -323,8 +338,6 @@ class Maria {
   update(dt) {
     this.isAnimFinished = false
 
-    tree.tick(target, blackboard)
-
     // console.log('tick')
     // console.log(this.body.velocity.x.toFixed(1), this.body.linearFactor.x, this.body.force.x, this.body.invMass)
 
@@ -371,6 +384,10 @@ class Maria {
     // this.shadow.position.x = this.body.position.x
     // this.shadow.position.z = this.body.position.z
     this.mixer.update(dt)
+    
+
+    // need after `this.isAnimFinished = false`
+    tree.tick(target, blackboard)
   }
 
   hit(collideEvent) {

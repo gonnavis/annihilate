@@ -239,7 +239,7 @@ class Maria {
           ]}),
           // new Jump(),
           new Run(),
-          new b3.MemSequence({children:[ // todo: MemSequence not reset after failed, still remember Runner node.
+          window.aaa = new b3.MemSequence({children:[ // todo: MemSequence not reset after failed, still remember Runner node.
             new Idle(),
             new b3.Runner(),
           ]}),

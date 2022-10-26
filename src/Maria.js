@@ -224,27 +224,31 @@ class Maria {
       }
     }
 
+    class A000 extends b3.Action {
+      tick() {
+        console.log('000')
+        if (count < 3) {
+          return b3.FAILURE
+        } else {
+          return b3.SUCCESS
+        }
+      }
+    }
+    class A111 extends b3.Action {
+      tick() {
+        console.log('111')
+        return b3.RUNNING
+      }
+    }
+
     window.target = {}
     window.blackboard = new b3.Blackboard()
 
     window.tree = new b3.BehaviorTree()
     // the tree -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    tree.root = new b3.MemSequence({ children: [
-      new Loading(),
-      new b3.Runnor({ child:
-        new b3.Priority({ children: [
-          new b3.MemSequence({children:[
-            new Attack(),
-            new WaitAnimFinished(),
-          ]}),
-          // new Jump(),
-          new Run(),
-          new b3.MemSequence({children:[ // todo: MemSequence not reset after failed, still remember Runner node.
-            new Idle(),
-            new b3.Runner(),
-          ]}),
-        ]}),
-      }),
+    tree.root = new b3.Priority({ children: [
+      new A000(),
+      new A111(),
     ]})
     // end: the tree-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -253,14 +257,14 @@ class Maria {
     //   console.log('-----------------------------')
     // }, 1000)
 
-    // let count = 0;
-    // function step() {
-    //   tree.tick(target, blackboard)
-    //   console.log('-----------------------------')
-    //   count++;
-    //   if (count < 10) setTimeout(step, 1000);
-    // }
-    // step();
+    let count = 0;
+    function step() {
+      tree.tick(target, blackboard)
+      console.log('-----------------------------')
+      count++;
+      if (count < 10) setTimeout(step, 1000);
+    }
+    step();
 
     // function step() {
     //   tree.tick(target, blackboard)
@@ -396,7 +400,7 @@ class Maria {
     
 
     // need after `this.isAnimFinished = false`
-    tree.tick(target, blackboard)
+    // tree.tick(target, blackboard)
   }
 
   hit(collideEvent) {

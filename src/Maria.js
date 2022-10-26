@@ -96,7 +96,7 @@ class Maria {
         // console.log('open Idle')
       }
       tick() {
-        // console.log('tick Idle')
+        console.log('tick Idle')
         // console.log(window.allKey.KeyJ)
         // if (window.allKey.KeyJ) {
           // console.log('RUNNING Idle')
@@ -106,7 +106,13 @@ class Maria {
         // return b3.RUNNING
         // }
         
-        // console.log('SUCCESS Idle')
+        maria.fadeToAction('idle')
+
+        maria.chargedLevel = 0
+        maria.sword.material.emissive.setScalar(0)
+        maria.sword.material.color.setRGB(1, 1, 1)
+        
+        console.log('SUCCESS Idle')
         return b3.SUCCESS
       }
       // start() {
@@ -194,7 +200,7 @@ class Maria {
         if (window.allKey.KeyJ) {
           maria.oaction['punch'].timeScale = maria.attackSpeed
           maria.fadeToAction('punch', 0)
-          // console.log('SUCCESS Attack')
+          console.log('SUCCESS Attack')
           return b3.SUCCESS
         } else {
           // console.log('FAILURE Attack')
@@ -233,7 +239,10 @@ class Maria {
           ]}),
           // new Jump(),
           new Run(),
-          new Idle(),
+          new b3.MemSequence({children:[ // todo: MemSequence not reset after failed, still remember Runner node.
+            new Idle(),
+            new b3.Runner(),
+          ]}),
         ]}),
       }),
     ]})

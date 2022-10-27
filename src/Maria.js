@@ -210,9 +210,13 @@ class Maria {
       tick() {
         // console.log('tick Attack')
         // console.log('RUNNING Attack')
-        if (window.allKey.KeyJ) {
-          maria.oaction['punch'].timeScale = maria.attackSpeed
+        if (window.tickKey.KeyJ) {
+          // maria.oaction['punch'].timeScale = maria.attackSpeed
+          maria.oaction['punch'].timeScale = 0.3
           maria.fadeToAction('punch', 0)
+
+          maria.isAttack = true
+
           // console.log('SUCCESS Attack')
           return b3.SUCCESS
         } else {
@@ -225,6 +229,31 @@ class Maria {
       //   maria.oaction['punch'].timeScale = maria.attackSpeed
       //   maria.fadeToAction('punch', 0)
       // }
+    }
+    class PrepareFist extends b3.Action {
+      tick() {
+        // console.log('tick PrepareFist')
+        if (window.tickKey.KeyJ && maria.isAttack) {
+          // console.log('SUCCESS PrepareFist')
+          return b3.SUCCESS
+        } else {
+          // console.log('FAILURE PrepareFist')
+          return b3.FAILURE
+        }
+      }
+    }
+    class Fist extends b3.Action {
+      tick() {
+        // console.log('tick Fist')
+        // maria.oaction['fist'].timeScale = maria.attackSpeed
+        maria.oaction['fist'].timeScale = 0.3
+        maria.fadeToAction('fist', 0)
+
+        maria.isAnimFinished = false
+
+        // console.log('SUCCESS Fist')
+        return b3.SUCCESS
+      }
     }
     class WaitAnimFinished extends b3.Action {
       tick() {
@@ -247,6 +276,12 @@ class Maria {
       new Loading(),
       new b3.Runnor({ child:
         new b3.Priority({ children: [
+          new b3.MemSequence({children:[
+            new PrepareFist(), // todo: Rename FistStart?
+            new WaitAnimFinished(),
+            new Fist(), // todo: Rename FistStart?
+            new WaitAnimFinished(),
+          ]}),
           new b3.MemSequence({children:[
             new Attack(), // todo: Rename AttackStart?
             new WaitAnimFinished(),

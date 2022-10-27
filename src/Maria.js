@@ -235,7 +235,6 @@ class Maria {
           tick.blackboard.fist = false
         }
 
-        // console.log('RUNNING Fist')
         if (maria.isAnimFinished) {
           return b3.FAILURE
         } else if ((tick.blackboard.attack && window.tickKey.KeyJ) || tick.blackboard.fist) {
@@ -267,7 +266,6 @@ class Maria {
           tick.blackboard.attack = false
         }
 
-        // console.log('RUNNING Attack')
         if (maria.isAnimFinished) {
           return b3.FAILURE
         } else if (window.tickKey.KeyJ || tick.blackboard.attack) {

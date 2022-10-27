@@ -234,12 +234,23 @@ class Maria {
       }
       tick(tick) {
         // console.log('tick Attack')
-        // console.log('RUNNING Attack')
-        if (!tick.blackboard.attack && window.tickKey.KeyJ) {
-          maria.oaction['punch'].timeScale = maria.attackSpeed
-          maria.fadeToAction('punch', 0)
 
+        if (tick.blackboard.attackPrevTick !== window.prevTick) {
+          tick.blackboard.attack = false
+        }
+
+        // console.log('RUNNING Attack')
+        if (maria.isAnimFinished) {
+          return b3.FAILURE
+        } else if (window.tickKey.KeyJ || tick.blackboard.attack) {
+          if (!tick.blackboard.attack) {
+            // maria.oaction['punch'].timeScale = maria.attackSpeed
+            maria.oaction['punch'].timeScale = 0.3
+            maria.fadeToAction('punch', 0)
+          }
+            
           tick.blackboard.attack = true
+          tick.blackboard.attackPrevTick = tick
 
           console.log('SUCCESS Attack')
           return b3.SUCCESS
@@ -276,7 +287,7 @@ class Maria {
       new b3.Runnor({ child:
         new b3.MemPriority({ children: [
           new Attack(), // todo: Rename AttackStart?
-          new Run(), // todo: Rename Running?
+          // new Run(), // todo: Rename Running?
           new Idle(), // todo: Rename IdleStart?
         ]}),
       }),

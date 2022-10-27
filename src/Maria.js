@@ -255,39 +255,39 @@ class Maria {
         }
       }
     }
-    class Attack extends b3.Action {
+    class Punch extends b3.Action {
       open() {
-        // console.log('open Attack')
+        // console.log('open Punch')
       }
       tick(tick) {
-        // console.log('tick Attack')
+        // console.log('tick Punch')
 
-        if (tick.blackboard.attackPrevTick !== window.prevTick) {
-          tick.blackboard.attack = false
+        if (tick.blackboard.punchPrevTick !== window.prevTick) {
+          tick.blackboard.punch = false
         }
 
         if (maria.isAnimFinished) {
           return b3.FAILURE
-        } else if (window.tickKey.KeyJ || tick.blackboard.attack) {
-          if (!tick.blackboard.attack) {
-            // maria.oaction['punch'].timeScale = maria.attackSpeed
+        } else if (window.tickKey.KeyJ || tick.blackboard.punch) {
+          if (!tick.blackboard.punch) {
+            // maria.oaction['punch'].timeScale = maria.punchSpeed
             maria.oaction['punch'].timeScale = 0.3
             maria.fadeToAction('punch', 0)
           }
             
-          tick.blackboard.attack = true
-          tick.blackboard.attackPrevTick = tick
+          tick.blackboard.punch = true
+          tick.blackboard.punchPrevTick = tick
 
-          console.log('SUCCESS Attack')
+          console.log('SUCCESS Punch')
           return b3.SUCCESS
         } else {
-          // console.log('FAILURE Attack')
+          // console.log('FAILURE Punch')
           return b3.FAILURE
         }
       }
       // start() {
-      //   console.log('start Attack')
-      //   maria.oaction['punch'].timeScale = maria.attackSpeed
+      //   console.log('start Punch')
+      //   maria.oaction['punch'].timeScale = maria.punchSpeed
       //   maria.fadeToAction('punch', 0)
       // }
     }
@@ -313,7 +313,7 @@ class Maria {
       new b3.Runnor({ child:
         new b3.MemPriority({ children: [
           new Fist(),
-          new Attack(),
+          new Punch(),
           new Run(),
           new Idle(),
         ]}),

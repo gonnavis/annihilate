@@ -80,7 +80,7 @@ class Maria {
       tick() {
         // console.log('tick Loading')
         if (maria.isLoaded) {
-          // console.log('SUCCESS Loading')
+          console.log('SUCCESS Loading')
           return b3.SUCCESS
         } else {
           // console.log('RUNNING Loading')
@@ -92,11 +92,19 @@ class Maria {
       // }
     }
     class Idle extends b3.Action {
-      open() {
-        // console.log('open Idle')
-      }
-      tick() {
+      // enter() {
+      //   console.log('enter Idle')
+      // }
+      // open() {
+      //   console.log('open Idle')
+      // }
+      tick(tick) {
         // console.log('tick Idle')
+
+        if (tick.blackboard.idlePrevTick !== window.prevTick) {
+          tick.blackboard.idle = false
+        }
+
         // console.log(window.allKey.KeyJ)
         // if (window.allKey.KeyJ) {
           // console.log('RUNNING Idle')
@@ -105,16 +113,33 @@ class Maria {
         // console.log('RUNNING Idle')
         // return b3.RUNNING
         // }
-        
-        maria.fadeToAction('idle')
 
-        maria.chargedLevel = 0
-        maria.sword.material.emissive.setScalar(0)
-        maria.sword.material.color.setRGB(1, 1, 1)
+        // console.log('tick.test', tick.test) // undefined
+        // tick.test = 1;
+        //
+        // console.log('tick.blackboard.test', tick.blackboard.test) // 1
+        // tick.blackboard.test = 1;
+
+        if (!tick.blackboard.idle) {
+          maria.fadeToAction('idle')
+          
+          maria.chargedLevel = 0
+          maria.sword.material.emissive.setScalar(0)
+          maria.sword.material.color.setRGB(1, 1, 1)
+        }
+
+        tick.blackboard.idle = true
+        tick.blackboard.idlePrevTick = tick
         
-        // console.log('SUCCESS Idle')
+        console.log('SUCCESS Idle')
         return b3.SUCCESS
       }
+      // close() {
+      //   console.log('close Idle')
+      // }
+      // exit() {
+      //   console.log('exit Idle')
+      // }
       // start() {
       //   console.log('start Idle')
         
@@ -130,7 +155,7 @@ class Maria {
         // console.log('tick RunStart')
         if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
           maria.fadeToAction('running')
-          // console.log('SUCCESS RunStart')
+          console.log('SUCCESS RunStart')
           return b3.SUCCESS
         } else {
           // console.log('FAILURE RunStart')
@@ -207,13 +232,16 @@ class Maria {
       open() {
         // console.log('open Attack')
       }
-      tick() {
+      tick(tick) {
         // console.log('tick Attack')
         // console.log('RUNNING Attack')
-        if (window.tickKey.KeyJ) {
+        if (!tick.blackboard.attack && window.tickKey.KeyJ) {
           maria.oaction['punch'].timeScale = maria.attackSpeed
           maria.fadeToAction('punch', 0)
-          // console.log('SUCCESS Attack')
+
+          tick.blackboard.attack = true
+
+          console.log('SUCCESS Attack')
           return b3.SUCCESS
         } else {
           // console.log('FAILURE Attack')
@@ -246,20 +274,10 @@ class Maria {
     tree.root = new b3.MemSequence({ children: [
       new Loading(),
       new b3.Runnor({ child:
-        new b3.Priority({ children: [
-          new b3.MemSequence({children:[
-            new Attack(), // todo: Rename AttackStart?
-            new WaitAnimFinished(),
-          ]}),
-          // new Jump(),
-          new b3.MemSequence({children:[
-            new RunStart(),
-            new Run(), // todo: Rename Running?
-          ]}),
-          window.aaa = new b3.MemSequence({children:[
-            new Idle(), // todo: Rename IdleStart?
-            new b3.Runner(),
-          ]}),
+        new b3.MemPriority({ children: [
+          new Attack(), // todo: Rename AttackStart?
+          new Run(), // todo: Rename Running?
+          new Idle(), // todo: Rename IdleStart?
         ]}),
       }),
     ]})

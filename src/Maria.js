@@ -150,26 +150,22 @@ class Maria {
       //   maria.sword.material.color.setRGB(1, 1, 1)
       // }
     }
-    class RunStart extends b3.Action {
-      tick() {
-        // console.log('tick RunStart')
-        if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
-          maria.fadeToAction('running')
-          console.log('SUCCESS RunStart')
-          return b3.SUCCESS
-        } else {
-          // console.log('FAILURE RunStart')
-          return b3.FAILURE
-        }
-      }
-    }
     class Run extends b3.Action {
       open() {
         // console.log('open Run')
       }
-      tick() {
+      tick(tick) {
         // console.log('tick Run')
+
+        if (tick.blackboard.runPrevTick !== window.prevTick) {
+          tick.blackboard.run = false
+        }
+
         if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
+          if (!tick.blackboard.run) {
+            maria.fadeToAction('running')
+          }
+
           const directionLengthSq = maria.direction.lengthSq()
           if (directionLengthSq > 0) {
             // change facing
@@ -179,9 +175,12 @@ class Maria {
 
           maria.body.position.x += maria.direction.x
           maria.body.position.z += maria.direction.y
+            
+          tick.blackboard.run = true
+          tick.blackboard.runPrevTick = tick
 
-          // console.log('RUNNING Run')
-          return b3.RUNNING
+          console.log('SUCCESS Run')
+          return b3.SUCCESS
         } else {
           // console.log('FAILURE Run')
           return b3.FAILURE
@@ -287,7 +286,7 @@ class Maria {
       new b3.Runnor({ child:
         new b3.MemPriority({ children: [
           new Attack(), // todo: Rename AttackStart?
-          // new Run(), // todo: Rename Running?
+          new Run(), // todo: Rename Running?
           new Idle(), // todo: Rename IdleStart?
         ]}),
       }),

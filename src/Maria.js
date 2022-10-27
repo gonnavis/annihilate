@@ -235,12 +235,10 @@ class Maria {
           tick.blackboard.fist = false
         }
 
-        if (maria.isAnimFinished) {
-          return b3.FAILURE
-        } else if ((tick.blackboard.attack && window.tickKey.KeyJ) || tick.blackboard.fist) {
+        const doFist = () => {
           if (!tick.blackboard.fist) {
-            // maria.oaction['fist'].timeScale = maria.attackSpeed
-            maria.oaction['fist'].timeScale = 0.3
+            maria.oaction['fist'].timeScale = maria.attackSpeed
+            // maria.oaction['fist'].timeScale = 0.3
             maria.fadeToAction('fist', 0)
           }
             
@@ -249,6 +247,17 @@ class Maria {
 
           console.log('SUCCESS Fist')
           return b3.SUCCESS
+        }
+
+        if (maria.isAnimFinished) {
+          if (tick.blackboard.prepareFist) {
+            doFist()
+          } else {
+            return b3.FAILURE
+          }
+        } else if (tick.blackboard.fist) {
+          tick.blackboard.prepareFist = false
+          doFist();
         } else {
           // console.log('FAILURE Fist')
           return b3.FAILURE
@@ -270,9 +279,13 @@ class Maria {
           return b3.FAILURE
         } else if (window.tickKey.KeyJ || tick.blackboard.punch) {
           if (!tick.blackboard.punch) {
-            // maria.oaction['punch'].timeScale = maria.punchSpeed
-            maria.oaction['punch'].timeScale = 0.3
+            maria.oaction['punch'].timeScale = maria.attackSpeed
+            // maria.oaction['punch'].timeScale = 0.3
             maria.fadeToAction('punch', 0)
+          } else {
+            if (window.tickKey.KeyJ) {
+              tick.blackboard.prepareFist = true
+            }
           }
             
           tick.blackboard.punch = true
@@ -312,8 +325,8 @@ class Maria {
       new Loading(),
       new b3.Runnor({ child:
         new b3.MemPriority({ children: [
+          new Punch(), // todo: put Punch Fist in MemSequence ?
           new Fist(),
-          new Punch(),
           new Run(),
           new Idle(),
         ]}),

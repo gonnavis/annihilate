@@ -210,7 +210,7 @@ class Maria {
       tick() {
         // console.log('tick Attack')
         // console.log('RUNNING Attack')
-        if (window.allKey.KeyJ) {
+        if (window.tickKey.KeyJ) {
           maria.oaction['punch'].timeScale = maria.attackSpeed
           maria.fadeToAction('punch', 0)
           // console.log('SUCCESS Attack')

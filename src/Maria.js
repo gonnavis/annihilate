@@ -227,6 +227,35 @@ class Maria {
       //   // maria.body.velocity.set(0, 0, 0) // For climb jump -> double jump clear velocity, thus can jump back to start wall, when roleControls move by change position.
       // }
     }
+    class Fist extends b3.Action {
+      tick(tick) {
+        // console.log('tick Fist')
+
+        if (tick.blackboard.fistPrevTick !== window.prevTick) {
+          tick.blackboard.fist = false
+        }
+
+        // console.log('RUNNING Fist')
+        if (maria.isAnimFinished) {
+          return b3.FAILURE
+        } else if ((tick.blackboard.attack && window.tickKey.KeyJ) || tick.blackboard.fist) {
+          if (!tick.blackboard.fist) {
+            // maria.oaction['fist'].timeScale = maria.attackSpeed
+            maria.oaction['fist'].timeScale = 0.3
+            maria.fadeToAction('fist', 0)
+          }
+            
+          tick.blackboard.fist = true
+          tick.blackboard.fistPrevTick = tick
+
+          console.log('SUCCESS Fist')
+          return b3.SUCCESS
+        } else {
+          // console.log('FAILURE Fist')
+          return b3.FAILURE
+        }
+      }
+    }
     class Attack extends b3.Action {
       open() {
         // console.log('open Attack')
@@ -285,9 +314,10 @@ class Maria {
       new Loading(),
       new b3.Runnor({ child:
         new b3.MemPriority({ children: [
-          new Attack(), // todo: Rename AttackStart?
-          new Run(), // todo: Rename Running?
-          new Idle(), // todo: Rename IdleStart?
+          new Fist(),
+          new Attack(),
+          new Run(),
+          new Idle(),
         ]}),
       }),
     ]})

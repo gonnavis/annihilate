@@ -90,6 +90,7 @@ class Maria {
               block: { target: 'block' },
               // blocked: { target: 'blocked' },
               air: { target: 'airIdle' },
+              // air: { target: 'fall' },
             },
           },
           block: {
@@ -150,6 +151,7 @@ class Maria {
               hit: { target: 'hit' },
               dash: { target: 'dash' },
               air: { target: 'airIdle' },
+              // air: { target: 'fall' },
               block: { target: 'block' },
               // blocked: { target: 'blocked' }, // Note: Can block when running or in other states? No, more by intended operation, less by luck.
             },

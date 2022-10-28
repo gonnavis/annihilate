@@ -47,6 +47,8 @@ class FloatingBox {
     //   this.body.velocity.set(-this.speed, 0, 0)
     // }
 
+    // this.body.position.x = Math.sin(time * 0.001) * 10;
+
     this.mesh.position.copy(this.body.position)
   }
 }

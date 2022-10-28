@@ -237,8 +237,8 @@ class Maria {
 
         const doFist = () => {
           if (!tick.blackboard.fist) {
-            maria.oaction['fist'].timeScale = maria.attackSpeed
-            // maria.oaction['fist'].timeScale = 0.3
+            // maria.oaction['fist'].timeScale = maria.attackSpeed
+            maria.oaction['fist'].timeScale = 0.3
             maria.fadeToAction('fist', 0)
           }
             
@@ -279,8 +279,8 @@ class Maria {
           return b3.FAILURE
         } else if (window.tickKey.KeyJ || tick.blackboard.punch) {
           if (!tick.blackboard.punch) {
-            maria.oaction['punch'].timeScale = maria.attackSpeed
-            // maria.oaction['punch'].timeScale = 0.3
+            // maria.oaction['punch'].timeScale = maria.attackSpeed
+            maria.oaction['punch'].timeScale = 0.3
             maria.fadeToAction('punch', 0)
           } else {
             if (window.tickKey.KeyJ) {
@@ -321,12 +321,12 @@ class Maria {
 
     window.tree = new b3.BehaviorTree()
     // the tree -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    tree.root = new b3.MemSequence({ children: [
+    tree.root = new b3.MemSequence({children:[
       new Loading(),
-      new b3.Runnor({ child:
-        new b3.MemPriority({ children: [
-          new Punch(), // todo: put Punch Fist in MemSequence ?
-          new Fist(),
+      new b3.Runnor({child:
+        new b3.Priority({children:[
+          new Fist(), // note: Fist need before Punch
+          new Punch(),
           new Run(),
           new Idle(),
         ]}),

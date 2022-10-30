@@ -104,8 +104,8 @@ class Maria {
         const {target, blackboard, tree} = tick;
         const prevTick = blackboard.get('prevTick', tree.id)
 
-        if (tick.blackboard.idlePrevTick !== prevTick) {
-          tick.blackboard.idle = false
+        if (blackboard.get('idlePrevTick') !== prevTick) {
+          blackboard.set('idle', false)
         }
 
         // console.log(window.allKey.KeyJ)
@@ -120,10 +120,10 @@ class Maria {
         // console.log('tick.test', tick.test) // undefined
         // tick.test = 1;
         //
-        // console.log('tick.blackboard.test', tick.blackboard.test) // 1
-        // tick.blackboard.test = 1;
+        // console.log('blackboard.test', blackboard.test) // 1
+        // blackboard.test = 1;
 
-        if (!tick.blackboard.idle) {
+        if (!blackboard.get('idle')) {
           maria.fadeToAction('idle')
           
           maria.chargedLevel = 0
@@ -131,8 +131,8 @@ class Maria {
           maria.sword.material.color.setRGB(1, 1, 1)
         }
 
-        tick.blackboard.idle = true
-        tick.blackboard.idlePrevTick = tick
+        blackboard.set('idle', true)
+        blackboard.set('idlePrevTick', tick)
         
         console.log('SUCCESS Idle')
         return b3.SUCCESS
@@ -163,12 +163,12 @@ class Maria {
         const {target, blackboard, tree} = tick;
         const prevTick = blackboard.get('prevTick', tree.id)
 
-        if (tick.blackboard.runPrevTick !== prevTick) {
-          tick.blackboard.run = false
+        if (blackboard.get('runPrevTick') !== prevTick) {
+          blackboard.set('run', false)
         }
 
         if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
-          if (!tick.blackboard.run) {
+          if (!blackboard.get('run')) {
             maria.fadeToAction('running')
           }
 
@@ -182,8 +182,8 @@ class Maria {
           maria.body.position.x += maria.direction.x
           maria.body.position.z += maria.direction.y
             
-          tick.blackboard.run = true
-          tick.blackboard.runPrevTick = tick
+          blackboard.set('run', true)
+          blackboard.set('runPrevTick', tick)
 
           console.log('SUCCESS Run')
           return b3.SUCCESS
@@ -240,32 +240,32 @@ class Maria {
         const {target, blackboard, tree} = tick;
         const prevTick = blackboard.get('prevTick', tree.id)
 
-        if (tick.blackboard.fistPrevTick !== prevTick) {
-          tick.blackboard.fist = false
+        if (blackboard.get('fistPrevTick') !== prevTick) {
+          blackboard.set('fist', false)
         }
 
         const doFist = () => {
-          if (!tick.blackboard.fist) {
+          if (!blackboard.get('fist')) {
             // maria.oaction['fist'].timeScale = maria.attackSpeed
             maria.oaction['fist'].timeScale = 0.3
             maria.fadeToAction('fist', 0)
           }
             
-          tick.blackboard.fist = true
-          tick.blackboard.fistPrevTick = tick
+          blackboard.set('fist', true)
+          blackboard.set('fistPrevTick', tick)
 
           console.log('SUCCESS Fist')
           return b3.SUCCESS
         }
 
         if (maria.isAnimFinished) {
-          if (tick.blackboard.prepareFist) {
+          if (blackboard.get('prepareFist')) {
             doFist()
           } else {
             return b3.FAILURE
           }
-        } else if (tick.blackboard.fist) {
-          tick.blackboard.prepareFist = false
+        } else if (blackboard.get('fist')) {
+          blackboard.set('prepareFist', false)
           doFist();
         } else {
           // console.log('FAILURE Fist')
@@ -283,25 +283,25 @@ class Maria {
         const {target, blackboard, tree} = tick;
         const prevTick = blackboard.get('prevTick', tree.id)
 
-        if (tick.blackboard.punchPrevTick !== prevTick) {
-          tick.blackboard.punch = false
+        if (blackboard.get('punchPrevTick') !== prevTick) {
+          blackboard.set('punch', false)
         }
 
         if (maria.isAnimFinished) {
           return b3.FAILURE
-        } else if (window.tickKey.KeyJ || tick.blackboard.punch) {
-          if (!tick.blackboard.punch) {
+        } else if (window.tickKey.KeyJ || blackboard.get('punch')) {
+          if (!blackboard.get('punch')) {
             // maria.oaction['punch'].timeScale = maria.attackSpeed
             maria.oaction['punch'].timeScale = 0.3
             maria.fadeToAction('punch', 0)
           } else {
             if (window.tickKey.KeyJ) {
-              tick.blackboard.prepareFist = true
+              blackboard.set('prepareFist', true)
             }
           }
             
-          tick.blackboard.punch = true
-          tick.blackboard.punchPrevTick = tick
+          blackboard.set('punch', true)
+          blackboard.set('punchPrevTick', tick)
 
           console.log('SUCCESS Punch')
           return b3.SUCCESS

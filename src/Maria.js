@@ -101,7 +101,10 @@ class Maria {
       tick(tick) {
         // console.log('tick Idle')
 
-        if (tick.blackboard.idlePrevTick !== window.prevTick) {
+        const {target, blackboard, tree} = tick;
+        const prevTick = blackboard.get('prevTick', tree.id)
+
+        if (tick.blackboard.idlePrevTick !== prevTick) {
           tick.blackboard.idle = false
         }
 
@@ -157,7 +160,10 @@ class Maria {
       tick(tick) {
         // console.log('tick Run')
 
-        if (tick.blackboard.runPrevTick !== window.prevTick) {
+        const {target, blackboard, tree} = tick;
+        const prevTick = blackboard.get('prevTick', tree.id)
+
+        if (tick.blackboard.runPrevTick !== prevTick) {
           tick.blackboard.run = false
         }
 
@@ -231,7 +237,10 @@ class Maria {
       tick(tick) {
         // console.log('tick Fist')
 
-        if (tick.blackboard.fistPrevTick !== window.prevTick) {
+        const {target, blackboard, tree} = tick;
+        const prevTick = blackboard.get('prevTick', tree.id)
+
+        if (tick.blackboard.fistPrevTick !== prevTick) {
           tick.blackboard.fist = false
         }
 
@@ -271,7 +280,10 @@ class Maria {
       tick(tick) {
         // console.log('tick Punch')
 
-        if (tick.blackboard.punchPrevTick !== window.prevTick) {
+        const {target, blackboard, tree} = tick;
+        const prevTick = blackboard.get('prevTick', tree.id)
+
+        if (tick.blackboard.punchPrevTick !== prevTick) {
           tick.blackboard.punch = false
         }
 
@@ -327,6 +339,7 @@ class Maria {
         new b3.Priority({children:[
           new Fist(), // note: Fist need before Punch
           new Punch(),
+          // new Jump(),
           new Run(),
           new Idle(),
         ]}),
@@ -482,7 +495,7 @@ class Maria {
     
 
     // need after `this.isAnimFinished = false`
-    tree.tick(target, blackboard)
+    tree.tick(this, blackboard)
   }
 
   hit(collideEvent) {

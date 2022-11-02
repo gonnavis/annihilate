@@ -303,7 +303,7 @@ class Maria {
               new PunchStart(),
               new WaitAnimFinished(),
               new Punch(),
-              new WaitOneTick(), // prevent immediately finish animation. // todo: any better way?
+              new WaitOneTick(), // prevent immediately finish animation. // todo: any better way? set state in `WaitAnimFinished`?
               new b3.Priority({children:[
                 new b3.MemSequence({children:[
                   new CheckAttack(),
@@ -316,19 +316,19 @@ class Maria {
             ]}),
             new b3.MemSequence({children:[ // Fist
               new FistStart(),
-              new WaitOneTick(), // prevent immediately finish animation. // todo: any better way?
+              new WaitOneTick(), // prevent immediately finish animation. // todo: any better way? set state in `WaitAnimFinished`?
               new WaitAnimFinished(),
               new Fist(),
-              new WaitOneTick(), // prevent immediately finish animation. // todo: any better way?
+              new WaitOneTick(), // prevent immediately finish animation. // todo: any better way? set state in `WaitAnimFinished`?
               new WaitAnimFinished(),
             ]}),
           ]}),
           // new Jump(),
-          new b3.MemSequence({children:[
+          new b3.MemSequence({children:[ // Run
             new RunStart(),
             new Run(), // todo: Rename Running?
           ]}),
-          window.aaa = new b3.MemSequence({children:[
+          window.aaa = new b3.MemSequence({children:[ // Idle
             new Idle(), // todo: Rename IdleStart?
             new b3.Runner(),
           ]}),

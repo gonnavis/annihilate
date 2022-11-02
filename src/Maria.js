@@ -29,7 +29,8 @@ class Maria {
     // this.speed = 1
     // this.landAttackSpeed = 1.4
     // this.airAttackSpeed = 2.5
-    this.attackSpeed = 1.4
+    // this.attackSpeed = 1.4
+    this.attackSpeed = 0.3
     this.airBashSpeed = this.attackSpeed * 5
     // this.attackSpeed = this.landAttackSpeed
     this.chargeAttackCoe = 2
@@ -203,36 +204,70 @@ class Maria {
       //   // maria.body.velocity.set(0, 0, 0) // For climb jump -> double jump clear velocity, thus can jump back to start wall, when roleControls move by change position.
       // }
     }
-    class Attack extends b3.Action {
+    class Punch extends b3.Action {
       open() {
-        // console.log('open Attack')
+        // console.log('open Punch')
       }
       tick() {
-        // console.log('tick Attack')
-        // console.log('RUNNING Attack')
+        // console.log('tick Punch')
+        // console.log('RUNNING Punch')
         if (window.tickKey.KeyJ) {
           maria.oaction['punch'].timeScale = maria.attackSpeed
           maria.fadeToAction('punch', 0)
-          // console.log('SUCCESS Attack')
+          // console.log('SUCCESS Punch')
           return b3.SUCCESS
         } else {
-          // console.log('FAILURE Attack')
+          // console.log('FAILURE Punch')
           return b3.FAILURE
         }
       }
       // start() {
-      //   console.log('start Attack')
+      //   console.log('start Punch')
       //   maria.oaction['punch'].timeScale = maria.attackSpeed
       //   maria.fadeToAction('punch', 0)
       // }
+    }
+    class Fist extends b3.Action {
+      tick() {
+        // console.log('tick Fist')
+        
+        maria.oaction['fist'].timeScale = maria.attackSpeed
+        maria.fadeToAction('fist', 0)
+        // console.log('SUCCESS Fist')
+        return b3.SUCCESS
+      }
+    }
+    class CheckAttack extends b3.Condition {
+      tick() {
+        if (window.tickKey.KeyJ) {
+          // console.log('SUCCESS CheckAttack')
+          return b3.SUCCESS
+        } else {
+          return b3.FAILURE
+        }
+      }
     }
     class WaitAnimFinished extends b3.Action {
       tick() {
         // console.log('tick WaitAnimFinished')
         if (maria.isAnimFinished) {
           // console.log('anim finished')
+          // console.log('SUCCESS WaitAnimFinished')
           return b3.SUCCESS
         } else {
+          // console.log('RUNNING WaitAnimFinished')
+          return b3.RUNNING
+        }
+      }
+    }
+    class WaitOneTick extends b3.Action {
+      tick(tick) {
+        const ticked = tick.blackboard.get('ticked', tick.tree.id, this.id)
+        if (ticked) {
+          tick.blackboard.set('ticked', false, tick.tree.id, this.id)
+          return b3.SUCCESS
+        } else {
+          tick.blackboard.set('ticked', true, tick.tree.id, this.id)
           return b3.RUNNING
         }
       }
@@ -247,9 +282,25 @@ class Maria {
       new Loading(),
       new b3.Runnor({ child:
         new b3.Priority({ children: [
-          new b3.MemSequence({children:[
-            new Attack(), // todo: Rename AttackStart?
-            new WaitAnimFinished(),
+          new b3.MemSequence({children:[ // combo
+            new b3.MemSequence({children:[ // Punch
+              new Punch(), // todo: Rename PunchStart?
+              new WaitOneTick(),
+              new b3.Priority({children:[
+                new b3.MemSequence({children:[
+                  new CheckAttack(),
+                  new WaitAnimFinished(),
+                ]}),
+                new b3.Failor({child:
+                  new WaitAnimFinished(),
+                }),
+              ]}),
+            ]}),
+            new b3.MemSequence({children:[ // Fist
+              new Fist(), // todo: Rename FistStart?
+              new WaitOneTick(),
+              new WaitAnimFinished(),
+            ]}),
           ]}),
           // new Jump(),
           new b3.MemSequence({children:[

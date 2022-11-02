@@ -204,22 +204,37 @@ class Maria {
       //   // maria.body.velocity.set(0, 0, 0) // For climb jump -> double jump clear velocity, thus can jump back to start wall, when roleControls move by change position.
       // }
     }
+    class PunchStart extends b3.Action {
+      tick() {
+        // console.log('tick PunchStart')
+        
+        maria.oaction['punchStart'].timeScale = maria.attackSpeed
+        maria.fadeToAction('punchStart')
+        // console.log('SUCCESS PunchStart')
+        return b3.SUCCESS
+      }
+    }
+    class FistStart extends b3.Action {
+      tick() {
+        // console.log('tick FistStart')
+        
+        maria.oaction['fistStart'].timeScale = maria.attackSpeed
+        maria.fadeToAction('fistStart')
+        // console.log('SUCCESS FistStart')
+        return b3.SUCCESS
+      }
+    }
     class Punch extends b3.Action {
       open() {
         // console.log('open Punch')
       }
       tick() {
         // console.log('tick Punch')
-        // console.log('RUNNING Punch')
-        if (window.tickKey.KeyJ) {
-          maria.oaction['punch'].timeScale = maria.attackSpeed
-          maria.fadeToAction('punch', 0)
-          // console.log('SUCCESS Punch')
-          return b3.SUCCESS
-        } else {
-          // console.log('FAILURE Punch')
-          return b3.FAILURE
-        }
+
+        maria.oaction['punch'].timeScale = maria.attackSpeed
+        maria.fadeToAction('punch', 0)
+        // console.log('SUCCESS Punch')
+        return b3.SUCCESS
       }
       // start() {
       //   console.log('start Punch')
@@ -255,7 +270,7 @@ class Maria {
           // console.log('SUCCESS WaitAnimFinished')
           return b3.SUCCESS
         } else {
-          // console.log('RUNNING WaitAnimFinished')
+          console.log('RUNNING WaitAnimFinished')
           return b3.RUNNING
         }
       }
@@ -283,9 +298,12 @@ class Maria {
       new b3.Runnor({ child:
         new b3.Priority({ children: [
           new b3.MemSequence({children:[ // combo
+            new CheckAttack(),
             new b3.MemSequence({children:[ // Punch
-              new Punch(), // todo: Rename PunchStart?
-              new WaitOneTick(),
+              new PunchStart(),
+              new WaitAnimFinished(),
+              new Punch(),
+              new WaitOneTick(), // prevent immediately finish animation. // todo: any better way?
               new b3.Priority({children:[
                 new b3.MemSequence({children:[
                   new CheckAttack(),
@@ -297,8 +315,11 @@ class Maria {
               ]}),
             ]}),
             new b3.MemSequence({children:[ // Fist
-              new Fist(), // todo: Rename FistStart?
-              new WaitOneTick(),
+              new FistStart(),
+              new WaitOneTick(), // prevent immediately finish animation. // todo: any better way?
+              new WaitAnimFinished(),
+              new Fist(),
+              new WaitOneTick(), // prevent immediately finish animation. // todo: any better way?
               new WaitAnimFinished(),
             ]}),
           ]}),

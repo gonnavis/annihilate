@@ -7,7 +7,7 @@ import { SwordBlink } from './SwordBlink.js'
 import { Pop } from './Pop.js'
 import { Splash } from './Splash.js'
 import * as b3 from '../lib/behavior3js/index.js'
-import { BehaviorTree } from './MariaBT.js'
+import { ActionsManager } from './MariaBT.js'
 window.b3 = b3
 
 // console.log(SUCCESS);
@@ -45,7 +45,7 @@ class Maria {
     this.airLiftVelocity = 1.5
     this.climbContactSign = null
     this.whirlwindOneTurnDuration = 0.3
-    this.behaviorTree = new BehaviorTree(this);
+    this.actionsManager = new ActionsManager(this);
 
     // pseudo shadow
     // const geometry = new THREE.CircleGeometry(1.7, 32)
@@ -197,7 +197,7 @@ class Maria {
     
 
     // need after `this.isAnimFinished = false`
-    this.behaviorTree.update();
+    this.actionsManager.update();
   }
 
   hit(collideEvent) {

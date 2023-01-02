@@ -119,7 +119,7 @@ const postFrameSettings = (localPlayer, blackboard) => {
   blackboard.set('frameCount', blackboard.get('frameCount') + 1);
 }
 
-class BehaviorTree {
+class ActionsManager {
   constructor(localPlayer) {
     this.localPlayer = localPlayer;
     this.blackboard = new b3.Blackboard();
@@ -177,4 +177,4 @@ class BehaviorTree {
   }
 }
 
-export {BehaviorTree};
+export {ActionsManager};

@@ -84,6 +84,20 @@ class FistStart extends b3.Action {
     }
   }
 }
+class Fist extends b3.Action {
+  tick(tick) {
+    const localPlayer = tick.target;
+    const tickResults = tick.blackboard.get('tickResults');
+    if (localPlayer.isAnimFinished) {
+      // console.log('FAILURE Fist');
+      return b3.FAILURE;
+    } else {
+      tickResults.fist = true;
+      // console.log('RUNNING Fist');
+      return b3.RUNNING;
+    }
+  }
+}
 class StartIdle extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
@@ -137,7 +151,9 @@ tree.root = new b3.MemSequence({title:'root',children: [
             new StartFistStart({title:'StartFistStart'}),
             new b3.Succeedor({child:new PrepareFist({title:'PrepareFist'})}),
             new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'punch'}),
-            new FistStart({title:'FistStart'}),
+            new b3.Succeedor({child:new FistStart({title:'FistStart'})}),
+            new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'fist'}),
+            new Fist({title:'Fist'}),
           ]}),
           new Punch({title:'Punch'}),
         ]}),
@@ -195,6 +211,15 @@ const postFrameSettings = (localPlayer, blackboard) => {
     }
     if (!tickResults.fistStart && lastFrameResults.fistStart) {
       // console.log('fistStart off');
+    }
+
+    if (tickResults.fist && !lastFrameResults.fist) {
+      // console.log('fist on');
+      maria.oaction['fist'].timeScale = maria.attackSpeed
+      maria.fadeToAction('fist', 0)
+    }
+    if (!tickResults.fist && lastFrameResults.fist) {
+      // console.log('fist off');
     }
     
     if (tickResults.idle && !lastFrameResults.idle) {

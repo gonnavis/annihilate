@@ -35,6 +35,20 @@ class PunchStart extends b3.Action {
     }
   }
 }
+class Punch extends b3.Action {
+  tick(tick) {
+    const localPlayer = tick.target;
+    const tickResults = tick.blackboard.get('tickResults');
+    if (localPlayer.isAnimFinished) {
+      // console.log('FAILURE Punch');
+      return b3.FAILURE;
+    } else {
+      tickResults.punch = true;
+      // console.log('RUNNING Punch');
+      return b3.RUNNING;
+    }
+  }
+}
 class StartIdle extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
@@ -54,6 +68,25 @@ class Idle extends b3.Action {
     }
   }
 }
+class WaitOneFrame extends b3.Action {
+  tick(tick) {
+    const frameCount = tick.blackboard.get('frameCount');
+    const thisFrameCount = tick.blackboard.get('frameCount', tick.tree.id, this.id);
+    const tickResults = tick.blackboard.get('tickResults');
+    if (!thisFrameCount) {
+      tick.blackboard.set('frameCount', frameCount, tick.tree.id, this.id);
+    }
+    if (frameCount > thisFrameCount) {
+      tick.blackboard.set('frameCount', undefined, tick.tree.id, this.id);
+      // console.log('SUCCESS WaitOneFrame');
+      return b3.SUCCESS
+    } else {
+      if (this.setTrueKey) tickResults[this.setTrueKey] = true;
+      // console.log('RUNNING WaitOneFrame');
+      return b3.RUNNING
+    }
+  }
+}
 
 const tree = new b3.BehaviorTree();
 tree.root = new b3.MemSequence({title:'root',children: [
@@ -62,7 +95,9 @@ tree.root = new b3.MemSequence({title:'root',children: [
     new b3.Priority({title:'base',children:[
       new b3.MemSequence({title:'punchStart',children:[
         new StartPunchStart({title:'StartPunchStart',}),
-        new PunchStart({title:'PunchStart',}),
+        new b3.Succeedor({child:new PunchStart({title:'PunchStart'})}),
+        new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'punch'}),
+        new Punch({title:'Punch'}),
       ]}),
       new b3.MemSequence({title:'idle',children:[
         new StartIdle({title:'StartIdle'}),
@@ -89,20 +124,30 @@ const postFrameSettings = (localPlayer, blackboard) => {
   const frameTryActions = blackboard.get('frameTryActions');
   const longTryActions = blackboard.get('longTryActions');
 
+  console.log(tickResults.punchStart, tickResults.punch)
   const setActions = () => {
     if (tickResults.punchStart && !lastFrameResults.punchStart) {
       // console.log('punchStart on');
       maria.oaction['punchStart'].timeScale = maria.attackSpeed
-      maria.fadeToAction('punchStart')
+      maria.fadeToAction('punchStart', null)
     }
     if (!tickResults.punchStart && lastFrameResults.punchStart) {
       // console.log('punchStart off');
+    }
+
+    if (tickResults.punch && !lastFrameResults.punch) {
+      // console.log('punch on');
+      maria.oaction['punch'].timeScale = maria.attackSpeed
+      maria.fadeToAction('punch', 0)
+    }
+    if (!tickResults.punch && lastFrameResults.punch) {
+      // console.log('punch off');
     }
     
     if (tickResults.idle && !lastFrameResults.idle) {
       // console.log('idle on');
       maria.oaction['idle'].timeScale = maria.attackSpeed
-      maria.fadeToAction('idle', 2)
+      maria.fadeToAction('idle', null)
     }
     if (!tickResults.idle && lastFrameResults.idle) {
       // console.log('idle off');

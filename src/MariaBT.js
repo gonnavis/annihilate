@@ -12,15 +12,26 @@ class Loading extends b3.Action {
     }
   }
 }
-class StartPunch extends b3.Action {
+class StartPunchStart extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
-    const frameTryActions = tick.blackboard.get('frameTryActions');
     if (window.tickKey.KeyJ) {
-      tickResults.punch = true;
+      tickResults.punchStart = true;
       return b3.SUCCESS;
     } else {
       return b3.FAILURE;
+    }
+  }
+}
+class PunchStart extends b3.Action {
+  tick(tick) {
+    const localPlayer = tick.target;
+    const tickResults = tick.blackboard.get('tickResults');
+    if (localPlayer.isAnimFinished) {
+      return b3.FAILURE;
+    } else {
+      tickResults.punchStart = true;
+      return b3.RUNNING;
     }
   }
 }
@@ -29,7 +40,12 @@ const tree = new b3.BehaviorTree();
 tree.root = new b3.MemSequence({title:'root',children: [
   new Loading({title:'Loading',}),
   new b3.Runnor({title:'loaded',child:
-    new Loading({title:'Loading',}),
+    new b3.Priority({title:'base',children:[
+      new b3.MemSequence({title:'punchStart',children:[
+        new StartPunchStart({title:'StartPunchStart',}),
+        new PunchStart({title:'PunchStart',}),
+      ]}),
+    ]}),
   }), // end: loaded
 ]}); // end: root
 
@@ -51,13 +67,13 @@ const postFrameSettings = (localPlayer, blackboard) => {
   const longTryActions = blackboard.get('longTryActions');
 
   const setActions = () => {
-    if (tickResults.punch && !lastFrameResults.punch) {
-      localPlayer.addAction(frameTryActions.punch);
-      localPlayer.punch.visible = true;
+    if (tickResults.punchStart && !lastFrameResults.punchStart) {
+      console.log('punchStart on');
+      maria.oaction['punchStart'].timeScale = maria.attackSpeed
+      maria.fadeToAction('punchStart')
     }
-    if (!tickResults.punch && lastFrameResults.punch) {
-      localPlayer.removeAction('punch');
-      localPlayer.punch.visible = false;
+    if (!tickResults.punchStart && lastFrameResults.punchStart) {
+      console.log('punchStart off');
     }
   }
   setActions();

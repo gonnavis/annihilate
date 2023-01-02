@@ -35,11 +35,23 @@ class PunchStart extends b3.Action {
     }
   }
 }
-class Idle extends b3.Action {
+class StartIdle extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
-    tickResults.idle = true;
+    tickResults.startIdle = true;
     return b3.SUCCESS;
+  }
+}
+class Idle extends b3.Action {
+  tick(tick) {
+    const localPlayer = tick.target;
+    const tickResults = tick.blackboard.get('tickResults');
+    if (localPlayer.isAnimFinished) {
+      return b3.FAILURE;
+    } else {
+      tickResults.idle = true;
+      return b3.RUNNING;
+    }
   }
 }
 
@@ -52,7 +64,10 @@ tree.root = new b3.MemSequence({title:'root',children: [
         new StartPunchStart({title:'StartPunchStart',}),
         new PunchStart({title:'PunchStart',}),
       ]}),
-      new Idle({title:'Idle'}),
+      new b3.MemSequence({title:'idle',children:[
+        new StartIdle({title:'StartIdle'}),
+        new Idle({title:'Idle'}),
+      ]}),
     ]}),
   }), // end: loaded
 ]}); // end: root

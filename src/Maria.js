@@ -7,7 +7,7 @@ import { SwordBlink } from './SwordBlink.js'
 import { Pop } from './Pop.js'
 import { Splash } from './Splash.js'
 import * as b3 from '../lib/behavior3js/index.js'
-import { ActionsManager } from './MariaBT.js'
+import { ActionsManager } from './MariaAM.js'
 window.b3 = b3
 
 // console.log(SUCCESS);

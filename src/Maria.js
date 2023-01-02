@@ -325,7 +325,7 @@ class Maria {
   }
 
   fadeToAction(name, duration = 0.1) {
-    // console.log('fadeToAction:', name)
+    console.log('fadeToAction:', name)
     // previousAction = this.action_act;
     // activeAction = this.oaction[ name ];
     // if ( previousAction !== activeAction ) {

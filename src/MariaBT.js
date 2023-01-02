@@ -35,6 +35,13 @@ class PunchStart extends b3.Action {
     }
   }
 }
+class Idle extends b3.Action {
+  tick(tick) {
+    const tickResults = tick.blackboard.get('tickResults');
+    tickResults.idle = true;
+    return b3.SUCCESS;
+  }
+}
 
 const tree = new b3.BehaviorTree();
 tree.root = new b3.MemSequence({title:'root',children: [
@@ -45,6 +52,7 @@ tree.root = new b3.MemSequence({title:'root',children: [
         new StartPunchStart({title:'StartPunchStart',}),
         new PunchStart({title:'PunchStart',}),
       ]}),
+      new Idle({title:'Idle'}),
     ]}),
   }), // end: loaded
 ]}); // end: root
@@ -68,12 +76,21 @@ const postFrameSettings = (localPlayer, blackboard) => {
 
   const setActions = () => {
     if (tickResults.punchStart && !lastFrameResults.punchStart) {
-      console.log('punchStart on');
+      // console.log('punchStart on');
       maria.oaction['punchStart'].timeScale = maria.attackSpeed
       maria.fadeToAction('punchStart')
     }
     if (!tickResults.punchStart && lastFrameResults.punchStart) {
-      console.log('punchStart off');
+      // console.log('punchStart off');
+    }
+    
+    if (tickResults.idle && !lastFrameResults.idle) {
+      // console.log('idle on');
+      maria.oaction['idle'].timeScale = maria.attackSpeed
+      maria.fadeToAction('idle', 2)
+    }
+    if (!tickResults.idle && lastFrameResults.idle) {
+      // console.log('idle off');
     }
   }
   setActions();

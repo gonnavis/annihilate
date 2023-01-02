@@ -1,0 +1,147 @@
+
+import * as b3 from '../lib/behavior3js/index.js'
+
+// note: tickResults will all reset to false after every tick, so don't need set `tickResults.xxx = false`.
+
+class Loading extends b3.Action {
+  tick(tick) {
+    if (tick.blackboard.get('loaded')) {
+      return b3.SUCCESS;
+    } else {
+      return b3.RUNNING;
+    }
+  }
+}
+class StartPunch extends b3.Action {
+  tick(tick) {
+    const tickResults = tick.blackboard.get('tickResults');
+    const frameTryActions = tick.blackboard.get('frameTryActions');
+    if (window.tickKey.KeyJ) {
+      tickResults.punch = true;
+      return b3.SUCCESS;
+    } else {
+      return b3.FAILURE;
+    }
+  }
+}
+
+const tree = new b3.BehaviorTree();
+tree.root = new b3.MemSequence({title:'root',children: [
+  new Loading({title:'Loading',}),
+  new b3.Runnor({title:'loaded',child:
+    new Loading({title:'Loading',}),
+  }), // end: loaded
+]}); // end: root
+
+const clearTickResults = (localPlayer, blackboard) => {
+  const tickResults = blackboard.get('tickResults');
+  for (const key in tickResults) {
+    tickResults[key] = false;
+  }
+}
+
+const preFrameSettings = (localPlayer, blackboard, timestamp) => {
+  // blackboard.set('now', timestamp);
+}
+
+const postFrameSettings = (localPlayer, blackboard) => {
+  const tickResults = blackboard.get('tickResults');
+  const lastFrameResults = blackboard.get('lastFrameResults');
+  const frameTryActions = blackboard.get('frameTryActions');
+  const longTryActions = blackboard.get('longTryActions');
+
+  const setActions = () => {
+    if (tickResults.punch && !lastFrameResults.punch) {
+      localPlayer.addAction(frameTryActions.punch);
+      localPlayer.punch.visible = true;
+    }
+    if (!tickResults.punch && lastFrameResults.punch) {
+      localPlayer.removeAction('punch');
+      localPlayer.punch.visible = false;
+    }
+  }
+  setActions();
+
+  const setLastFrameResults = () => {
+    const tickResults = blackboard.get('tickResults');
+    const lastFrameResults = blackboard.get('lastFrameResults');
+    for (const key in tickResults) {
+      lastFrameResults[key] = tickResults[key];
+    }
+  }
+  setLastFrameResults();
+
+  const resetFrameInfos = () => {
+    const frameTryActions = blackboard.get('frameTryActions');
+    for (const key in frameTryActions) {
+      frameTryActions[key] = null;
+    }
+    const frameTryStopActions = blackboard.get('frameTryStopActions');
+    for (const key in frameTryStopActions) {
+      frameTryStopActions[key] = null;
+    }
+  }
+  resetFrameInfos();
+
+  blackboard.set('frameCount', blackboard.get('frameCount') + 1);
+}
+
+class BehaviorTree {
+  constructor(localPlayer) {
+    this.localPlayer = localPlayer;
+    this.blackboard = new b3.Blackboard();
+    this.blackboard.set('tickResults', {});
+    this.blackboard.set('lastFrameResults', {});
+    this.blackboard.set('frameTryActions', {});
+    this.blackboard.set('longTryActions', {});
+    this.blackboard.set('frameTryStopActions', {});
+    this.blackboard.set('frameCount', 0);
+    this.blackboard.set('loaded', true);
+  }
+
+  get() {
+    return this.blackboard.get(...arguments);
+  }
+
+  set() {
+    return this.blackboard.set(...arguments);
+  }
+
+  tryAddAction(action, isLong = false) {
+    if (isLong) {
+      const longTryActions = this.blackboard.get('longTryActions');
+      longTryActions[action.type] = action;
+      const frameTryActions = this.blackboard.get('frameTryActions');
+      frameTryActions[action.type] = action; // note: long try also trigger frame try.
+    } else {
+      const frameTryActions = this.blackboard.get('frameTryActions');
+      frameTryActions[action.type] = action;
+    }
+  }
+
+  tryRemoveAction(actionType, isLong = false) {
+    if (isLong) {
+      const longTryActions = this.blackboard.get('longTryActions');
+      longTryActions[actionType] = null;
+    } else {
+      const frameTryStopActions = this.blackboard.get('frameTryStopActions');
+      frameTryStopActions[actionType] = true;
+    }
+  }
+
+  isLongTrying(actionType) {
+    const longTryActions = this.blackboard.get('longTryActions');
+    return !!longTryActions[actionType];
+  }
+
+  update(timestamp) {
+    preFrameSettings(this.localPlayer, this.blackboard, timestamp);
+    tree.tick(this.localPlayer, this.blackboard);
+    clearTickResults(this.localPlayer, this.blackboard);
+    tree.tick(this.localPlayer, this.blackboard); // note: reTick/doubleTick in order to switch from low prio action to high prio action immediately, prevent one frame empty state/action.
+    postFrameSettings(this.localPlayer, this.blackboard);
+    clearTickResults(this.localPlayer, this.blackboard);
+  }
+}
+
+export {BehaviorTree};

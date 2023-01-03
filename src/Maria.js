@@ -269,7 +269,7 @@ class Maria {
             // this.service.send('finish')
             // }
             this.isAnimFinished = true
-            console.log('isAnimFinished = true')
+            // console.log('isAnimFinished = true')
             this.actionsManager.update();
             this.isAnimFinished = false
           })
@@ -325,7 +325,7 @@ class Maria {
   }
 
   fadeToAction(name, duration = 0.1) {
-    console.log('fadeToAction:', name)
+    // console.log('fadeToAction:', name)
     // previousAction = this.action_act;
     // activeAction = this.oaction[ name ];
     // if ( previousAction !== activeAction ) {

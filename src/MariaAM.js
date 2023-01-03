@@ -12,7 +12,7 @@ class Loading extends b3.Action {
     }
   }
 }
-class StartPunchStart extends b3.Action {
+class TriggerPunchStart extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
     if (window.tickKey.KeyJ) {
@@ -61,11 +61,12 @@ class PrepareFist extends b3.Action {
     }
   }
 }
-class StartFistStart extends b3.Action {
+class TriggerFistStart extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
     if (window.tickKey.KeyJ) {
       tickResults.fistStart = true;
+      // console.log('SUCCESS TriggerFistStart');
       return b3.SUCCESS;
     } else {
       return b3.FAILURE;
@@ -98,7 +99,7 @@ class Fist extends b3.Action {
     }
   }
 }
-class StartIdle extends b3.Action {
+class TriggerIdle extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
     tickResults.startIdle = true;
@@ -143,12 +144,12 @@ tree.root = new b3.MemSequence({title:'root',children: [
   new b3.Runnor({title:'loaded',child:
     new b3.Priority({title:'base',children:[
       new b3.MemSequence({title:'punchStart',children:[
-        new StartPunchStart({title:'StartPunchStart',}),
+        new TriggerPunchStart({title:'TriggerPunchStart',}),
         new b3.Succeedor({child:new PunchStart({title:'PunchStart'})}),
         new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'punch'}),
         new b3.Priority({children:[
           new b3.MemSequence({children:[
-            new StartFistStart({title:'StartFistStart'}),
+            new TriggerFistStart({title:'TriggerFistStart'}),
             new b3.Succeedor({child:new PrepareFist({title:'PrepareFist'})}),
             new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'punch'}),
             new b3.Succeedor({child:new FistStart({title:'FistStart'})}),
@@ -159,7 +160,7 @@ tree.root = new b3.MemSequence({title:'root',children: [
         ]}),
       ]}),
       new b3.MemSequence({title:'idle',children:[
-        new StartIdle({title:'StartIdle'}),
+        new TriggerIdle({title:'TriggerIdle'}),
         new Idle({title:'Idle'}),
       ]}),
     ]}),
@@ -184,6 +185,12 @@ const postFrameSettings = (localPlayer, blackboard) => {
   const longTryActions = blackboard.get('longTryActions');
 
   // console.log(tickResults.punchStart, tickResults.punch)
+  const actionTypes = [];
+  for (const key in tickResults) {
+    const value = tickResults[key];
+    if (value === true) actionTypes.push(key)
+  }
+  console.log(actionTypes.join(','));
   const setActions = () => {
 
     if (tickResults.punchStart && !lastFrameResults.punchStart) {

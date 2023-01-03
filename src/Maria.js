@@ -30,8 +30,8 @@ class Maria {
     // this.speed = 1
     // this.landAttackSpeed = 1.4
     // this.airAttackSpeed = 2.5
-    // this.attackSpeed = 1.4
-    this.attackSpeed = 0.3
+    this.attackSpeed = 1.4
+    // this.attackSpeed = 0.3
     this.airBashSpeed = this.attackSpeed * 5
     // this.attackSpeed = this.landAttackSpeed
     this.chargeAttackCoe = 2
@@ -325,7 +325,7 @@ class Maria {
   }
 
   fadeToAction(name, duration = 0.1) {
-    // console.log('fadeToAction:', name)
+    console.log('fadeToAction:', name)
     // previousAction = this.action_act;
     // activeAction = this.oaction[ name ];
     // if ( previousAction !== activeAction ) {

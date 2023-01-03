@@ -156,6 +156,17 @@ class TriggerIdle extends b3.Action {
     return b3.SUCCESS;
   }
 }
+class Run extends b3.Action {
+  tick(tick) {
+    const tickResults = tick.blackboard.get('tickResults');
+    if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
+      tickResults.run = true;
+      return b3.SUCCESS;
+    } else {
+      return b3.FAILURE;
+    }
+  }
+}
 // class Idle extends b3.Action {
 //   tick(tick) {
 //     const localPlayer = tick.target;
@@ -227,6 +238,7 @@ tree.root = new b3.MemSequence({title:'root',children: [
           new Punch({title:'Punch'}),
         ]}),
       ]}),
+      new Run({title:'Run'}),
       // new b3.MemSequence({title:'idle',children:[
       //   new TriggerIdle({title:'TriggerIdle'}),
       //   new Idle({title:'Idle'}),
@@ -253,21 +265,24 @@ const postFrameSettings = (localPlayer, blackboard) => {
   const frameTryActions = blackboard.get('frameTryActions');
   const longTryActions = blackboard.get('longTryActions');
 
+  /*** test ***/
   // console.log(tickResults.punchStart, tickResults.punch)
   const actionTypes = [];
   for (const key in tickResults) {
     const value = tickResults[key];
     if (value === true) actionTypes.push(key)
   }
-  console.log(actionTypes.join(','));
+  // console.log(actionTypes.join(','));
   // console.log(actionTypes.length, actionTypes.join(','));
   // console.log(actionTypes);
+  /*** end test ***/
+
   const setActions = () => {
 
     if (tickResults.punchStart && !lastFrameResults.punchStart) {
       // console.log('punchStart on');
       maria.oaction['punchStart'].timeScale = maria.attackSpeed
-      maria.fadeToAction('punchStart', 2)
+      maria.fadeToAction('punchStart')
     }
     if (!tickResults.punchStart && lastFrameResults.punchStart) {
       // console.log('punchStart off');
@@ -285,7 +300,7 @@ const postFrameSettings = (localPlayer, blackboard) => {
     if (tickResults.fistStart && !lastFrameResults.fistStart) {
       // console.log('fistStart on');
       maria.oaction['fistStart'].timeScale = maria.attackSpeed
-      maria.fadeToAction('fistStart', 2)
+      maria.fadeToAction('fistStart')
     }
     if (!tickResults.fistStart && lastFrameResults.fistStart) {
       // console.log('fistStart off');
@@ -303,7 +318,7 @@ const postFrameSettings = (localPlayer, blackboard) => {
     if (tickResults.strikeStart && !lastFrameResults.strikeStart) {
       // console.log('strikeStart on');
       maria.oaction['strikeStart'].timeScale = maria.attackSpeed
-      maria.fadeToAction('strikeStart', 2)
+      maria.fadeToAction('strikeStart')
     }
     if (!tickResults.strikeStart && lastFrameResults.strikeStart) {
       // console.log('strikeStart off');
@@ -321,10 +336,29 @@ const postFrameSettings = (localPlayer, blackboard) => {
     if (tickResults.idle && !lastFrameResults.idle) {
       // console.log('idle on');
       maria.oaction['idle'].timeScale = maria.attackSpeed
-      maria.fadeToAction('idle', 2)
+      maria.fadeToAction('idle')
     }
     if (!tickResults.idle && lastFrameResults.idle) {
       // console.log('idle off');
+    }
+
+    if (tickResults.run) {
+      const directionLengthSq = maria.direction.lengthSq()
+      if (directionLengthSq > 0) {
+        // change facing
+        maria.facing.copy(maria.direction)
+      } // end if here to set velocity 0 when stop, but because linearDamping not 1, will no obvious effect.
+      maria.mesh.rotation.y = -maria.facing.angle() + Math.PI / 2
+
+      maria.body.position.x += maria.direction.x
+      maria.body.position.z += maria.direction.y
+    }
+    if (tickResults.run && !lastFrameResults.run) {
+      // console.log('run on');
+      maria.fadeToAction('running');
+    }
+    if (!tickResults.run && lastFrameResults.run) {
+      // console.log('run off');
     }
   }
   setActions();

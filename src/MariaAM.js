@@ -149,6 +149,20 @@ class Strike extends b3.Action {
     }
   }
 }
+class StrikeEnd extends b3.Action {
+  tick(tick) {
+    const localPlayer = tick.target;
+    const tickResults = tick.blackboard.get('tickResults');
+    if (localPlayer.isAnimFinished) {
+      // console.log('FAILURE StrikeEnd');
+      return b3.FAILURE;
+    } else {
+      tickResults.strikeEnd = true;
+      // console.log('RUNNING StrikeEnd');
+      return b3.RUNNING;
+    }
+  }
+}
 class TriggerIdle extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
@@ -230,7 +244,9 @@ tree.root = new b3.MemSequence({title:'root',children: [
                 new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strikeStart'}),
                 new b3.Succeedor({child:new StrikeStart({title:'StrikeStart'})}),
                 new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strike'}),
-                new Strike({title:'Strike'}),
+                new b3.Succeedor({child:new Strike({title:'Strike'}),}), // todo: don't use Succeedor, return SUCCSS directly.
+                new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strikeEnd'}),
+                new StrikeEnd({title:'StrikeEnd'}),
               ]}),
               new Fist({title:'Fist'}),
             ]}),
@@ -331,6 +347,15 @@ const postFrameSettings = (localPlayer, blackboard) => {
     }
     if (!tickResults.strike && lastFrameResults.strike) {
       // console.log('strike off');
+    }
+
+    if (tickResults.strikeEnd && !lastFrameResults.strikeEnd) {
+      // console.log('strikeEnd on');
+      maria.oaction['strikeEnd'].timeScale = maria.attackSpeed
+      maria.fadeToAction('strikeEnd', 0)
+    }
+    if (!tickResults.strikeEnd && lastFrameResults.strikeEnd) {
+      // console.log('strikeEnd off');
     }
     
     if (tickResults.idle && !lastFrameResults.idle) {

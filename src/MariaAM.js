@@ -245,7 +245,7 @@ tree.root = new b3.MemSequence({title:'root',children: [
                 new StrikeStart({title:'StrikeStart'}),
                 new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strike'}),
                 new Strike({title:'Strike'}),
-                new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strikeEnd'}),
+                new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strikeEnd'}), // todo: set isAnimFinished = false, instead of use WaitOneFrame ?
                 new StrikeEnd({title:'StrikeEnd'}),
               ]}),
               new Fist({title:'Fist'}),

@@ -167,6 +167,7 @@ class TriggerJump extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
     if (window.tickKey.KeyK) {
+      tickResults.canMove = true;
       tickResults.jump = true;
       // console.log('SUCCESS TriggerJump');
       return b3.SUCCESS;
@@ -184,6 +185,7 @@ class Jump extends b3.Action {
       // console.log('FAILURE Jump');
       return b3.FAILURE;
     } else {
+      tickResults.canMove = true;
       tickResults.jump = true;
       // console.log('RUNNING Jump');
       return b3.RUNNING;
@@ -201,6 +203,7 @@ class Run extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
     if (window.allKey.KeyW || window.allKey.KeyS || window.allKey.KeyA || window.allKey.KeyD) {
+      tickResults.canMove = true;
       tickResults.run = true;
       return b3.SUCCESS;
     } else {
@@ -401,7 +404,7 @@ const postFrameSettings = (localPlayer, blackboard) => {
       // console.log('idle off');
     }
 
-    if (tickResults.run) {
+    if (tickResults.canMove) {
       const directionLengthSq = maria.direction.lengthSq()
       if (directionLengthSq > 0) {
         // change facing
@@ -412,6 +415,7 @@ const postFrameSettings = (localPlayer, blackboard) => {
       maria.body.position.x += maria.direction.x
       maria.body.position.z += maria.direction.y
     }
+
     if (tickResults.run && !lastFrameResults.run) {
       // console.log('run on');
       maria.fadeToAction('running');

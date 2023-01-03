@@ -9,9 +9,10 @@ class RoleControls {
 
     updates.push(this)
 
-    window.allKey = {}
+    window.allKey = {} // todo: allKey === holdKey ? Just use holdKey is ok ?
     this.holdKey = {}
     window.tickKey = {}
+    window.tickKeyUp = {}
     this.seqKey = [] // sequentialKey
     this.timeoutSeqKey = null
     // this.actkey = ''
@@ -75,6 +76,7 @@ class RoleControls {
       // console.log(event)
       window.allKey[event.code] = false
       this.holdKey[event.code] = false
+      window.tickKeyUp[event.code] = true
 
       switch (event.code) {
         case 'KeyJ':
@@ -221,8 +223,9 @@ class RoleControls {
     // }
 
     // restore
-    window.tickKey = {}
+    window.tickKey = {} // todo: performance: clear instead of new object.
     // console.log('clear tickKey')
+    window.tickKeyUp = {}
   }
   setRole(role) {
     this.role = role

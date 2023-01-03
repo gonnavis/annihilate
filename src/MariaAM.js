@@ -12,6 +12,29 @@ class Loading extends b3.Action {
     }
   }
 }
+class TriggerPunchStartWithCharge extends b3.Action {
+  tick(tick) {
+    const tickResults = tick.blackboard.get('tickResults');
+    if (window.tickKey.KeyJ) {
+      tickResults.punchStart = true;
+      return b3.SUCCESS;
+    } else {
+      return b3.FAILURE;
+    }
+  }
+}
+class PunchStartWithCharge extends b3.Action {
+  tick(tick) {
+    const localPlayer = tick.target;
+    const tickResults = tick.blackboard.get('tickResults');
+    if (localPlayer.isAnimFinished) {
+      return b3.SUCCESS;
+    } else {
+      tickResults.punchStart = true;
+      return b3.RUNNING;
+    }
+  }
+}
 class TriggerPunchStart extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
@@ -250,41 +273,81 @@ class WaitOneFrame extends b3.Action {
     }
   }
 }
+class Charging extends b3.Action {
+  tick(tick) {
+    const tickResults = tick.blackboard.get('tickResults');
+    tickResults.Charging = true;
+    return b3.RUNNING;
+  }
+}
+class Charged1 extends b3.Action {
+  tick(tick) {
+    const tickResults = tick.blackboard.get('tickResults');
+    tickResults.charged1 = true;
+    return b3.RUNNING;
+  }
+}
+class Charged2 extends b3.Action {
+  tick(tick) {
+    const tickResults = tick.blackboard.get('tickResults');
+    tickResults.charged2 = true;
+    return b3.RUNNING;
+  }
+}
+class KeyJUp extends b3.Action {
+  tick(tick) {
+    if (window.tickKeyUp.KeyJ) {
+      return b3.SUCCESS;
+    } else {
+      return b3.FAILURE;
+    }
+  }
+}
 
 const tree = new b3.BehaviorTree();
 tree.root = new b3.MemSequence({title:'root',children: [
   new Loading(),
   new b3.Runnor({title:'loaded',child:
     new b3.Priority({title:'base',children:[
-      new b3.MemSequence({title:'punch',children:[
-        new TriggerPunchStart(),
-        new PunchStart(),
-        new WaitOneFrame({setTrueKey:'punch'}),
-        new b3.Priority({children:[
-          new b3.MemSequence({title:'fist',children:[
-            new TriggerFistStart(),
-            new PrepareFist(),
-            new WaitOneFrame({setTrueKey:'fistStart'}),
-            new FistStart(),
-            new WaitOneFrame({setTrueKey:'fist'}),
-            new b3.Priority({children:[
-              new b3.MemSequence({title:'strike',children:[
-                new TriggerStrikeStart(),
-                new PrepareStrike(),
-                new WaitOneFrame({setTrueKey:'strikeStart'}),
-                new StrikeStart(),
-                new WaitOneFrame({setTrueKey:'strike'}),
-                new Strike(),
-                new WaitOneFrame({setTrueKey:'strikeEnd'}), // todo: set isAnimFinished = false, instead of use WaitOneFrame ?
-                new StrikeEnd(),
+      new b3.Priority({children:[
+        new b3.MemSequence({title:'punch',children:[
+          new KeyJUp(),
+          // new TriggerPunchStart(),
+          new PunchStart(),
+          new WaitOneFrame({setTrueKey:'punch'}),
+          new b3.Priority({children:[
+            new b3.MemSequence({title:'fist',children:[
+              new TriggerFistStart(),
+              new PrepareFist(),
+              new WaitOneFrame({setTrueKey:'fistStart'}),
+              new FistStart(),
+              new WaitOneFrame({setTrueKey:'fist'}),
+              new b3.Priority({children:[
+                new b3.MemSequence({title:'strike',children:[
+                  new TriggerStrikeStart(),
+                  new PrepareStrike(),
+                  new WaitOneFrame({setTrueKey:'strikeStart'}),
+                  new StrikeStart(),
+                  new WaitOneFrame({setTrueKey:'strike'}),
+                  new Strike(),
+                  new WaitOneFrame({setTrueKey:'strikeEnd'}), // todo: set isAnimFinished = false, instead of use WaitOneFrame ?
+                  new StrikeEnd(),
+                ]}),
+                new Fist(),
               ]}),
-              new Fist(),
             ]}),
+            new Punch(),
           ]}),
-          new Punch(),
+        ]}),
+        new b3.MemSequence({title:'charge',children:[
+          new TriggerPunchStartWithCharge(),
+          new PunchStartWithCharge(),
+          new b3.Succeedor({child:new b3.MaxTime({maxTime:500,child:new Charging(),}),}),
+          new b3.Succeedor({child:new b3.MaxTime({maxTime:500,child:new Charged1(),}),}),
+          new b3.Succeedor({child:new b3.MaxTime({maxTime:500,child:new Charged2(),}),}),
         ]}),
       ]}),
-      new b3.MemSequence({children:[
+      new b3.MemSequence({title:'jump',children:[
         new TriggerJump(),
         new WaitOneFrame({setTrueKey:'jump'}),
         new Jump(),
@@ -324,7 +387,7 @@ const postFrameSettings = (localPlayer, blackboard) => {
     const value = tickResults[key];
     if (value === true) actionTypes.push(key)
   }
-  // console.log(actionTypes.join(','));
+  console.log(actionTypes.join(','));
 
   // console.log(actionTypes.length, actionTypes.join(','));
   // console.log(actionTypes);
@@ -399,6 +462,11 @@ const postFrameSettings = (localPlayer, blackboard) => {
       // console.log('idle on');
       maria.oaction['idle'].timeScale = maria.attackSpeed
       maria.fadeToAction('idle')
+
+      // todo: don't put these in Idle action ?
+      maria.chargedLevel = 0
+      maria.sword.material.emissive.setScalar(0)
+      maria.sword.material.color.setRGB(1, 1, 1)
     }
     if (!tickResults.idle && lastFrameResults.idle) {
       // console.log('idle off');
@@ -431,6 +499,28 @@ const postFrameSettings = (localPlayer, blackboard) => {
     }
     if (!tickResults.jump && lastFrameResults.jump) {
       // console.log('jump off');
+    }
+
+    if (tickResults.charged1 && !lastFrameResults.charged1) {
+      // console.log('charged1 on');
+      maria.chargedLevel = 1
+      maria.sword.material.emissive.setScalar(0.3)
+
+      maria.swordBlink.blink(1)
+    }
+    if (!tickResults.charged1 && lastFrameResults.charged1) {
+      // console.log('charged1 off');
+    }
+
+    if (tickResults.charged2 && !lastFrameResults.charged2) {
+      // console.log('charged2 on');
+      maria.chargedLevel = 2
+      maria.sword.material.color.setRGB(0, 1, 1)
+
+      maria.swordBlink.blink(2)
+    }
+    if (!tickResults.charged2 && lastFrameResults.charged2) {
+      // console.log('charged2 off');
     }
   }
   setActions();

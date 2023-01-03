@@ -99,10 +99,60 @@ class Fist extends b3.Action {
     }
   }
 }
+class PrepareStrike extends b3.Action {
+  tick(tick) {
+    const localPlayer = tick.target;
+    const tickResults = tick.blackboard.get('tickResults');
+    if (localPlayer.isAnimFinished) {
+      return b3.FAILURE;
+    } else {
+      tickResults.fist = true;
+      return b3.RUNNING;
+    }
+  }
+}
+class TriggerStrikeStart extends b3.Action {
+  tick(tick) {
+    const tickResults = tick.blackboard.get('tickResults');
+    if (window.tickKey.KeyJ) {
+      tickResults.strikeStart = true;
+      // console.log('SUCCESS TriggerStrikeStart');
+      return b3.SUCCESS;
+    } else {
+      return b3.FAILURE;
+    }
+  }
+}
+class StrikeStart extends b3.Action {
+  tick(tick) {
+    const localPlayer = tick.target;
+    const tickResults = tick.blackboard.get('tickResults');
+    if (localPlayer.isAnimFinished) {
+      return b3.FAILURE;
+    } else {
+      tickResults.strikeStart = true;
+      return b3.RUNNING;
+    }
+  }
+}
+class Strike extends b3.Action {
+  tick(tick) {
+    const localPlayer = tick.target;
+    const tickResults = tick.blackboard.get('tickResults');
+    if (localPlayer.isAnimFinished) {
+      // console.log('FAILURE Strike');
+      return b3.FAILURE;
+    } else {
+      tickResults.strike = true;
+      // console.log('RUNNING Strike');
+      return b3.RUNNING;
+    }
+  }
+}
 class TriggerIdle extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
-    tickResults.startIdle = true;
+    tickResults.idle = true;
     return b3.SUCCESS;
   }
 }
@@ -151,10 +201,20 @@ tree.root = new b3.MemSequence({title:'root',children: [
           new b3.MemSequence({children:[
             new TriggerFistStart({title:'TriggerFistStart'}),
             new b3.Succeedor({child:new PrepareFist({title:'PrepareFist'})}),
-            new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'punch'}),
+            new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'fistStart'}),
             new b3.Succeedor({child:new FistStart({title:'FistStart'})}),
             new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'fist'}),
-            new Fist({title:'Fist'}),
+            new b3.Priority({children:[
+              new b3.MemSequence({children:[
+                new TriggerStrikeStart({title:'TriggerStrikeStart'}),
+                new b3.Succeedor({child:new PrepareStrike({title:'PrepareStrike'})}),
+                new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strikeStart'}),
+                new b3.Succeedor({child:new StrikeStart({title:'StrikeStart'})}),
+                new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strike'}),
+                new Strike({title:'Strike'}),
+              ]}),
+              new Fist({title:'Fist'}),
+            ]}),
           ]}),
           new Punch({title:'Punch'}),
         ]}),
@@ -191,6 +251,8 @@ const postFrameSettings = (localPlayer, blackboard) => {
     if (value === true) actionTypes.push(key)
   }
   console.log(actionTypes.join(','));
+  // console.log(actionTypes.length, actionTypes.join(','));
+  // console.log(actionTypes);
   const setActions = () => {
 
     if (tickResults.punchStart && !lastFrameResults.punchStart) {
@@ -227,6 +289,24 @@ const postFrameSettings = (localPlayer, blackboard) => {
     }
     if (!tickResults.fist && lastFrameResults.fist) {
       // console.log('fist off');
+    }
+    
+    if (tickResults.strikeStart && !lastFrameResults.strikeStart) {
+      // console.log('strikeStart on');
+      maria.oaction['strikeStart'].timeScale = maria.attackSpeed
+      maria.fadeToAction('strikeStart', 2)
+    }
+    if (!tickResults.strikeStart && lastFrameResults.strikeStart) {
+      // console.log('strikeStart off');
+    }
+
+    if (tickResults.strike && !lastFrameResults.strike) {
+      // console.log('strike on');
+      maria.oaction['strike'].timeScale = maria.attackSpeed
+      maria.fadeToAction('strike', 0)
+    }
+    if (!tickResults.strike && lastFrameResults.strike) {
+      // console.log('strike off');
     }
     
     if (tickResults.idle && !lastFrameResults.idle) {

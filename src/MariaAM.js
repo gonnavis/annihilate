@@ -163,6 +163,33 @@ class StrikeEnd extends b3.Action {
     }
   }
 }
+class TriggerJump extends b3.Action {
+  tick(tick) {
+    const tickResults = tick.blackboard.get('tickResults');
+    if (window.tickKey.KeyK) {
+      tickResults.jump = true;
+      // console.log('SUCCESS TriggerJump');
+      return b3.SUCCESS;
+    } else {
+      // console.log('FAILURE TriggerJump');
+      return b3.FAILURE;
+    }
+  }
+}
+class Jump extends b3.Action {
+  tick(tick) {
+    const tickResults = tick.blackboard.get('tickResults');
+    // if (maria.altitude <= 0.01) {
+    if (maria.altitude <= 0) {
+      // console.log('FAILURE Jump');
+      return b3.FAILURE;
+    } else {
+      tickResults.jump = true;
+      // console.log('RUNNING Jump');
+      return b3.RUNNING;
+    }
+  }
+}
 class TriggerIdle extends b3.Action {
   tick(tick) {
     const tickResults = tick.blackboard.get('tickResults');
@@ -254,6 +281,11 @@ tree.root = new b3.MemSequence({title:'root',children: [
           new Punch({title:'Punch'}),
         ]}),
       ]}),
+      new b3.MemSequence({children:[
+        new TriggerJump({title:'TriggerJump'}),
+        new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'jump'}),
+        new Jump({title:'Jump'}),
+      ]}),
       new Run({title:'Run'}),
       // new b3.MemSequence({title:'idle',children:[
       //   new TriggerIdle({title:'TriggerIdle'}),
@@ -283,12 +315,14 @@ const postFrameSettings = (localPlayer, blackboard) => {
 
   /*** test ***/
   // console.log(tickResults.punchStart, tickResults.punch)
+
   const actionTypes = [];
   for (const key in tickResults) {
     const value = tickResults[key];
     if (value === true) actionTypes.push(key)
   }
   // console.log(actionTypes.join(','));
+
   // console.log(actionTypes.length, actionTypes.join(','));
   // console.log(actionTypes);
   /*** end test ***/
@@ -384,6 +418,15 @@ const postFrameSettings = (localPlayer, blackboard) => {
     }
     if (!tickResults.run && lastFrameResults.run) {
       // console.log('run off');
+    }
+
+    if (tickResults.jump && !lastFrameResults.jump) {
+      // console.log('jump on');
+      maria.body.velocity.y = 5.2
+      maria.fadeToAction('jump');
+    }
+    if (!tickResults.jump && lastFrameResults.jump) {
+      // console.log('jump off');
     }
   }
   setActions();

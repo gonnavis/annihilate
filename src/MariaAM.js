@@ -28,7 +28,7 @@ class PunchStart extends b3.Action {
     const localPlayer = tick.target;
     const tickResults = tick.blackboard.get('tickResults');
     if (localPlayer.isAnimFinished) {
-      return b3.FAILURE;
+      return b3.SUCCESS;
     } else {
       tickResults.punchStart = true;
       return b3.RUNNING;
@@ -40,8 +40,8 @@ class Punch extends b3.Action {
     const localPlayer = tick.target;
     const tickResults = tick.blackboard.get('tickResults');
     if (localPlayer.isAnimFinished) {
-      // console.log('FAILURE Punch');
-      return b3.FAILURE;
+      // console.log('SUCCESS Punch');
+      return b3.SUCCESS;
     } else {
       tickResults.punch = true;
       // console.log('RUNNING Punch');
@@ -54,7 +54,7 @@ class PrepareFist extends b3.Action {
     const localPlayer = tick.target;
     const tickResults = tick.blackboard.get('tickResults');
     if (localPlayer.isAnimFinished) {
-      return b3.FAILURE;
+      return b3.SUCCESS;
     } else {
       tickResults.punch = true;
       return b3.RUNNING;
@@ -78,7 +78,7 @@ class FistStart extends b3.Action {
     const localPlayer = tick.target;
     const tickResults = tick.blackboard.get('tickResults');
     if (localPlayer.isAnimFinished) {
-      return b3.FAILURE;
+      return b3.SUCCESS;
     } else {
       tickResults.fistStart = true;
       return b3.RUNNING;
@@ -90,8 +90,8 @@ class Fist extends b3.Action {
     const localPlayer = tick.target;
     const tickResults = tick.blackboard.get('tickResults');
     if (localPlayer.isAnimFinished) {
-      // console.log('FAILURE Fist');
-      return b3.FAILURE;
+      // console.log('SUCCESS Fist');
+      return b3.SUCCESS;
     } else {
       tickResults.fist = true;
       // console.log('RUNNING Fist');
@@ -104,7 +104,7 @@ class PrepareStrike extends b3.Action {
     const localPlayer = tick.target;
     const tickResults = tick.blackboard.get('tickResults');
     if (localPlayer.isAnimFinished) {
-      return b3.FAILURE;
+      return b3.SUCCESS;
     } else {
       tickResults.fist = true;
       return b3.RUNNING;
@@ -128,7 +128,7 @@ class StrikeStart extends b3.Action {
     const localPlayer = tick.target;
     const tickResults = tick.blackboard.get('tickResults');
     if (localPlayer.isAnimFinished) {
-      return b3.FAILURE;
+      return b3.SUCCESS;
     } else {
       tickResults.strikeStart = true;
       return b3.RUNNING;
@@ -140,8 +140,8 @@ class Strike extends b3.Action {
     const localPlayer = tick.target;
     const tickResults = tick.blackboard.get('tickResults');
     if (localPlayer.isAnimFinished) {
-      // console.log('FAILURE Strike');
-      return b3.FAILURE;
+      // console.log('SUCCESS Strike');
+      return b3.SUCCESS;
     } else {
       tickResults.strike = true;
       // console.log('RUNNING Strike');
@@ -154,8 +154,8 @@ class StrikeEnd extends b3.Action {
     const localPlayer = tick.target;
     const tickResults = tick.blackboard.get('tickResults');
     if (localPlayer.isAnimFinished) {
-      // console.log('FAILURE StrikeEnd');
-      return b3.FAILURE;
+      // console.log('SUCCESS StrikeEnd');
+      return b3.SUCCESS;
     } else {
       tickResults.strikeEnd = true;
       // console.log('RUNNING StrikeEnd');
@@ -186,7 +186,7 @@ class Run extends b3.Action {
 //     const localPlayer = tick.target;
 //     const tickResults = tick.blackboard.get('tickResults');
 //     if (localPlayer.isAnimFinished) {
-//       return b3.FAILURE;
+//       return b3.SUCCESS;
 //     } else {
 //       tickResults.idle = true;
 //       return b3.RUNNING;
@@ -228,23 +228,23 @@ tree.root = new b3.MemSequence({title:'root',children: [
     new b3.Priority({title:'base',children:[
       new b3.MemSequence({title:'punchStart',children:[
         new TriggerPunchStart({title:'TriggerPunchStart',}),
-        new b3.Succeedor({child:new PunchStart({title:'PunchStart'})}),
+        new PunchStart({title:'PunchStart'}),
         new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'punch'}),
         new b3.Priority({children:[
           new b3.MemSequence({children:[
             new TriggerFistStart({title:'TriggerFistStart'}),
-            new b3.Succeedor({child:new PrepareFist({title:'PrepareFist'})}),
+            new PrepareFist({title:'PrepareFist'}),
             new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'fistStart'}),
-            new b3.Succeedor({child:new FistStart({title:'FistStart'})}),
+            new FistStart({title:'FistStart'}),
             new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'fist'}),
             new b3.Priority({children:[
               new b3.MemSequence({children:[
                 new TriggerStrikeStart({title:'TriggerStrikeStart'}),
-                new b3.Succeedor({child:new PrepareStrike({title:'PrepareStrike'})}),
+                new PrepareStrike({title:'PrepareStrike'}),
                 new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strikeStart'}),
-                new b3.Succeedor({child:new StrikeStart({title:'StrikeStart'})}),
+                new StrikeStart({title:'StrikeStart'}),
                 new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strike'}),
-                new b3.Succeedor({child:new Strike({title:'Strike'}),}), // todo: don't use Succeedor, return SUCCSS directly.
+                new Strike({title:'Strike'}),
                 new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strikeEnd'}),
                 new StrikeEnd({title:'StrikeEnd'}),
               ]}),

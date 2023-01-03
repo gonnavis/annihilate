@@ -156,16 +156,24 @@ class TriggerIdle extends b3.Action {
     return b3.SUCCESS;
   }
 }
+// class Idle extends b3.Action {
+//   tick(tick) {
+//     const localPlayer = tick.target;
+//     const tickResults = tick.blackboard.get('tickResults');
+//     if (localPlayer.isAnimFinished) {
+//       return b3.FAILURE;
+//     } else {
+//       tickResults.idle = true;
+//       return b3.RUNNING;
+//     }
+//   }
+// }
 class Idle extends b3.Action {
   tick(tick) {
-    const localPlayer = tick.target;
+    // const localPlayer = tick.target;
     const tickResults = tick.blackboard.get('tickResults');
-    if (localPlayer.isAnimFinished) {
-      return b3.FAILURE;
-    } else {
-      tickResults.idle = true;
-      return b3.RUNNING;
-    }
+    tickResults.idle = true;
+    return b3.SUCCESS;
   }
 }
 class WaitOneFrame extends b3.Action {
@@ -219,10 +227,11 @@ tree.root = new b3.MemSequence({title:'root',children: [
           new Punch({title:'Punch'}),
         ]}),
       ]}),
-      new b3.MemSequence({title:'idle',children:[
-        new TriggerIdle({title:'TriggerIdle'}),
-        new Idle({title:'Idle'}),
-      ]}),
+      // new b3.MemSequence({title:'idle',children:[
+      //   new TriggerIdle({title:'TriggerIdle'}),
+      //   new Idle({title:'Idle'}),
+      // ]}),
+      new Idle({title:'Idle'}),
     ]}),
   }), // end: loaded
 ]}); // end: root

@@ -253,48 +253,48 @@ class WaitOneFrame extends b3.Action {
 
 const tree = new b3.BehaviorTree();
 tree.root = new b3.MemSequence({title:'root',children: [
-  new Loading({title:'Loading',}),
+  new Loading(),
   new b3.Runnor({title:'loaded',child:
     new b3.Priority({title:'base',children:[
-      new b3.MemSequence({title:'punchStart',children:[
-        new TriggerPunchStart({title:'TriggerPunchStart',}),
-        new PunchStart({title:'PunchStart'}),
-        new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'punch'}),
+      new b3.MemSequence({title:'punch',children:[
+        new TriggerPunchStart(),
+        new PunchStart(),
+        new WaitOneFrame({setTrueKey:'punch'}),
         new b3.Priority({children:[
-          new b3.MemSequence({children:[
-            new TriggerFistStart({title:'TriggerFistStart'}),
-            new PrepareFist({title:'PrepareFist'}),
-            new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'fistStart'}),
-            new FistStart({title:'FistStart'}),
-            new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'fist'}),
+          new b3.MemSequence({title:'fist',children:[
+            new TriggerFistStart(),
+            new PrepareFist(),
+            new WaitOneFrame({setTrueKey:'fistStart'}),
+            new FistStart(),
+            new WaitOneFrame({setTrueKey:'fist'}),
             new b3.Priority({children:[
-              new b3.MemSequence({children:[
-                new TriggerStrikeStart({title:'TriggerStrikeStart'}),
-                new PrepareStrike({title:'PrepareStrike'}),
-                new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strikeStart'}),
-                new StrikeStart({title:'StrikeStart'}),
-                new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strike'}),
-                new Strike({title:'Strike'}),
-                new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'strikeEnd'}), // todo: set isAnimFinished = false, instead of use WaitOneFrame ?
-                new StrikeEnd({title:'StrikeEnd'}),
+              new b3.MemSequence({title:'strike',children:[
+                new TriggerStrikeStart(),
+                new PrepareStrike(),
+                new WaitOneFrame({setTrueKey:'strikeStart'}),
+                new StrikeStart(),
+                new WaitOneFrame({setTrueKey:'strike'}),
+                new Strike(),
+                new WaitOneFrame({setTrueKey:'strikeEnd'}), // todo: set isAnimFinished = false, instead of use WaitOneFrame ?
+                new StrikeEnd(),
               ]}),
-              new Fist({title:'Fist'}),
+              new Fist(),
             ]}),
           ]}),
-          new Punch({title:'Punch'}),
+          new Punch(),
         ]}),
       ]}),
       new b3.MemSequence({children:[
-        new TriggerJump({title:'TriggerJump'}),
-        new WaitOneFrame({title:'WaitOneFrame',setTrueKey:'jump'}),
-        new Jump({title:'Jump'}),
+        new TriggerJump(),
+        new WaitOneFrame({setTrueKey:'jump'}),
+        new Jump(),
       ]}),
-      new Run({title:'Run'}),
+      new Run(),
       // new b3.MemSequence({title:'idle',children:[
       //   new TriggerIdle({title:'TriggerIdle'}),
       //   new Idle({title:'Idle'}),
       // ]}),
-      new Idle({title:'Idle'}),
+      new Idle(),
     ]}),
   }), // end: loaded
 ]}); // end: root

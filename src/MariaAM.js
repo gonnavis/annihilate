@@ -309,7 +309,7 @@ tree.root = new b3.MemSequence({title:'root',children: [
   new Loading(),
   new b3.Runnor({title:'loaded',child:
     new b3.Priority({title:'base',children:[
-      new b3.Priority({children:[
+      new b3.Priority({title:'charge & punch',children:[
         new b3.MemSequence({title:'punch',children:[
           new KeyJUp(),
           // new TriggerPunchStart(),
